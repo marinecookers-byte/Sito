@@ -3,8 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marine Cookers — Techimpex</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<title>Marine Cookers — Techimpex | Yacht Galley Equipment Since 1974</title>
+<meta name="description" content="Marine Cookers — Techimpex. Handcrafted gimballed cookers, ovens and grills for professional yachts since 1974. Gas, electric and induction. Designed in the Inox Valley, Conegliano, Italy.">
+<!-- Preconnect per font e Cloudinary (riduce latenza DNS) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com">
+<!-- Font non-render-blocking: carica come print, poi passa a all -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Outfit:wght@200;300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Outfit:wght@200;300;400;500;600&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Outfit:wght@200;300;400;500;600&display=swap"></noscript>
 <style>
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
@@ -318,33 +326,8 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 }
 #pp-lightbox-close:hover{color:rgba(184,150,90,1)}
 
-/* ── CURSORE ADATTIVO ── */
-/* Home (hero scuro): cursore oro */
-/* ── CUSTOM CURSOR ── */
-*{cursor:none !important}
-#cursor{
-  position:fixed;width:11px;height:11px;
-  background:var(--go);
-  border-radius:50%;pointer-events:none;
-  z-index:2147483647;transform:translate(-50%,-50%);
-  transition:width .2s,height .2s,opacity .2s;
-}
-#cursor-ring{
-  position:fixed;width:42px;height:42px;
-  border:1.5px solid rgba(184,150,90,.7);
-  border-radius:50%;pointer-events:none;
-  z-index:2147483646;transform:translate(-50%,-50%);
-  transition:width .3s,height .3s,opacity .2s;
-}
-body.cur-hover #cursor{width:0;height:0;opacity:0}
-body.cur-hover #cursor-ring{width:60px;height:60px}
-/* Drawing panel open state */
-#pp-drawing-panel.dp-open{opacity:1}
-#pp-drawing-panel.dp-open > div{pointer-events:all}
-
-/* Ticker nel footer prodotto */
-
-/* Custom cursor */
+/* ── CUSTOM CURSOR — solo dispositivi con puntatore fine (desktop) ── */
+@media(hover:hover) and (pointer:fine){
 *{cursor:none !important}
 html,body{cursor:none !important}
 #cursor{
@@ -381,9 +364,14 @@ body.cur-complex #cursor-ring{
   border-color:rgba(10,10,10,.4);
   mix-blend-mode:normal;
 }
-
-/* Padding bottom per non finire sotto il footer fisso */
-body{padding-bottom:72px}
+}
+/* Su mobile il cursore div è nascosto */
+@media(hover:none),(pointer:coarse){
+  #cursor,#cursor-ring{display:none !important}
+}
+/* Drawing panel open state */
+#pp-drawing-panel.dp-open{opacity:1}
+#pp-drawing-panel.dp-open > div{pointer-events:all}
 
 /* Nascondi scrollbar mantenendo la funzionalità di scroll */
 * { scrollbar-width: none; -ms-overflow-style: none; }
@@ -2243,10 +2231,6 @@ header.hide{transform:translateY(-100%);}
 
 </style>
 
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
@@ -2306,8 +2290,9 @@ header.hide{transform:translateY(-100%);}
 
   <!-- Hero con video e titolo sovrapposto -->
   <div class="pp-hero">
-    <video id="pp-herovid" autoplay loop muted playsinline>
+    <video id="pp-herovid" autoplay loop muted playsinline preload="none">
       <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/Marine_Cooker_reel-1_1_-_ALEX_NEWSOME_sxpft6.mp4" type="video/mp4">
+      <track kind="captions" src="" label="No captions">
     </video>
     <div class="pp-hero-overlay"></div>
     <div class="pp-hero-title">
@@ -2651,13 +2636,6 @@ header.hide{transform:translateY(-100%);}
   <span class="pp-scroll-hint-label">Scroll</span>
   <div class="pp-scroll-hint-line"></div>
 </div>
-  </div>
-
-  <!-- Scroll indicator -->
-  <div class="pp-scroll-hint" id="pp-scroll-hint">
-    <span class="pp-scroll-hint-label">Scroll</span>
-    <div class="pp-scroll-hint-line"></div>
-  </div>
 
 </div><!-- /prodpage -->
 
@@ -2690,6 +2668,7 @@ header.hide{transform:translateY(-100%);}
     poster="https://res.cloudinary.com/dseiw9ndw/video/upload/so_0/kling_20260422_作品_Voglio_due_3709_0_er3ugs.jpg"
     style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85)">
     <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/kling_20260422_作品_Voglio_due_3709_0_er3ugs.mp4" type="video/mp4">
+    <track kind="captions" src="" label="No captions">
   </video>
   <div class="hovl"></div>
   <div class="hci"></div>
@@ -2817,8 +2796,9 @@ header.hide{transform:translateY(-100%);}
 
     <!-- ── PANNELLO 0: HERO ── -->
     <div class="ab-panel ab-panel-dark" style="z-index:1;">
-      <video class="ab-panel-video ab-hero-video" autoplay loop muted playsinline>
+      <video class="ab-panel-video ab-hero-video" autoplay loop muted playsinline preload="none">
         <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/kling_20260422_%E4%BD%9C%E5%93%81_Voglio_due_3960_0_bq8o1r.mp4" type="video/mp4">
+        <track kind="captions" src="" label="No captions">
       </video>
       <div class="ab-vbreak-overlay"></div>
       <div class="ab-panel-inner" style="align-items:flex-end; padding-bottom:80px;">
@@ -2842,15 +2822,16 @@ header.hide{transform:translateY(-100%);}
               <p data-i18n="ab_p1_body2">From a territory so deeply connected to culinary culture, it was only natural that a company specialised in yacht cookers would be born here. And who better than Italians — undisputed masters of gastronomy — to design instruments for cooking at sea?</p>
             </div>
           </div>
-          <img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/v1/DSC_8459-RIT-1-WEB_trrqks.jpg" alt="Marine Cookers — Origin">
+          <img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/v1/DSC_8459-RIT-1-WEB_trrqks.jpg" alt="Marine Cookers — Origin, Conegliano" width="800" height="1000" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
 
     <!-- ── PANNELLO 2: VIDEO BREAK 1 ── -->
     <div class="ab-panel ab-panel-dark" style="z-index:3;">
-      <video class="ab-panel-video" id="abv1" autoplay loop muted playsinline>
+      <video class="ab-panel-video" id="abv1" autoplay loop muted playsinline preload="none">
         <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/6046368-uhd_3840_2160_24fps_g8punn.mp4" type="video/mp4">
+        <track kind="captions" src="" label="No captions">
       </video>
       <div class="ab-vbreak-overlay"></div>
       <p class="ab-vbreak-quote" data-i18n-html="ab_quote1">
@@ -2863,7 +2844,7 @@ header.hide{transform:translateY(-100%);}
     <div class="ab-panel ab-panel-light" style="z-index:4;">
       <div class="ab-panel-inner">
         <div class="ab-section-grid layout-left">
-          <img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/v1/DSC_8477-RITOC-2-WEB_odaks6.jpg" alt="Inox Valley — Stainless steel heritage">
+          <img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/v1/DSC_8477-RITOC-2-WEB_odaks6.jpg" alt="Inox Valley — Stainless steel heritage" width="800" height="1000" loading="lazy" decoding="async">
           <div class="ab-section-meta">
             <span class="ab-tag">02 — <span data-i18n="ab_p3_tag">Inox Valley</span></span>
             <h2 class="ab-section-title" data-i18n-html="ab_p3_title">Steel, <em>craft</em> and legacy</h2>
@@ -2892,8 +2873,9 @@ header.hide{transform:translateY(-100%);}
 
     <!-- ── PANNELLO 5: VIDEO BREAK 2 ── -->
     <div class="ab-panel ab-panel-dark" style="z-index:6;">
-      <video class="ab-panel-video" id="abv2" autoplay loop muted playsinline>
+      <video class="ab-panel-video" id="abv2" autoplay loop muted playsinline preload="none">
         <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/13053725_3840_2160_50fps_kxybg4.mp4" type="video/mp4">
+        <track kind="captions" src="" label="No captions">
       </video>
       <div class="ab-vbreak-overlay"></div>
       <p class="ab-vbreak-quote" data-i18n-html="ab_quote2">
@@ -2914,15 +2896,16 @@ header.hide{transform:translateY(-100%);}
               <p data-i18n="ab_p6_body2">Always for Wally, we developed the first fully aluminium lightweight cooker. And for Perini Navi, we engineered a special cooker with a unique reverse-gimballing system — a world first.</p>
             </div>
           </div>
-          <img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/v1/DSC_8459-RIT-1-WEB_trrqks.jpg" alt="Innovation — Marine Cookers">
+          <img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/v1/DSC_8459-RIT-1-WEB_trrqks.jpg" alt="Innovation — Marine Cookers" width="800" height="1000" loading="lazy" decoding="async">
         </div>
       </div>
     </div>
 
     <!-- ── PANNELLO 7: VIDEO BREAK 3 ── -->
     <div class="ab-panel ab-panel-dark" style="z-index:8;">
-      <video class="ab-panel-video" id="abv3" autoplay loop muted playsinline>
+      <video class="ab-panel-video" id="abv3" autoplay loop muted playsinline preload="none">
         <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/4941370-hd_1920_1080_25fps_rlz6hw.mp4" type="video/mp4">
+        <track kind="captions" src="" label="No captions">
       </video>
       <div class="ab-vbreak-overlay"></div>
     </div>
@@ -2931,7 +2914,7 @@ header.hide{transform:translateY(-100%);}
     <div class="ab-panel ab-panel-light" style="z-index:9;">
       <div class="ab-panel-inner">
         <div class="ab-section-grid layout-left">
-          <img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/v1/DSC_8477-RITOC-2-WEB_odaks6.jpg" alt="Our Clients — Shipyards worldwide" style="aspect-ratio:4/5; object-fit:cover;">
+          <img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/v1/DSC_8477-RITOC-2-WEB_odaks6.jpg" alt="Our Clients — Shipyards worldwide" width="800" height="1000" loading="lazy" decoding="async" style="aspect-ratio:4/5; object-fit:cover;">
           <div class="ab-section-meta">
             <span class="ab-tag">05 — <span data-i18n="ab_p8_tag">Our Clients</span></span>
             <h2 class="ab-section-title" data-i18n-html="ab_p8_title">Trusted by the <em>world's finest</em> yards</h2>
@@ -3017,6 +3000,7 @@ header.hide{transform:translateY(-100%);}
         <a class="ct-map-click" href="https://maps.google.com/?q=Via+Cosmo+14,+31015+Conegliano+TV+Italia" target="_blank" rel="noopener" title="Open in Google Maps">
           <iframe
             class="ct-map"
+            title="Marine Cookers — Techimpex location, Via Cosmo 14, Conegliano"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d11120.0!2d12.3067!3d45.8875!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477939e5f5b2b3b7%3A0x4b3e3e3e3e3e3e3e!2sVia%20Cosmo%2014%2C%2031015%20Conegliano%20TV!5e0!3m2!1sen!2sit!4v1"
             allowfullscreen=""
             loading="lazy"
@@ -3045,8 +3029,9 @@ header.hide{transform:translateY(-100%);}
 
   <!-- ELECTRIC COOKERS — HERO VIDEO (shown only for Electric Cookers with Oven) -->
   <div class="cp-electric-hero" id="cp-electric-hero">
-    <video autoplay loop muted playsinline>
+    <video autoplay loop muted playsinline preload="none">
       <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/kling_20260423_%E4%BD%9C%E5%93%81_si_intravv_3383_0_cvn5w3.mp4" type="video/mp4">
+      <track kind="captions" src="" label="No captions">
     </video>
     <div class="cp-electric-hero-overlay"></div>
     <div class="cp-electric-hero-content">
