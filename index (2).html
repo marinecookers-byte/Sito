@@ -332,23 +332,25 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 html,body{cursor:none !important}
 #cursor{
   position:fixed;
+  left:0;top:0; /* posizionamento via transform:translate nel JS */
   width:9px;height:9px;
   background:var(--go);
   border-radius:50%;
   pointer-events:none;
   z-index:2147483647;
-  transform:translate(-50%,-50%);
+  will-change:transform;
   transition:width .2s ease,height .2s ease,background .35s ease,opacity .3s ease;
   mix-blend-mode:normal;
 }
 #cursor-ring{
   position:fixed;
+  left:0;top:0; /* posizionamento via transform:translate nel JS */
   width:38px;height:38px;
   border:1.5px solid rgba(184,150,90,.55);
   border-radius:50%;
   pointer-events:none;
   z-index:2147483646;
-  transform:translate(-50%,-50%);
+  will-change:transform;
   transition:width .3s ease,height .3s ease,border-color .35s ease,opacity .3s ease;
   mix-blend-mode:normal;
 }
@@ -3384,20 +3386,26 @@ document.addEventListener('keydown',function(e){
 });
 
 // ── CUSTOM CURSOR ──
+// Usa transform:translate invece di left/top — nessun forced layout (compositor-only)
 (function(){
   var dot=document.getElementById('cursor');
   var ring=document.getElementById('cursor-ring');
   if(!dot||!ring)return;
-  /* Usa -100,-100 come posizione iniziale fuori schermo — evita forced reflow sincrono da window.innerWidth/innerHeight */
-  var mx=-100, my=-100;
+
+  var mx=-200, my=-200;
   var rx=mx, ry=my;
-  dot.style.left=mx+'px'; dot.style.top=my+'px';
-  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+
+  /* Posizionamento iniziale fuori schermo via transform — nessun reflow */
+  dot.style.left='0'; dot.style.top='0';
+  ring.style.left='0'; ring.style.top='0';
+  dot.style.transform='translate('+mx+'px,'+my+'px) translate(-50%,-50%)';
+  ring.style.transform='translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';
   dot.style.opacity='0'; ring.style.opacity='0';
 
   document.addEventListener('mousemove',function(e){
     mx=e.clientX; my=e.clientY;
-    dot.style.left=mx+'px'; dot.style.top=my+'px';
+    /* Dot segue il mouse — solo transform, zero layout recalc */
+    dot.style.transform='translate('+mx+'px,'+my+'px) translate(-50%,-50%)';
     dot.style.opacity='1'; ring.style.opacity='1';
     var cpOpen=document.getElementById('cp')&&document.getElementById('cp').classList.contains('show');
     var ppOpen=document.getElementById('prodpage')&&document.getElementById('prodpage').classList.contains('show');
@@ -3417,8 +3425,8 @@ document.addEventListener('keydown',function(e){
   function lerp(a,b,t){return a+(b-a)*t;}
   function loop(){
     rx=lerp(rx,mx,0.12); ry=lerp(ry,my,0.12);
-    ring.style.left=Math.round(rx*10)/10+'px';
-    ring.style.top=Math.round(ry*10)/10+'px';
+    /* Ring lerp — solo transform, nessun layout thrashing */
+    ring.style.transform='translate('+Math.round(rx*10)/10+'px,'+Math.round(ry*10)/10+'px) translate(-50%,-50%)';
     requestAnimationFrame(loop);
   }
   loop();
