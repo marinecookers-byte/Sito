@@ -2294,6 +2294,7 @@ header.hide{transform:translateY(-100%);}
       <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/Marine_Cooker_reel-1_1_-_ALEX_NEWSOME_sxpft6.mp4" type="video/mp4">
       <track kind="captions" src="" label="No captions">
     </video>
+    <img id="pp-heroimg" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/perfetto_ma_devi_usare_il_202605070958_xs6ycy" alt="OPUS — Marine Cookers" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;display:none;">
     <div class="pp-hero-overlay"></div>
     <div class="pp-hero-title">
       <span class="pp-hero-label" data-i18n="pp_hero_label">Marine Cookers — Electric</span>
@@ -3226,6 +3227,20 @@ function goProd(m){
   });
   var nameEl=document.getElementById('pp-name');
   if(nameEl)nameEl.textContent=m;
+  // Hero: immagine per OPUS, video per tutti gli altri
+  var ppVid=document.getElementById('pp-herovid');
+  var ppImg=document.getElementById('pp-heroimg');
+  if(ppVid&&ppImg){
+    if(m==='OPUS'){
+      ppVid.style.display='none';
+      ppVid.pause();
+      ppImg.style.display='block';
+    }else{
+      ppImg.style.display='none';
+      ppVid.style.display='block';
+      ppVid.play().catch(function(){});
+    }
+  }
   var gg=document.getElementById('pp-gallery-grid');
   if(gg){
     var src=window.PROD_IMGS&&window.PROD_IMGS[m]?window.PROD_IMGS[m]:'';
