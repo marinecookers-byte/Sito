@@ -3097,10 +3097,15 @@ header.hide{transform:translateY(-100%);}
 }
 /* Stato deterministico hero categoria: la classe decide cosa si vede,
    così il video non può mai comparire quando la categoria è a immagine. */
-.cp-electric-hero.cat-media-img #cp-hero-video{display:none!important;}
+.cp-electric-hero.cat-media-img #cp-hero-video,
+.cp-electric-hero.cat-media-img #cp-hero-video-2{display:none!important;}
 .cp-electric-hero.cat-media-img #cp-hero-img{display:block!important;}
 .cp-electric-hero.cat-media-vid #cp-hero-img{display:none!important;}
-.cp-electric-hero.cat-media-vid #cp-hero-video{display:block!important;}
+.cp-electric-hero.cat-media-vid #cp-hero-video,
+.cp-electric-hero.cat-media-vid #cp-hero-video-2{display:block!important;}
+/* Dissolvenza morbida del crossfade tra i due layer video (nessun rewind visibile). */
+.cp-electric-hero #cp-hero-video,
+.cp-electric-hero #cp-hero-video-2{transition:opacity 2.2s ease;}
 /* Stesso principio per la hero della scheda prodotto. */
 .pp-hero.hero-media-img #pp-herovid{display:none!important;}
 .pp-hero.hero-media-img #pp-heroimg{display:block!important;}
@@ -4449,8 +4454,12 @@ header.hide{transform:translateY(-100%);}
   <!-- CATEGORY HERO · video nativo a piena larghezza (object-fit:cover) per
        TUTTE le categorie. La sorgente cambia in base alla categoria. -->
   <div class="cp-electric-hero" id="cp-electric-hero">
-    <video id="cp-hero-video" loop muted playsinline preload="none">
+    <video id="cp-hero-video" class="cp-hero-vid-layer" muted playsinline preload="auto">
       <source id="cp-hero-video-src" src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/Luxury_Yacht_Scene_A_man__zkfgpn.mp4" type="video/mp4">
+      <track kind="captions" src="" label="No captions">
+    </video>
+    <video id="cp-hero-video-2" class="cp-hero-vid-layer" muted playsinline preload="auto" style="opacity:0">
+      <source id="cp-hero-video-src-2" src="" type="video/mp4">
       <track kind="captions" src="" label="No captions">
     </video>
     <img id="cp-hero-img" src="" alt="" style="display:none">
@@ -4724,7 +4733,7 @@ window.CAT_HERO_MEDIA = {
   'Gas Grills':                 {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784911666/HERO_CAPITANO_Gemini_Generated_Image_2lrjng2lrjng2lrj_kfyada.png'},
   'Built-in Gas Ovens':         {video: window.CAT_HERO_VIDEO_CATEGORY},
   'Built-in Electric Ovens':    {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785302564/HERO_NAPOLI_kling_20260729_Creation__3335_0_k9yjw6.png'},
-  'Antiche Cambuse - Cucine per yachts d\'Epoca': {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785249097/HERO_PRINCIPE_202607281619_2_tszlqg.mp4'}
+  'Antiche Cambuse - Cucine per yachts d\'Epoca': {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785342727/kling_20260730_VIDEO_Lo_yacht_s_113_0_hyq4lq.mp4'}
 };
 
 // Media hero per SINGOLO prodotto: ha la precedenza su CAT_HERO_MEDIA nella
@@ -4923,6 +4932,8 @@ function openCat(name,models){
       // HERO a IMMAGINE (object-fit:cover, piena larghezza)
       if(heroEl){heroEl.classList.add('cat-media-img');heroEl.classList.remove('cat-media-vid');}
       if(vidEl){try{vidEl.pause();}catch(e){}vidEl.style.display='none';}
+      var _vB=document.getElementById('cp-hero-video-2');
+      if(_vB){try{_vB.pause();}catch(e){}_vB.style.display='none';}
       if(ifrWrap){ifrWrap.style.display='none';}
       if(imgEl){ if(imgEl.getAttribute('src')!==media.image) imgEl.setAttribute('src',media.image); imgEl.style.display='block'; }
     } else {
@@ -4930,13 +4941,87 @@ function openCat(name,models){
       if(heroEl){heroEl.classList.add('cat-media-vid');heroEl.classList.remove('cat-media-img');}
       if(imgEl){imgEl.style.display='none';}
       if(vidEl){
-        if(srcEl && srcEl.getAttribute('src')!==media.video){
-          srcEl.setAttribute('src',media.video);
-          try{vidEl.load();}catch(e){}
+        // LOOP SENZA SCATTO · crossfade tra due layer video gemelli.
+        // Il problema del "salto" nasce dal riavvolgere lo stesso <video>
+        // (currentTime=0 = micro-stallo del decoder). Qui NON si riavvolge mai:
+        // quando il layer attivo si avvicina alla fine, l'ALTRO layer è già
+        // partito da zero e stabile, e si esegue un semplice crossfade.
+        var vidA = document.getElementById('cp-hero-video');
+        var vidB = document.getElementById('cp-hero-video-2');
+        var srcA = document.getElementById('cp-hero-video-src');
+        var srcB = document.getElementById('cp-hero-video-src-2');
+        var RATE = 0.4;  // velocità rallentata (cinematografica)
+        var FADE = 2200; // durata crossfade, combacia con la transition CSS
+
+        function prep(v){ v.loop=false;v.muted=true;v.removeAttribute('loop');
+          v.setAttribute('playsinline','');v.setAttribute('muted','');
+          try{v.playbackRate=RATE;}catch(e){} }
+        prep(vidA);prep(vidB);
+
+        // Imposto la sorgente su ENTRAMBI i layer (stessa clip).
+        if(srcA && srcA.getAttribute('src')!==media.video){
+          srcA.setAttribute('src',media.video);try{vidA.load();}catch(e){}
         }
-        vidEl.loop=true;vidEl.muted=true;vidEl.setAttribute('loop','');vidEl.setAttribute('playsinline','');
-        vidEl.style.display='';
-        try{vidEl.play();}catch(e){}
+        if(srcB && srcB.getAttribute('src')!==media.video){
+          srcB.setAttribute('src',media.video);try{vidB.load();}catch(e){}
+        }
+
+        // Stato iniziale: A visibile e in play, B pronto e invisibile.
+        vidA.style.opacity='1';vidB.style.opacity='0';
+        try{vidA.currentTime=0;}catch(e){}
+        try{vidA.play();}catch(e){}
+
+        // Aggancio il controller di crossfade una volta sola.
+        if(!window._catHeroXfadeBound){
+          window._catHeroXfadeBound=true;
+          window._catHeroActive='A'; // quale layer è visibile
+
+          function el(which){return which==='A'?
+            document.getElementById('cp-hero-video'):document.getElementById('cp-hero-video-2');}
+
+          function armFade(which){
+            var cur=el(which);
+            cur.addEventListener('timeupdate',function onTU(){
+              if(window._catHeroActive!==which)return; // non è più l'attivo
+              if(!cur.duration||cur._xfading)return;
+              // Quando manca ~FADE alla fine, preparo l'altro layer e sfumo.
+              if(cur.currentTime>=cur.duration-(FADE/1000)-0.15){
+                cur._xfading=true;
+                cur.removeEventListener('timeupdate',onTU);
+                var other=(which==='A')?'B':'A';
+                var nxt=el(other);
+                try{nxt.playbackRate=RATE;}catch(e){}
+                // L'altro layer parte da zero e diventa stabile PRIMA di apparire.
+                function goFade(){
+                  nxt.style.opacity='1';   // sale l'altro
+                  cur.style.opacity='0';    // scende questo
+                  window._catHeroActive=other;
+                  armFade(other);           // armo il prossimo giro
+                  // reset del vecchio layer, ora invisibile: nessuno vede il rewind
+                  setTimeout(function(){
+                    cur._xfading=false;
+                    try{cur.pause();cur.currentTime=0;}catch(e){}
+                  },FADE+200);
+                }
+                var started=false;
+                function onNxtPlaying(){
+                  if(started)return;started=true;
+                  nxt.removeEventListener('playing',onNxtPlaying);
+                  goFade();
+                }
+                nxt.addEventListener('playing',onNxtPlaying);
+                try{nxt.currentTime=0;nxt.play();}catch(e){}
+                setTimeout(onNxtPlaying,600); // fallback se 'playing' non arriva
+              }
+            });
+          }
+          armFade('A');
+        }
+
+        // Riapplico rate/riparto quando torno su questa categoria.
+        try{vidA.playbackRate=RATE;}catch(e){}
+        vidA.addEventListener('loadedmetadata',function(){try{vidA.playbackRate=RATE;}catch(e){}},{once:true});
+        vidA.style.display='';vidB.style.display='';
       }
     }
     if(heroEl)heroEl.classList.add('show');
