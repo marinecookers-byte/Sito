@@ -3364,7 +3364,10 @@ header.hide{transform:translateY(-100%);}
 
   /* stacchi video · fasce statiche a piena larghezza */
   #aboutpage .ab-panel.ab-panel-dark:not(:first-child){ min-height:62vh; }
+  #aboutpage .ab-panel.ab-panel-dark.ab-panel-photo:not(:first-child){ min-height:85vh; }
   #aboutpage .ab-panel-video{ height:100% !important; top:0 !important; transform:none !important; }
+  /* Venezia · fascia larga e bassa su desktop: alzo l'inquadratura per tagliare meno (regolabile: % piu' bassa = piu' su) */
+  #aboutpage #abv2{ object-position:center 30% !important; }
 
   /* HERO statico · immagine piena, titolo in basso */
   #aboutpage .ab-panel:first-child{ min-height:94vh; }
@@ -3402,6 +3405,13 @@ header.hide{transform:translateY(-100%);}
   /* foto orizzontale con testo a lato · colonna foto piu' ampia */
   #aboutpage .ab-section-grid.layout-left.photo-wide { grid-template-columns:minmax(0,1.32fr) minmax(0,1fr); }
   #aboutpage .ab-section-grid.layout-right.photo-wide{ grid-template-columns:minmax(0,1fr) minmax(0,1.32fr); }
+
+  /* GRANLUX · foto verticale mostrata INTERA (nessun taglio), grande e al vivo sul bordo sinistro */
+  #aboutpage .ab-panel.ab-full .ab-panel-inner{ max-width:none; margin:0; padding:clamp(70px,10vh,140px) 0; }
+  #aboutpage .ab-full .ab-section-grid.layout-left{ grid-template-columns:minmax(0,54vw) minmax(0,1fr); gap:clamp(48px,5vw,96px); align-items:center; }
+  #aboutpage .ab-full .ab-section-grid.layout-left .ab-section-meta{ padding-right:clamp(40px,6vw,96px); }
+  #aboutpage .ab-full .ab-figure.is-wide > .ab-img{ width:100%; height:auto; aspect-ratio:auto; object-fit:contain; }
+  #aboutpage .ab-full .ab-figure.is-wide .ab-cap{ padding-left:clamp(24px,3vw,60px); }
 }
 
 /* ── SPREAD editoriale · immagine orizzontale contenuta e sfalsata (non a tutto campo) ── */
@@ -3419,6 +3429,11 @@ header.hide{transform:translateY(-100%);}
 @media(max-width:768px){
   #aboutpage .ab-spread{ width:100%; }
   #aboutpage .ab-spread > img{ aspect-ratio:16/10; }
+
+  /* Ultimo video: su mobile adattato alla LARGHEZZA (intero, senza taglio laterale) */
+  #aboutpage .ab-panel.ab-vfit{ min-height:0 !important; padding-bottom:clamp(88px,14vh,150px); }
+  #aboutpage .ab-vfit .ab-panel-video{ position:relative !important; width:100% !important; height:auto !important; top:0 !important; aspect-ratio:16/9; object-fit:contain !important; }
+  #aboutpage .ab-vfit .ab-vbreak-overlay{ display:none; }
 }
 </style>
 
@@ -4023,11 +4038,8 @@ header.hide{transform:translateY(-100%);}
     </div>
 
     <!-- ── PANNELLO 2: VIDEO BREAK 1 ── -->
-    <div class="ab-panel ab-panel-dark" style="z-index:3;">
-      <video class="ab-panel-video" id="abv1" autoplay loop muted playsinline preload="none">
-        <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/6046368-uhd_3840_2160_24fps_g8punn.mp4" type="video/mp4">
-        <track kind="captions" src="" label="No captions">
-      </video>
+    <div class="ab-panel ab-panel-dark ab-panel-photo" style="z-index:3;">
+      <img class="ab-panel-video" id="abv1" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785311755/CHI_SIAMO_FOTO_TORNIO_Gemini_Generated_Image_z53elxz53elxz53e_vowh2q.png" alt="Marine Cookers · Il tornio, lavorazione dell'acciaio" loading="lazy" decoding="async">
       <div class="ab-vbreak-overlay"></div>
       <p class="ab-vbreak-quote" data-i18n-html="ab_quote1">
         "Over a century of Italian craftsmanship · forged in steel, refined by the sea."
@@ -4036,7 +4048,7 @@ header.hide{transform:translateY(-100%);}
     </div>
 
     <!-- ── PANNELLO 3: INOX VALLEY ── -->
-    <div class="ab-panel ab-panel-light" style="z-index:4;">
+    <div class="ab-panel ab-panel-light ab-full" style="z-index:4;">
       <div class="ab-panel-inner">
         <div class="ab-section-grid layout-left photo-wide">
           <figure class="ab-figure is-wide"><img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784872556/GRANLUX1500_DSC_9547_ktfddd.jpg" alt="Inox Valley · Stainless steel heritage" width="1000" height="750" loading="lazy" decoding="async"><figcaption class="ab-cap">Granlux · Inox Valley</figcaption></figure>
@@ -4077,11 +4089,8 @@ header.hide{transform:translateY(-100%);}
     </div>
 
     <!-- ── PANNELLO 5: VIDEO BREAK 2 ── -->
-    <div class="ab-panel ab-panel-dark" style="z-index:6;">
-      <video class="ab-panel-video" id="abv2" autoplay loop muted playsinline preload="none">
-        <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/13053725_3840_2160_50fps_kxybg4.mp4" type="video/mp4">
-        <track kind="captions" src="" label="No captions">
-      </video>
+    <div class="ab-panel ab-panel-dark ab-panel-photo" style="z-index:6;">
+      <img class="ab-panel-video" id="abv2" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785312022/CHI_SIAMO_FOTO_VENEZIA_DA_YACHT_IN_RADA_Gemini_Generated_Image_cl03cwcl03cwcl03_wmtcy1.png" alt="Marine Cookers · Venezia vista da uno yacht in rada" loading="lazy" decoding="async">
       <div class="ab-vbreak-overlay"></div>
       <p class="ab-vbreak-quote" data-i18n-html="ab_quote2">
         "From the lagoon of Venice to the open ocean · our cookers follow the sea."
@@ -4116,7 +4125,7 @@ header.hide{transform:translateY(-100%);}
     </div>
 
     <!-- ── PANNELLO 8: OUR CLIENTS ── -->
-    <div class="ab-panel ab-panel-light" style="z-index:9;">
+    <div class="ab-panel ab-panel-light ab-full" style="z-index:9;">
       <div class="ab-panel-inner">
         <div class="ab-section-grid layout-left photo-wide">
           <figure class="ab-figure is-wide"><img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784872561/GRANLUX2000_DSC_9590_bwn4ma.jpg" alt="Our Clients · Granlux" width="1000" height="750" loading="lazy" decoding="async"><figcaption class="ab-cap">Granlux</figcaption></figure>
@@ -4133,9 +4142,9 @@ header.hide{transform:translateY(-100%);}
     </div>
 
     <!-- ── PANNELLO FINALE: VIDEO BREAK (chiusura) ── -->
-    <div class="ab-panel ab-panel-dark" style="z-index:10;">
-      <video class="ab-panel-video" id="abv4" autoplay loop muted playsinline preload="none">
-        <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/kling_20260422_%E4%BD%9C%E5%93%81_Voglio_due_3650_0_zv8npc.mp4" type="video/mp4">
+    <div class="ab-panel ab-panel-dark ab-vfit" style="z-index:10;">
+      <video class="ab-panel-video" id="abv4" autoplay loop muted playsinline preload="auto">
+        <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785316393/202607291109_uzihgr.mp4" type="video/mp4">
         <track kind="captions" src="" label="No captions">
       </video>
       <div class="ab-vbreak-overlay"></div>
