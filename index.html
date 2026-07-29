@@ -292,6 +292,9 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 /* CATPAGE */
 #cp{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0a0a;z-index:400;flex-direction:column;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .55s ease;display:flex}
 #cp.show{opacity:1;pointer-events:all}
+/* Blocco scroll iOS-safe della home quando una pagina e' aperta + niente scroll-chaining */
+@media(max-width:768px){ body.slock{ position:fixed; left:0; right:0; width:100%; overflow:hidden; } }
+#cp,#aboutpage,#contactpage,#sparepage,#pp-content-scroll{ overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
 .cphd{position:sticky;top:var(--hh);background:rgba(10,10,10,.96);border-bottom:1px solid rgba(184,150,90,.12);padding:0 60px;height:72px;display:flex;align-items:center;justify-content:space-between;z-index:10;flex-shrink:0}
 .cpbk{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:12px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,150,90,.5);background:none;border:none;transition:color .3s,gap .3s;font-family:"Outfit",sans-serif}.cpbk:hover{color:rgba(184,150,90,.9);gap:15px}
 
@@ -4449,6 +4452,31 @@ function tm(){
 
   if(!mO)cDrop();
 }
+
+/* Blocco scroll iOS-safe delle pagine overlay: quando body.page-open e' attiva
+   congela la home con position:fixed preservando lo scroll, cosi' su mobile non
+   traspare piu' da sotto e lo scroll non interferisce con la home sottostante. */
+(function(){
+  var savedY=0, locked=false;
+  function sync(){
+    var open=document.body.classList.contains('page-open');
+    if(open && !locked){
+      savedY=window.scrollY||window.pageYOffset||0;
+      locked=true;
+      document.body.style.top=(-savedY)+'px';
+      document.body.classList.add('slock');
+    } else if(!open && locked){
+      locked=false;
+      document.body.classList.remove('slock');
+      document.body.style.top='';
+      window.scrollTo(0,savedY);
+    }
+  }
+  try{
+    var mo=new MutationObserver(sync);
+    mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+  }catch(e){}
+})();
 function cm(){
   mO=false;
   HB.classList.remove('open');
@@ -5118,6 +5146,56 @@ function goProd(m){
 // specifiche dedicate, ripristina le righe statiche originali (nessuna regressione).
 window.__specsDefaultHTML = null;
 var SPEC_LABELS_EN = {spec_type:'Type',spec_burners:'Burners',spec_power:'Power',spec_gas:'Gas · pressure',spec_supply:'Power supply',spec_dimensions:'Dimensions (W×D×H)',spec_zones:'Grilling zones',spec_construction:'Construction',spec_ignition:'Ignition',spec_oven:'Oven',spec_lid:'Lid',specs_technology:'Technology',specs_hob_power:'Hob power',specs_oven_power:'Oven power',specs_total_power:'Total max power',specs_certified:'Marine certified',specs_steel:'316L stainless steel',specs_steel_plain:'Stainless steel',specs_safety:'Safety shut-off'};
+window.SPEC_VAL_I18N={
+  'Gas cooker':{it:'Cucina a gas',fr:'Cuisinière à gaz',de:'Gasherd',es:'Cocina a gas'},
+  'Gas cooker with oven':{it:'Cucina a gas con forno',fr:'Cuisinière à gaz avec four',de:'Gasherd mit Backofen',es:'Cocina a gas con horno'},
+  'Gas cooker with grill':{it:'Cucina a gas con grill',fr:'Cuisinière à gaz avec gril',de:'Gasherd mit Grill',es:'Cocina a gas con grill'},
+  'Compact gas cooker with oven':{it:'Cucina a gas con forno compatta',fr:'Cuisinière à gaz avec four compacte',de:'Kompakter Gasherd mit Backofen',es:'Cocina a gas con horno compacta'},
+  'Gas cooker · separate grill chamber':{it:'Cucina a gas · camera grill separata',fr:'Cuisinière à gaz · chambre de gril séparée',de:'Gasherd · separate Grillkammer',es:'Cocina a gas · cámara de grill separada'},
+  'Gas grill':{it:'Grill a gas',fr:'Gril à gaz',de:'Gasgrill',es:'Grill a gas'},
+  'Electric grill':{it:'Griglia elettrica',fr:'Gril électrique',de:'Elektrogrill',es:'Parrilla eléctrica'},
+  'Electric grill · Duplex':{it:'Griglia elettrica · Duplex',fr:'Gril électrique · Duplex',de:'Elektrogrill · Duplex',es:'Parrilla eléctrica · Duplex'},
+  'Electric grill · patented Duplex':{it:'Griglia elettrica · Duplex brevettato',fr:'Gril électrique · Duplex breveté',de:'Elektrogrill · patentiertes Duplex',es:'Parrilla eléctrica · Duplex patentado'},
+  'Electric grill · minimal':{it:'Griglia elettrica · minimal',fr:'Gril électrique · minimaliste',de:'Elektrogrill · minimalistisch',es:'Parrilla eléctrica · minimalista'},
+  'Electric grill · ultra compact':{it:'Griglia elettrica · ultra compatta',fr:'Gril électrique · ultra compact',de:'Elektrogrill · ultrakompakt',es:'Parrilla eléctrica · ultracompacta'},
+  'XL electric grill · Duplex':{it:'Griglia elettrica XL · Duplex',fr:'Gril électrique XL · Duplex',de:'XL-Elektrogrill · Duplex',es:'Parrilla eléctrica XL · Duplex'},
+  'Electric BBQ':{it:'Barbecue elettrico',fr:'Barbecue électrique',de:'Elektro-BBQ',es:'Barbacoa eléctrica'},
+  'Electric BBQ · optional cover':{it:'Barbecue elettrico · coperchio opzionale',fr:'Barbecue électrique · couvercle en option',de:'Elektro-BBQ · Deckel optional',es:'Barbacoa eléctrica · tapa opcional'},
+  'Electric built-in oven':{it:'Forno elettrico da incasso',fr:'Four électrique encastrable',de:'Elektro-Einbaubackofen',es:'Horno eléctrico empotrable'},
+  'LP gas built-in oven':{it:'Forno da incasso a gas GPL',fr:'Four encastrable à gaz GPL',de:'LPG-Gas-Einbaubackofen',es:'Horno empotrable a gas GLP'},
+  'Compact LP gas built-in oven':{it:'Forno da incasso a gas GPL compatto',fr:'Four encastrable à gaz GPL compact',de:'Kompakter LPG-Gas-Einbaubackofen',es:'Horno empotrable a gas GLP compacto'},
+  'Glass-ceramic griddle':{it:'Piastra in vetroceramica',fr:'Plancha vitrocéramique',de:'Glaskeramik-Grillplatte',es:'Plancha vitrocerámica'},
+  'Radiant grill + glass-ceramic griddle':{it:'Grill radiante + piastra in vetroceramica',fr:'Gril radiant + plancha vitrocéramique',de:'Strahlungsgrill + Glaskeramik-Grillplatte',es:'Grill radiante + plancha vitrocerámica'},
+  'Gas':{it:'Gas',fr:'Gaz',de:'Gas',es:'Gas'},
+  'Induction':{it:'Induzione',fr:'Induction',de:'Induktion',es:'Inducción'},
+  'Radiant':{it:'Radiante',fr:'Radiant',de:'Strahlungsheizung',es:'Radiante'},
+  'Radiant · Duplex':{it:'Radiante · Duplex',fr:'Radiant · Duplex',de:'Strahlungsheizung · Duplex',es:'Radiante · Duplex'},
+  'Electronic':{it:'Elettronica',fr:'Électronique',de:'Elektronisch',es:'Electrónica'},
+  'Battery electronic':{it:'Elettronica a batteria',fr:'Électronique à pile',de:'Batterie-elektronisch',es:'Electrónica a pilas'},
+  'Enamelled cavity':{it:'Cavità smaltata',fr:'Cavité émaillée',de:'Emaillierter Garraum',es:'Cavidad esmaltada'},
+  'Enamelled or st. steel cavity':{it:'Cavità smaltata o in acciaio inox',fr:'Cavité émaillée ou inox',de:'Garraum emailliert oder Edelstahl',es:'Cavidad esmaltada o de acero inox'},
+  'Thermostatic · optional grill':{it:'Termostatico · grill opzionale',fr:'Thermostatique · gril en option',de:'Thermostatisch · Grill optional',es:'Termostático · grill opcional'},
+  'St. steel · thermostatic':{it:'Acciaio inox · termostatico',fr:'Inox · thermostatique',de:'Edelstahl · thermostatisch',es:'Acero inox · termostático'},
+  'St. steel · thermostatic · optional grill':{it:'Acciaio inox · termostatico · grill opzionale',fr:'Inox · thermostatique · gril en option',de:'Edelstahl · thermostatisch · Grill optional',es:'Acero inox · termostático · grill opcional'},
+  'Grill · optional ventilation':{it:'Grill · ventilazione opzionale',fr:'Gril · ventilation en option',de:'Grill · Umluft optional',es:'Grill · ventilación opcional'},
+  'Thermostat and timer':{it:'Termostato e timer',fr:'Thermostat et minuterie',de:'Thermostat und Timer',es:'Termostato y temporizador'},
+  'Integrated bridge':{it:'Ponte integrato',fr:'Pont intégré',de:'Integrierte Bridge-Zone',es:'Puente integrado'},
+  'Optional bridge function':{it:'Funzione ponte opzionale',fr:'Fonction pont en option',de:'Bridge-Funktion optional',es:'Función puente opcional'},
+  'Super easy-clean flat surface':{it:'Superficie piana super facile da pulire',fr:'Surface plane ultra-facile à nettoyer',de:'Superleicht zu reinigende ebene Fläche',es:'Superficie plana superfácil de limpiar'},
+  'Super-insulated · detachable':{it:'Super isolato · rimovibile',fr:'Super isolé · amovible',de:'Hochisoliert · abnehmbar',es:'Superaislado · desmontable'},
+  'All stainless · large drip tray':{it:'Tutto acciaio · ampia vaschetta raccogligocce',fr:'Tout inox · grand bac récupérateur',de:'Komplett Edelstahl · große Auffangschale',es:'Todo acero inox · amplia bandeja recogegotas'},
+  'Double heater · st. steel':{it:'Doppia resistenza · acciaio inox',fr:'Double résistance · inox',de:'Doppelheizelement · Edelstahl',es:'Doble resistencia · acero inox'},
+  'Double heater · large drip tray · st. steel':{it:'Doppia resistenza · ampia vaschetta · acciaio inox',fr:'Double résistance · grand bac · inox',de:'Doppelheizelement · große Auffangschale · Edelstahl',es:'Doble resistencia · amplia bandeja · acero inox'},
+  'Triple heater · removable drip tray':{it:'Tripla resistenza · vaschetta removibile',fr:'Triple résistance · bac amovible',de:'Dreifach-Heizelement · herausnehmbare Auffangschale',es:'Triple resistencia · bandeja extraíble'},
+  'Sealed components · high IP · glass':{it:'Componenti sigillati · IP elevato · vetro',fr:'Composants scellés · IP élevé · verre',de:'Versiegelte Komponenten · hohe IP-Schutzart · Glas',es:'Componentes sellados · IP elevado · cristal'},
+  'Butane / Propane · 30 mbar':{it:'Butano / Propano · 30 mbar',fr:'Butane / Propane · 30 mbar',de:'Butan / Propan · 30 mbar',es:'Butano / Propano · 30 mbar'},
+  'Butane / Propane · 30 mbar (I3 B/P)':{it:'Butano / Propano · 30 mbar (I3 B/P)',fr:'Butane / Propane · 30 mbar (I3 B/P)',de:'Butan / Propan · 30 mbar (I3 B/P)',es:'Butano / Propano · 30 mbar (I3 B/P)'},
+  '2 · integrated panholders':{it:'2 · reggipentola integrati',fr:'2 · supports de casserole intégrés',de:'2 · integrierte Topfhalter',es:'2 · sujetaollas integrados'},
+  '1 large':{it:'1 grande',fr:'1 grande',de:'1 groß',es:'1 grande'},
+  '2 or 3':{it:'2 o 3',fr:'2 ou 3',de:'2 oder 3',es:'2 o 3'},
+  '3 or 4':{it:'3 o 4',fr:'3 ou 4',de:'3 oder 4',es:'3 o 4'},
+  '4 or 5':{it:'4 o 5',fr:'4 ou 5',de:'4 oder 5',es:'4 o 5'}
+};
 // Layout della sezione 01 (Specifications).
 // 'split' = foto prodotto a sinistra + tabella specifiche a destra. Dal ckpt 32
 // e' il comportamento PREDEFINITO di tutte le schede: qui sotto si elencano solo
@@ -5729,7 +5807,8 @@ function renderProdSpecs(m){
     for(var i=0;i<rows.length;i++){
       var lk=rows[i][0], val=rows[i][1], vk=rows[i][2];
       var lbl=SPEC_LABELS_EN[lk]||lk;
-      h+='<tr><td class="pct-label" data-i18n="'+lk+'">'+lbl+'</td><td class="pct-val"'+(vk?' data-i18n-html="'+vk+'"':'')+'>'+val+'</td></tr>';
+      var __va = vk ? (' data-i18n-html="'+vk+'"') : (val.indexOf('<')<0 ? (' data-spec-val="'+val.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"') : '');
+      h+='<tr><td class="pct-label" data-i18n="'+lk+'">'+lbl+'</td><td class="pct-val"'+__va+'>'+val+'</td></tr>';
     }
     var __note=(window.PROD_SPECS_NOTE&&window.PROD_SPECS_NOTE[m])?window.PROD_SPECS_NOTE[m]:'';
     if(__note){ h+='<tr class="pct-note-row"><td class="pct-note" colspan="2" style="font-size:11px;opacity:.62;padding-top:12px;font-style:italic;letter-spacing:.01em" data-i18n="'+__note+'"></td></tr>'; }
@@ -13308,6 +13387,13 @@ function setLang(lang) {
   document.querySelectorAll('[data-i18n-html]').forEach(function(el){
     var key = el.getAttribute('data-i18n-html');
     if (d[key] !== undefined) el.innerHTML = d[key];
+  });
+
+  /* Translate spec VALUES · [data-spec-val] (mappa EN -> lingua) */
+  document.querySelectorAll('[data-spec-val]').forEach(function(el){
+    var en = el.getAttribute('data-spec-val');
+    var mp = window.SPEC_VAL_I18N && window.SPEC_VAL_I18N[en];
+    el.textContent = (mp && mp[lang]) ? mp[lang] : en;
   });
 
   /* Translate placeholders · [data-i18n-ph] */
