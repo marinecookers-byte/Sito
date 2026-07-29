@@ -1510,6 +1510,8 @@ header.hide{transform:translateY(-100%);}
 .pp-gallery-item.pp-gallery-video{position:relative;cursor:pointer;background:#0a0a0a}
 .pp-gallery-item.pp-gallery-video img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;padding:0}
 .pp-gallery-grid.pp-gallery-multi .pp-gallery-item.pp-gallery-video img{aspect-ratio:4/3;height:auto;padding:0;object-fit:cover}
+.pp-gallery-item.pp-gallery-video video{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;padding:0}
+.pp-gallery-grid.pp-gallery-multi .pp-gallery-item.pp-gallery-video video{aspect-ratio:4/3;height:auto;padding:0;object-fit:cover}
 .pp-gallery-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:rgba(10,10,10,.45);border:1px solid rgba(248,246,241,.85);transition:background .3s,border-color .3s;pointer-events:none}
 .pp-gallery-play::after{content:"";position:absolute;top:50%;left:54%;transform:translate(-50%,-50%);border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #f8f6f1}
 .pp-gallery-item.pp-gallery-video:hover .pp-gallery-play{background:rgba(184,150,90,.85);border-color:rgba(212,176,122,1)}
@@ -5042,15 +5044,36 @@ function goProd(m){
       for(var gj=0;gj<media.length;gj++){
         var it=media[gj];
         if(it.type==='video'){
-          gh+='<div class="pp-gallery-item pp-gallery-video" data-lb-type="video" data-lb-embed="'+it.embed+'" data-lb-alt="'+it.alt+'" onclick="ppGalleryOpenFromGrid('+gj+')">'
-            +(it.src?'<img src="'+it.src+'" alt="'+it.alt+'" onerror="this.style.display=\'none\'">':'')
-            +'<span class="pp-gallery-play" aria-hidden="true"></span></div>';
+          var vpid=(it.embed.match(/public_id=([^&]+)/)||[])[1]||'';
+          var vmp4=vpid?('https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/'+vpid+'.mp4'):'';
+          gh+='<div class="pp-gallery-item pp-gallery-video pp-gallery-video-auto" data-lb-type="video" data-lb-embed="'+it.embed+'" data-lb-alt="'+it.alt+'" onclick="ppGalleryOpenFromGrid('+gj+')">'
+            +(vmp4?'<video src="'+vmp4+'"'+(it.src?' poster="'+it.src+'"':'')+' loop muted playsinline preload="none"></video>'
+                  :(it.src?'<img src="'+it.src+'" alt="'+it.alt+'" onerror="this.style.display=\'none\'">':''))
+            +'</div>';
         } else {
           var cls=(dyn && gj%3===0)?'pp-gallery-item span-all':'pp-gallery-item';
           gh+='<div class="'+cls+'" data-lb-type="image" data-lb-src="'+it.src+'" data-lb-alt="'+it.alt+'" onclick="ppGalleryOpenFromGrid('+gj+')"><img src="'+it.src+'" alt="'+it.alt+'"></div>';
         }
       }
       gg.innerHTML=gh;
+      /* Autoplay solo quando il video entra nello schermo (risparmio risorse) */
+      (function(){
+        var vids=gg.querySelectorAll('.pp-gallery-video-auto video');
+        if(window.__ppGalVidIO){ try{window.__ppGalVidIO.disconnect();}catch(e){} window.__ppGalVidIO=null; }
+        if(!vids.length) return;
+        if(!('IntersectionObserver' in window)){
+          Array.prototype.forEach.call(vids,function(v){ if(v.play) v.play().catch(function(){}); });
+          return;
+        }
+        window.__ppGalVidIO=new IntersectionObserver(function(entries){
+          entries.forEach(function(en){
+            var v=en.target;
+            if(en.isIntersecting){ if(v.play) v.play().catch(function(){}); }
+            else if(v.pause){ v.pause(); }
+          });
+        },{threshold:0.25});
+        Array.prototype.forEach.call(vids,function(v){ window.__ppGalVidIO.observe(v); });
+      })();
       // La classe multi resta legata alle SOLE gallerie multi-foto vere (come
       // prima): il video opt-in non cambia il layout. MAGNUS resta a 2 colonne.
       // Quando il layout e' dinamico (mosaico) si usa pp-gallery-dyn al posto
