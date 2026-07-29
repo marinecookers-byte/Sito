@@ -79,7 +79,8 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .hsr{
   width:38px;height:38px;display:flex;align-items:center;justify-content:center;
   background:none;border:none;padding:0;cursor:pointer;
-  color:rgba(248,246,241,.55);transition:color .3s,transform .3s cubic-bezier(.23,1,.32,1);
+  color:rgba(248,246,241,.9);transition:color .3s,transform .3s cubic-bezier(.23,1,.32,1);
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));
 }
 .hsr svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-linecap:round}
 .hsr:hover{color:var(--gl);transform:scale(1.08)}
@@ -179,7 +180,7 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
   .srch-it-sb{white-space:normal}
 }
 
-.hbg{width:44px;height:44px;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;gap:6px;cursor:pointer;background:none;border:none;padding:0;z-index:800}
+.hbg{width:44px;height:44px;display:flex;flex-direction:column;justify-content:center;align-items:flex-end;gap:6px;cursor:pointer;background:none;border:none;padding:0;z-index:800;filter:drop-shadow(0 1px 2px rgba(0,0,0,.55))}
 .hbg span{display:block;height:1px;background:#f8f6f1;transition:all .4s cubic-bezier(.23,1,.32,1)}
 .hbg span:nth-child(1){width:28px}.hbg span:nth-child(2){width:20px}.hbg span:nth-child(3){width:24px}
 .hbg.open span:nth-child(1){width:26px;transform:translateY(7px) rotate(45deg)}
@@ -365,15 +366,23 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
      altro modo di sovrascriverlo senza toccare il markup. */
   header{padding:0 16px;gap:8px}
   header > a img{height:28px !important}
-  .lang-sel{margin-right:8px;flex-shrink:1;min-width:0}
-  .lang-btn{font-size:7.5px;padding:4px 4px;letter-spacing:.12em}
+  .lang-sel{margin-right:8px;flex-shrink:1;min-width:0;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+  .lang-btn{font-size:7.5px;padding:4px 4px;letter-spacing:.12em;color:rgba(248,246,241,.72)}
+  .lang-btn.active{color:var(--gl)}
+  .lang-sep{background:rgba(248,246,241,.3)}
   .hdr-right{gap:4px;flex-shrink:0}
   .hsr{width:30px;height:30px}
   .hsr svg{width:16px;height:16px}
-  .hbg{width:34px}
+  .hbg{width:34px;filter:drop-shadow(0 1px 2.5px rgba(0,0,0,.7))}
+  .hbg span{height:2px}
   .hbg span:nth-child(1){width:22px}
   .hbg span:nth-child(2){width:16px}
   .hbg span:nth-child(3){width:19px}
+  .hbg.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+  .hbg.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+  .hsr{color:rgba(248,246,241,.95);filter:drop-shadow(0 1px 2.5px rgba(0,0,0,.7))}
+  /* Voci categoria menu: piu' leggibili a riposo su mobile (no hover) */
+  .ncat{color:rgba(248,246,241,.72)}
   /* ── HERO HOME SU MOBILE ──
      Il problema principale e' il VIDEO di sfondo: ha object-fit:cover, quindi
      su un contenitore alto e stretto viene ingrandito fino a coprire l'altezza
@@ -1844,7 +1853,7 @@ header.hide{transform:translateY(-100%);}
 @media(max-width:768px){
   #pp-mobile-nav{display:flex;flex-direction:row;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;background:#f8f6f1;border-bottom:1px solid rgba(0,0,0,.07);padding:0 8px;height:40px;align-items:center;width:100%;flex-shrink:0;position:sticky;top:0;z-index:10}
   #pp-mobile-nav::-webkit-scrollbar{display:none}
-  .pp-mob-btn{flex-shrink:0;background:none;border:none;cursor:pointer;font-family:"Outfit",sans-serif;font-size:9px;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,0,0,.35);padding:0 14px;height:40px;white-space:nowrap;transition:color .3s}
+  .pp-mob-btn{flex-shrink:0;background:none;border:none;cursor:pointer;font-family:"Outfit",sans-serif;font-size:9px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:rgba(0,0,0,.62);padding:0 14px;height:40px;white-space:nowrap;transition:color .3s}
   .pp-mob-btn.active{color:rgba(184,150,90,1)}
   .pp-nav{display:none}
   .pp-body{display:block}
@@ -3480,7 +3489,7 @@ header.hide{transform:translateY(-100%);}
       <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/Marine_Cooker_reel-1_1_-_ALEX_NEWSOME_sxpft6.mp4" type="video/mp4">
       <track kind="captions" src="" label="No captions">
     </video>
-    <img id="pp-heroimg" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg" alt="OPUS · Marine Cookers" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;display:none;">
+    <img id="pp-heroimg" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg" alt="OPUS · Marine Cookers" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85;display:none;">
     <div class="pp-hero-overlay"></div>
     <div class="pp-hero-title">
       <span class="pp-hero-label" data-i18n="pp_hero_label">Marine Cookers · Electric</span>
@@ -3985,7 +3994,7 @@ header.hide{transform:translateY(-100%);}
 
     <!-- ── PANNELLO 0: HERO ── -->
     <div class="ab-panel ab-panel-dark" style="z-index:1;">
-      <img class="ab-panel-video ab-hero-video" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785171975/HERO_PER_CHI_SIAMO_kling_20260728_Creation__227_0_wyducq.png" alt="Marine Cookers · Chi siamo" loading="eager" decoding="async">
+      <img class="ab-panel-video ab-hero-video" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785171975/HERO_PER_CHI_SIAMO_kling_20260728_Creation__227_0_wyducq.png" alt="Marine Cookers · Chi siamo" loading="eager" decoding="async">
       <div class="ab-vbreak-overlay"></div>
       <div class="ab-panel-inner" style="align-items:flex-end; padding-bottom:80px;">
         <div>
@@ -4047,7 +4056,7 @@ header.hide{transform:translateY(-100%);}
     <div class="ab-panel ab-panel-light">
       <div class="ab-panel-inner">
         <figure class="ab-figure ab-spread to-right">
-          <img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785164702/HERO2_CUCINE_CON_FORNO_A_GAS_Gemini_Generated_Image_ep57fkep57fkep57_nbgmuy.png" alt="Alta Cucina italiana, ovunque" loading="lazy" decoding="async">
+          <img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785164702/HERO2_CUCINE_CON_FORNO_A_GAS_Gemini_Generated_Image_ep57fkep57fkep57_nbgmuy.png" alt="Alta Cucina italiana, ovunque" loading="lazy" decoding="async">
           <figcaption class="ab-cap">Alta Cucina italiana, ovunque · Marine Cookers</figcaption>
         </figure>
       </div>
@@ -4572,14 +4581,14 @@ window.CAT_HERO_VIDEO_CATEGORY = 'https://res.cloudinary.com/dseiw9ndw/video/upl
 // Media hero per categoria: {video:'url'} oppure {image:'url'}. Se una categoria
 // non è elencata, usa il video di default (categoria) o la scena (elettriche).
 window.CAT_HERO_MEDIA = {
-  'Built-in Gas Cooktops': {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785261270/HERO_PIANI_INCASSO_GAS_kling_20260729_IMAGE__Migliora__450_0_osvswl.png'},
+  'Built-in Gas Cooktops': {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785261270/HERO_PIANI_INCASSO_GAS_kling_20260729_IMAGE__Migliora__450_0_osvswl.png'},
   'Electric Cookers with Oven': {video: window.CAT_HERO_VIDEO_ELECTRIC},
-  'Gas Cookers with Oven':      {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785164702/HERO2_CUCINE_CON_FORNO_A_GAS_Gemini_Generated_Image_ep57fkep57fkep57_nbgmuy.png', pos:'center 20%'},
-  'Gas Cookers':                {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784739539/HERO_59_GRILL_qs77cf.jpg'},
+  'Gas Cookers with Oven':      {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785164702/HERO2_CUCINE_CON_FORNO_A_GAS_Gemini_Generated_Image_ep57fkep57fkep57_nbgmuy.png', pos:'center 20%'},
+  'Gas Cookers':                {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784739539/HERO_59_GRILL_qs77cf.jpg'},
   'Built-in Electric Cooktops': {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/kling_20260422_%E4%BD%9C%E5%93%81_Voglio_due_3869_0_yzuut1.mp4'},
-  'Electric Grills':            {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784738013/Gemini_Generated_Image_7hyx5s7hyx5s7hyx_z4rhgg.png'},
-  'Electric BBQs':              {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg'},
-  'Gas Grills':                 {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784911666/HERO_CAPITANO_Gemini_Generated_Image_2lrjng2lrjng2lrj_kfyada.png'},
+  'Electric Grills':            {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784738013/Gemini_Generated_Image_7hyx5s7hyx5s7hyx_z4rhgg.png'},
+  'Electric BBQs':              {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg'},
+  'Gas Grills':                 {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784911666/HERO_CAPITANO_Gemini_Generated_Image_2lrjng2lrjng2lrj_kfyada.png'},
   'Built-in Gas Ovens':         {video: window.CAT_HERO_VIDEO_CATEGORY},
   'Built-in Electric Ovens':    {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785302564/HERO_NAPOLI_kling_20260729_Creation__3335_0_k9yjw6.png'},
   'Antiche Cambuse - Cucine per yachts d\'Epoca': {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785249097/HERO_PRINCIPE_202607281619_2_tszlqg.mp4'}
@@ -4591,11 +4600,11 @@ window.CAT_HERO_MEDIA = {
 window.PROD_HERO_MEDIA = {
   'VENTOTENE':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785263039/HERO_VENTOTENE_59_GRILL_kling_20260729_IMAGE__Migliora__576_0_njmfwn.png', pos:'center 72%'},
   'VIRTUS':     {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1280/v1785299301/HERO_VIRTUS_kling_20260728_Creation__419_0_2_vr0ov7.png', pos:'center 72%'},
-  'FAVIGNANA':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785148672/MARETTIMO_FOTO_2_Gemini_Generated_Image_ngyamngyamngyamn_jprwoj.png'},
-  'MEGA GRILL': {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784800536/HERO_74_2_Gemini_Generated_Image_2rr86x2rr86x2rr8_ae6ac9.png'},
-  'ORIZZONTE':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784818451/HERO_ORIZZONTE_JPG_Gemini_Generated_Image_1swvi71swvi71swv_dd8cui.jpg'},
-  'CAPITANO':   {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784911666/HERO_CAPITANO_Gemini_Generated_Image_2lrjng2lrjng2lrj_kfyada.png'},
-  'MAGNUS':     {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg'},
+  'FAVIGNANA':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785148672/MARETTIMO_FOTO_2_Gemini_Generated_Image_ngyamngyamngyamn_jprwoj.png'},
+  'MEGA GRILL': {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784800536/HERO_74_2_Gemini_Generated_Image_2rr86x2rr86x2rr8_ae6ac9.png'},
+  'ORIZZONTE':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784818451/HERO_ORIZZONTE_JPG_Gemini_Generated_Image_1swvi71swvi71swv_dd8cui.jpg'},
+  'CAPITANO':   {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784911666/HERO_CAPITANO_Gemini_Generated_Image_2lrjng2lrjng2lrj_kfyada.png'},
+  'MAGNUS':     {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg'},
   'PRINCIPE':   {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785254570/HERO_PRINCIPE_PAGINE_PRODOTTO_202607281618_4_uqgavs.mp4'}
 };
 
@@ -4619,7 +4628,7 @@ window.PROD_DATASHEET = {
     name:'MAGNUS',
     tagline:'Italian fine dining takes on the open sea.',
     cat1:'ELECTRIC BBQ', cat2:'DETACHABLE LID',
-    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg',
     drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784992791/MAGNUS_DISEGNO_nv8jqg.jpg',
     specs:[['Type','Electric BBQ'],['Power','3.7 kW'],['Power supply','220-240V · 50/60 Hz'],['Lid','Super-insulated · detachable'],['Construction','Double heater · stainless steel'],['Dimensions','74 × 52.2 × 8.5h cm'],['Lid open','41h cm']],
     descTitle:'The Instrument',
