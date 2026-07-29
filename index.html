@@ -265,6 +265,62 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .btp:hover{background:var(--gl);letter-spacing:.28em}
 .btg{display:inline-flex;align-items:center;gap:10px;font-size:9px;font-weight:300;letter-spacing:.3em;text-transform:uppercase;color:rgba(248,246,241,.65);text-decoration:none;transition:color .3s;font-family:"Outfit",sans-serif}
 .btg svg{width:14px;height:14px;transition:transform .3s}.btg:hover{color:var(--wh)}.btg:hover svg{transform:translateX(4px)}
+/* Hero · pulsante secondario "Panoramica Prodotti" (outline dorato) */
+.btm{display:inline-block;padding:13px 32px;background:transparent;color:var(--go);border:1px solid rgba(184,150,90,.55);font-size:9px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;transition:background .3s,color .3s,border-color .3s,letter-spacing .3s;font-family:"Outfit",sans-serif}
+.btm:hover{background:rgba(184,150,90,.12);color:var(--gl);border-color:var(--gl);letter-spacing:.28em}
+
+/* ── PRODUCT MATRIX · pagina overlay dedicata ─────────────────── */
+#matrixpage{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0a0a;color:var(--wh);z-index:362;opacity:0;pointer-events:none;transition:opacity .5s ease;display:block;overflow:hidden}
+#matrixpage.show{opacity:1;pointer-events:all;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.mx-hero{position:relative;padding:calc(var(--hh) + 52px) clamp(20px,6vw,90px) clamp(40px,5vw,60px);border-bottom:1px solid rgba(184,150,90,.16);text-align:left}
+.mx-back{display:inline-flex;align-items:center;gap:9px;margin-bottom:clamp(28px,4vw,44px);font-family:"Outfit",sans-serif;font-size:9px;font-weight:400;letter-spacing:.26em;text-transform:uppercase;color:rgba(248,246,241,.55);text-decoration:none;transition:color .3s}
+.mx-back svg{transition:transform .3s}
+.mx-back:hover{color:var(--go)}
+.mx-back:hover svg{transform:translateX(-4px)}
+.mx-kicker{display:block;font-family:"Outfit",sans-serif;font-size:10px;font-weight:400;letter-spacing:.4em;text-transform:uppercase;color:var(--go);margin-bottom:20px}
+.mx-title{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:clamp(32px,5vw,62px);line-height:1.02;letter-spacing:-.01em;color:var(--wh);margin:0 0 22px;max-width:14ch}
+.mx-sub{font-family:"Outfit",sans-serif;font-weight:300;font-size:clamp(13px,1.3vw,15px);line-height:1.9;color:rgba(248,246,241,.6);margin:0;max-width:440px}
+.mx-body{padding:clamp(44px,5vw,72px) clamp(20px,6vw,90px) clamp(80px,9vw,130px)}
+@media(max-width:768px){
+  .mx-hero{padding:calc(var(--hh) + 36px) 22px 30px}
+  .mx-back{margin-bottom:26px}
+  .mx-title{font-size:clamp(30px,9vw,42px);max-width:none}
+  .mx-body{padding:34px 18px 70px}
+}
+.mx-cat{margin-bottom:clamp(48px,6vw,86px)}
+.mx-cat:last-child{margin-bottom:0}
+.mx-cat-head{display:flex;align-items:baseline;gap:16px;padding:0 0 20px;margin-bottom:30px;border-bottom:1px solid rgba(184,150,90,.18);cursor:pointer;transition:border-color .4s}
+.mx-cat-head:hover{border-color:rgba(184,150,90,.5)}
+.mx-cat-name{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:clamp(20px,2.4vw,30px);line-height:1;color:var(--wh);transition:color .35s}
+.mx-cat-head:hover .mx-cat-name{color:var(--gl)}
+.mx-cat-count{font-family:"Outfit",sans-serif;font-size:10px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,150,90,.62)}
+.mx-cat-all{margin-left:auto;font-family:"Outfit",sans-serif;font-size:9px;font-weight:400;letter-spacing:.26em;text-transform:uppercase;color:rgba(248,246,241,.4);white-space:nowrap;transition:color .35s;align-self:center}
+.mx-cat-head:hover .mx-cat-all{color:var(--go)}
+.mx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:clamp(16px,1.8vw,26px)}
+.mx-card{position:relative;text-align:left;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);cursor:pointer;overflow:hidden;transition:border-color .4s,transform .4s,background .4s;display:flex;flex-direction:column}
+.mx-card:hover{border-color:rgba(184,150,90,.45);background:rgba(255,255,255,.035);transform:translateY(-4px)}
+.mx-card-media{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:#111}
+.mx-card-media img{width:100%;height:100%;object-fit:contain;padding:10px;transition:transform .7s cubic-bezier(.2,.7,.2,1);opacity:.94}
+.mx-card:hover .mx-card-media img{transform:scale(1.06);opacity:1}
+.mx-card-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:12px;flex:1}
+.mx-card-name{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:23px;line-height:1.02;letter-spacing:.02em;color:var(--wh)}
+.mx-card-specs{display:flex;flex-direction:column;gap:7px;margin-top:2px}
+.mx-spec-row{display:flex;justify-content:space-between;gap:14px;font-family:"Outfit",sans-serif;font-size:12.5px;line-height:1.35}
+.mx-spec-k{font-weight:400;color:rgba(184,150,90,.62);text-transform:uppercase;font-size:10px;letter-spacing:.13em;padding-top:1px;white-space:nowrap}
+.mx-spec-v{font-weight:300;color:rgba(248,246,241,.78);text-align:right}
+.mx-spec-v .pct-val-unit{color:rgba(184,150,90,.75);font-size:.85em;margin-left:2px}
+.mx-card-cta{margin-top:auto;padding-top:4px;font-family:"Outfit",sans-serif;font-size:9px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,150,90,.65);opacity:0;transform:translateY(4px);transition:opacity .35s,transform .35s}
+.mx-card:hover .mx-card-cta{opacity:1;transform:translateY(0)}
+@media(max-width:768px){
+  .mx-grid{grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:13px}
+  .mx-card-body{padding:14px 14px 16px;gap:10px}
+  .mx-card-name{font-size:19px}
+  .mx-spec-row{font-size:11.5px}
+  .mx-spec-k{font-size:9.5px}
+  .mx-cat-all{display:none}
+  .mx-card-cta{display:none}
+  .mx-cat-head{gap:10px}
+}
 /* Year badge top-right */
 .hyr{position:absolute;top:calc(var(--hh) + 36px);right:40px;display:flex;align-items:center;gap:10px;z-index:3;opacity:0;animation:fid 1s ease 1.2s forwards}
 .hyr::before{content:"";width:32px;height:1px;background:var(--go);flex-shrink:0}
@@ -405,11 +461,11 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
      finestra sugli schermi bassi) e padding
      inferiore che tiene conto del ticker .twrap, fisso in basso e alto ~68px. */
   .hero{
-    height:54vh;
-    height:54svh;
-    min-height:450px;
-    max-height:540px;
-    padding:calc(var(--hh) + 34px) 24px 34px;
+    height:64vh;
+    height:64svh;
+    min-height:520px;
+    max-height:640px;
+    padding:calc(var(--hh) + 34px) 24px 40px;
     justify-content:flex-end;
   }
   /* ── IL VIDEO SI VEDE INTERO IN LARGHEZZA ──
@@ -447,20 +503,20 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
      lunghe di tutte e cinque. */
   .hti{
     font-size:clamp(22px,6.4vw,30px);
-    margin-bottom:12px;
+    margin-bottom:10px;
     overflow-wrap:break-word;
     hyphens:none;
   }
   .hey{
-    font-size:7.5px;
-    letter-spacing:.14em;
-    margin-bottom:9px;
+    font-size:8px;
+    letter-spacing:.16em;
+    margin-bottom:8px;
     overflow-wrap:break-word;
   }
   .hde{
     font-size:12px;
-    line-height:1.6;
-    margin-bottom:60px;
+    line-height:1.55;
+    margin-bottom:22px;
     max-width:100%;
     overflow-wrap:break-word;
   }
@@ -471,7 +527,10 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
      Il ticker .twrap qui non c'entra: e' fisso in fondo alla FINESTRA e la hero
      e' alta 400px, quindi non arriva a toccarla. Il vincolo dei 68px vale solo
      dove un contenuto arriva davvero in fondo allo schermo. */
-  .hac{flex-wrap:wrap;gap:14px 18px;margin-top:8px}
+  .hac{flex-direction:column;align-items:flex-start;flex-wrap:nowrap;gap:0;margin-top:4px}
+  .hac .btp{align-self:flex-start;width:auto;padding:12px 26px;font-size:8.5px;letter-spacing:.2em}
+  .hac .btm{align-self:flex-end;width:auto;text-align:center;margin-top:48px;padding:12px 26px;font-size:8.5px;letter-spacing:.2em}
+  .hac .btg{align-self:flex-end;margin-top:14px;font-size:8.5px;letter-spacing:.2em}
   #np{width:100%;padding:calc(var(--hh) + 20px) 28px 28px}
   .cphd,.cpbd{padding-left:24px;padding-right:24px}
   .hsb{display:none}
@@ -2086,15 +2145,31 @@ header.hide{transform:translateY(-100%);}
 
 @media(max-width:430px){
   .hac {
-    flex-direction: row;
-    align-items: center;
-    gap: 14px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    flex-wrap: nowrap;
   }
-  .btp, .btg {
+  .hac .btp {
+    align-self: flex-start;
+    width: auto;
     font-size: 8px;
-    padding: 10px 18px;
-    letter-spacing: .18em;
+    padding: 11px 22px;
+    letter-spacing: .16em;
+  }
+  .hac .btm {
+    align-self: flex-end;
+    width: auto;
+    margin-top: 42px;
+    font-size: 8px;
+    padding: 11px 22px;
+    letter-spacing: .16em;
+  }
+  .hac .btg {
+    align-self: flex-end;
+    margin-top: 13px;
+    font-size: 8px;
+    letter-spacing: .16em;
   }
 }
 
@@ -3897,6 +3972,7 @@ header.hide{transform:translateY(-100%);}
     <p class="hde" data-i18n="hero_desc">Handcrafted in the Inox Valley, Conegliano. Gimballed cookers, ovens and grills built for professional yachts · gas, electric, induction.</p>
     <div class="hac">
       <a href="#" class="btp" onclick="tm();setTimeout(tDrop,400);return false;" data-i18n="hero_btn_explore">Explore Products</a>
+      <a href="#" class="btm" onclick="openMatrix();return false;" data-i18n="matrix_btn">Product Overview</a>
       <a href="#" class="btg" onclick="openAbout();return false;"><span data-i18n="hero_btn_story">Our Story</span><svg viewBox="0 0 16 16" fill="none"><path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
@@ -4001,6 +4077,7 @@ header.hide{transform:translateY(-100%);}
   </div>
 </section>
 <!-- /REVIEWS SECTION -->
+
 </div><!-- /home-scroll -->
 
 <!-- ABOUT US PAGE -->
@@ -4087,7 +4164,7 @@ header.hide{transform:translateY(-100%);}
           <h2 class="ab-section-title" style="margin-top:16px;" data-i18n-html="ab_p4_title">Where <em>Venice</em> set sail</h2>
           <div class="ab-section-body" style="margin-top:20px; max-width:680px;">
             <p data-i18n="ab_p4_body1">Our cultural roots are tied to the maritime tradition of the Serenissima Republic of Venice · one of history's most influential naval powers. Just as Venice united culture, technique and mastery of the seas, we unite refined design and technical reliability to create unique cookers for those who love the sea.</p>
-            <p data-i18n="ab_p4_body2">We work with some of Italy's most distinguished designers, including Marco Zito, professor and former director of IUAV Venice · one of Italy's most prestigious design institutes.</p>
+            <p data-i18n="ab_p4_body2">We work with some of Italy's most distinguished designers, including Marco Zito, professor of design at IUAV Venice · one of Italy's most prestigious design institutes.</p>
           </div>
         </div>
       </div>
@@ -4138,7 +4215,7 @@ header.hide{transform:translateY(-100%);}
             <span class="ab-tag">05 · <span data-i18n="ab_p8_tag">Our Clients</span></span>
             <h2 class="ab-section-title" data-i18n-html="ab_p8_title">Trusted by the <em>world's finest</em> yards</h2>
             <div class="ab-section-body">
-              <p data-i18n="ab_p8_body1">Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to Charles Leclerc's Ferretti.</p>
+              <p data-i18n="ab_p8_body1">Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to the yachts of celebrated artists, Formula One drivers, and leading figures from the worlds of entertainment and finance.</p>
               <p data-i18n="ab_p8_body2">A tradition that continues today with Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo, and many others · wherever excellence at sea demands excellence in the galley.</p>
             </div>
           </div>
@@ -4344,6 +4421,21 @@ header.hide{transform:translateY(-100%);}
   </div>
 </div><!-- /sparepage -->
 
+<!-- PRODUCT MATRIX PAGE · panoramica sintetica di tutti i modelli (pagina overlay dedicata) -->
+<div id="matrixpage">
+  <div class="mx-hero">
+    <a href="#" class="mx-back" onclick="closeMatrix();return false;" aria-label="Back">
+      <svg width="15" height="10" viewBox="0 0 15 10" fill="none"><path d="M14 5H2M5 1L1 5L5 9" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="back_btn">Back</span>
+    </a>
+    <span class="mx-kicker" data-i18n="matrix_kicker">The full collection</span>
+    <h1 class="mx-title" data-i18n="matrix_title">Every model at a glance</h1>
+    <p class="mx-sub" data-i18n="matrix_sub">Browse the complete range by category. Tap any model to open its page, or a category to see it in full.</p>
+  </div>
+  <div class="mx-body" id="mx-body"><!-- generato da JS: buildProductMatrix() --></div>
+</div><!-- /matrixpage -->
+
+
 <div class="twrap"><div class="tinn"><div class="tbr"><span>Ferretti Yachts</span></div><div class="tbr"><span>Azimut Yachts</span></div><div class="tbr"><span>Solaris Yachts</span></div><div class="tbr"><span>Sunseeker</span></div><div class="tbr"><span>Neo Yachts</span></div><div class="tbr"><span>Ice Yachts</span></div><div class="tbr"><span>Cantiere del Pardo</span></div><div class="tbr"><span>Carbon Yachts</span></div><div class="tbr"><span>Bavaria Yachts</span></div><div class="tbr"><span>Axopar</span></div><div class="tbr"><span>Lyman Morse</span></div><div class="tbr"><span>Heesen Yachts</span></div><div class="tbr"><span>Pegasus Yachts</span></div><div class="tbr"><span>Maxi Dolphin</span></div><div class="tbr"><span>Nautor's Swan</span></div><div class="tbr"><span>X-Yachts</span></div><div class="tbr"><span>Aschenez</span></div><div class="tbr"><span>Baglietto</span></div><div class="tbr"><span>Italia Yachts</span></div><div class="tbr"><span>Rossi Navi</span></div><div class="tbr"><span>Cantieri Capelli</span></div><div class="tbr"><span>Turquoise Yachts</span></div><div class="tbr"><span>CNB</span></div><div class="tbr"><span>ITA Catamarans</span></div><div class="tbr"><span>Sunreef</span></div><div class="tbr"><span>Dragonfly</span></div><div class="tbr"><span>Ferretti Yachts</span></div><div class="tbr"><span>Azimut Yachts</span></div><div class="tbr"><span>Solaris Yachts</span></div><div class="tbr"><span>Sunseeker</span></div><div class="tbr"><span>Neo Yachts</span></div><div class="tbr"><span>Ice Yachts</span></div><div class="tbr"><span>Cantiere del Pardo</span></div><div class="tbr"><span>Carbon Yachts</span></div><div class="tbr"><span>Bavaria Yachts</span></div><div class="tbr"><span>Axopar</span></div><div class="tbr"><span>Lyman Morse</span></div><div class="tbr"><span>Heesen Yachts</span></div><div class="tbr"><span>Pegasus Yachts</span></div><div class="tbr"><span>Maxi Dolphin</span></div><div class="tbr"><span>Nautor's Swan</span></div><div class="tbr"><span>X-Yachts</span></div><div class="tbr"><span>Aschenez</span></div><div class="tbr"><span>Baglietto</span></div><div class="tbr"><span>Italia Yachts</span></div><div class="tbr"><span>Rossi Navi</span></div><div class="tbr"><span>Cantieri Capelli</span></div><div class="tbr"><span>Turquoise Yachts</span></div><div class="tbr"><span>CNB</span></div><div class="tbr"><span>ITA Catamarans</span></div><div class="tbr"><span>Sunreef</span></div><div class="tbr"><span>Dragonfly</span></div></div></div>
 
 <!-- Cursore galleria orizzontale -->
@@ -4508,6 +4600,8 @@ function goHome(){
   if(ct){ct.classList.remove('show');}
   var sp=document.getElementById('sparepage');
   if(sp){sp.classList.remove('show');}
+  var mx=document.getElementById('matrixpage');
+  if(mx){mx.classList.remove('show');}
   var pp=document.getElementById('prodpage');
   if(pp){pp.classList.remove('show');pp.style.display='none';}
   var cp=document.getElementById('cp');
@@ -4794,7 +4888,7 @@ function openCat(name,models){
   // prodotto può tornare alla categoria corretta (gas, elettriche, ecc.)
   window.__prodBackCat = { name: name, models: (models || []).slice() };
   cm();
-  ['aboutpage','catpage','contactpage','sparepage'].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove('show');}});
+  ['aboutpage','catpage','contactpage','sparepage','matrixpage'].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove('show');}});
   var hdr=document.getElementById('hdr');if(hdr)hdr.classList.add('dark');
   var parts=name.split(' '),last=parts.pop();
   var cpnmEl=document.getElementById('cpnm');
@@ -4942,7 +5036,7 @@ function goProd(m){
   if(hdr){hdr.classList.add('dark');hdr.classList.remove('hide');}
   var cp=document.getElementById('cp');
   if(cp)cp.classList.remove('show');
-  ['aboutpage','catpage','contactpage','sparepage'].forEach(function(id){
+  ['aboutpage','catpage','contactpage','sparepage','matrixpage'].forEach(function(id){
     var el=document.getElementById(id);
     if(el){el.classList.remove('show');}
   });
@@ -5969,6 +6063,8 @@ document.addEventListener('keydown',function(e){
   if(pp&&pp.classList.contains('show')){closeProd();return;}
   var cp=document.getElementById('cp');
   if(cp&&cp.classList.contains('show')){closeCat();return;}
+  var _mx=document.getElementById('matrixpage');
+  if(_mx&&_mx.classList.contains('show')){if(window.closeMatrix)window.closeMatrix();return;}
   var _sp=document.getElementById('sparepage');
   if(_sp&&_sp.classList.contains('show')){closeSpare();return;}
   var _ab=document.getElementById('aboutpage');
@@ -6402,16 +6498,17 @@ function prodDisp(m){ return (window.PROD_DISPLAY && window.PROD_DISPLAY[m]) ? w
 window.PROD_SPECS={
   // Electric Cookers with Oven
   // 3° elemento (facoltativo) = chiave i18n del VALORE, per tradurlo nelle 5 lingue.
-  'ORIZZONTE':[['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','adjustable 1 to 5.2 <span class="pct-val-unit">kW</span>','specs_hob_power_val_oriz'], ['specs_oven_power','1.6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','adjustable from just 1.75 up to 6.8 <span class="pct-val-unit">kW</span>','specs_total_power_val_oriz'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
-  'TOLOMEO':[['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1-5,2 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','1,5 + 1,65 <span class="pct-val-unit">kW</span>'], ['specs_total_power','1,75-7,7 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
-  'NOBILIS':[['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1-5,2 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','~1,35 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,35-6,6 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
-  'ALTALUX':[['specs_technology','Electric Radiant','specs_technology_val'], ['specs_hob_power','3,6 / 4,8 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','~1,6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','5,2 / 6,4 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'ORIZZONTE':[['spec_dimensions','52.5 x 55 x 50h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','adjustable 1 to 5.2 <span class="pct-val-unit">kW</span>','specs_hob_power_val_oriz'], ['specs_oven_power','1.6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','adjustable from just 1.75 up to 6.8 <span class="pct-val-unit">kW</span>','specs_total_power_val_oriz'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'TOLOMEO':[['spec_dimensions','52.5 x 55 x 50h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1-5,2 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','1,5 + 1,65 <span class="pct-val-unit">kW</span>'], ['specs_total_power','1,75-7,7 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'NOBILIS':[['spec_dimensions','52.5 x 55 x 50h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1-5,2 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','~1,35 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,35-6,6 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'ALTALUX':[['spec_dimensions','52.5 x 55 x 48h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Radiant','specs_technology_val'], ['specs_hob_power','3,6 / 4,8 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','~1,6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','5,2 / 6,4 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
   'VERA':[['specs_technology','Electric Radiant','specs_technology_val'], ['specs_hob_power','2,4 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','2,4 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,7-4,8 <span class="pct-val-unit">kW</span>'], ['spec_dimensions','52.5 × 42.9 × 42.4h <span class="pct-val-unit">cm</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
-  'FORMA':[['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1,5-3,7 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','1,6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,25-5,3 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
-  'MARINA E':[['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1,5-3,7 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','~1,35 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,85-5,1 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
-  'NAUTICA':[['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1,5-3,7 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','~1,35 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,85-5,1 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
-  'COMPACTA':[['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1,5-3,7 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','2,4 <span class="pct-val-unit">kW</span>'], ['specs_total_power','3,9-6,1 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
-  'GRANLUX':[['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','2,8-6,8 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','1,6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','4,4-8,5 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'FORMA':[['spec_dimensions','52.5 x 43 x 50h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1,5-3,7 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','1,6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,25-5,3 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'MARINA E':[['spec_dimensions','52.5 x 47 x 50h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1,5-3,7 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','~1,35 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,85-5,1 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'NAUTICA':[['spec_dimensions','47.5 x 42 x 45/50h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1,5-3,7 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','~1,35 <span class="pct-val-unit">kW</span>'], ['specs_total_power','2,85-5,1 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'COMPACTA':[['spec_dimensions','47.5 x 42 x 48h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','1,5-3,7 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','2,4 <span class="pct-val-unit">kW</span>'], ['specs_total_power','3,9-6,1 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'GRANLUX':[['spec_dimensions','65.5 x 55 x 60h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','2,8-6,8 <span class="pct-val-unit">kW</span>'], ['specs_oven_power','1,6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','4,4-8,5 <span class="pct-val-unit">kW</span>'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
+  'MODULAR':[['spec_dimensions','&#8805; 65.1 x 60 x 59h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
   'MARIS':[['spec_type','Gas cooker with oven'], ['spec_burners','2'], ['spec_power','5.7 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_oven','Enamelled or st. steel cavity'], ['spec_dimensions','52.5 × 48 × 46h <span class="pct-val-unit">cm</span>']],
   'NAUTA':[['spec_type','Gas cooker with oven'], ['spec_burners','3'], ['spec_power','6.7 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_oven','Enamelled or st. steel cavity'], ['spec_dimensions','52.5 × 48 × 46h <span class="pct-val-unit">cm</span>']],
   'MARINA':[['spec_type','Gas cooker with oven'], ['spec_burners','2'], ['spec_power','6.25 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Battery electronic'], ['spec_oven','Thermostatic · optional grill'], ['spec_dimensions','52.5 × 48 × 46h <span class="pct-val-unit">cm</span>']],
@@ -6918,7 +7015,7 @@ function openContact(){
   var pg = document.getElementById('contactpage');
   if(!pg) return;
   cm();
-  ['aboutpage','catpage','prodpage','contactpage','sparepage'].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove('show');}});
+  ['aboutpage','catpage','prodpage','contactpage','sparepage','matrixpage'].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove('show');}});
   var cpEl=document.getElementById('cp');if(cpEl)cpEl.classList.remove('show');;
   pg.scrollTop = 0;
   requestAnimationFrame(function(){
@@ -6940,7 +7037,7 @@ function openSpare(){
   var pg = document.getElementById('sparepage');
   if(!pg) return;
   cm();
-  ['aboutpage','catpage','prodpage','contactpage','sparepage'].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove('show');}});
+  ['aboutpage','catpage','prodpage','contactpage','sparepage','matrixpage'].forEach(function(id){var el=document.getElementById(id);if(el){el.classList.remove('show');}});
   var cpEl=document.getElementById('cp');if(cpEl)cpEl.classList.remove('show');
   pg.scrollTop = 0;
   requestAnimationFrame(function(){
@@ -7100,6 +7197,7 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     var cat=document.getElementById('catpage');
     var ct=document.getElementById('contactpage');
     var sp=document.getElementById('sparepage');
+    var mx=document.getElementById('matrixpage');
 
     var ppL=pp?divScroller(pp):null;
     var cpL=cp?divScroller(cp):null;
@@ -7108,6 +7206,7 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     var catL=cat?divScroller(cat):null;
     var ctL=ct?divScroller(ct):null;
     var spL=sp?divScroller(sp):null;
+    var mxL=mx?divScroller(mx):null;
     var homeL=homeScroller();
 
     function isOpen(el,cls){return el&&el.classList.contains(cls);}
@@ -7121,6 +7220,7 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
       if(isOpen(cat,'show')&&cat.contains(e.target)){catL&&catL.wheel(e);return;}
       if(isOpen(ct,'show')&&ct.contains(e.target)){ctL&&ctL.wheel(e);return;}
       if(isOpen(sp,'show')&&sp.contains(e.target)){spL&&spL.wheel(e);return;}
+      if(isOpen(mx,'show')&&mx.contains(e.target)){mxL&&mxL.wheel(e);return;}
       homeL.wheel(e);
     },{passive:false});
 
@@ -7134,6 +7234,8 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     if(_gh)window.goHome=function(){_gh();homeL.reset();};
     var _os=window.openSpare;
     if(_os)window.openSpare=function(){_os();setTimeout(function(){spL&&spL.reset();},100);};
+    var _om=window.openMatrix;
+    if(_om)window.openMatrix=function(){_om();setTimeout(function(){mxL&&mxL.reset();},100);};
 
     // Dopo un salto programmatico di scrollTop (es. la ricerca che porta a una
     // scheda ricambio) lo stato interno del lerp resta indietro e il primo
@@ -7916,7 +8018,7 @@ var DICT = {
     cs2_eoven_lead: "Stainless steel electric ovens to build into the galley, in a range of sizes. Precise, quiet, and built by hand for cooking that holds to the standard of a great table.",
     cs2_eoven_points: "<li>Powerful, high-quality armoured heating elements.</li><li>Precise thermostats for fine temperature control.</li><li>Roomy oven racks and double-glazed safety doors for a cooler front.</li><li>Enamelled drip trays for even heat and efficiency.</li><li>Interiors in thick enamel or mirror-polished stainless steel, for hygiene and corrosion resistance.</li><li>Each piece handcrafted in Conegliano.</li>",
     /* Hero */
-    hero_tag: "Artisan Marine Cooking Equipment",
+    hero_tag: "Marine Cooking, Crafted in Italy",
     hero_title: "Engineered<br>for the <em>open sea</em>",
     hero_desc: "Handcrafted in the Inox Valley, Conegliano. Gimballed cookers, ovens and grills built for professional yachts · gas, electric, induction.",
     hero_btn_explore: "Explore Products",
@@ -7988,7 +8090,7 @@ var DICT = {
     ab_p3_body2: "The artisans who build our cookers are the latest link in a know-how passed from one generation to the next, born in a small steel workshop of the early 1900s · the same heritage as names like Zoppas and Zanussi. From here come turned solid steel, mirror-finished cavities and the patented gimbal system · details that hold up to a close look.",
     ab_p4_title: "Where <em>Venice</em> set sail",
     ab_p4_body1: "Our cultural roots are tied to the maritime tradition of the Serenissima Republic of Venice · one of history's most influential naval powers. Just as Venice united culture, technique and mastery of the seas, we unite refined design and technical reliability to create unique cookers for those who love the sea.",
-    ab_p4_body2: "We work with some of Italy's most distinguished designers, including Marco Zito, professor and former director of IUAV Venice · one of Italy's most prestigious design institutes.",
+    ab_p4_body2: "We work with some of Italy's most distinguished designers, including Marco Zito, professor of design at IUAV Venice · one of Italy's most prestigious design institutes.",
     ab_quote2: "\"From the lagoon of Venice to the open ocean · our cookers follow the sea.\"<span>La Serenissima heritage</span>",
     ab_p6_tag: "Innovation",
     ab_p6_title: "Firsts that <em>defined</em> the sector",
@@ -7996,7 +8098,7 @@ var DICT = {
     ab_p6_body2: "Always for Wally, we developed the first fully aluminium lightweight cooker. And for Perini Navi, we engineered a special cooker with a unique reverse-gimballing system · a world first.",
     ab_p8_tag: "Our Clients",
     ab_p8_title: "Trusted by the <em>world's finest</em> yards",
-    ab_p8_body1: "Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to Charles Leclerc's Ferretti.",
+    ab_p8_body1: "Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to the yachts of celebrated artists, Formula One drivers, and leading figures from the worlds of entertainment and finance.",
     ab_p8_body2: "A tradition that continues today with Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo, and many others · wherever excellence at sea demands excellence in the galley.",
     /* Catalogues */
     cat_page_label: "Library",
@@ -8094,6 +8196,12 @@ var DICT = {
     ppd_magnus_s2: "Two separate controls.",
     ppd_magnus_s3: "Heating elements with differentiated power.",
     mag_full_kicker: "The MAGNUS story",
+    matrix_kicker: "The full collection",
+    matrix_title: "Every model at a glance",
+    matrix_sub: "Browse the complete range by category. Tap any model to open its page, or a category to see it in full.",
+    matrix_btn: "Product Overview",
+    matrix_hint: "Tap a model for details",
+    matrix_dim: "Dimensions",
     bgc_hero_title: "Built-in Gas Cooktops",
     bgc_hero_sub: "The pure flame of Italian cooking, flush into the galley.",
     bgc_es_tag: "The collection",
@@ -9045,7 +9153,7 @@ var DICT = {
     cs2_eoven_head: "Forni elettrici da incasso,<br><em>precisi e puliti</em>",
     cs2_eoven_lead: "Forni elettrici in acciaio inox da incassare in cambusa, in diverse misure. Precisi, silenziosi e costruiti a mano, per una cottura all'altezza di una grande tavola.",
     cs2_eoven_points: "<li>Resistenze corazzate potenti e di alta qualità.</li><li>Termostati precisi, per un controllo fine della temperatura.</li><li>Griglie forno capienti e porte con vetri doppi di sicurezza, per una facciata più fresca.</li><li>Leccarde smaltate, per una diffusione del calore uniforme ed efficiente.</li><li>Interni in smalto ad alto spessore o acciaio inox lucidato a specchio, per igiene e resistenza alla corrosione.</li><li>Ogni pezzo realizzato a mano a Conegliano.</li>",
-    hero_tag: "Attrezzature da Cucina per Imbarcazioni",
+    hero_tag: "Cucine Marine d'Autore",
     hero_title: "Progettato<br>per il <em>mare aperto</em>",
     hero_desc: "Fatto a mano nell'Inox Valley, Conegliano. Cucine orientabili, forni e griglie per yacht professionali · gas, elettrici, induzione.",
     hero_btn_explore: "Esplora i Prodotti",
@@ -9113,7 +9221,7 @@ var DICT = {
     ab_p3_body2: "Le maestranze che costruiscono le nostre cucine sono l'ultimo anello di un sapere tramandato di generazione in generazione, nato in una piccola bottega dell'acciaio agli inizi del Novecento · lo stesso patrimonio di nomi come Zoppas e Zanussi. Da qui vengono l'inox massiccio tornito, le muffole a specchio e il brevetto dei basculanti · dettagli che reggono lo sguardo ravvicinato.",
     ab_p4_title: "Dove <em>Venezia</em> prendeva il largo",
     ab_p4_body1: "Le nostre radici culturali sono legate alla tradizione marittima della Serenissima Repubblica di Venezia · una delle potenze navali più influenti della storia. Come Venezia univa cultura, tecnica e dominio dei mari, noi uniamo design raffinato e affidabilità tecnica per creare cucine uniche per chi ama il mare.",
-    ab_p4_body2: "Collaboriamo con alcuni dei designer italiani più illustri, tra cui Marco Zito, professore ed ex direttore dello IUAV di Venezia · uno degli istituti di design più prestigiosi d'Italia.",
+    ab_p4_body2: "Collaboriamo con alcuni dei designer italiani più illustri, tra cui Marco Zito, professore di design allo IUAV di Venezia · uno degli istituti di design più prestigiosi d'Italia.",
     ab_quote2: "\"Dalla laguna di Venezia all'oceano aperto · le nostre cucine seguono il mare.\"<span>Eredità della Serenissima</span>",
     ab_p6_tag: "Innovazione",
     ab_p6_title: "Primati che hanno <em>definito</em> il settore",
@@ -9121,7 +9229,7 @@ var DICT = {
     ab_p6_body2: "Sempre per Wally, sviluppammo la prima cucina completamente in alluminio ultraleggera. E per Perini Navi, progettammo una cucina speciale con un sistema di bilanciamento inverso unico · un primato mondiale.",
     ab_p8_tag: "I Nostri Clienti",
     ab_p8_title: "La fiducia dei <em>migliori</em> cantieri al mondo",
-    ab_p8_body1: "Le nostre cucine sono state scelte per decenni dai più importanti cantieri navali del mondo, dai più rinomati distributori e da armatori privati. Dai moderni yacht Solaris alle imbarcazioni classiche come la Latifa di William Fife III (1936), dall'Elmo's Fire di Giovanni Soldini alla Ferretti di Charles Leclerc.",
+    ab_p8_body1: "Le nostre cucine sono state scelte per decenni dai più importanti cantieri navali del mondo, dai più rinomati distributori e da armatori privati. Dai moderni yacht Solaris alle imbarcazioni classiche come la Latifa di William Fife III (1936), dall'Elmo's Fire di Giovanni Soldini agli yacht di grandi artisti, piloti di Formula Uno e personalità del mondo dello spettacolo e della finanza.",
     ab_p8_body2: "Una tradizione che continua oggi con Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo e molti altri · ovunque l'eccellenza in mare richieda eccellenza in cucina.",
     cat_page_label: "Libreria",
     cat_page_title: "Cataloghi",
@@ -9215,6 +9323,12 @@ var DICT = {
     ppd_magnus_s2: "Doppio comando separato.",
     ppd_magnus_s3: "Resistenze con potenza differenziata.",
     mag_full_kicker: "Il racconto di MAGNUS",
+    matrix_kicker: "La collezione completa",
+    matrix_title: "Tutti i modelli in un colpo d'occhio",
+    matrix_sub: "Sfoglia l'intera gamma per categoria. Tocca un modello per aprire la sua pagina, o una categoria per vederla per intero.",
+    matrix_btn: "Panoramica Prodotti",
+    matrix_hint: "Tocca un modello per i dettagli",
+    matrix_dim: "Dimensioni",
     bgc_hero_title: "Piani cottura a gas",
     bgc_hero_sub: "La fiamma pura dell'alta cucina italiana, a filo nella cambusa.",
     bgc_es_tag: "La collezione",
@@ -10166,7 +10280,7 @@ var DICT = {
     cs2_eoven_head: "Fours électriques encastrables,<br><em>précis et nets</em>",
     cs2_eoven_lead: "Fours électriques en acier inox à encastrer dans la cuisine, en plusieurs dimensions. Précis, silencieux et faits à la main, pour une cuisson à la hauteur d'une grande table.",
     cs2_eoven_points: "<li>Résistances blindées puissantes et de haute qualité.</li><li>Thermostats précis, pour un contrôle fin de la température.</li><li>Grilles de four spacieuses et portes à double vitrage de sécurité, pour une façade plus fraîche.</li><li>Lèchefrites émaillées, pour une diffusion de la chaleur uniforme et efficace.</li><li>Intérieurs en émail épais ou acier inox poli miroir, pour l'hygiène et la résistance à la corrosion.</li><li>Chaque pièce fabriquée à la main à Conegliano.</li>",
-    hero_tag: "Équipements de Cuisine Marine Artisanaux",
+    hero_tag: "Cuisines Marines d'Exception",
     hero_title: "Conçu pour<br><em>la haute mer</em>",
     hero_desc: "Fabriqué à la main dans l'Inox Valley, Conegliano. Cuisinières à cardan, fours et grils pour yachts professionnels · gaz, électrique, induction.",
     hero_btn_explore: "Découvrir les Produits",
@@ -10234,7 +10348,7 @@ var DICT = {
     ab_p3_body2: "Les artisans qui fabriquent nos cuisinières sont le dernier maillon d'un savoir-faire transmis de génération en génération, né dans un petit atelier de l'acier au début du XXe siècle · le même héritage que des noms comme Zoppas et Zanussi. D'ici viennent l'inox massif tourné, les moufles miroir et le brevet des cardans · des détails qui soutiennent le regard rapproché.",
     ab_p4_title: "Là où <em>Venise</em> prenait la mer",
     ab_p4_body1: "Nos racines culturelles sont liées à la tradition maritime de la Sérénissime République de Venise · l'une des puissances navales les plus influentes de l'histoire. Tout comme Venise unissait culture, technique et maîtrise des mers, nous unissons design raffiné et fiabilité technique pour créer des cuisinières uniques pour ceux qui aiment la mer.",
-    ab_p4_body2: "Nous collaborons avec certains des designers italiens les plus distingués, dont Marco Zito, professeur et ancien directeur de l'IUAV Venise · l'un des instituts de design les plus prestigieux d'Italie.",
+    ab_p4_body2: "Nous collaborons avec certains des designers italiens les plus distingués, dont Marco Zito, professeur de design à l'IUAV Venise · l'un des instituts de design les plus prestigieux d'Italie.",
     ab_quote2: "\"Du lagon de Venise à l'océan ouvert · nos cuisinières suivent la mer.\"<span>Héritage de la Sérénissime</span>",
     ab_p6_tag: "Innovation",
     ab_p6_title: "Les premières qui ont <em>défini</em> le secteur",
@@ -10242,7 +10356,7 @@ var DICT = {
     ab_p6_body2: "Toujours pour Wally, nous avons développé la première cuisinière entièrement en aluminium ultra-légère. Et pour Perini Navi, nous avons conçu une cuisinière spéciale avec un système de cardan inversé unique · une première mondiale.",
     ab_p8_tag: "Nos Clients",
     ab_p8_title: "La confiance des <em>meilleurs</em> chantiers du monde",
-    ab_p8_body1: "Nos cuisinières sont la référence depuis des décennies des plus grands chantiers navals du monde, des distributeurs les plus réputés et des propriétaires privés. Des yachts Solaris modernes aux bateaux classiques comme le Latifa de William Fife III (1936), du Elmo's Fire de Giovanni Soldini au Ferretti de Charles Leclerc.",
+    ab_p8_body1: "Nos cuisinières sont la référence depuis des décennies des plus grands chantiers navals du monde, des distributeurs les plus réputés et des propriétaires privés. Des yachts Solaris modernes aux bateaux classiques comme le Latifa de William Fife III (1936), de l'Elmo's Fire de Giovanni Soldini aux yachts de grands artistes, de pilotes de Formule 1 et de personnalités du monde du spectacle et de la finance.",
     ab_p8_body2: "Une tradition qui se poursuit aujourd'hui avec Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo et bien d'autres · partout où l'excellence en mer exige l'excellence en cuisine.",
     cat_page_label: "Bibliothèque",
     cat_page_title: "Catalogues",
@@ -10336,6 +10450,12 @@ var DICT = {
     ppd_magnus_s2: "Double commande séparée.",
     ppd_magnus_s3: "Résistances à puissance différenciée.",
     mag_full_kicker: "Le récit de MAGNUS",
+    matrix_kicker: "La collection complète",
+    matrix_title: "Tous les modèles en un coup d'oeil",
+    matrix_sub: "Parcourez toute la gamme par catégorie. Touchez un modèle pour ouvrir sa page, ou une catégorie pour la voir en entier.",
+    matrix_btn: "Apercu des Produits",
+    matrix_hint: "Touchez un modèle pour les détails",
+    matrix_dim: "Dimensions",
     bgc_hero_title: "Tables de cuisson à gaz",
     bgc_hero_sub: "La flamme pure de la cuisine italienne, affleurante dans la cambuse.",
     bgc_es_tag: "La collection",
@@ -11287,7 +11407,7 @@ var DICT = {
     cs2_eoven_head: "Elektro-Einbaubacköfen,<br><em>präzise und sauber</em>",
     cs2_eoven_lead: "Elektrobacköfen aus Edelstahl zum Einbau in die Kombüse, in verschiedenen Größen. Präzise, leise und von Hand gefertigt, für ein Garen auf dem Niveau einer großen Tafel.",
     cs2_eoven_points: "<li>Kräftige, hochwertige gepanzerte Heizelemente.</li><li>Präzise Thermostate für feine Temperaturkontrolle.</li><li>Geräumige Backroste und doppelt verglaste Sicherheitstüren, für eine kühlere Front.</li><li>Emaillierte Fettpfannen, für gleichmäßige, effiziente Wärmeverteilung.</li><li>Innenräume aus dickem Email oder spiegelpoliertem Edelstahl, für Hygiene und Korrosionsbeständigkeit.</li><li>Jedes Stück in Conegliano von Hand gefertigt.</li>",
-    hero_tag: "Handgefertigte Marine-Kochgeräte",
+    hero_tag: "Handgefertigte Marine-Küchen",
     hero_title: "Gebaut für<br><em>die offene See</em>",
     hero_desc: "Handgefertigt im Inox Valley, Conegliano. Kardanisch aufgehängte Kocher, Öfen und Grills für professionelle Yachten · Gas, Elektro, Induktion.",
     hero_btn_explore: "Produkte Entdecken",
@@ -11355,7 +11475,7 @@ var DICT = {
     ab_p3_body2: "Die Handwerker, die unsere Herde bauen, sind das jüngste Glied eines von Generation zu Generation weitergegebenen Könnens, entstanden in einer kleinen Stahlwerkstatt zu Anfang des 20. Jahrhunderts · dasselbe Erbe wie Namen wie Zoppas und Zanussi. Von hier kommen gedrehter massiver Edelstahl, spiegelnde Garräume und das patentierte Kardansystem · Details, die dem nahen Blick standhalten.",
     ab_p4_title: "Wo <em>Venedig</em> in See stach",
     ab_p4_body1: "Unsere kulturellen Wurzeln sind mit der maritimen Tradition der Serenissima Republik Venedig verbunden · einer der einflussreichsten Seemächte der Geschichte. So wie Venedig Kultur, Technik und Beherrschung der Meere vereinte, vereinen wir raffiniertes Design und technische Zuverlässigkeit, um einzigartige Herde für Meerliebhaber zu schaffen.",
-    ab_p4_body2: "Wir arbeiten mit einigen der renommiertesten Designer Italiens zusammen, darunter Marco Zito, Professor und ehemaliger Direktor der IUAV Venedig · einem der prestigiösesten Designinstitute Italiens.",
+    ab_p4_body2: "Wir arbeiten mit einigen der renommiertesten Designer Italiens zusammen, darunter Marco Zito, Professor für Design an der IUAV Venedig · einem der prestigiösesten Designinstitute Italiens.",
     ab_quote2: "\"Von der Lagune Venedigs bis zum offenen Ozean · unsere Herde folgen dem Meer.\"<span>Erbe der Serenissima</span>",
     ab_p6_tag: "Innovation",
     ab_p6_title: "Premieren die den Sektor <em>definierten</em>",
@@ -11363,7 +11483,7 @@ var DICT = {
     ab_p6_body2: "Ebenfalls für Wally entwickelten wir den ersten vollständig aus Aluminium gefertigten Leichtherd. Und für Perini Navi konzipierten wir einen Spezialkocher mit einzigartigem umgekehrtem Karda-System · eine Weltpremiere.",
     ab_p8_tag: "Unsere Kunden",
     ab_p8_title: "Vertraut von den <em>besten Werften</em> der Welt",
-    ab_p8_body1: "Unsere Herde sind seit Jahrzehnten die erste Wahl der bedeutendsten Werften der Welt, renommiertester Händler und privater Eigner. Von modernen Solaris-Yachten bis zu klassischen Schiffen wie William Fife III's Latifa (1936), von Giovanni Soldinis Elmo's Fire bis Charles Leclercs Ferretti.",
+    ab_p8_body1: "Unsere Herde sind seit Jahrzehnten die erste Wahl der bedeutendsten Werften der Welt, renommiertester Händler und privater Eigner. Von modernen Solaris-Yachten bis zu klassischen Schiffen wie William Fife III's Latifa (1936), von Giovanni Soldinis Elmo's Fire bis zu den Yachten großer Künstler, Formel-1-Fahrer und führender Persönlichkeiten aus Unterhaltung und Finanzwelt.",
     ab_p8_body2: "Eine Tradition, die sich heute mit Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo und vielen anderen fortsetzt · überall dort, wo Exzellenz auf See Exzellenz in der Kombüse erfordert.",
     cat_page_label: "Bibliothek",
     cat_page_title: "Kataloge",
@@ -11457,6 +11577,12 @@ var DICT = {
     ppd_magnus_s2: "Zwei getrennte Bedienelemente.",
     ppd_magnus_s3: "Heizelemente mit abgestufter Leistung.",
     mag_full_kicker: "Die Geschichte von MAGNUS",
+    matrix_kicker: "Die komplette Kollektion",
+    matrix_title: "Alle Modelle auf einen Blick",
+    matrix_sub: "Durchstoebern Sie das gesamte Sortiment nach Kategorie. Tippen Sie auf ein Modell, um seine Seite zu oeffnen, oder auf eine Kategorie, um sie vollstaendig zu sehen.",
+    matrix_btn: "Produktuebersicht",
+    matrix_hint: "Fuer Details auf ein Modell tippen",
+    matrix_dim: "Abmessungen",
     bgc_hero_title: "Gas-Kochfelder",
     bgc_hero_sub: "Die reine Flamme der italienischen Küche, bündig in der Kombüse.",
     bgc_es_tag: "Die Kollektion",
@@ -12408,7 +12534,7 @@ var DICT = {
     cs2_eoven_head: "Hornos eléctricos de encastre,<br><em>precisos y limpios</em>",
     cs2_eoven_lead: "Hornos eléctricos en acero inox para encastrar en la cocina, en varias medidas. Precisos, silenciosos y hechos a mano, para una cocción a la altura de una gran mesa.",
     cs2_eoven_points: "<li>Resistencias blindadas potentes y de alta calidad.</li><li>Termostatos precisos, para un control fino de la temperatura.</li><li>Parrillas de horno amplias y puertas con doble cristal de seguridad, para un frontal más fresco.</li><li>Bandejas esmaltadas, para una difusión del calor uniforme y eficiente.</li><li>Interiores en esmalte de alto espesor o acero inox pulido a espejo, para higiene y resistencia a la corrosión.</li><li>Cada pieza hecha a mano en Conegliano.</li>",
-    hero_tag: "Equipos de Cocina Marina Artesanales",
+    hero_tag: "Cocinas Marinas de Autor",
     hero_title: "Diseñado para<br><em>la mar abierta</em>",
     hero_desc: "Fabricado a mano en el Inox Valley, Conegliano. Cocinas cardánicas, hornos y parrillas para yates profesionales · gas, eléctrico, inducción.",
     hero_btn_explore: "Explorar Productos",
@@ -12476,7 +12602,7 @@ var DICT = {
     ab_p3_body2: "Los artesanos que construyen nuestras cocinas son el último eslabón de un saber transmitido de generación en generación, nacido en un pequeño taller del acero a principios del siglo XX · el mismo legado que nombres como Zoppas y Zanussi. De aquí vienen el inox macizo torneado, las muflas de espejo y la patente de los basculantes · detalles que resisten la mirada cercana.",
     ab_p4_title: "Donde <em>Venecia</em> se hizo a la mar",
     ab_p4_body1: "Nuestras raíces culturales están ligadas a la tradición marítima de la Serenísima República de Venecia · una de las potencias navales más influyentes de la historia. Así como Venecia unía cultura, técnica y dominio de los mares, nosotros unimos diseño refinado y fiabilidad técnica para crear cocinas únicas para quienes aman el mar.",
-    ab_p4_body2: "Colaboramos con algunos de los diseñadores italianos más distinguidos, entre ellos Marco Zito, profesor y ex director del IUAV de Venecia · uno de los institutos de diseño más prestigiosos de Italia.",
+    ab_p4_body2: "Colaboramos con algunos de los diseñadores italianos más distinguidos, entre ellos Marco Zito, profesor de diseño en el IUAV de Venecia · uno de los institutos de diseño más prestigiosos de Italia.",
     ab_quote2: "\"De la laguna de Venecia al océano abierto · nuestras cocinas siguen al mar.\"<span>Herencia de la Serenísima</span>",
     ab_p6_tag: "Innovación",
     ab_p6_title: "Primicias que <em>definieron</em> el sector",
@@ -12484,7 +12610,7 @@ var DICT = {
     ab_p6_body2: "También para Wally desarrollamos la primera cocina completamente de aluminio ultraligera. Y para Perini Navi, diseñamos una cocina especial con un sistema de cardán inverso único · una primicia mundial.",
     ab_p8_tag: "Nuestros Clientes",
     ab_p8_title: "La confianza de los <em>mejores astilleros</em> del mundo",
-    ab_p8_body1: "Nuestras cocinas han sido elegidas durante décadas por los astilleros más importantes del mundo, los distribuidores más renombrados y propietarios privados. Desde los modernos yates Solaris hasta embarcaciones clásicas como el Latifa de William Fife III (1936), desde el Elmo's Fire de Giovanni Soldini hasta el Ferretti de Charles Leclerc.",
+    ab_p8_body1: "Nuestras cocinas han sido elegidas durante décadas por los astilleros más importantes del mundo, los distribuidores más renombrados y propietarios privados. Desde los modernos yates Solaris hasta embarcaciones clásicas como el Latifa de William Fife III (1936), desde el Elmo's Fire de Giovanni Soldini hasta los yates de grandes artistas, pilotos de Fórmula Uno y personalidades del mundo del espectáculo y las finanzas.",
     ab_p8_body2: "Una tradición que continúa hoy con Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo y muchos otros · allí donde la excelencia en el mar exige excelencia en la cocina.",
     cat_page_label: "Biblioteca",
     cat_page_title: "Catálogos",
@@ -12578,6 +12704,12 @@ var DICT = {
     ppd_magnus_s2: "Doble mando independiente.",
     ppd_magnus_s3: "Resistencias con potencia diferenciada.",
     mag_full_kicker: "El relato de MAGNUS",
+    matrix_kicker: "La coleccion completa",
+    matrix_title: "Todos los modelos de un vistazo",
+    matrix_sub: "Explore toda la gama por categoria. Toque un modelo para abrir su pagina, o una categoria para verla completa.",
+    matrix_btn: "Vision General de Productos",
+    matrix_hint: "Toque un modelo para ver los detalles",
+    matrix_dim: "Dimensiones",
     bgc_hero_title: "Placas de cocina a gas",
     bgc_hero_sub: "La llama pura de la cocina italiana, enrasada en la cambusa.",
     bgc_es_tag: "La colección",
@@ -13629,6 +13761,189 @@ window.setLang = setLang;
       var ta=document.createElement('textarea'); ta.value=url; document.body.appendChild(ta); ta.select();
       try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); toast();
     }
+  };
+})();
+</script>
+
+<!-- PRODUCT MATRIX · generatore dinamico (legge window.CATS/PROD_IMGS/PROD_SPECS) -->
+<script>
+(function(){
+  // Ordine di visualizzazione categorie (macro Marine). Salta categorie senza modelli.
+  var ORDER = [
+    'Gas Cookers','Gas Cookers with Oven','Electric Cookers with Oven',
+    'Electric Grills','Gas Grills','Electric BBQs',
+    'Built-in Gas Cooktops','Built-in Electric Cooktops',
+    'Built-in Gas Ovens','Built-in Electric Ovens',
+    "Antiche Cambuse - Cucine per yachts d'Epoca"
+  ];
+
+  // esc per attributi/testo
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+  // Nome categoria (EN, come in window.CATS) -> chiave i18n gia' presente nel DICT (5 lingue).
+  // Stesse chiavi usate dal menu di navigazione, cosi' i titoli si traducono ovunque.
+  var CAT_I18N = {
+    'Electric Cookers with Oven':'cat_electric_oven',
+    'Gas Cookers with Oven':'cat_gas_oven',
+    'Gas Cookers':'cat_gas',
+    'Built-in Gas Cooktops':'cat_gas_builtin',
+    'Built-in Electric Cooktops':'cat_elec_builtin',
+    'Electric Grills':'cat_elec_grill',
+    'Electric BBQs':'cat_elec_bbq',
+    'Gas Grills':'cat_gas_grill',
+    'Built-in Gas Ovens':'cat_gas_oven_builtin',
+    'Built-in Electric Ovens':'cat_elec_oven_builtin',
+    "Antiche Cambuse - Cucine per yachts d'Epoca":'cat_antiche'
+  };
+
+  // Da PROD_SPECS[m] (array [labelKey, val, optValKey]) estrae una mappa labelKey->valHTML
+  function specMap(m){
+    var rows=(window.PROD_SPECS&&window.PROD_SPECS[m])?window.PROD_SPECS[m]:[];
+    var map={};
+    rows.forEach(function(r){ if(r&&r[0]&&map[r[0]]===undefined) map[r[0]]=r[1]; });
+    return map;
+  }
+
+  // Sceglie fino a 2 righe "extra" (oltre alle dimensioni) tra le piu' significative disponibili
+  var PREF=['spec_power','specs_total_power','spec_burners','specs_technology','spec_type','specs_hob_power','spec_gas'];
+  function pickSpecs(m){
+    var map=specMap(m), out=[];
+    // dimensioni sempre in cima se presenti
+    if(map['spec_dimensions']!==undefined) out.push(['matrix_dim', map['spec_dimensions']]);
+    for(var i=0;i<PREF.length && out.length<3;i++){
+      var k=PREF[i];
+      if(map[k]!==undefined) out.push([k, map[k]]);
+    }
+    // se non c'erano dimensioni, permetti fino a 3 comunque
+    return out.slice(0,3);
+  }
+
+  function catByName(name){
+    var C=window.CATS||[];
+    for(var i=0;i<C.length;i++){ if(C[i].name===name) return C[i]; }
+    return null;
+  }
+
+  function build(){
+    var host=document.getElementById('mx-body');
+    if(!host || !window.CATS) return;
+
+    // costruisce l'ordine finale: prima ORDER (se presenti+con modelli), poi eventuali residue
+    var seen={}, cats=[];
+    ORDER.forEach(function(nm){ var c=catByName(nm); if(c && c.models && c.models.length){ cats.push(c); seen[c.name]=1; } });
+    (window.CATS||[]).forEach(function(c){ if(!seen[c.name] && c.models && c.models.length){ cats.push(c); } });
+
+    var html='';
+    cats.forEach(function(c){
+      var modelsJson=esc(JSON.stringify(c.models));
+      var nameAttr=esc(c.name);
+      var i18nKey=CAT_I18N[c.name]||'';
+      var fallbackName=esc(c.name.replace(/ - .*/,''));
+      html+='<div class="mx-cat">';
+      html+= '<div class="mx-cat-head" role="button" tabindex="0" data-open-cat="'+nameAttr+'" data-models="'+modelsJson+'">'
+           +   '<span class="mx-cat-name"'+(i18nKey?(' data-i18n="'+i18nKey+'"'):'')+'>'+fallbackName+'</span>'
+           +   '<span class="mx-cat-count">'+c.models.length+'</span>'
+           +   '<span class="mx-cat-all" data-i18n="matrix_hint">Tap a model for details</span>'
+           + '</div>';
+      html+='<div class="mx-grid">';
+      c.models.forEach(function(m){
+        var img=(window.PROD_IMGS&&window.PROD_IMGS[m])?window.PROD_IMGS[m]:'';
+        var disp=(typeof prodDisp==='function')?prodDisp(m):m;
+        var specs=pickSpecs(m);
+        html+='<button class="mx-card" type="button" data-goprod="'+esc(m)+'">';
+        html+= '<span class="mx-card-media">'+(img?'<img src="'+esc(img)+'" alt="'+esc(disp)+'" loading="lazy">':'')+'</span>';
+        html+= '<span class="mx-card-body">';
+        html+=  '<span class="mx-card-name">'+esc(disp)+'</span>';
+        if(specs.length){
+          html+='<span class="mx-card-specs">';
+          specs.forEach(function(sp){
+            var kkey=sp[0], val=sp[1];
+            // label: se e' una chiave i18n nota, usa data-i18n; matrix_dim gia' i18n
+            html+='<span class="mx-spec-row">'
+                +   '<span class="mx-spec-k" data-i18n="'+esc(kkey)+'"></span>'
+                +   '<span class="mx-spec-v">'+val+'</span>'
+                + '</span>';
+          });
+          html+='</span>';
+        }
+        html+=  '<span class="mx-card-cta" data-i18n="matrix_hint">Tap a model for details</span>';
+        html+= '</span>';
+        html+='</button>';
+      });
+      html+='</div></div>';
+    });
+    host.innerHTML=html;
+
+    // Ri-applica traduzioni ai nuovi [data-i18n] (label specs, hint, dimensioni)
+    if(typeof curLang!=='undefined' && typeof setLang==='function'){ setLang(curLang); }
+  }
+
+  // Delegazione click: card -> goProd ; testata categoria -> openCat
+  function bind(){
+    var host=document.getElementById('mx-body');
+    if(!host) return;
+    host.addEventListener('click', function(ev){
+      var card=ev.target.closest && ev.target.closest('.mx-card');
+      if(card){
+        var m=card.getAttribute('data-goprod');
+        if(m && typeof goProd==='function'){
+          // Imposta la categoria di appartenenza del modello PRIMA di aprire la
+          // scheda: goProd sceglie l'hero e il pulsante Back in base a
+          // window.__prodBackCat. Senza questo userebbe la categoria di
+          // un'apertura precedente -> hero di un altro prodotto/categoria.
+          var catBox=card.closest && card.closest('.mx-cat');
+          var head=catBox?catBox.querySelector('.mx-cat-head'):null;
+          if(head){
+            var nm=head.getAttribute('data-open-cat'); var mods=[];
+            try{ mods=JSON.parse(head.getAttribute('data-models')||'[]'); }catch(e){}
+            if(nm){ window.__prodBackCat={ name:nm, models:mods }; }
+          }
+          goProd(m);
+        }
+        return;
+      }
+      var head2=ev.target.closest && ev.target.closest('.mx-cat-head');
+      if(head2){
+        var nm2=head2.getAttribute('data-open-cat'); var mods2=[];
+        try{ mods2=JSON.parse(head2.getAttribute('data-models')||'[]'); }catch(e){}
+        if(nm2 && typeof openCat==='function'){ openCat(nm2, mods2); }
+      }
+    });
+    // tastiera sulle testate categoria
+    host.addEventListener('keydown', function(ev){
+      if((ev.key==='Enter'||ev.key===' ')){
+        var head=ev.target.closest && ev.target.closest('.mx-cat-head');
+        if(head){ ev.preventDefault(); head.click(); }
+      }
+    });
+  }
+
+  function init(){ build(); bind(); }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', init); }
+  else { init(); }
+
+  // Apre la pagina overlay dedicata (stesso pattern di openSpare/openAbout)
+  window.openMatrix=function(){
+    var pg=document.getElementById('matrixpage');
+    if(!pg) return;
+    var hdr=document.getElementById('hdr');
+    if(hdr){ hdr.classList.add('dark'); hdr.classList.remove('hide'); }
+    // chiudi menu e altre pagine
+    if(typeof cm==='function'){ try{ cm(); }catch(e){} }
+    ['aboutpage','catpage','contactpage','sparepage','prodpage','matrixpage'].forEach(function(id){
+      var el=document.getElementById(id); if(el){ el.classList.remove('show'); }
+    });
+    var cp=document.getElementById('cp'); if(cp) cp.classList.remove('show');
+    pg.scrollTop=0;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ pg.classList.add('show'); }); });
+    document.body.classList.add('page-open');
+  };
+  window.closeMatrix=function(){
+    var pg=document.getElementById('matrixpage');
+    if(!pg) return;
+    var hdr=document.getElementById('hdr'); if(hdr) hdr.classList.remove('dark');
+    pg.classList.remove('show');
+    document.body.classList.remove('page-open');
   };
 })();
 </script>
