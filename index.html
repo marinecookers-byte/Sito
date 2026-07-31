@@ -3672,6 +3672,13 @@ body.page-open #home-scroll{ visibility:hidden; }
 .ab-hd-solo-img:hover{transform:scale(1.02)}
 @media(min-width:769px){ .ab-hd-solo-left{width:70%;margin-left:calc(-1 * (clamp(40px,6vw,96px) + max(0px,(100vw - 1120px)/2)))} }
 @media(max-width:768px){ .ab-hd-intro, .ab-hd-feature-text p{ font-size:clamp(17px,4.5vw,22px) } }
+
+/* Niente "velo azzurro": rimuove il tap-highlight (mobile) e la selezione/callout
+   accidentale sull'interfaccia (logo, menu, titoli, bottoni), mantenendo pero'
+   COPIABILI i testi di contenuto (paragrafi, indirizzo, telefono, celle tabella, input). */
+html{-webkit-tap-highlight-color:transparent}
+body{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none}
+p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable{-webkit-user-select:text;-moz-user-select:text;user-select:text;-webkit-touch-callout:default}
 </style>
 </head>
 <body>
