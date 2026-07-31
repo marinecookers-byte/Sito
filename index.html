@@ -296,30 +296,36 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .mx-cat-count{font-family:"Outfit",sans-serif;font-size:10px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,150,90,.62)}
 .mx-cat-all{margin-left:auto;font-family:"Outfit",sans-serif;font-size:9px;font-weight:400;letter-spacing:.26em;text-transform:uppercase;color:rgba(248,246,241,.4);white-space:nowrap;transition:color .35s;align-self:center}
 .mx-cat-head:hover .mx-cat-all{color:var(--go)}
-.mx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:clamp(16px,1.8vw,26px)}
-.mx-card{position:relative;text-align:left;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);cursor:pointer;overflow:hidden;transition:border-color .4s,transform .4s,background .4s;display:flex;flex-direction:column}
-.mx-card:hover{border-color:rgba(184,150,90,.45);background:rgba(255,255,255,.035);transform:translateY(-4px)}
-.mx-card-media{position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;background:#111}
-.mx-card-media img{width:100%;height:100%;object-fit:contain;padding:10px;transition:transform .7s cubic-bezier(.2,.7,.2,1);opacity:.94}
-.mx-card:hover .mx-card-media img{transform:scale(1.06);opacity:1}
-.mx-card-body{padding:18px 18px 20px;display:flex;flex-direction:column;gap:12px;flex:1}
-.mx-card-name{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:23px;line-height:1.02;letter-spacing:.02em;color:var(--wh)}
-.mx-card-specs{display:flex;flex-direction:column;gap:7px;margin-top:2px}
-.mx-spec-row{display:flex;justify-content:space-between;gap:14px;font-family:"Outfit",sans-serif;font-size:12.5px;line-height:1.35}
-.mx-spec-k{font-weight:400;color:rgba(184,150,90,.62);text-transform:uppercase;font-size:10px;letter-spacing:.13em;padding-top:1px;white-space:nowrap}
-.mx-spec-v{font-weight:300;color:rgba(248,246,241,.78);text-align:right}
-.mx-spec-v .pct-val-unit{color:rgba(184,150,90,.75);font-size:.85em;margin-left:2px}
-.mx-card-cta{margin-top:auto;padding-top:4px;font-family:"Outfit",sans-serif;font-size:9px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,150,90,.65);opacity:0;transform:translateY(4px);transition:opacity .35s,transform .35s}
-.mx-card:hover .mx-card-cta{opacity:1;transform:translateY(0)}
+/* PANORAMICA · tabella elegante (sessione 54) */
+.mx-tablewrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.mx-tablewrap::-webkit-scrollbar{height:6px}
+.mx-tablewrap::-webkit-scrollbar-track{background:transparent}
+.mx-tablewrap::-webkit-scrollbar-thumb{background:rgba(184,150,90,.22);border-radius:3px}
+.mx-table{width:100%;border-collapse:collapse;font-family:"Outfit",sans-serif}
+.mx-table thead th{text-align:left;font-weight:400;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,150,90,.6);padding:0 20px 15px;white-space:nowrap;vertical-align:bottom;border-bottom:1px solid rgba(184,150,90,.18)}
+.mx-table thead th.mx-th-model{padding-left:4px}
+.mx-row{cursor:pointer}
+.mx-row td{padding:15px 20px;vertical-align:middle;border-bottom:1px solid rgba(255,255,255,.055);background:transparent;transition:background .35s}
+.mx-row:last-child td{border-bottom:0}
+.mx-row:hover td{background:rgba(255,255,255,.03)}
+.mx-row:hover .mx-cell-name{color:var(--gl)}
+.mx-cell-model{padding-left:4px!important}
+.mx-cell-idwrap{display:flex;align-items:center;gap:16px}
+.mx-thumb{flex:0 0 auto;width:66px;height:50px;object-fit:contain;background:#111;border:1px solid rgba(255,255,255,.06);padding:4px;box-sizing:border-box}
+.mx-cell-name{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:22px;line-height:1.05;letter-spacing:.01em;color:var(--wh);white-space:nowrap;transition:color .35s}
+.mx-cell-v{font-weight:300;font-size:13px;color:rgba(248,246,241,.78);white-space:nowrap}
+.mx-cell-v.mx-empty{color:rgba(248,246,241,.26)}
+.mx-td .pct-val-unit,.mx-cell-v .pct-val-unit{color:rgba(184,150,90,.75);font-size:.85em;margin-left:2px}
 @media(max-width:768px){
-  .mx-grid{grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:13px}
-  .mx-card-body{padding:14px 14px 16px;gap:10px}
-  .mx-card-name{font-size:19px}
-  .mx-spec-row{font-size:11.5px}
-  .mx-spec-k{font-size:9.5px}
   .mx-cat-all{display:none}
-  .mx-card-cta{display:none}
   .mx-cat-head{gap:10px}
+  .mx-table{min-width:600px}
+  .mx-table thead th{font-size:8.5px;letter-spacing:.16em;padding:0 14px 12px}
+  .mx-row td{padding:12px 14px}
+  .mx-cell-name{font-size:18px}
+  .mx-cell-v{font-size:12px}
+  .mx-thumb{width:54px;height:42px}
+  .mx-cell-idwrap{gap:11px}
 }
 /* Year badge top-right */
 .hyr{position:absolute;top:calc(var(--hh) + 36px);right:40px;display:flex;align-items:center;gap:10px;z-index:3;opacity:0;animation:fid 1s ease 1.2s forwards}
@@ -350,7 +356,7 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 #cp.show{opacity:1;pointer-events:all}
 /* Blocco scroll iOS-safe della home quando una pagina e' aperta + niente scroll-chaining */
 @media(max-width:768px){ body.slock{ position:fixed; left:0; right:0; width:100%; overflow:hidden; } }
-#cp,#aboutpage,#contactpage,#sparepage,#pp-content-scroll{ overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+#cp,#aboutpage,#contactpage,#sparepage,#prodpage,#pp-content-scroll{ overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
 .cphd{position:sticky;top:var(--hh);background:rgba(10,10,10,.96);border-bottom:1px solid rgba(184,150,90,.12);padding:0 60px;height:72px;display:flex;align-items:center;justify-content:space-between;z-index:10;flex-shrink:0}
 .cpbk{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:12px;font-weight:300;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,150,90,.5);background:none;border:none;transition:color .3s,gap .3s;font-family:"Outfit",sans-serif}.cpbk:hover{color:rgba(184,150,90,.9);gap:15px}
 
@@ -716,6 +722,20 @@ header.hide{transform:translateY(-100%);}
   inset: 0;
   background: linear-gradient(to bottom, rgba(10,10,10,0) 40%, rgba(10,10,10,.6) 100%);
 }
+/* Velo da piu scuro (alto) a piu chiaro (basso) SOLO sulla hero di FIRENZE. */
+.pp-hero.pp-hero-firenze #pp-heroimg{
+  position:relative;
+}
+.pp-hero.pp-hero-firenze::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:2;
+  background:linear-gradient(to bottom, rgba(10,10,10,.62) 0%, rgba(10,10,10,.28) 50%, rgba(10,10,10,0) 100%);
+}
+.pp-hero.pp-hero-firenze .pp-hero-title,
+.pp-hero.pp-hero-firenze .pp-back{ z-index:3; }
 .pp-back {
   position: absolute;
   top: 32px;
@@ -2746,6 +2766,9 @@ header.hide{transform:translateY(-100%);}
   gap: 28px;
 }
 .cat-dl-label { display: block; }
+.cat-dl-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 48px; }
+.cat-dl-actions .cat-dl-btn { margin-top: 0; }
+@media(max-width:768px){ .cat-dl-actions { flex-direction: column; } }
 
 @media(max-width:768px){
   .cat-hero { padding: calc(var(--hh) + 32px) 24px 40px; }
@@ -3506,7 +3529,7 @@ header.hide{transform:translateY(-100%);}
 }
 @media(min-width:769px){
   #aboutpage .ab-spread{ width:min(72%,860px); }
-  #aboutpage .ab-spread.to-right{ margin-left:auto; }   /* sfalsata a destra */
+  #aboutpage .ab-spread.to-right{ width:auto; margin-left:clamp(60px,20vw,320px); margin-right:calc(-1 * (clamp(40px,6vw,96px) + max(0px,(100vw - 1180px)/2))); }   /* al vivo a destra */
   #aboutpage .ab-spread.to-left { margin-right:auto; }  /* sfalsata a sinistra */
   #aboutpage .ab-spread.to-right .ab-cap{ justify-content:flex-end; text-align:right; }
   #aboutpage .ab-spread.to-right .ab-cap::before{ order:2; }
@@ -3523,6 +3546,123 @@ header.hide{transform:translateY(-100%);}
 </style>
 
 <style id="pp-descvid">.slr-mag-fig-video .slr-mag-media{position:relative;cursor:pointer}.slr-mag-fig-video .pp-gallery-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}.slr-mag-fig-video .slr-mag-media video{width:100%;display:block}</style>
+<style id="coll-collections">
+/* Sotto-collezioni nel dropdown nav */
+.ncat-sub{display:block;padding:15px 0 7px 12px;border-top:1px solid rgba(255,255,255,.05);margin-top:4px;text-decoration:none;position:relative}
+.ncat-sub-name{display:block;font-family:"Cormorant Garamond",serif;font-size:16px;font-weight:400;letter-spacing:.03em;color:rgba(184,150,90,.85);line-height:1.1}
+.ncat-sub-tag{display:block;font-size:8px;font-weight:300;letter-spacing:.24em;text-transform:uppercase;color:rgba(248,246,241,.32);font-family:"Outfit",sans-serif;margin-top:4px}
+.ncat-sub-link{cursor:pointer;transition:padding-left .35s ease}
+.ncat-sub-link:hover{padding-left:16px}
+.ncat-sub-link:hover .ncat-sub-name{color:var(--gl)}
+.ncat-lock{position:absolute;right:2px;top:17px;color:rgba(184,150,90,.55);transition:color .35s}
+.ncat-sub-link:hover .ncat-lock{color:var(--gl)}
+.ncat-sub-soon{opacity:.5}
+.ncat-soon-badge{display:inline-block;font-size:7.5px;letter-spacing:.24em;text-transform:uppercase;color:rgba(248,246,241,.28);font-family:"Outfit",sans-serif;font-style:italic;margin-top:5px}
+/* Occhiello collezione nella Panoramica */
+.mx-colltag{display:block;font-family:"Cormorant Garamond",serif;font-size:clamp(16px,2.2vw,22px);font-weight:400;color:rgba(184,150,90,.8);letter-spacing:.02em;margin:0 0 14px}
+.mx-colltag .mx-colltag-tag{font-size:.62em;letter-spacing:.18em;text-transform:uppercase;color:rgba(248,246,241,.4);font-family:"Outfit",sans-serif;font-style:italic}
+/* Modale gate password collezione */
+#collgate{position:fixed;inset:0;z-index:500;display:none;align-items:center;justify-content:center;background:rgba(6,6,6,.86);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:20px}
+#collgate.show{display:flex}
+.cg-box{width:min(92vw,368px);background:#0e0e0e;border:1px solid rgba(184,150,90,.25);padding:40px 34px 34px;text-align:center;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.cg-close{position:absolute;top:12px;right:16px;background:none;border:none;color:rgba(248,246,241,.4);font-size:22px;line-height:1;cursor:pointer;font-family:"Outfit",sans-serif;padding:2px 6px}
+.cg-close:hover{color:var(--gl)}
+.cg-kicker{display:block;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(184,150,90,.6);margin-bottom:16px;font-family:"Outfit",sans-serif}
+.cg-title{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:27px;color:var(--wh);margin:0 0 12px;line-height:1.1}
+.cg-sub{font-size:11px;font-weight:300;line-height:1.65;color:rgba(248,246,241,.5);margin:0 0 24px;font-family:"Outfit",sans-serif}
+.cg-input{width:100%;background:transparent;border:none;border-bottom:1px solid rgba(184,150,90,.35);color:var(--wh);font-family:"Outfit",sans-serif;font-size:14px;letter-spacing:.18em;text-align:center;padding:11px 0;outline:none}
+.cg-input:focus{border-bottom-color:var(--gl)}
+.cg-btn{margin-top:26px;width:100%;background:none;border:1px solid rgba(184,150,90,.4);color:var(--gl);font-family:"Outfit",sans-serif;font-size:10px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;padding:14px 0;cursor:pointer;transition:background .3s,color .3s}
+.cg-btn:hover{background:rgba(184,150,90,.12);color:var(--wh)}
+.cg-err{min-height:15px;margin-top:14px;font-size:10px;letter-spacing:.08em;color:#cf8a76;font-family:"Outfit",sans-serif;opacity:0;transition:opacity .3s}
+.cg-err.show{opacity:1}
+/* Fix: la home non deve trasparire dietro le pagine overlay (desktop + mobile) */
+body.page-open #home-scroll{ visibility:hidden; }
+/* Chi Siamo · griglia heavy-duty (dettagli robustezza) */
+.ab-hd{width:100%;max-width:1120px;margin:0 auto}
+.ab-hd-head{max-width:660px;margin:0 0 clamp(46px,5.5vw,80px)}
+.ab-hd-intro{font-family:"Outfit",sans-serif;font-weight:300;font-size:clamp(14px,1.15vw,16px);line-height:1.8;color:rgba(10,10,10,.66);margin:18px 0 0}
+.ab-hd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(32px,3.4vw,56px)}
+.ab-hd-item{margin:0}
+.ab-hd-item{overflow:hidden}
+.ab-hd-img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:#eceae3;filter:grayscale(.06);cursor:zoom-in;transition:filter .45s ease,transform .55s cubic-bezier(.23,1,.32,1)}
+.ab-hd-img:hover{filter:grayscale(0);transform:scale(1.04)}
+.ab-hd-feature{display:grid;grid-template-columns:1fr;gap:clamp(28px,3.5vw,56px);align-items:center;margin:0 0 clamp(66px,8vw,120px)}
+.ab-hd-feature-media{margin:0;overflow:hidden}
+.ab-hd-feature-img{width:100%;height:auto;display:block;cursor:zoom-in;filter:grayscale(.04);transition:transform .6s cubic-bezier(.23,1,.32,1)}
+.ab-hd-feature-img:hover{transform:scale(1.03)}
+.ab-hd-feature .ab-hd-cap{margin-top:12px}
+.ab-hd-feature-text p{font-family:"Outfit",sans-serif;font-weight:300;font-size:clamp(14px,1.15vw,16px);line-height:1.85;color:rgba(10,10,10,.72);margin:0 0 16px}
+.ab-hd-feature-text p:last-child{margin-bottom:0}
+@media(min-width:769px){ .ab-hd-feature{grid-template-columns:0.9fr 1.5fr;gap:clamp(34px,3.6vw,64px);align-items:center} .ab-hd-feature-text{order:1} .ab-hd-feature-media{order:2;margin-right:calc(-1 * (clamp(40px,6vw,96px) + max(0px,(100vw - 1120px)/2)))} }
+.ab-hd-cap{margin-top:13px;font-family:"Outfit",sans-serif;font-weight:300;font-size:11px;line-height:1.55;letter-spacing:.05em;color:rgba(10,10,10,.62);padding-left:16px;position:relative}
+.ab-hd-cap::before{content:"";position:absolute;left:0;top:8px;width:8px;height:1px;background:rgba(184,150,90,.85)}
+.cat-dl-lock{flex-shrink:0;opacity:.75}
+/* Panoramica · altre collezioni Yachting (Leonardo gate + Galileo soon) */
+.mx-collnext{padding:clamp(6px,2vw,20px) clamp(20px,6vw,90px) clamp(70px,9vw,120px);display:flex;flex-direction:column;gap:2px;max-width:780px}
+.mx-collnext-label{font-family:"Outfit",sans-serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:rgba(184,150,90,.55);margin-bottom:10px}
+.mx-coll-card{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 0;border-top:1px solid rgba(255,255,255,.07);text-decoration:none}
+.mx-coll-txt{display:flex;flex-direction:column;gap:6px}
+.mx-coll-name{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:clamp(19px,2.4vw,27px);color:rgba(184,150,90,.9);line-height:1.05}
+.mx-coll-tag{font-family:"Outfit",sans-serif;font-size:9px;font-weight:300;letter-spacing:.24em;text-transform:uppercase;color:rgba(248,246,241,.34)}
+.mx-coll-locked{cursor:pointer;transition:padding-left .35s ease}
+.mx-coll-locked:hover{padding-left:10px}
+.mx-coll-locked:hover .mx-coll-name{color:var(--gl)}
+.mx-coll-lock{flex-shrink:0;color:rgba(184,150,90,.6);transition:color .35s}
+.mx-coll-locked:hover .mx-coll-lock{color:var(--gl)}
+.mx-coll-soon{opacity:.5}
+.mx-coll-badge{flex-shrink:0;font-family:"Outfit",sans-serif;font-size:8px;letter-spacing:.24em;text-transform:uppercase;color:rgba(248,246,241,.3);font-style:italic}
+@media(max-width:520px){ .ab-hd-grid{grid-template-columns:repeat(2,1fr)} }
+
+/* Panoramica · accordion collezioni (Marco Polo espandibile, Leonardo gate, Galileo soon) */
+.mx-collections{padding:clamp(18px,3.5vw,44px) clamp(20px,6vw,90px) clamp(80px,9vw,130px);max-width:920px}
+.mx-acc{display:block;border-top:1px solid rgba(184,150,90,.18)}
+.mx-acc:last-child{border-bottom:1px solid rgba(184,150,90,.18)}
+.mx-acc-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:18px;background:none;border:none;cursor:pointer;padding:26px 0;text-align:left;font-family:inherit;color:inherit}
+.mx-acc-txt{display:flex;flex-direction:column;gap:6px}
+.mx-acc-name{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:clamp(22px,3vw,34px);color:rgba(184,150,90,.92);line-height:1.02;transition:color .35s}
+.mx-acc-tag{font-family:"Outfit",sans-serif;font-size:9px;font-weight:300;letter-spacing:.26em;text-transform:uppercase;color:rgba(248,246,241,.36)}
+.mx-acc-ind{position:relative;width:16px;height:16px;flex-shrink:0}
+.mx-acc-ind::before,.mx-acc-ind::after{content:"";position:absolute;background:rgba(184,150,90,.8);transition:transform .4s ease,opacity .4s ease}
+.mx-acc-ind::before{top:7px;left:0;width:16px;height:1px}
+.mx-acc-ind::after{top:0;left:7px;width:1px;height:16px}
+.mx-acc.open .mx-acc-ind::after{transform:scaleY(0);opacity:0}
+.mx-acc-head:hover .mx-acc-name{color:var(--gl)}
+.mx-acc-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.4,0,.2,1)}
+.mx-acc.open .mx-acc-panel{grid-template-rows:1fr}
+.mx-acc-clip{overflow:hidden;min-height:0}
+.mx-acc-panel-inner{padding-bottom:clamp(24px,4vw,52px)}
+.mx-acc-locked{cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:26px 0;transition:padding-left .35s ease}
+.mx-acc-locked:hover{padding-left:10px}
+.mx-acc-locked:hover .mx-acc-name{color:var(--gl)}
+.mx-acc-soon{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:26px 0;opacity:.5}
+/* Chi Siamo · griglia dettagli articolata (dimensioni diverse) */
+@media(min-width:769px){
+  .ab-hd-grid{grid-template-columns:repeat(6,1fr)}
+  .ab-hd-item:nth-child(1){grid-column:span 2}
+  .ab-hd-item:nth-child(2){grid-column:span 4}
+  .ab-hd-item:nth-child(3){grid-column:span 3}
+  .ab-hd-item:nth-child(4){grid-column:span 3}
+  .ab-hd-item:nth-child(5){grid-column:span 6}
+  .ab-hd-item:nth-child(1) .ab-hd-img{aspect-ratio:4/5}
+  .ab-hd-item:nth-child(2) .ab-hd-img{aspect-ratio:16/10}
+  .ab-hd-item:nth-child(3) .ab-hd-img{aspect-ratio:3/4}
+  .ab-hd-item:nth-child(4) .ab-hd-img{aspect-ratio:3/4}
+  .ab-hd-item:nth-child(5) .ab-hd-img{aspect-ratio:24/9}
+}
+
+/* Chi Siamo · dettaglio al vivo a SINISTRA (alternanza con la foto chef a destra) */
+.ab-hd-feature-cap{font-family:"Outfit",sans-serif;font-weight:300;font-size:clamp(13px,1.05vw,15px);line-height:1.6;letter-spacing:.04em;color:rgba(10,10,10,.66);padding-left:16px;position:relative;margin:0}
+.ab-hd-feature-cap::before{content:"";position:absolute;left:0;top:9px;width:8px;height:1px;background:rgba(184,150,90,.85)}
+@media(min-width:769px){
+  .ab-hd-feature-left{grid-template-columns:1.55fr 0.85fr;gap:clamp(48px,4.8vw,92px)}
+  .ab-hd-feature-left .ab-hd-feature-media{order:1;margin-left:calc(-1 * (clamp(40px,6vw,96px) + max(0px,(100vw - 1120px)/2)));margin-right:0}
+  .ab-hd-feature-left .ab-hd-feature-text{order:2}
+}
+
+/* Chi Siamo · respiro attorno al dettaglio al vivo a sinistra */
+.ab-hd-feature-left{margin-top:clamp(58px,7.5vw,114px)}
+</style>
 </head>
 <body>
 
@@ -3544,7 +3684,12 @@ header.hide{transform:translateY(-100%);}
       </button>
       <div class="ndrop" id="ndrop"><div class="ndrop-inner">
 
-        <span class="ncat-macro" data-i18n="nav_marine">Marine Products</span>
+        <span class="ncat-macro" data-i18n="nav_marine">The Yachting Collections</span>
+
+        <span class="ncat-sub">
+          <span class="ncat-sub-name" data-i18n="coll_mp_name">Marco Polo Collection</span>
+          <span class="ncat-sub-tag" data-i18n="coll_mp_tag">Masterful culinary solutions</span>
+        </span>
         <a class="ncat" onclick="openCat('Electric Cookers with Oven',['ORIZZONTE','TOLOMEO','NOBILIS','ALTALUX','FORMA','VERA','MARINA E','NAUTICA','COMPACTA','GRANLUX','MODULAR'])" data-i18n="cat_electric_oven">Electric Cookers with Oven</a>
         <a class="ncat" onclick="openCat('Gas Cookers with Oven',['MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','MAXIMA','MAREA','LUX','ALTAMAREA'])" data-i18n="cat_gas_oven">Gas Cookers with Oven</a>
         <a class="ncat" onclick="openCat('Gas Cookers',['VENTOTENE','MARETTIMO','FAVIGNANA','LIPARI'])" data-i18n="cat_gas">Gas Cookers</a>
@@ -3556,13 +3701,25 @@ header.hide{transform:translateY(-100%);}
         <a class="ncat" onclick="openCat('Built-in Gas Ovens',['ROMA','FIRENZE'])" data-i18n="cat_gas_oven_builtin">Built-in Gas Ovens</a>
         <a class="ncat" onclick="openCat('Built-in Electric Ovens',['NAPOLI'])" data-i18n="cat_elec_oven_builtin">Built-in Electric Ovens</a>
         <a class="ncat" onclick="openCat('Antiche Cambuse - Cucine per yachts d\'Epoca',['PRINCIPE'])" data-i18n="cat_antiche">Antiche Cambuse</a>
-        <a class="ncat" onclick="openCat('Coffee Makers',[])" data-i18n="cat_coffee">Coffee Makers</a>
+        <a class="ncat" onclick="openCat('Coffee Makers',['ESPRESSO12'])" data-i18n="cat_coffee">Coffee Makers</a>
         <a class="ncat" onclick="openCat('Panholders',[])" data-i18n="cat_panholders">Panholders</a>
 
-        <span class="ncat-macro" data-i18n="nav_rv">RV Products</span>
+        <a class="ncat-sub ncat-sub-link" onclick="openCollGate('https://online.fliphtml5.com/jzkfe/hycl/')">
+          <span class="ncat-sub-name" data-i18n="coll_le_name">Leonardo Collection</span>
+          <span class="ncat-sub-tag" data-i18n="coll_le_tag">Ultra-tech culinary solutions</span>
+          <svg class="ncat-lock" width="9" height="11" viewBox="0 0 9 11" fill="none" aria-hidden="true"><path d="M2 5V3.3A2.3 2.3 0 0 1 6.6 3.3V5M1 5h7v5.4H1z" stroke="currentColor" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+
+        <span class="ncat-sub ncat-sub-soon">
+          <span class="ncat-sub-name" data-i18n="coll_ga_name">Galileo Collection</span>
+          <span class="ncat-sub-tag" data-i18n="coll_ga_tag">Monolithic culinary solutions</span>
+          <span class="ncat-soon-badge" data-i18n="coming_soon">Coming soon</span>
+        </span>
+
+        <span class="ncat-macro" data-i18n="nav_rv">The Luxury RV Collections</span>
         <span class="ncat-coming" data-i18n="coming_soon">Coming soon</span>
 
-        <span class="ncat-macro" data-i18n="nav_home">Home Products</span>
+        <span class="ncat-macro" data-i18n="nav_home">The Residential Collections</span>
         <span class="ncat-coming" data-i18n="coming_soon">Coming soon</span>
 
       </div></div>
@@ -3974,7 +4131,7 @@ header.hide{transform:translateY(-100%);}
   <div class="hco">
     <p class="hey" data-i18n="hero_tag">Artisan Marine Cooking Equipment</p>
     <h1 class="hti" data-i18n-html="hero_title">Engineered<br>for the <em>open sea</em></h1>
-    <p class="hde" data-i18n="hero_desc">Handcrafted in the Inox Valley, Conegliano. Gimballed cookers, ovens and grills built for professional yachts · gas, electric, induction.</p>
+    <p class="hde" data-i18n="hero_desc">Handcrafted in the Inox Valley, Conegliano · turned and milled from solid stainless steel. Gimballed cookers, ovens and grills for professional yachts · gas, electric, induction.</p>
     <div class="hac">
       <a href="#" class="btp" onclick="tm();setTimeout(tDrop,400);return false;" data-i18n="hero_btn_explore">Explore Products</a>
       <a href="#" class="btm" onclick="openMatrix();return false;" data-i18n="matrix_btn">Product Overview</a>
@@ -4145,6 +4302,44 @@ header.hide{transform:translateY(-100%);}
             <div class="ab-section-body">
               <p data-i18n="ab_p3_body1">The artisans who build our cookers, in our workshop and alongside our partners, are the latest link in a chain of know-how passed from one generation to the next, born in a small steel workshop of the early 1900s.</p>
               <p data-i18n="ab_p3_body2">That heritage lives on in the Inox Valley, home to legendary names such as Zoppas and Zanussi, and in the maritime culture of the Serenissima Republic of Venice, distilled into cookers refined down to the smallest detail.</p>
+              <p data-i18n="ab_p3_body3">Where others turn to plastic and thin sheet metal, we machine ours from solid stainless steel · heavy-gauge bodies, components turned and milled to outlast the boat itself. It is the culture of the professional kitchen, carried out to sea.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PANNELLO · HEAVY DUTY (dettagli robustezza inox massiccio) -->
+    <div class="ab-panel ab-panel-light">
+      <div class="ab-panel-inner">
+        <div class="ab-hd">
+          <div class="ab-hd-head">
+            <span class="ab-tag" data-i18n="ab_hd_tag">Heavy duty</span>
+            <h2 class="ab-section-title" data-i18n-html="ab_hd_title"><em>Heavy duty</em>, down to the last detail</h2>
+            <p class="ab-hd-intro" data-i18n="ab_hd_intro">Solid stainless steel where others use plastic or thin sheet metal · turned, milled and welded to the standards of the professional kitchen.</p>
+          </div>
+          <div class="ab-hd-feature">
+            <figure class="ab-hd-feature-media">
+              <img class="ab-hd-feature-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785492643/FOTO_CHEF_CHE_CUCINA_CON_MAXIMA_kling_20260731_Creation__4608_0_q7rwds.png" alt="Chef cooking on a MAXIMA cooker" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785492643/FOTO_CHEF_CHE_CUCINA_CON_MAXIMA_kling_20260731_Creation__4608_0_q7rwds.png','Chef cooking on a MAXIMA cooker')">
+              <figcaption class="ab-hd-cap" data-i18n="ab_hd_feat_cap">MAXIMA · a chef at work in the galley</figcaption>
+            </figure>
+            <div class="ab-hd-feature-text">
+              <p data-i18n="ab_hd_feat1">A cooker at sea is worked as hard as one in a busy restaurant: heat, salt, motion, service after service. So we build ours the way a professional kitchen is built · heavy-duty, in solid stainless steel, with parts machined to be used and not merely to look right.</p>
+              <p data-i18n="ab_hd_feat2">It is no accident. We were born in the Inox Valley, the district around Conegliano where some of Italy's finest professional kitchens are made · a culture of thick steel and precise metalwork that we breathe every day and carry, unchanged, out to sea.</p>
+            </div>
+          </div>
+          <div class="ab-hd-grid">
+            <figure class="ab-hd-item"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785487193/FOTO_MANOPOLA_INOX_MASSICCIO_DETTAGLIO_kling_20260731_IMAGE_Metti_sfon_4202_0_yuvgkg.png" alt="Control knob in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785487193/FOTO_MANOPOLA_INOX_MASSICCIO_DETTAGLIO_kling_20260731_IMAGE_Metti_sfon_4202_0_yuvgkg.png','Control knob in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_a">Control knob turned from solid stainless steel</figcaption></figure>
+            <figure class="ab-hd-item"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785487174/FOTO_DETTAGLIO_GRIGLIA_INOX_MASSICCIO_kling_20260731_IMAGE_Metti_sfon_4236_0_zi1ymi.png" alt="Grate in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785487174/FOTO_DETTAGLIO_GRIGLIA_INOX_MASSICCIO_kling_20260731_IMAGE_Metti_sfon_4236_0_zi1ymi.png','Grate in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_b">Grate in solid stainless steel · welded bars Ø 8-10 mm</figcaption></figure>
+            <figure class="ab-hd-item"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785488346/FOTO_DETTAGLIO_INOX_MASSICCIO_kling_20260731_IMAGE_Crea_una_i_4300_0_ocbavk.png" alt="Mirror-polished grill hinges in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785488346/FOTO_DETTAGLIO_INOX_MASSICCIO_kling_20260731_IMAGE_Crea_una_i_4300_0_ocbavk.png','Mirror-polished grill hinges in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_c">Mirror-polished grill hinges · heavy-gauge solid stainless steel</figcaption></figure>
+            <figure class="ab-hd-item"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785493525/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_kling_20260731_IMAGE_Aumenta_la_4360_0_a_e7nfoe.png" alt="Door hinges made in our workshop in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785493525/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_kling_20260731_IMAGE_Aumenta_la_4360_0_a_e7nfoe.png','Door hinges made in our workshop in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_d">Door hinges made in our workshop · heavy-gauge solid stainless steel</figcaption></figure>
+          </div>
+          <div class="ab-hd-feature ab-hd-feature-left">
+            <figure class="ab-hd-feature-media">
+              <img class="ab-hd-feature-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785496511/DETTAGLIO_CUCINA_INOX_kling_20260731_Creation__4915_0_jjuoit.png" alt="Grate support block turned and milled in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785496511/DETTAGLIO_CUCINA_INOX_kling_20260731_Creation__4915_0_jjuoit.png','Grate support block turned and milled in solid stainless steel')">
+            </figure>
+            <div class="ab-hd-feature-text">
+              <p class="ab-hd-feature-cap" data-i18n="ab_hd_cap_e">Grate support block · solid stainless steel, turned and milled</p>
             </div>
           </div>
         </div>
@@ -4253,14 +4448,26 @@ header.hide{transform:translateY(-100%);}
     <div class="cat-intro-wrap">
       <div class="cat-intro-label" data-i18n="cat_edition">2025 Edition</div>
       <div class="cat-intro-text">
-        <p data-i18n="cat_desc1">Our product catalogue brings together the complete Marine Cookers range · from gimballed gas cookers to our latest electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano.</p>
+        <p data-i18n="cat_desc1">Our product catalogue brings together the complete Marine Cookers range · from gimballed gas cookers to our latest electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · turned and milled where others rely on plastic and thin sheet.</p>
         <p data-i18n="cat_desc2">Download the catalogue to explore technical specifications, dimensions, and the full collection.</p>
-        <a class="cat-dl-btn" href="https://www.techimpex.tv/_files/ugd/d671d9_3184c0c2307644d6adbea85e5ea99a11.pdf" target="_blank" rel="noopener">
-          <span class="cat-dl-label" data-i18n="cat_dl_btn">Download Catalogue</span>
+        <div class="cat-dl-actions">
+        <a class="cat-dl-btn" href="https://online.fliphtml5.com/jzkfe/cvcr/" target="_blank" rel="noopener">
+          <span class="cat-dl-label" data-i18n="cat_dl_btn1">Browse the catalogue with a selection of products</span>
           <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
             <path d="M1 6H23M18 1L23 6L18 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
+        <a class="cat-dl-btn" href="https://online.fliphtml5.com/jzkfe/Marine-Cookers_Marco-Polo-Brochure_WEB/" target="_blank" rel="noopener">
+          <span class="cat-dl-label" data-i18n="cat_dl_btn2">Browse the Marco Polo Collection</span>
+          <svg width="24" height="12" viewBox="0 0 24 12" fill="none">
+            <path d="M1 6H23M18 1L23 6L18 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="cat-dl-btn" onclick="openCollGate('https://online.fliphtml5.com/jzkfe/hycl/')" style="cursor:pointer">
+          <span class="cat-dl-label" data-i18n="cat_dl_btn3">Browse the Leonardo Collection</span>
+          <svg class="cat-dl-lock" width="12" height="14" viewBox="0 0 12 14" fill="none" aria-hidden="true"><path d="M3 6V4A3 3 0 0 1 9 4V6M1.5 6h9v6.5h-9z" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        </div>
       </div>
     </div>
   </div>
@@ -4360,42 +4567,42 @@ header.hide{transform:translateY(-100%);}
 
     <div class="sp-grid">
 
-      <a class="sp-card" href="https://www.techimpex.tv/_files/ugd/d671d9_35622228d9f64c2d945481c0d952bec5.pdf" target="_blank" rel="noopener">
+      <a class="sp-card" href="https://pub-97e6441de1ce49a1a5c01ca24e9d93d1.r2.dev/ESPLOSO%20XL2%2C%20SHINY%20(1).pdf" target="_blank" rel="noopener">
         <span class="sp-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M14 5h13l7 7v29a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.1"/><path d="M27 5v7h7" stroke="currentColor" stroke-width="1.1"/><path d="M17 21h14M17 26h10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".55"/><text x="23.5" y="39" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="currentColor">PDF</text></svg></span>
         <span class="sp-card-kind" data-i18n="sp_kind_cooker">Cooker with Oven</span>
         <span class="sp-card-model">XL2 · LT20 · LT2D</span>
         <span class="sp-card-open"><span data-i18n="sp_open_pdf">Open exploded view</span><svg width="13" height="7" viewBox="0 0 14 8" fill="none"><path d="M1 4H13M10 1L13 4L10 7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </a>
 
-      <a class="sp-card" href="https://www.techimpex.tv/_files/ugd/d671d9_e8978c20226f40f3a7a097df3ed78bed.pdf" target="_blank" rel="noopener">
+      <a class="sp-card" href="https://pub-97e6441de1ce49a1a5c01ca24e9d93d1.r2.dev/LT30%20XL3%20spare%20parts%20NIEUW.pdf" target="_blank" rel="noopener">
         <span class="sp-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M14 5h13l7 7v29a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.1"/><path d="M27 5v7h7" stroke="currentColor" stroke-width="1.1"/><path d="M17 21h14M17 26h10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".55"/><text x="23.5" y="39" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="currentColor">PDF</text></svg></span>
         <span class="sp-card-kind" data-i18n="sp_kind_cooker">Cooker with Oven</span>
         <span class="sp-card-model">XL3 · LT30 · LT3D</span>
         <span class="sp-card-open"><span data-i18n="sp_open_pdf">Open exploded view</span><svg width="13" height="7" viewBox="0 0 14 8" fill="none"><path d="M1 4H13M10 1L13 4L10 7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </a>
 
-      <a class="sp-card" href="https://www.techimpex.tv/_files/ugd/d671d9_0dfaa642d002437db39cc9718793f930.pdf" target="_blank" rel="noopener">
+      <a class="sp-card" href="https://pub-97e6441de1ce49a1a5c01ca24e9d93d1.r2.dev/ESPLOSO%20CLASSIC%2C%20MASTERGRILL%20(2).PDF" target="_blank" rel="noopener">
         <span class="sp-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M14 5h13l7 7v29a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.1"/><path d="M27 5v7h7" stroke="currentColor" stroke-width="1.1"/><path d="M17 21h14M17 26h10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".55"/><text x="23.5" y="39" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="currentColor">PDF</text></svg></span>
         <span class="sp-card-kind" data-i18n="sp_kind_cooker">Cooker with Oven</span>
         <span class="sp-card-model">Classic · Mastergrill</span>
         <span class="sp-card-open"><span data-i18n="sp_open_pdf">Open exploded view</span><svg width="13" height="7" viewBox="0 0 14 8" fill="none"><path d="M1 4H13M10 1L13 4L10 7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </a>
 
-      <a class="sp-card" href="https://www.techimpex.tv/_files/ugd/d671d9_7227d9861ebf496eac9f9246c39ab4a0.pdf" target="_blank" rel="noopener">
+      <a class="sp-card" href="https://pub-97e6441de1ce49a1a5c01ca24e9d93d1.r2.dev/ESPLOSO%20TOP2%2C%20TOP3.pdf" target="_blank" rel="noopener">
         <span class="sp-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M14 5h13l7 7v29a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.1"/><path d="M27 5v7h7" stroke="currentColor" stroke-width="1.1"/><path d="M17 21h14M17 26h10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".55"/><text x="23.5" y="39" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="currentColor">PDF</text></svg></span>
         <span class="sp-card-kind" data-i18n="sp_kind_cooker">Cooker with Oven</span>
         <span class="sp-card-model">Top3</span>
         <span class="sp-card-open"><span data-i18n="sp_open_pdf">Open exploded view</span><svg width="13" height="7" viewBox="0 0 14 8" fill="none"><path d="M1 4H13M10 1L13 4L10 7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </a>
 
-      <a class="sp-card" href="https://www.techimpex.tv/_files/ugd/d671d9_e474b93a9fe84521a938e2e151f19a45.pdf" target="_blank" rel="noopener">
+      <a class="sp-card" href="https://pub-97e6441de1ce49a1a5c01ca24e9d93d1.r2.dev/ESPLOSO%20PIANI%20INCASSO.pdf" target="_blank" rel="noopener">
         <span class="sp-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M14 5h13l7 7v29a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.1"/><path d="M27 5v7h7" stroke="currentColor" stroke-width="1.1"/><path d="M17 21h14M17 26h10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".55"/><text x="23.5" y="39" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="currentColor">PDF</text></svg></span>
         <span class="sp-card-kind" data-i18n="sp_kind_hobs">Built-in Hobs</span>
         <span class="sp-card-model">Seafarer Collection</span>
         <span class="sp-card-open"><span data-i18n="sp_open_pdf">Open exploded view</span><svg width="13" height="7" viewBox="0 0 14 8" fill="none"><path d="M1 4H13M10 1L13 4L10 7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </a>
 
-      <a class="sp-card" href="https://www.techimpex.tv/_files/ugd/d671d9_f63d38e40c7c4f89bdc5110f8b125c6a.pdf" target="_blank" rel="noopener">
+      <a class="sp-card" href="https://pub-97e6441de1ce49a1a5c01ca24e9d93d1.r2.dev/Exploded%20View%20BARGAS30520.pdf" target="_blank" rel="noopener">
         <span class="sp-card-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M14 5h13l7 7v29a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" stroke="currentColor" stroke-width="1.1"/><path d="M27 5v7h7" stroke="currentColor" stroke-width="1.1"/><path d="M17 21h14M17 26h10" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" opacity=".55"/><text x="23.5" y="39" text-anchor="middle" font-family="Outfit,sans-serif" font-size="8" font-weight="600" letter-spacing="1" fill="currentColor">PDF</text></svg></span>
         <span class="sp-card-kind" data-i18n="sp_kind_bbq">Plancha · Barbecue</span>
         <span class="sp-card-model">BARGAS30520</span>
@@ -4413,7 +4620,7 @@ header.hide{transform:translateY(-100%);}
       </div>
     </div>
     <div class="sp-actions" style="margin:-6px 0 34px">
-      <a class="sp-xlsx" href="https://www.techimpex.tv/_files/ugd/d671d9_d8d49a190bae40c898834e8d9a433bc5.xlsx" target="_blank" rel="noopener">
+      <a class="sp-xlsx" href="https://pub-97e6441de1ce49a1a5c01ca24e9d93d1.r2.dev/spare-parts-list.xlsx" target="_blank" rel="noopener">
         <span data-i18n="sp_xlsx">Full spare parts list (Excel)</span>
         <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1v9M4.5 6.5L8 10l3.5-3.5M2.5 13h11" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -4437,7 +4644,33 @@ header.hide{transform:translateY(-100%);}
     <h1 class="mx-title" data-i18n="matrix_title">Every model at a glance</h1>
     <p class="mx-sub" data-i18n="matrix_sub">Browse the complete range by category. Tap any model to open its page, or a category to see it in full.</p>
   </div>
-  <div class="mx-body" id="mx-body"><!-- generato da JS: buildProductMatrix() --></div>
+  <div class="mx-collections">
+    <div class="mx-acc" id="mx-acc-mp">
+      <button class="mx-acc-head" onclick="toggleMarcoPolo()" aria-expanded="false">
+        <span class="mx-acc-txt">
+          <span class="mx-acc-name" data-i18n="coll_mp_name">Marco Polo Collection</span>
+          <span class="mx-acc-tag" data-i18n="coll_mp_tag">Masterful culinary solutions</span>
+        </span>
+        <span class="mx-acc-ind" aria-hidden="true"></span>
+      </button>
+      <div class="mx-acc-panel"><div class="mx-acc-clip"><div class="mx-acc-panel-inner" id="mx-body"><!-- generato da JS: buildProductMatrix() --></div></div></div>
+    </div>
+    <a class="mx-acc mx-acc-locked" onclick="openCollGate('https://online.fliphtml5.com/jzkfe/hycl/')">
+      <span class="mx-acc-txt">
+        <span class="mx-acc-name" data-i18n="coll_le_name">Leonardo Collection</span>
+        <span class="mx-acc-tag" data-i18n="coll_le_tag">Ultra-tech culinary solutions</span>
+      </span>
+      <svg class="mx-coll-lock" width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true"><path d="M2.6 5.5V3.6A2.9 2.9 0 0 1 8.4 3.6V5.5M1.3 5.5h8.4v6.4H1.3z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <span class="mx-acc mx-acc-soon">
+      <span class="mx-acc-txt">
+        <span class="mx-acc-name" data-i18n="coll_ga_name">Galileo Collection</span>
+        <span class="mx-acc-tag" data-i18n="coll_ga_tag">Monolithic culinary solutions</span>
+      </span>
+      <span class="mx-coll-badge" data-i18n="coming_soon">Coming soon</span>
+    </span>
+  </div>
+
 </div><!-- /matrixpage -->
 
 
@@ -4708,6 +4941,13 @@ window.CAT_HERO = {
     b1l:'eoven_01_label', b1t:'eoven_01_title', b1b:'eoven_01_body',
     b2l:'eoven_02_label', b2t:'eoven_02_title', b2b:'eoven_02_body',
     b3l:'eoven_03_label', b3t:'eoven_03_title', b3b:'eoven_03_body'
+  },
+  'Coffee Makers': {
+    media:'image',
+    title:'cm_hero_title', sub:'cm_hero_sub', estag:'cm_es_tag', hl:'cm_es_headline',
+    b1l:'cm_01_label', b1t:'cm_01_title', b1b:'cm_01_body',
+    b2l:'cm_02_label', b2t:'cm_02_title', b2b:'cm_02_body',
+    b3l:'cm_03_label', b3t:'cm_03_title', b3b:'cm_03_body'
   }
 };
 
@@ -4731,9 +4971,10 @@ window.CAT_HERO_MEDIA = {
   'Electric Grills':            {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784738013/Gemini_Generated_Image_7hyx5s7hyx5s7hyx_z4rhgg.png'},
   'Electric BBQs':              {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg'},
   'Gas Grills':                 {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784911666/HERO_CAPITANO_Gemini_Generated_Image_2lrjng2lrjng2lrj_kfyada.png'},
-  'Built-in Gas Ovens':         {video: window.CAT_HERO_VIDEO_CATEGORY},
+  'Built-in Gas Ovens':         {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785391163/ROMA_HERO_kling_20260730_IMAGE_Miglora_la_3442_1_ajcgbn.png'},
   'Built-in Electric Ovens':    {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785302564/HERO_NAPOLI_kling_20260729_Creation__3335_0_k9yjw6.png'},
-  'Antiche Cambuse - Cucine per yachts d\'Epoca': {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785342727/kling_20260730_VIDEO_Lo_yacht_s_113_0_hyq4lq.mp4'}
+  'Antiche Cambuse - Cucine per yachts d\'Epoca': {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785342727/kling_20260730_VIDEO_Lo_yacht_s_113_0_hyq4lq.mp4'},
+  'Coffee Makers':              {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785407719/HERO_COFFEE_MAKERS_Gemini_Generated_Image_ayyy5aayyy5aayyy_qvmide.png'}
 };
 
 // Media hero per SINGOLO prodotto: ha la precedenza su CAT_HERO_MEDIA nella
@@ -4741,13 +4982,17 @@ window.CAT_HERO_MEDIA = {
 // propria categoria, esattamente come prima.
 window.PROD_HERO_MEDIA = {
   'VENTOTENE':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785263039/HERO_VENTOTENE_59_GRILL_kling_20260729_IMAGE__Migliora__576_0_njmfwn.png', pos:'center 72%'},
+  'MARETTIMO':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785398452/MARETTIMO_FOTO_HERO_pgnpke.jpg'},
   'VIRTUS':     {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1280/v1785299301/HERO_VIRTUS_kling_20260728_Creation__419_0_2_vr0ov7.png', pos:'center 72%'},
   'FAVIGNANA':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785148672/MARETTIMO_FOTO_2_Gemini_Generated_Image_ngyamngyamngyamn_jprwoj.png'},
   'MEGA GRILL': {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784800536/HERO_74_2_Gemini_Generated_Image_2rr86x2rr86x2rr8_ae6ac9.png'},
   'ORIZZONTE':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784818451/HERO_ORIZZONTE_JPG_Gemini_Generated_Image_1swvi71swvi71swv_dd8cui.jpg'},
   'CAPITANO':   {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784911666/HERO_CAPITANO_Gemini_Generated_Image_2lrjng2lrjng2lrj_kfyada.png'},
   'MAGNUS':     {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg'},
-  'PRINCIPE':   {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785254570/HERO_PRINCIPE_PAGINE_PRODOTTO_202607281618_4_uqgavs.mp4'}
+  'ROMA':       {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785391163/ROMA_HERO_kling_20260730_IMAGE_Miglora_la_3442_1_ajcgbn.png'},
+  'FIRENZE':    {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785393027/HERO_FIRENZE_FOTO4_wnokzo.jpg', pos:'center 15%'},
+  'PRINCIPE':   {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785254570/HERO_PRINCIPE_PAGINE_PRODOTTO_202607281618_4_uqgavs.mp4'},
+  'ESPRESSO12': {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785407719/HERO_COFFEE_MAKERS_Gemini_Generated_Image_ayyy5aayyy5aayyy_qvmide.png'}
 };
 
 // Disegno tecnico della sezione 04, per-modello (opt-in). Se un modello non ha
@@ -4950,7 +5195,12 @@ function openCat(name,models){
         var vidB = document.getElementById('cp-hero-video-2');
         var srcA = document.getElementById('cp-hero-video-src');
         var srcB = document.getElementById('cp-hero-video-src-2');
-        var RATE = 0.4;  // velocità rallentata (cinematografica)
+        // Velocità PER-CATEGORIA: rallentata (0.4) solo per Antiche Cambuse,
+        // normale (1.0) per tutte le altre hero video. Salvata su window perché
+        // il controller crossfade è agganciato una volta sola e deve leggere
+        // il valore aggiornato ogni volta che si cambia categoria.
+        window._catHeroRate = (name && name.indexOf('Antiche Cambuse')!==-1) ? 0.4 : 1.0;
+        var RATE = window._catHeroRate;
         var FADE = 2200; // durata crossfade, combacia con la transition CSS
 
         function prep(v){ v.loop=false;v.muted=true;v.removeAttribute('loop');
@@ -4990,7 +5240,7 @@ function openCat(name,models){
                 cur.removeEventListener('timeupdate',onTU);
                 var other=(which==='A')?'B':'A';
                 var nxt=el(other);
-                try{nxt.playbackRate=RATE;}catch(e){}
+                try{nxt.playbackRate=window._catHeroRate||1.0;}catch(e){}
                 // L'altro layer parte da zero e diventa stabile PRIMA di apparire.
                 function goFade(){
                   nxt.style.opacity='1';   // sale l'altro
@@ -5155,6 +5405,12 @@ function goProd(m){
       ppVid.play().catch(function(){});
     }
   }
+  // Velo scuro->chiaro solo sulla hero di FIRENZE (classe dedicata sul contenitore).
+  (function(){
+    var __ppH=document.querySelector('.pp-hero');
+    if(__ppH){ if(m==='FIRENZE'){__ppH.classList.add('pp-hero-firenze');}
+               else {__ppH.classList.remove('pp-hero-firenze');} }
+  })();
   // Etichetta hero = categoria di appartenenza (invece del generico "Electric")
   var __lbl=document.querySelector('.pp-hero-label');
   if(__lbl && __cat){ __lbl.removeAttribute('data-i18n'); __lbl.textContent='Marine Cookers · '+__cat; }
@@ -5324,8 +5580,9 @@ function goProd(m){
 // Popola la tabella specifiche in base a PROD_SPECS[m]. Se il prodotto non ha
 // specifiche dedicate, ripristina le righe statiche originali (nessuna regressione).
 window.__specsDefaultHTML = null;
-var SPEC_LABELS_EN = {spec_type:'Type',spec_burners:'Burners',spec_power:'Power',spec_gas:'Gas · pressure',spec_supply:'Power supply',spec_dimensions:'Dimensions (W×D×H)',spec_zones:'Grilling zones',spec_construction:'Construction',spec_ignition:'Ignition',spec_oven:'Oven',spec_lid:'Lid',specs_technology:'Technology',specs_hob_power:'Hob power',specs_oven_power:'Oven power',specs_total_power:'Total max power',specs_certified:'Marine certified',specs_steel:'316L stainless steel',specs_steel_plain:'Stainless steel',specs_safety:'Safety shut-off'};
+var SPEC_LABELS_EN = {spec_type:'Type',spec_burners:'Burners',spec_power:'Power',spec_gas:'Gas · pressure',spec_supply:'Power supply',spec_dimensions:'Dimensions (W×D×H)',spec_dimensions_flaps:'Dimensions (with side flaps)',spec_zones:'Grilling zones',spec_construction:'Construction',spec_ignition:'Ignition',spec_oven:'Oven',spec_lid:'Lid',specs_technology:'Technology',specs_hob_power:'Hob power',specs_oven_power:'Oven power',specs_total_power:'Total max power',specs_certified:'Marine certified',specs_steel:'316L stainless steel',specs_steel_plain:'Stainless steel',specs_safety:'Safety shut-off'};
 window.SPEC_VAL_I18N={
+  'Espresso Coffee Maker':{it:'Macchina da caffè espresso',fr:'Machine à café espresso',de:'Espressomaschine',es:'Cafetera espresso'},
   'Gas cooker':{it:'Cucina a gas',fr:'Cuisinière à gaz',de:'Gasherd',es:'Cocina a gas'},
   'Gas cooker with oven':{it:'Cucina a gas con forno',fr:'Cuisinière à gaz avec four',de:'Gasherd mit Backofen',es:'Cocina a gas con horno'},
   'Gas cooker with grill':{it:'Cucina a gas con grill',fr:'Cuisinière à gaz avec gril',de:'Gasherd mit Grill',es:'Cocina a gas con grill'},
@@ -5446,7 +5703,8 @@ window.PROD_DESC_SHORT = {
   'CAPRERA': ['ppd_caprera_s0','ppd_caprera_s1','ppd_caprera_s2','ppd_caprera_s3','ppd_caprera_s4','ppd_caprera_s5'],
   'GRANDE': ['ppd_grande_s0','ppd_grande_s1','ppd_grande_s2','ppd_grande_s3','ppd_grande_s4','ppd_grande_s5'],
   'CAPITANO': ['ppd_capitano_s0','ppd_capitano_s1','ppd_capitano_s2','ppd_capitano_s3','ppd_capitano_s4','ppd_capitano_s5'],
-  'PRINCIPE': ['ppd_principe_s0','ppd_principe_s1','ppd_principe_s2','ppd_principe_s3','ppd_principe_s4','ppd_principe_s5']
+  'PRINCIPE': ['ppd_principe_s0','ppd_principe_s1','ppd_principe_s2','ppd_principe_s3','ppd_principe_s4','ppd_principe_s5'],
+  'ESPRESSO12': ['ppd_esp_s0','ppd_esp_s1','ppd_esp_s2','ppd_esp_s3']
 };
 
 // ── DESCRIPTION ESTESA PER MODELLO (sezione 02) · opt-in ──
@@ -5461,6 +5719,15 @@ window.PROD_DESC_SHORT = {
 //   photos : indici in PROD_GALLERY[modello] delle foto da intercalare
 //   after  : dopo quale paragrafo (0-based) inserire ciascuna foto
 window.PROD_DESC_FULL = {
+  'ESPRESSO12': {
+    title:  'ppd_esp_l0',
+    kicker: 'ppd_esp_k',
+    paras:  ['ppd_esp_p0','ppd_esp_p1','ppd_esp_p2'],
+    photos: [
+      {img:0, after:0, cap:'Espresso12'},
+      {img:1, after:2, cap:'Espresso12'}
+    ]
+  },
   'MAGNUS': {
     title:  'ppd_magnus_l0',
     kicker: 'mag_full_kicker',
@@ -5636,7 +5903,9 @@ window.PROD_DESC_FULL = {
     title:  'ppd_firenze_t',
     kicker: 'ppd_firenze_k',
     paras:  ['ppd_firenze_p0','ppd_firenze_p1','ppd_firenze_p2'],
-    photos: []
+    photos: [
+      {img:1, after:0, span:true}
+    ]
   },
   'NAPOLI': {
     title:  'ppd_napoli_t',
@@ -5986,6 +6255,7 @@ function applyProdDescFull(m){
 
 window.PROD_SPECS_NOTE = window.PROD_SPECS_NOTE || {};
 window.PROD_SPECS_NOTE['PRINCIPE']='ppd_principe_note';
+window.PROD_SPECS_NOTE['ESPRESSO12']='ppd_espresso_note';
 function renderProdSpecs(m){
   window.__curProd=m;
   var body=document.getElementById('pp-specs-body');
@@ -6334,7 +6604,8 @@ window.PROD_DESCS={
   'ROMA':        'LP Gas Built-in Oven',
   'FIRENZE':     'Compact LP Gas Built-in Oven',
   // Built-in Electric Ovens
-  'NAPOLI':      'Electric Built-in Oven with Grill'
+  'NAPOLI':      'Electric Built-in Oven with Grill',
+  'ESPRESSO12':  'Espresso Coffee Maker · 12V'
 };
 window.PROD_IMGS={
   'PRINCIPE':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785247399/PRINCIPE30_kjdbxz.jpg',
@@ -6395,7 +6666,8 @@ window.PROD_IMGS={
   'ROMA':         'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784657207/ROMA_-_MAXI_dq8ys8.webp',
   'FIRENZE':      'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784657222/FIRENZE_-_REEF_xhqayq.jpg',
   // Built-in Electric Ovens
-  'NAPOLI':       'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784696003/NAPOLI_FORNO_INCASSO_ELETTRICO_aaacrp.jpg'
+  'NAPOLI':       'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784696003/NAPOLI_FORNO_INCASSO_ELETTRICO_aaacrp.jpg',
+  'ESPRESSO12':   'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785405492/EPRESSO12_bk29lb.webp'
 };
 
 
@@ -6421,6 +6693,10 @@ window.PROD_IMG_SHIFT={
 // Galleria multi-foto per prodotto (usata da #prodpage · sezione Gallery).
 // Se un modello e' qui, la sua galleria mostra queste foto invece della singola.
 window.PROD_GALLERY={
+  'FIRENZE':[
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784657222/FIRENZE_-_REEF_xhqayq.jpg',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785390403/FIRENZE_FOTO_GALLERIA_qz9j9j.png'
+  ],
   'PRINCIPE':[
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785247388/PRINCIPE29_bwj9ei.jpg',
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785247166/PRINCIPE28_vymfuf.jpg',
@@ -6512,6 +6788,10 @@ window.PROD_GALLERY={
   'MAGNUS':[
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784657263/MAGNUS_t8ledk.jpg',
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784958463/MAGNUS_1_majs2j.jpg'
+  ],
+  'ESPRESSO12':[
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785405715/ESPRESSO12_SOLDINI_kz7ath.webp',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785405713/ESPRESSO12_SOLDINI_2_ddshfv.webp'
   ]
 };
 
@@ -6565,7 +6845,7 @@ window.CAT_INTRO = {
       '<p data-i18n="ph_p2"></p>'+
       '<p data-i18n="ph_p3"></p>'+
       '<p class="cat-intro-note" data-i18n="ph_note"></p>'+
-      '<a class="cat-intro-btn" href="https://www.techimpex.net/panholders.pdf" target="_blank" rel="noopener" data-i18n="ph_btn">View the catalogue</a>'+
+      '<a class="cat-intro-btn" href="https://online.fliphtml5.com/jzkfe/panholders/" target="_blank" rel="noopener" data-i18n="ph_btn">View the catalogue</a>'+
     '</div>'
 };
 
@@ -6601,7 +6881,7 @@ window.PROD_SPECS={
   'ALTURA':[['spec_type','Gas cooker with oven'], ['spec_burners','4'], ['spec_power','8.95 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Electronic'], ['spec_oven','St. steel · thermostatic'], ['spec_dimensions','52.5 × 53 × 51h <span class="pct-val-unit">cm</span>']],
   'VENTUS':[['spec_type','Gas cooker with oven'], ['spec_burners','3 or 4'], ['spec_power','7.95 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_oven','Enamelled or st. steel cavity'], ['spec_dimensions','52.5 × 53.4 × 47.4h <span class="pct-val-unit">cm</span>']],
   'MAXIMA':[['spec_type','Gas cooker with oven'], ['spec_burners','4 or 5'], ['spec_power','6.25 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Battery electronic'], ['spec_oven','Thermostatic · optional grill'], ['spec_dimensions','64.6 × 51.5 × 49.5h <span class="pct-val-unit">cm</span>']],
-  'MAREA':[['spec_type','Compact gas cooker with oven'], ['spec_burners','2'], ['spec_power','5.5 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_oven','Enamelled cavity'], ['spec_dimensions','52.5 × 48 × 46h <span class="pct-val-unit">cm</span>']],
+  'MAREA':[['spec_type','Compact gas cooker with oven'], ['spec_burners','2'], ['spec_power','5.5 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_oven','Enamelled cavity'], ['spec_dimensions','47.5 × 44 × 46h <span class="pct-val-unit">cm</span>']],
   'LUX':[['spec_type','Gas cooker with oven'], ['spec_burners','2 or 3'], ['spec_power','7.25 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Electronic'], ['spec_oven','St. steel · thermostatic · optional grill'], ['spec_dimensions','52.5 × 48.5 × 51h <span class="pct-val-unit">cm</span>']],
   'PRINCIPE':[['spec_type','Gas cooker with oven'], ['spec_burners','2 or 3'], ['spec_power','7.25 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Electronic'], ['spec_oven','St. steel · thermostatic · optional grill'], ['spec_dimensions','52.5 × 48.5 × 51h <span class="pct-val-unit">cm</span>']],
   'ALTAMAREA':[['spec_type','Gas cooker · separate grill chamber'], ['spec_burners','2'], ['spec_power','7.0 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_oven','Enamelled or st. steel cavity'], ['spec_dimensions','47.5 × 44 × 52h <span class="pct-val-unit">cm</span>']],
@@ -6611,7 +6891,7 @@ window.PROD_SPECS={
   'CAPRERA':[['specs_technology','Gas'], ['spec_burners','3'], ['spec_power','5,55 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','47 × 39 <span class="pct-val-unit">cm</span>']],
   'GRANDE':[['specs_technology','Gas'], ['spec_burners','4'], ['spec_power','6,1 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','50 × 40 <span class="pct-val-unit">cm</span>']],
   'VENTOTENE':[['spec_type','Gas cooker with grill'], ['spec_burners','2'], ['spec_power','5.5 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','55.7 × 28 × 27.3h <span class="pct-val-unit">cm</span>']],
-  'MARETTIMO':[['spec_type','Gas cooker'], ['spec_burners','2'], ['spec_power','3.2 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','51 × 24 × 27.3h <span class="pct-val-unit">cm</span>']],
+  'MARETTIMO':[['spec_type','Gas cooker'], ['spec_burners','2'], ['spec_power','3.2 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','45.6 × 24 × 15h <span class="pct-val-unit">cm</span>'], ['spec_dimensions_flaps','51 × 24 × 27.3h <span class="pct-val-unit">cm</span>']],
   'FAVIGNANA':[['spec_type','Gas cooker'], ['spec_burners','1'], ['spec_power','1.6 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','24 × 24 × 10h <span class="pct-val-unit">cm</span>']],
   'LIPARI':[['spec_type','Gas cooker'], ['spec_burners','3'], ['spec_power','5.55 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','50 × 45 × 16h <span class="pct-val-unit">cm</span>']],
   'DUE':[['specs_technology','Induction'], ['spec_burners','2'], ['spec_power','3.6 <span class="pct-val-unit">kW</span>'], ['spec_supply','220-240V · 50/60 Hz'], ['spec_oven','Integrated bridge'], ['spec_dimensions','44 × 36 × 7h <span class="pct-val-unit">cm</span>']],
@@ -6633,7 +6913,8 @@ window.PROD_SPECS={
   'MAGNUS':[['spec_type','Electric BBQ'], ['spec_power','3.7 <span class="pct-val-unit">kW</span>'], ['spec_supply','220-240V · 50/60 Hz'], ['spec_lid','Super-insulated · detachable'], ['spec_construction','Double heater · st. steel'], ['spec_dimensions','74 × 52.2 × 8.5h · lid open 41h <span class="pct-val-unit">cm</span>']],
   'ROMA':[['spec_type','LP gas built-in oven'], ['spec_power','1.7 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_oven','Thermostat and timer'], ['spec_dimensions','55 × 38 × 54h <span class="pct-val-unit">cm</span>']],
   'FIRENZE':[['spec_type','Compact LP gas built-in oven'], ['spec_power','1.7 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','48.6 × 41 × 24h <span class="pct-val-unit">cm</span>']],
-  'NAPOLI':[['spec_type','Electric built-in oven'], ['spec_power','1.6 <span class="pct-val-unit">kW</span>'], ['spec_supply','220/240V · 50/60 Hz'], ['spec_oven','Grill · optional ventilation'], ['spec_dimensions','50.4 × 39 × 47h <span class="pct-val-unit">cm</span>']]
+  'NAPOLI':[['spec_type','Electric built-in oven'], ['spec_power','1.6 <span class="pct-val-unit">kW</span>'], ['spec_supply','220/240V · 50/60 Hz'], ['spec_oven','Grill · optional ventilation'], ['spec_dimensions','50.4 × 39 × 47h <span class="pct-val-unit">cm</span>']],
+  'ESPRESSO12':[['spec_type','Espresso Coffee Maker'], ['spec_power','0,35 <span class="pct-val-unit">kW</span>'], ['spec_supply','12V DC'], ['spec_dimensions','15 × 14 × 32h <span class="pct-val-unit">cm</span>']]
 };
 
 
@@ -8105,7 +8386,7 @@ var DICT = {
     /* Hero */
     hero_tag: "Marine Cooking, Crafted in Italy",
     hero_title: "Engineered<br>for the <em>open sea</em>",
-    hero_desc: "Handcrafted in the Inox Valley, Conegliano. Gimballed cookers, ovens and grills built for professional yachts · gas, electric, induction.",
+    hero_desc: "Handcrafted in the Inox Valley, Conegliano · turned and milled from solid stainless steel. Gimballed cookers, ovens and grills for professional yachts · gas, electric, induction.",
     hero_btn_explore: "Explore Products",
     hero_btn_story: "Our Story",
     stat_craft: "Years of craft",
@@ -8117,15 +8398,28 @@ var DICT = {
     /* Nav */
     nav_label: "Navigation",
     nav_products: "Product Categories",
-    nav_marine: "Marine Products",
-    nav_rv: "RV Products",
-    nav_home: "Home Products",
+    nav_marine: "The Yachting Collections",
+    nav_rv: "The Luxury RV Collections",
+    nav_home: "The Residential Collections",
     nav_about: "About Us",
     nav_catalogues: "Catalogues",
     nav_contact: "Contact Us",
     nav_spare: "Spare Parts",
     nav_touch: "Get in touch",
     coming_soon: "Coming soon",
+    coll_mp_name: "Marco Polo Collection",
+    coll_le_name: "Leonardo Collection",
+    coll_ga_name: "Galileo Collection",
+    coll_mp_tag: "Masterful culinary solutions",
+    coll_le_tag: "Ultra-tech culinary solutions",
+    coll_ga_tag: "Monolithic culinary solutions",
+    coll_yachting_more: "More from The Yachting Collections",
+    gate_kicker: "Private access",
+    gate_title: "Reserved collection",
+    gate_sub: "Enter the password to browse the collection catalogue.",
+    gate_btn: "Enter",
+    gate_err: "Incorrect password.",
+
     /* Category names */
     cat_electric_oven: "Electric Cookers with Oven",
     cat_gas_oven: "Gas Cookers with Oven",
@@ -8137,6 +8431,29 @@ var DICT = {
     cat_gas_oven_builtin: "Built-in Gas Ovens",
     cat_elec_oven_builtin: "Built-in Electric Ovens",
     cat_coffee: "Coffee Makers",
+    cm_hero_title: "Coffee Makers",
+    cm_hero_sub: "The Italian espresso ritual, carried to the open sea.",
+    cm_es_tag: "The collection",
+    cm_es_headline: "A patented espresso machine that pulls a real Italian espresso from just twelve volts.",
+    cm_01_label: "Twelve volts",
+    cm_01_title: "Espresso from 12V and 350W",
+    cm_01_body: "A genuine Italian espresso drawn from only 12 volts and a mere 350 watts, with no external inverter: the onboard electrical system is enough.",
+    cm_02_label: "Light alloy",
+    cm_02_title: "Sturdy, yet feather-light",
+    cm_02_body: "The body is machined entirely from light alloy, at once robust and remarkably light: the smallest and lightest patented espresso maker of its kind.",
+    cm_03_label: "No tank",
+    cm_03_title: "Just a half-litre bottle",
+    cm_03_body: "No dedicated water tank to fill or clean: you simply slip in a half-litre bottle of water and pull your espresso.",
+    ppd_esp_l0: "ESPRESSO12: the Italian ritual, at twelve volts.",
+    ppd_esp_k: "The ESPRESSO12 story",
+    ppd_esp_p0: "In Italy, espresso is not simply a coffee: it is a daily rite, the short, dense cup crowned with a hazelnut crema, the pause that sets the rhythm of the day. ESPRESSO12 carries that rite on board, so that even in the middle of the sea the first gesture of the morning can be a true Italian espresso.",
+    ppd_esp_p1: "Behind the ritual lies an uncommon feat of engineering. ESPRESSO12 pulls a genuine espresso from just 12 volts and a mere 350 watts, with no external inverter and no dedicated tank: you simply slip in a half-litre bottle of water. Its body is machined entirely from light alloy, sturdy yet feather-light, made to live at sea.",
+    ppd_esp_p2: "The result is the smallest and lightest patented espresso machine of its kind, ready to serve the crema of a great Italian bar wherever the yacht drops anchor: at dawn before setting sail, or after dinner under the stars.",
+    ppd_esp_s0: "A genuine Italian espresso from just 12V and 350W.",
+    ppd_esp_s1: "No external inverter and no dedicated water tank.",
+    ppd_esp_s2: "Body machined entirely from light alloy: sturdy and ultra-light.",
+    ppd_esp_s3: "The smallest and lightest patented espresso maker of its kind.",
+    ppd_espresso_note: "The first patented espresso coffee maker, remarkably compact and light, built entirely from metal that is both sturdy and lightweight (light alloy); it needs no water tank - simply fit a half-litre bottle of water.",
     cat_gas_grill:'Gas Grills',
     cat_antiche:'Antiche Cambuse - Cookers for Vintage Yachts',
     cat_panholders:'Panholders',
@@ -8173,6 +8490,19 @@ var DICT = {
     ab_p3_title: "Steel, <em>craft</em> and legacy",
     ab_p3_body1: "Here we are in the Inox Valley: not only Italy, home to the finest cuisine in the world, but the Conegliano district where the best cookers for the professional world are born · built by the many companies of this territory together with great chefs. It is the know-how we breathe every day.",
     ab_p3_body2: "The artisans who build our cookers are the latest link in a know-how passed from one generation to the next, born in a small steel workshop of the early 1900s · the same heritage as names like Zoppas and Zanussi. From here come turned solid steel, mirror-finished cavities and the patented gimbal system · details that hold up to a close look.",
+    ab_p3_body3: "Where others turn to plastic and thin sheet metal, we machine ours from solid stainless steel · heavy-gauge bodies, components turned and milled to outlast the boat itself. It is the culture of the professional kitchen, carried out to sea.",
+    cat_dl_btn3: "Browse the Leonardo Collection",
+    ab_hd_tag: "Heavy duty",
+    ab_hd_title: "<em>Heavy duty</em>, down to the last detail",
+    ab_hd_intro: "Solid stainless steel where others use plastic or thin sheet metal · turned, milled and welded to the standards of the professional kitchen.",
+    ab_hd_cap_a: "Control knob turned from solid stainless steel",
+    ab_hd_cap_b: "Grate in solid stainless steel · welded bars Ø 8-10 mm",
+    ab_hd_cap_c: "Mirror-polished grill hinges · heavy-gauge solid stainless steel",
+    ab_hd_cap_d: "Door hinges made in our workshop · heavy-gauge solid stainless steel",
+    ab_hd_cap_e: "Grate support block · solid stainless steel, turned and milled",
+    ab_hd_feat1: "A cooker at sea is worked as hard as one in a busy restaurant: heat, salt, motion, service after service. So we build ours the way a professional kitchen is built · heavy-duty, in solid stainless steel, with parts machined to be used and not merely to look right.",
+    ab_hd_feat2: "It is no accident. We were born in the Inox Valley, the district around Conegliano where some of Italy's finest professional kitchens are made · a culture of thick steel and precise metalwork that we breathe every day and carry, unchanged, out to sea.",
+    ab_hd_feat_cap: "MAXIMA · a chef at work in the galley",
     ab_p4_title: "Where <em>Venice</em> set sail",
     ab_p4_body1: "Our cultural roots are tied to the maritime tradition of the Serenissima Republic of Venice · one of history's most influential naval powers. Just as Venice united culture, technique and mastery of the seas, we unite refined design and technical reliability to create unique cookers for those who love the sea.",
     ab_p4_body2: "We work with some of Italy's most distinguished designers, including Marco Zito, professor of design at IUAV Venice · one of Italy's most prestigious design institutes.",
@@ -8189,9 +8519,11 @@ var DICT = {
     cat_page_label: "Library",
     cat_page_title: "Catalogues",
     cat_edition: "2025 Edition",
-    cat_desc1: "Our product catalogue brings together the complete Marine Cookers range · from gimballed gas cookers to our latest electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano.",
+    cat_desc1: "Our product catalogue brings together the complete Marine Cookers range · from gimballed gas cookers to our latest electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · turned and milled where others rely on plastic and thin sheet.",
     cat_desc2: "Download the catalogue to explore technical specifications, dimensions, and the full collection.",
     cat_dl_btn: "Download Catalogue",
+    cat_dl_btn1: "Browse the catalogue with a selection of products",
+    cat_dl_btn2: "Browse the Marco Polo Collection",
     /* Contact */
     ct_label: "Get in touch",
     ct_title: "Contact Us",
@@ -8286,6 +8618,9 @@ var DICT = {
     matrix_sub: "Browse the complete range by category. Tap any model to open its page, or a category to see it in full.",
     matrix_btn: "Product Overview",
     matrix_hint: "Tap a model for details",
+    matrix_col_model: "Model",
+    matrix_col_burners: "Burners / Zones",
+    matrix_col_supply: "Gas / Supply",
     matrix_dim: "Dimensions",
     bgc_hero_title: "Built-in Gas Cooktops",
     bgc_hero_sub: "The pure flame of Italian cooking, flush into the galley.",
@@ -8996,6 +9331,7 @@ var DICT = {
     spec_gas: "Gas · pressure",
     spec_supply: "Power supply",
     spec_dimensions: "Dimensions (W×D×H)",
+    spec_dimensions_flaps: "Dimensions (with side flaps)",
     spec_zones: "Grilling zones",
     spec_construction: "Construction",
     spec_ignition: "Ignition",
@@ -9240,7 +9576,7 @@ var DICT = {
     cs2_eoven_points: "<li>Resistenze corazzate potenti e di alta qualità.</li><li>Termostati precisi, per un controllo fine della temperatura.</li><li>Griglie forno capienti e porte con vetri doppi di sicurezza, per una facciata più fresca.</li><li>Leccarde smaltate, per una diffusione del calore uniforme ed efficiente.</li><li>Interni in smalto ad alto spessore o acciaio inox lucidato a specchio, per igiene e resistenza alla corrosione.</li><li>Ogni pezzo realizzato a mano a Conegliano.</li>",
     hero_tag: "Cucine Marine d'Autore",
     hero_title: "Progettato<br>per il <em>mare aperto</em>",
-    hero_desc: "Fatto a mano nell'Inox Valley, Conegliano. Cucine orientabili, forni e griglie per yacht professionali · gas, elettrici, induzione.",
+    hero_desc: "Fatto a mano nell'Inox Valley, Conegliano · torniti e fresati nel pieno acciaio inox. Cucine orientabili, forni e griglie per yacht professionali · gas, elettrici, induzione.",
     hero_btn_explore: "Esplora i Prodotti",
     hero_btn_story: "La Nostra Storia",
     stat_craft: "Anni di artigianalità",
@@ -9250,15 +9586,28 @@ var DICT = {
     rv_title: "Cosa dicono i nostri clienti",
     nav_label: "Navigazione",
     nav_products: "Categorie Prodotti",
-    nav_marine: "Prodotti Marini",
-    nav_rv: "Prodotti per Camper",
-    nav_home: "Prodotti per Casa",
+    nav_marine: "Collezioni Yachting",
+    nav_rv: "Collezioni Overland Luxury",
+    nav_home: "Collezioni Residenziali",
     nav_about: "Chi Siamo",
     nav_catalogues: "Cataloghi",
     nav_contact: "Contattaci",
     nav_spare: "Ricambi",
     nav_touch: "Contatti",
     coming_soon: "Prossimamente",
+    coll_mp_name: "Marco Polo Collection",
+    coll_le_name: "Leonardo Collection",
+    coll_ga_name: "Galileo Collection",
+    coll_mp_tag: "Soluzioni culinarie magistrali",
+    coll_le_tag: "Soluzioni culinarie ultra-tech",
+    coll_ga_tag: "Soluzioni culinarie monolitiche",
+    coll_yachting_more: "Altre Collezioni Yachting",
+    gate_kicker: "Accesso riservato",
+    gate_title: "Collezione riservata",
+    gate_sub: "Inserisci la password per sfogliare il catalogo della collezione.",
+    gate_btn: "Accedi",
+    gate_err: "Password non corretta.",
+
     cat_electric_oven: "Cucine Elettriche con Forno",
     cat_gas_oven: "Cucine a Gas con Forno",
     cat_gas: "Cucine a Gas",
@@ -9269,6 +9618,29 @@ var DICT = {
     cat_gas_oven_builtin: "Forni a Gas da Incasso",
     cat_elec_oven_builtin: "Forni Elettrici da Incasso",
     cat_coffee: "Macchine da Caffè",
+    cm_hero_title: "Macchine da Caffè",
+    cm_hero_sub: "Il rito italiano dell'espresso, portato in mare aperto.",
+    cm_es_tag: "La collezione",
+    cm_es_headline: "Una macchina da espresso brevettata che estrae un vero espresso italiano da soli dodici volt.",
+    cm_01_label: "Dodici volt",
+    cm_01_title: "Espresso da 12V e 350W",
+    cm_01_body: "Un vero espresso italiano estratto da soli 12 volt e appena 350 watt, senza inverter esterni: basta l'impianto elettrico di bordo.",
+    cm_02_label: "Lega leggera",
+    cm_02_title: "Robusta, eppure leggerissima",
+    cm_02_body: "Il corpo è ricavato interamente in lega leggera, insieme robusto e leggerissimo: la macchina da espresso brevettata più piccola e leggera del suo genere.",
+    cm_03_label: "Senza serbatoio",
+    cm_03_title: "Basta una bottiglietta da mezzo litro",
+    cm_03_body: "Nessun serbatoio dedicato da riempire o pulire: è sufficiente inserire una bottiglietta d'acqua da mezzo litro ed estrarre l'espresso.",
+    ppd_esp_l0: "ESPRESSO12: il rito italiano, a dodici volt.",
+    ppd_esp_k: "Il racconto di ESPRESSO12",
+    ppd_esp_p0: "In Italia l'espresso non è semplicemente un caffè: è un rito quotidiano, la tazzina corta e densa coronata da una crema nocciola, la pausa che scandisce il ritmo della giornata. ESPRESSO12 porta questo rito a bordo, perché anche in mezzo al mare il primo gesto del mattino possa essere un vero espresso italiano.",
+    ppd_esp_p1: "Dietro al rito si nasconde un'impresa tecnica non comune. ESPRESSO12 estrae un espresso autentico da soli 12 volt e appena 350 watt, senza inverter esterni e senza serbatoio dedicato: basta inserire una bottiglietta d'acqua da mezzo litro. Il corpo è ricavato interamente in lega leggera, robusto eppure leggerissimo, nato per vivere il mare.",
+    ppd_esp_p2: "Il risultato è la macchina da caffè espresso brevettata più piccola e leggera nel suo genere, pronta a servire la crema di un grande bar italiano ovunque lo yacht getti l'ancora: all'alba prima di salpare, o dopo cena sotto le stelle.",
+    ppd_esp_s0: "Un vero espresso italiano da soli 12V e 350W.",
+    ppd_esp_s1: "Senza inverter esterni e senza serbatoio dedicato.",
+    ppd_esp_s2: "Corpo interamente in lega leggera: robusto e leggerissimo.",
+    ppd_esp_s3: "La macchina da espresso brevettata più piccola e leggera del suo genere.",
+    ppd_espresso_note: "La prima macchina da caffè espresso brevettata, compattissima e leggerissima, realizzata interamente in metallo robusto e insieme leggero (lega leggera); non necessita di serbatoio: è sufficiente inserire una bottiglietta d'acqua da mezzo litro.",
     cat_gas_grill:'Grill a Gas',
     cat_antiche:'Antiche Cambuse - Cucine per yachts d\'Epoca',
     cat_panholders:'Fermapentole',
@@ -9304,6 +9676,19 @@ var DICT = {
     ab_p3_title: "Acciaio, <em>artigianato</em> e tradizione",
     ab_p3_body1: "Qui siamo nell'Inox Valley: non solo l'Italia, patria della migliore cucina del mondo, ma la terra del Coneglianese dove nascono le migliori cucine per il mondo professionale · costruite dalle molte aziende del territorio insieme a grandi chef e cuochi. È il know-how che respiriamo ogni giorno.",
     ab_p3_body2: "Le maestranze che costruiscono le nostre cucine sono l'ultimo anello di un sapere tramandato di generazione in generazione, nato in una piccola bottega dell'acciaio agli inizi del Novecento · lo stesso patrimonio di nomi come Zoppas e Zanussi. Da qui vengono l'inox massiccio tornito, le muffole a specchio e il brevetto dei basculanti · dettagli che reggono lo sguardo ravvicinato.",
+    ab_p3_body3: "Dove altri ricorrono alla plastica e alla lamiera sottile, noi lavoriamo il pieno acciaio inox · corpi di forte spessore, particolari torniti e fresati per durare più della barca stessa. È la cultura della cucina professionale, portata per mare.",
+    cat_dl_btn3: "Sfoglia la Leonardo Collection",
+    ab_hd_tag: "Heavy duty",
+    ab_hd_title: "<em>Heavy duty</em>, fin nei minimi dettagli",
+    ab_hd_intro: "Acciaio inox massiccio dove altri usano plastica o lamiera sottile · tornito, fresato e saldato secondo gli standard della cucina professionale.",
+    ab_hd_cap_a: "Manopola di comando in acciaio inox massiccio",
+    ab_hd_cap_b: "Griglia in acciaio inox massiccio · barre solide saldate Ø 8-10 mm",
+    ab_hd_cap_c: "Cerniere per grill lucidate a specchio · inox massiccio di forte spessore",
+    ab_hd_cap_d: "Cerniere porta realizzate nella nostra officina · inox massiccio di forte spessore",
+    ab_hd_cap_e: "Blocco di supporto griglie · acciaio inox massiccio, tornito e fresato",
+    ab_hd_feat1: "In mare una cucina lavora come in un ristorante affollato: calore, salsedine, movimento, servizio dopo servizio. Per questo la costruiamo come si costruisce una cucina professionale · heavy duty, in acciaio inox massiccio, con parti lavorate per essere usate e non solo per fare bella figura.",
+    ab_hd_feat2: "Non è un caso. Siamo nati nell'Inox Valley, il distretto attorno a Conegliano dove nascono alcune delle migliori cucine professionali d'Italia · una cultura di acciaio spesso e metalmeccanica di precisione che respiriamo ogni giorno e portiamo, intatta, per mare.",
+    ab_hd_feat_cap: "MAXIMA · uno chef al lavoro in cambusa",
     ab_p4_title: "Dove <em>Venezia</em> prendeva il largo",
     ab_p4_body1: "Le nostre radici culturali sono legate alla tradizione marittima della Serenissima Repubblica di Venezia · una delle potenze navali più influenti della storia. Come Venezia univa cultura, tecnica e dominio dei mari, noi uniamo design raffinato e affidabilità tecnica per creare cucine uniche per chi ama il mare.",
     ab_p4_body2: "Collaboriamo con alcuni dei designer italiani più illustri, tra cui Marco Zito, professore di design allo IUAV di Venezia · uno degli istituti di design più prestigiosi d'Italia.",
@@ -9319,9 +9704,11 @@ var DICT = {
     cat_page_label: "Libreria",
     cat_page_title: "Cataloghi",
     cat_edition: "Edizione 2025",
-    cat_desc1: "Il nostro catalogo prodotti raccoglie l'intera gamma Marine Cookers · dalle cucine a gas orientabili alla nostra più recente serie elettrica e a induzione. Progettate per yacht professionali, disegnate nell'Inox Valley, Conegliano.",
+    cat_desc1: "Il nostro catalogo prodotti raccoglie l'intera gamma Marine Cookers · dalle cucine a gas orientabili alla nostra più recente serie elettrica e a induzione. Progettate per yacht professionali, disegnate nell'Inox Valley, Conegliano. Costruite in pieno acciaio inox di forte spessore · torniti e fresati là dove altri si affidano a plastica e lamiera sottile.",
     cat_desc2: "Scarica il catalogo per esplorare le specifiche tecniche, le dimensioni e la collezione completa.",
     cat_dl_btn: "Scarica il Catalogo",
+    cat_dl_btn1: "Sfoglia il catalogo con una selezione dei prodotti",
+    cat_dl_btn2: "Sfoglia la Marco Polo Collection",
     ct_label: "Scrivici",
     ct_title: "Contattaci",
     ct_address: "Indirizzo",
@@ -9413,6 +9800,9 @@ var DICT = {
     matrix_sub: "Sfoglia l'intera gamma per categoria. Tocca un modello per aprire la sua pagina, o una categoria per vederla per intero.",
     matrix_btn: "Panoramica Prodotti",
     matrix_hint: "Tocca un modello per i dettagli",
+    matrix_col_model: "Modello",
+    matrix_col_burners: "Fuochi / Zone",
+    matrix_col_supply: "Gas / Alimentazione",
     matrix_dim: "Dimensioni",
     bgc_hero_title: "Piani cottura a gas",
     bgc_hero_sub: "La fiamma pura dell'alta cucina italiana, a filo nella cambusa.",
@@ -10123,6 +10513,7 @@ var DICT = {
     spec_gas: "Gas · pressione",
     spec_supply: "Alimentazione",
     spec_dimensions: "Dimensioni (L×P×A)",
+    spec_dimensions_flaps: "Dimensioni (con basculanti laterali)",
     spec_zones: "Zone di cottura",
     spec_construction: "Costruzione",
     spec_ignition: "Accensione",
@@ -10367,7 +10758,7 @@ var DICT = {
     cs2_eoven_points: "<li>Résistances blindées puissantes et de haute qualité.</li><li>Thermostats précis, pour un contrôle fin de la température.</li><li>Grilles de four spacieuses et portes à double vitrage de sécurité, pour une façade plus fraîche.</li><li>Lèchefrites émaillées, pour une diffusion de la chaleur uniforme et efficace.</li><li>Intérieurs en émail épais ou acier inox poli miroir, pour l'hygiène et la résistance à la corrosion.</li><li>Chaque pièce fabriquée à la main à Conegliano.</li>",
     hero_tag: "Cuisines Marines d'Exception",
     hero_title: "Conçu pour<br><em>la haute mer</em>",
-    hero_desc: "Fabriqué à la main dans l'Inox Valley, Conegliano. Cuisinières à cardan, fours et grils pour yachts professionnels · gaz, électrique, induction.",
+    hero_desc: "Fabriqué à la main dans l'Inox Valley, Conegliano · tourné et fraisé dans l'inox massif. Cuisinières à cardan, fours et grils pour yachts professionnels · gaz, électrique, induction.",
     hero_btn_explore: "Découvrir les Produits",
     hero_btn_story: "Notre Histoire",
     stat_craft: "Années de savoir-faire",
@@ -10377,15 +10768,28 @@ var DICT = {
     rv_title: "Ce que disent nos clients",
     nav_label: "Navigation",
     nav_products: "Catégories de Produits",
-    nav_marine: "Produits Marins",
-    nav_rv: "Produits Camping-Car",
-    nav_home: "Produits Maison",
+    nav_marine: "Collections Yachting",
+    nav_rv: "Collections Overland Luxury",
+    nav_home: "Collections Résidentielles",
     nav_about: "À Propos",
     nav_catalogues: "Catalogues",
     nav_contact: "Nous Contacter",
     nav_spare: "Pièces Détachées",
     nav_touch: "Nous contacter",
     coming_soon: "Bientôt disponible",
+    coll_mp_name: "Marco Polo Collection",
+    coll_le_name: "Leonardo Collection",
+    coll_ga_name: "Galileo Collection",
+    coll_mp_tag: "Solutions culinaires magistrales",
+    coll_le_tag: "Solutions culinaires ultra-tech",
+    coll_ga_tag: "Solutions culinaires monolithiques",
+    coll_yachting_more: "Autres Collections Yachting",
+    gate_kicker: "Accès privé",
+    gate_title: "Collection réservée",
+    gate_sub: "Saisissez le mot de passe pour consulter le catalogue.",
+    gate_btn: "Entrer",
+    gate_err: "Mot de passe incorrect.",
+
     cat_electric_oven: "Cuisinières Électriques avec Four",
     cat_gas_oven: "Cuisinières à Gaz avec Four",
     cat_gas: "Cuisinières à Gaz",
@@ -10396,6 +10800,29 @@ var DICT = {
     cat_gas_oven_builtin: "Fours à Gaz Encastrés",
     cat_elec_oven_builtin: "Fours Électriques Encastrés",
     cat_coffee: "Machines à Café",
+    cm_hero_title: "Machines à Café",
+    cm_hero_sub: "Le rite italien de l'espresso, porté en haute mer.",
+    cm_es_tag: "La collection",
+    cm_es_headline: "Une machine à espresso brevetée qui tire un véritable espresso italien de douze volts seulement.",
+    cm_01_label: "Douze volts",
+    cm_01_title: "Espresso en 12V et 350W",
+    cm_01_body: "Un véritable espresso italien tiré de 12 volts seulement et à peine 350 watts, sans onduleur externe : l'installation électrique du bord suffit.",
+    cm_02_label: "Alliage léger",
+    cm_02_title: "Robuste, et pourtant très légère",
+    cm_02_body: "Le corps est usiné entièrement en alliage léger, à la fois robuste et remarquablement léger : la machine à espresso brevetée la plus petite et légère de sa catégorie.",
+    cm_03_label: "Sans réservoir",
+    cm_03_title: "Une simple bouteille d'un demi-litre",
+    cm_03_body: "Aucun réservoir dédié à remplir ou à nettoyer : il suffit d'y glisser une petite bouteille d'eau d'un demi-litre et de tirer l'espresso.",
+    ppd_esp_l0: "ESPRESSO12 : le rite italien, en douze volts.",
+    ppd_esp_k: "Le récit d'ESPRESSO12",
+    ppd_esp_p0: "En Italie, l'espresso n'est pas un simple café : c'est un rite quotidien, la petite tasse courte et dense couronnée d'une crème noisette, la pause qui rythme la journée. ESPRESSO12 emporte ce rite à bord, pour qu'au milieu de la mer le premier geste du matin soit un véritable espresso italien.",
+    ppd_esp_p1: "Derrière le rite se cache une prouesse technique peu commune. ESPRESSO12 tire un espresso authentique de 12 volts seulement et à peine 350 watts, sans onduleur externe et sans réservoir dédié : il suffit d'y glisser une petite bouteille d'eau d'un demi-litre. Son corps est usiné entièrement en alliage léger, robuste et pourtant très léger, fait pour vivre la mer.",
+    ppd_esp_p2: "Le résultat est la machine à café espresso brevetée la plus petite et la plus légère de sa catégorie, prête à servir la crème d'un grand bar italien partout où le yacht jette l'ancre : à l'aube avant d'appareiller, ou après le dîner sous les étoiles.",
+    ppd_esp_s0: "Un véritable espresso italien à partir de 12V et 350W seulement.",
+    ppd_esp_s1: "Sans onduleur externe et sans réservoir dédié.",
+    ppd_esp_s2: "Corps entièrement en alliage léger : robuste et ultra-léger.",
+    ppd_esp_s3: "La machine à espresso brevetée la plus petite et légère de sa catégorie.",
+    ppd_espresso_note: "La première machine à café espresso brevetée, très compacte et légère, entièrement réalisée dans un métal à la fois robuste et léger (alliage léger) ; elle ne nécessite aucun réservoir : il suffit d'insérer une petite bouteille d'eau d'un demi-litre.",
     cat_gas_grill:'Grills à Gaz',
     cat_antiche:'Antiche Cambuse - Cuisinières pour yachts d\'époque',
     cat_panholders:'Cale-Casseroles',
@@ -10431,6 +10858,19 @@ var DICT = {
     ab_p3_title: "Acier, <em>savoir-faire</em> et héritage",
     ab_p3_body1: "Ici, nous sommes dans l'Inox Valley : non seulement l'Italie, patrie de la meilleure cuisine du monde, mais la région de Conegliano où naissent les meilleures cuisinières pour le monde professionnel · construites par les nombreuses entreprises du territoire avec de grands chefs. C'est le savoir-faire que nous respirons chaque jour.",
     ab_p3_body2: "Les artisans qui fabriquent nos cuisinières sont le dernier maillon d'un savoir-faire transmis de génération en génération, né dans un petit atelier de l'acier au début du XXe siècle · le même héritage que des noms comme Zoppas et Zanussi. D'ici viennent l'inox massif tourné, les moufles miroir et le brevet des cardans · des détails qui soutiennent le regard rapproché.",
+    ab_p3_body3: "Là où d'autres recourent au plastique et à la tôle fine, nous usinons l'inox massif · des corps de forte épaisseur, des pièces tournées et fraisées pour durer plus longtemps que le bateau lui-même. C'est la culture de la cuisine professionnelle, portée en mer.",
+    cat_dl_btn3: "Feuilleter la Leonardo Collection",
+    ab_hd_tag: "Heavy duty",
+    ab_hd_title: "<em>Heavy duty</em>, jusque dans le moindre détail",
+    ab_hd_intro: "Inox massif là où d'autres emploient plastique ou tôle fine · tourné, fraisé et soudé selon les standards de la cuisine professionnelle.",
+    ab_hd_cap_a: "Bouton de commande en inox massif",
+    ab_hd_cap_b: "Grille en inox massif · barres pleines soudées Ø 8-10 mm",
+    ab_hd_cap_c: "Charnières de grill polies miroir · inox massif de forte épaisseur",
+    ab_hd_cap_d: "Charnières de porte fabriquées dans notre atelier · inox massif de forte épaisseur",
+    ab_hd_cap_e: "Bloc de support de grille · inox massif, tourné et fraisé",
+    ab_hd_feat1: "En mer, une cuisinière travaille autant que dans un restaurant très fréquenté : chaleur, sel, mouvement, service après service. Nous la construisons donc comme une cuisine professionnelle · heavy duty, en inox massif, avec des pièces usinées pour servir et non pour faire joli.",
+    ab_hd_feat2: "Ce n'est pas un hasard. Nous sommes nés dans l'Inox Valley, la région autour de Conegliano où naissent quelques-unes des meilleures cuisines professionnelles d'Italie · une culture d'acier épais et de mécanique de précision que nous respirons chaque jour et portons, intacte, en mer.",
+    ab_hd_feat_cap: "MAXIMA · un chef à l'œuvre à la cuisine du bord",
     ab_p4_title: "Là où <em>Venise</em> prenait la mer",
     ab_p4_body1: "Nos racines culturelles sont liées à la tradition maritime de la Sérénissime République de Venise · l'une des puissances navales les plus influentes de l'histoire. Tout comme Venise unissait culture, technique et maîtrise des mers, nous unissons design raffiné et fiabilité technique pour créer des cuisinières uniques pour ceux qui aiment la mer.",
     ab_p4_body2: "Nous collaborons avec certains des designers italiens les plus distingués, dont Marco Zito, professeur de design à l'IUAV Venise · l'un des instituts de design les plus prestigieux d'Italie.",
@@ -10446,9 +10886,11 @@ var DICT = {
     cat_page_label: "Bibliothèque",
     cat_page_title: "Catalogues",
     cat_edition: "Édition 2025",
-    cat_desc1: "Notre catalogue produits rassemble la gamme complète Marine Cookers · des cuisinières à gaz à cardan à notre dernière série électrique et à induction. Conçues pour les yachts professionnels, dessinées dans l'Inox Valley, Conegliano.",
+    cat_desc1: "Notre catalogue produits rassemble la gamme complète Marine Cookers · des cuisinières à gaz à cardan à notre dernière série électrique et à induction. Conçues pour les yachts professionnels, dessinées dans l'Inox Valley, Conegliano. Construites en inox massif de forte épaisseur · tournées et fraisées là où d'autres se fient au plastique et à la tôle fine.",
     cat_desc2: "Téléchargez le catalogue pour explorer les spécifications techniques, les dimensions et la collection complète.",
     cat_dl_btn: "Télécharger le Catalogue",
+    cat_dl_btn1: "Feuilleter le catalogue avec une sélection de produits",
+    cat_dl_btn2: "Feuilleter la Marco Polo Collection",
     ct_label: "Contactez-nous",
     ct_title: "Nous Contacter",
     ct_address: "Adresse",
@@ -10540,6 +10982,9 @@ var DICT = {
     matrix_sub: "Parcourez toute la gamme par catégorie. Touchez un modèle pour ouvrir sa page, ou une catégorie pour la voir en entier.",
     matrix_btn: "Apercu des Produits",
     matrix_hint: "Touchez un modèle pour les détails",
+    matrix_col_model: "Modèle",
+    matrix_col_burners: "Feux / Zones",
+    matrix_col_supply: "Gaz / Alimentation",
     matrix_dim: "Dimensions",
     bgc_hero_title: "Tables de cuisson à gaz",
     bgc_hero_sub: "La flamme pure de la cuisine italienne, affleurante dans la cambuse.",
@@ -11250,6 +11695,7 @@ var DICT = {
     spec_gas: "Gaz · pression",
     spec_supply: "Alimentation",
     spec_dimensions: "Dimensions (L×P×H)",
+    spec_dimensions_flaps: "Dimensions (avec abattants latéraux)",
     spec_zones: "Zones de cuisson",
     spec_construction: "Construction",
     spec_ignition: "Allumage",
@@ -11494,7 +11940,7 @@ var DICT = {
     cs2_eoven_points: "<li>Kräftige, hochwertige gepanzerte Heizelemente.</li><li>Präzise Thermostate für feine Temperaturkontrolle.</li><li>Geräumige Backroste und doppelt verglaste Sicherheitstüren, für eine kühlere Front.</li><li>Emaillierte Fettpfannen, für gleichmäßige, effiziente Wärmeverteilung.</li><li>Innenräume aus dickem Email oder spiegelpoliertem Edelstahl, für Hygiene und Korrosionsbeständigkeit.</li><li>Jedes Stück in Conegliano von Hand gefertigt.</li>",
     hero_tag: "Handgefertigte Marine-Küchen",
     hero_title: "Gebaut für<br><em>die offene See</em>",
-    hero_desc: "Handgefertigt im Inox Valley, Conegliano. Kardanisch aufgehängte Kocher, Öfen und Grills für professionelle Yachten · Gas, Elektro, Induktion.",
+    hero_desc: "Handgefertigt im Inox Valley, Conegliano · gedreht und gefräst aus massivem Edelstahl. Kardanisch aufgehängte Kocher, Öfen und Grills für professionelle Yachten · Gas, Elektro, Induktion.",
     hero_btn_explore: "Produkte Entdecken",
     hero_btn_story: "Unsere Geschichte",
     stat_craft: "Jahre Handwerkskunst",
@@ -11504,15 +11950,28 @@ var DICT = {
     rv_title: "Was unsere Kunden sagen",
     nav_label: "Navigation",
     nav_products: "Produktkategorien",
-    nav_marine: "Marine-Produkte",
-    nav_rv: "Wohnmobil-Produkte",
-    nav_home: "Haushaltsprodukte",
+    nav_marine: "Yachting-Kollektionen",
+    nav_rv: "Overland Luxury Kollektionen",
+    nav_home: "Residential Kollektionen",
     nav_about: "Über Uns",
     nav_catalogues: "Kataloge",
     nav_contact: "Kontakt",
     nav_spare: "Ersatzteile",
     nav_touch: "Kontakt aufnehmen",
     coming_soon: "Demnächst",
+    coll_mp_name: "Marco Polo Collection",
+    coll_le_name: "Leonardo Collection",
+    coll_ga_name: "Galileo Collection",
+    coll_mp_tag: "Meisterhafte Küchenlösungen",
+    coll_le_tag: "Ultra-Tech-Küchenlösungen",
+    coll_ga_tag: "Monolithische Küchenlösungen",
+    coll_yachting_more: "Weitere Yachting-Kollektionen",
+    gate_kicker: "Privater Zugang",
+    gate_title: "Reservierte Kollektion",
+    gate_sub: "Geben Sie das Passwort ein, um den Katalog anzusehen.",
+    gate_btn: "Öffnen",
+    gate_err: "Falsches Passwort.",
+
     cat_electric_oven: "Elektroherde mit Backofen",
     cat_gas_oven: "Gasherde mit Backofen",
     cat_gas: "Gasherde",
@@ -11523,6 +11982,29 @@ var DICT = {
     cat_gas_oven_builtin: "Einbau-Gasbacköfen",
     cat_elec_oven_builtin: "Einbau-Elektrobacköfen",
     cat_coffee: "Kaffeemaschinen",
+    cm_hero_title: "Kaffeemaschinen",
+    cm_hero_sub: "Das italienische Espresso-Ritual, hinaus aufs offene Meer getragen.",
+    cm_es_tag: "Die Kollektion",
+    cm_es_headline: "Eine patentierte Espressomaschine, die aus nur zwölf Volt einen echten italienischen Espresso gewinnt.",
+    cm_01_label: "Zwölf Volt",
+    cm_01_title: "Espresso aus 12V und 350W",
+    cm_01_body: "Ein echter italienischer Espresso aus nur 12 Volt und lediglich 350 Watt, ohne externen Wechselrichter: Das Bordnetz genügt.",
+    cm_02_label: "Leichtmetall",
+    cm_02_title: "Robust und dennoch federleicht",
+    cm_02_body: "Der Korpus ist vollständig aus Leichtmetall gefertigt, zugleich robust und bemerkenswert leicht: die kleinste und leichteste patentierte Espressomaschine ihrer Art.",
+    cm_03_label: "Ohne Tank",
+    cm_03_title: "Nur eine halbe-Liter-Flasche",
+    cm_03_body: "Kein eigener Wassertank zum Füllen oder Reinigen: Man setzt einfach eine halbe-Liter-Wasserflasche ein und bezieht den Espresso.",
+    ppd_esp_l0: "ESPRESSO12: das italienische Ritual, mit zwölf Volt.",
+    ppd_esp_k: "Die Geschichte von ESPRESSO12",
+    ppd_esp_p0: "In Italien ist Espresso nicht einfach ein Kaffee: Er ist ein tägliches Ritual, die kurze, dichte Tasse, gekrönt von einer haselnussbraunen Crema, die Pause, die den Rhythmus des Tages vorgibt. ESPRESSO12 bringt dieses Ritual an Bord, damit auch mitten auf dem Meer die erste Geste des Morgens ein echter italienischer Espresso sein kann.",
+    ppd_esp_p1: "Hinter dem Ritual steckt eine ungewöhnliche technische Leistung. ESPRESSO12 gewinnt einen echten Espresso aus nur 12 Volt und lediglich 350 Watt, ohne externen Wechselrichter und ohne eigenen Tank: Es genügt, eine halbe-Liter-Wasserflasche einzusetzen. Der Korpus ist vollständig aus Leichtmetall gefertigt, robust und dennoch federleicht, für das Leben auf See geschaffen.",
+    ppd_esp_p2: "Das Ergebnis ist die kleinste und leichteste patentierte Espressomaschine ihrer Art, bereit, die Crema einer großen italienischen Bar überall dort zu servieren, wo die Yacht vor Anker geht: im Morgengrauen vor dem Ablegen oder nach dem Abendessen unter den Sternen.",
+    ppd_esp_s0: "Ein echter italienischer Espresso aus nur 12V und 350W.",
+    ppd_esp_s1: "Ohne externen Wechselrichter und ohne eigenen Tank.",
+    ppd_esp_s2: "Korpus vollständig aus Leichtmetall: robust und ultraleicht.",
+    ppd_esp_s3: "Die kleinste und leichteste patentierte Espressomaschine ihrer Art.",
+    ppd_espresso_note: "Die erste patentierte Espressomaschine, äußerst kompakt und leicht, vollständig aus zugleich robustem und leichtem Metall (Leichtmetall) gefertigt; sie benötigt keinen Wassertank: Es genügt, eine halbe-Liter-Wasserflasche einzusetzen.",
     cat_gas_grill:'Gasgrills',
     cat_antiche:'Antiche Cambuse - Kocher für Oldtimer-Yachten',
     cat_panholders:'Topfhalter',
@@ -11558,6 +12040,19 @@ var DICT = {
     ab_p3_title: "Stahl, <em>Handwerk</em> und Vermächtnis",
     ab_p3_body1: "Hier sind wir im Inox Valley: nicht nur Italien, Heimat der besten Küche der Welt, sondern die Region Conegliano, in der die besten Herde für die Profiwelt entstehen · gebaut von den vielen Unternehmen dieses Gebiets gemeinsam mit großen Köchen. Es ist das Können, das wir jeden Tag atmen.",
     ab_p3_body2: "Die Handwerker, die unsere Herde bauen, sind das jüngste Glied eines von Generation zu Generation weitergegebenen Könnens, entstanden in einer kleinen Stahlwerkstatt zu Anfang des 20. Jahrhunderts · dasselbe Erbe wie Namen wie Zoppas und Zanussi. Von hier kommen gedrehter massiver Edelstahl, spiegelnde Garräume und das patentierte Kardansystem · Details, die dem nahen Blick standhalten.",
+    ab_p3_body3: "Wo andere zu Kunststoff und dünnem Blech greifen, bearbeiten wir massiven Edelstahl · Korpusse aus starkem Material, gedrehte und gefräste Teile, die das Boot selbst überdauern. Es ist die Kultur der Profiküche, hinaus aufs Meer getragen.",
+    cat_dl_btn3: "Die Leonardo Collection durchblättern",
+    ab_hd_tag: "Heavy duty",
+    ab_hd_title: "<em>Heavy duty</em>, bis ins letzte Detail",
+    ab_hd_intro: "Massiver Edelstahl, wo andere Kunststoff oder dünnes Blech verwenden · gedreht, gefräst und geschweißt nach den Standards der Profiküche.",
+    ab_hd_cap_a: "Bedienknopf aus massivem Edelstahl",
+    ab_hd_cap_b: "Rost aus massivem Edelstahl · verschweißte Vollstäbe Ø 8-10 mm",
+    ab_hd_cap_c: "Spiegelpolierte Grill-Scharniere · massiver Edelstahl großer Stärke",
+    ab_hd_cap_d: "Türscharniere aus unserer Werkstatt · massiver Edelstahl großer Stärke",
+    ab_hd_cap_e: "Rost-Auflageblock · massiver Edelstahl, gedreht und gefräst",
+    ab_hd_feat1: "Auf See wird ein Herd so hart beansprucht wie in einem gut besuchten Restaurant: Hitze, Salz, Bewegung, Service um Service. Darum bauen wir ihn wie eine Profiküche · heavy duty, aus massivem Edelstahl, mit Teilen, die zum Arbeiten gemacht sind und nicht nur zum Ansehen.",
+    ab_hd_feat2: "Das ist kein Zufall. Wir sind im Inox Valley entstanden, der Region um Conegliano, in der einige der besten Profiküchen Italiens gebaut werden · eine Kultur aus dickem Stahl und präziser Metallverarbeitung, die wir täglich atmen und unverändert aufs Meer tragen.",
+    ab_hd_feat_cap: "MAXIMA · ein Koch bei der Arbeit in der Kombüse",
     ab_p4_title: "Wo <em>Venedig</em> in See stach",
     ab_p4_body1: "Unsere kulturellen Wurzeln sind mit der maritimen Tradition der Serenissima Republik Venedig verbunden · einer der einflussreichsten Seemächte der Geschichte. So wie Venedig Kultur, Technik und Beherrschung der Meere vereinte, vereinen wir raffiniertes Design und technische Zuverlässigkeit, um einzigartige Herde für Meerliebhaber zu schaffen.",
     ab_p4_body2: "Wir arbeiten mit einigen der renommiertesten Designer Italiens zusammen, darunter Marco Zito, Professor für Design an der IUAV Venedig · einem der prestigiösesten Designinstitute Italiens.",
@@ -11573,9 +12068,11 @@ var DICT = {
     cat_page_label: "Bibliothek",
     cat_page_title: "Kataloge",
     cat_edition: "Ausgabe 2025",
-    cat_desc1: "Unser Produktkatalog vereint das gesamte Marine Cookers Sortiment · von kardanisch aufgehängten Gasherden bis zu unserer neuesten Elektro- und Induktionsserie. Für professionelle Yachten konzipiert, im Inox Valley Conegliano entworfen.",
+    cat_desc1: "Unser Produktkatalog vereint das gesamte Marine Cookers Sortiment · von kardanisch aufgehängten Gasherden bis zu unserer neuesten Elektro- und Induktionsserie. Für professionelle Yachten konzipiert, im Inox Valley Conegliano entworfen. Gefertigt aus massivem Edelstahl großer Materialstärke · gedreht und gefräst, wo andere auf Kunststoff und dünnes Blech setzen.",
     cat_desc2: "Laden Sie den Katalog herunter, um technische Daten, Abmessungen und die vollständige Kollektion zu entdecken.",
     cat_dl_btn: "Katalog Herunterladen",
+    cat_dl_btn1: "Katalog mit einer Produktauswahl durchblättern",
+    cat_dl_btn2: "Die Marco Polo Collection durchblättern",
     ct_label: "Schreiben Sie uns",
     ct_title: "Kontakt",
     ct_address: "Adresse",
@@ -11667,6 +12164,9 @@ var DICT = {
     matrix_sub: "Durchstoebern Sie das gesamte Sortiment nach Kategorie. Tippen Sie auf ein Modell, um seine Seite zu oeffnen, oder auf eine Kategorie, um sie vollstaendig zu sehen.",
     matrix_btn: "Produktuebersicht",
     matrix_hint: "Fuer Details auf ein Modell tippen",
+    matrix_col_model: "Modell",
+    matrix_col_burners: "Kochstellen / Zonen",
+    matrix_col_supply: "Gas / Versorgung",
     matrix_dim: "Abmessungen",
     bgc_hero_title: "Gas-Kochfelder",
     bgc_hero_sub: "Die reine Flamme der italienischen Küche, bündig in der Kombüse.",
@@ -12377,6 +12877,7 @@ var DICT = {
     spec_gas: "Gas · Druck",
     spec_supply: "Stromversorgung",
     spec_dimensions: "Maße (B×T×H)",
+    spec_dimensions_flaps: "Maße (mit Seitenklappen)",
     spec_zones: "Grillzonen",
     spec_construction: "Konstruktion",
     spec_ignition: "Zündung",
@@ -12621,7 +13122,7 @@ var DICT = {
     cs2_eoven_points: "<li>Resistencias blindadas potentes y de alta calidad.</li><li>Termostatos precisos, para un control fino de la temperatura.</li><li>Parrillas de horno amplias y puertas con doble cristal de seguridad, para un frontal más fresco.</li><li>Bandejas esmaltadas, para una difusión del calor uniforme y eficiente.</li><li>Interiores en esmalte de alto espesor o acero inox pulido a espejo, para higiene y resistencia a la corrosión.</li><li>Cada pieza hecha a mano en Conegliano.</li>",
     hero_tag: "Cocinas Marinas de Autor",
     hero_title: "Diseñado para<br><em>la mar abierta</em>",
-    hero_desc: "Fabricado a mano en el Inox Valley, Conegliano. Cocinas cardánicas, hornos y parrillas para yates profesionales · gas, eléctrico, inducción.",
+    hero_desc: "Fabricado a mano en el Inox Valley, Conegliano · torneado y fresado en acero inoxidable macizo. Cocinas cardánicas, hornos y parrillas para yates profesionales · gas, eléctrico, inducción.",
     hero_btn_explore: "Explorar Productos",
     hero_btn_story: "Nuestra Historia",
     stat_craft: "Años de artesanía",
@@ -12631,15 +13132,28 @@ var DICT = {
     rv_title: "Lo que dicen nuestros clientes",
     nav_label: "Navegación",
     nav_products: "Categorías de Productos",
-    nav_marine: "Productos Marinos",
-    nav_rv: "Productos para Autocaravanas",
-    nav_home: "Productos para el Hogar",
+    nav_marine: "Colecciones Yachting",
+    nav_rv: "Colecciones Overland Luxury",
+    nav_home: "Colecciones Residenciales",
     nav_about: "Quiénes Somos",
     nav_catalogues: "Catálogos",
     nav_contact: "Contacto",
     nav_spare: "Repuestos",
     nav_touch: "Contactar",
     coming_soon: "Próximamente",
+    coll_mp_name: "Marco Polo Collection",
+    coll_le_name: "Leonardo Collection",
+    coll_ga_name: "Galileo Collection",
+    coll_mp_tag: "Soluciones culinarias magistrales",
+    coll_le_tag: "Soluciones culinarias ultra-tech",
+    coll_ga_tag: "Soluciones culinarias monolíticas",
+    coll_yachting_more: "Más Colecciones Yachting",
+    gate_kicker: "Acceso privado",
+    gate_title: "Colección reservada",
+    gate_sub: "Introduce la contraseña para consultar el catálogo.",
+    gate_btn: "Entrar",
+    gate_err: "Contraseña incorrecta.",
+
     cat_electric_oven: "Cocinas Eléctricas con Horno",
     cat_gas_oven: "Cocinas de Gas con Horno",
     cat_gas: "Cocinas de Gas",
@@ -12650,6 +13164,29 @@ var DICT = {
     cat_gas_oven_builtin: "Hornos de Gas Empotrados",
     cat_elec_oven_builtin: "Hornos Eléctricos Empotrados",
     cat_coffee: "Cafeteras",
+    cm_hero_title: "Cafeteras",
+    cm_hero_sub: "El rito italiano del espresso, llevado a mar abierto.",
+    cm_es_tag: "La colección",
+    cm_es_headline: "Una máquina de espresso patentada que extrae un verdadero espresso italiano con solo doce voltios.",
+    cm_01_label: "Doce voltios",
+    cm_01_title: "Espresso con 12V y 350W",
+    cm_01_body: "Un verdadero espresso italiano extraído con solo 12 voltios y apenas 350 vatios, sin inversores externos: basta la instalación eléctrica de a bordo.",
+    cm_02_label: "Aleación ligera",
+    cm_02_title: "Robusta y a la vez ligerísima",
+    cm_02_body: "El cuerpo está realizado por completo en aleación ligera, a la vez robusto y notablemente ligero: la máquina de espresso patentada más pequeña y ligera de su género.",
+    cm_03_label: "Sin depósito",
+    cm_03_title: "Basta una botellita de medio litro",
+    cm_03_body: "Sin depósito dedicado que llenar o limpiar: basta con introducir una botellita de agua de medio litro y extraer el espresso.",
+    ppd_esp_l0: "ESPRESSO12: el rito italiano, a doce voltios.",
+    ppd_esp_k: "El relato de ESPRESSO12",
+    ppd_esp_p0: "En Italia el espresso no es simplemente un café: es un rito cotidiano, la tacita corta y densa coronada por una crema avellana, la pausa que marca el ritmo del día. ESPRESSO12 lleva ese rito a bordo, para que incluso en medio del mar el primer gesto de la mañana sea un verdadero espresso italiano.",
+    ppd_esp_p1: "Tras el rito se esconde una proeza técnica poco común. ESPRESSO12 extrae un espresso auténtico con solo 12 voltios y apenas 350 vatios, sin inversores externos y sin depósito dedicado: basta con introducir una botellita de agua de medio litro. Su cuerpo está realizado por completo en aleación ligera, robusto y a la vez ligerísimo, hecho para vivir el mar.",
+    ppd_esp_p2: "El resultado es la máquina de café espresso patentada más pequeña y ligera de su género, lista para servir la crema de un gran bar italiano allí donde el yate eche el ancla: al amanecer antes de zarpar, o tras la cena bajo las estrellas.",
+    ppd_esp_s0: "Un verdadero espresso italiano con solo 12V y 350W.",
+    ppd_esp_s1: "Sin inversores externos y sin depósito dedicado.",
+    ppd_esp_s2: "Cuerpo íntegramente en aleación ligera: robusto y ligerísimo.",
+    ppd_esp_s3: "La máquina de espresso patentada más pequeña y ligera de su género.",
+    ppd_espresso_note: "La primera máquina de café espresso patentada, sumamente compacta y ligera, realizada por completo en metal a la vez robusto y ligero (aleación ligera); no necesita depósito: basta con introducir una botellita de agua de medio litro.",
     cat_gas_grill:'Grills de Gas',
     cat_antiche:'Antiche Cambuse - Cocinas para yates de época',
     cat_panholders:'Sujetaollas',
@@ -12685,6 +13222,19 @@ var DICT = {
     ab_p3_title: "Acero, <em>artesanía</em> y legado",
     ab_p3_body1: "Aquí estamos en el Inox Valley: no solo Italia, patria de la mejor cocina del mundo, sino la comarca de Conegliano donde nacen las mejores cocinas para el mundo profesional · construidas por las muchas empresas del territorio junto a grandes chefs. Es el saber hacer que respiramos cada día.",
     ab_p3_body2: "Los artesanos que construyen nuestras cocinas son el último eslabón de un saber transmitido de generación en generación, nacido en un pequeño taller del acero a principios del siglo XX · el mismo legado que nombres como Zoppas y Zanussi. De aquí vienen el inox macizo torneado, las muflas de espejo y la patente de los basculantes · detalles que resisten la mirada cercana.",
+    ab_p3_body3: "Donde otros recurren al plástico y a la chapa fina, nosotros mecanizamos acero inoxidable macizo · cuerpos de gran espesor, piezas torneadas y fresadas para durar más que la propia embarcación. Es la cultura de la cocina profesional, llevada al mar.",
+    cat_dl_btn3: "Hojear la Leonardo Collection",
+    ab_hd_tag: "Heavy duty",
+    ab_hd_title: "<em>Heavy duty</em>, hasta el último detalle",
+    ab_hd_intro: "Acero inoxidable macizo donde otros usan plástico o chapa fina · torneado, fresado y soldado según los estándares de la cocina profesional.",
+    ab_hd_cap_a: "Mando de control en acero inoxidable macizo",
+    ab_hd_cap_b: "Parrilla en acero inoxidable macizo · barras macizas soldadas Ø 8-10 mm",
+    ab_hd_cap_c: "Bisagras de grill pulidas a espejo · inox macizo de gran espesor",
+    ab_hd_cap_d: "Bisagras de puerta hechas en nuestro taller · inox macizo de gran espesor",
+    ab_hd_cap_e: "Bloque de soporte de parrilla · acero inoxidable macizo, torneado y fresado",
+    ab_hd_feat1: "En el mar una cocina trabaja como en un restaurante concurrido: calor, sal, movimiento, servicio tras servicio. Por eso la construimos como se construye una cocina profesional · heavy duty, en acero inoxidable macizo, con piezas mecanizadas para usarse y no solo para lucir.",
+    ab_hd_feat2: "No es casualidad. Nacimos en el Inox Valley, la comarca en torno a Conegliano donde se fabrican algunas de las mejores cocinas profesionales de Italia · una cultura de acero grueso y mecánica de precisión que respiramos cada día y llevamos, intacta, al mar.",
+    ab_hd_feat_cap: "MAXIMA · un chef trabajando en la cocina de a bordo",
     ab_p4_title: "Donde <em>Venecia</em> se hizo a la mar",
     ab_p4_body1: "Nuestras raíces culturales están ligadas a la tradición marítima de la Serenísima República de Venecia · una de las potencias navales más influyentes de la historia. Así como Venecia unía cultura, técnica y dominio de los mares, nosotros unimos diseño refinado y fiabilidad técnica para crear cocinas únicas para quienes aman el mar.",
     ab_p4_body2: "Colaboramos con algunos de los diseñadores italianos más distinguidos, entre ellos Marco Zito, profesor de diseño en el IUAV de Venecia · uno de los institutos de diseño más prestigiosos de Italia.",
@@ -12700,9 +13250,11 @@ var DICT = {
     cat_page_label: "Biblioteca",
     cat_page_title: "Catálogos",
     cat_edition: "Edición 2025",
-    cat_desc1: "Nuestro catálogo de productos reúne la gama completa de Marine Cookers · desde cocinas de gas cardánicas hasta nuestra última serie eléctrica y de inducción. Diseñadas para yates profesionales, concebidas en el Inox Valley, Conegliano.",
+    cat_desc1: "Nuestro catálogo de productos reúne la gama completa de Marine Cookers · desde cocinas de gas cardánicas hasta nuestra última serie eléctrica y de inducción. Diseñadas para yates profesionales, concebidas en el Inox Valley, Conegliano. Construidas en acero inoxidable macizo de gran espesor · torneadas y fresadas donde otros recurren al plástico y a la chapa fina.",
     cat_desc2: "Descargue el catálogo para explorar las especificaciones técnicas, las dimensiones y la colección completa.",
     cat_dl_btn: "Descargar Catálogo",
+    cat_dl_btn1: "Hojear el catálogo con una selección de productos",
+    cat_dl_btn2: "Hojear la Marco Polo Collection",
     ct_label: "Escríbenos",
     ct_title: "Contacto",
     ct_address: "Dirección",
@@ -12794,6 +13346,9 @@ var DICT = {
     matrix_sub: "Explore toda la gama por categoria. Toque un modelo para abrir su pagina, o una categoria para verla completa.",
     matrix_btn: "Vision General de Productos",
     matrix_hint: "Toque un modelo para ver los detalles",
+    matrix_col_model: "Modelo",
+    matrix_col_burners: "Fuegos / Zonas",
+    matrix_col_supply: "Gas / Alimentación",
     matrix_dim: "Dimensiones",
     bgc_hero_title: "Placas de cocina a gas",
     bgc_hero_sub: "La llama pura de la cocina italiana, enrasada en la cambusa.",
@@ -13504,6 +14059,7 @@ var DICT = {
     spec_gas: "Gas · presión",
     spec_supply: "Alimentación",
     spec_dimensions: "Dimensiones (An×Pr×Al)",
+    spec_dimensions_flaps: "Dimensiones (con abatibles laterales)",
     spec_zones: "Zonas de cocción",
     spec_construction: "Construcción",
     spec_ignition: "Encendido",
@@ -13672,6 +14228,7 @@ window.setLang = setLang;
     {slug:'built-in-electric-cooktops', name:'Built-in Electric Cooktops', models:['DUE','TRE','UNO','MEDITERRANEO','TIRRENO','ADRIATICO']},
     {slug:'gas-grills',                 name:'Gas Grills',                 models:['CAPITANO']},
     {slug:'built-in-gas-cooktops',      name:'Built-in Gas Cooktops',      models:['BAIA','MADDALENA','CAPRERA','GRANDE']},
+    {slug:'coffee-makers',              name:'Coffee Makers',              models:['ESPRESSO12']},
     {slug:'panholders',                 name:'Panholders',                 models:[]},
     {slug:'electric-grills',            name:'Electric Grills',            models:['GIORGIONE','BELLINI','MINIMO','DOPPIO','TINTORETTO','TIZIANO','CARAVAGGIO','RAFFAELLO','VIRTUS','MEGA GRILL']},
     {slug:'electric-bbqs',              name:'Electric BBQs',              models:['MAGNUS']},
@@ -13859,7 +14416,8 @@ window.setLang = setLang;
     'Electric Grills','Gas Grills','Electric BBQs',
     'Built-in Gas Cooktops','Built-in Electric Cooktops',
     'Built-in Gas Ovens','Built-in Electric Ovens',
-    "Antiche Cambuse - Cucine per yachts d'Epoca"
+    "Antiche Cambuse - Cucine per yachts d'Epoca",
+    'Coffee Makers'
   ];
 
   // esc per attributi/testo
@@ -13878,6 +14436,7 @@ window.setLang = setLang;
     'Gas Grills':'cat_gas_grill',
     'Built-in Gas Ovens':'cat_gas_oven_builtin',
     'Built-in Electric Ovens':'cat_elec_oven_builtin',
+    'Coffee Makers':'cat_coffee',
     "Antiche Cambuse - Cucine per yachts d'Epoca":'cat_antiche'
   };
 
@@ -13887,6 +14446,15 @@ window.setLang = setLang;
     var map={};
     rows.forEach(function(r){ if(r&&r[0]&&map[r[0]]===undefined) map[r[0]]=r[1]; });
     return map;
+  }
+
+  // Crea una <td> per una cella spec. Valori con markup (unita') inseriti raw;
+  // valori testuali noti ricevono data-spec-val -> tradotti da setLang. Vuoto = placeholder.
+  function mxCell(val){
+    if(val==null || val===''){ return '<td class="mx-td"><span class="mx-cell-v mx-empty">&middot;</span></td>'; }
+    var attr='';
+    if(String(val).indexOf('<')===-1 && window.SPEC_VAL_I18N && window.SPEC_VAL_I18N[val]){ attr=' data-spec-val="'+esc(val)+'"'; }
+    return '<td class="mx-td"><span class="mx-cell-v"'+attr+'>'+val+'</span></td>';
   }
 
   // Sceglie fino a 2 righe "extra" (oltre alle dimensioni) tra le piu' significative disponibili
@@ -13930,32 +14498,35 @@ window.setLang = setLang;
            +   '<span class="mx-cat-count">'+c.models.length+'</span>'
            +   '<span class="mx-cat-all" data-i18n="matrix_hint">Tap a model for details</span>'
            + '</div>';
-      html+='<div class="mx-grid">';
+      html+='<div class="mx-tablewrap"><table class="mx-table"><thead><tr>'
+           +   '<th class="mx-th-model" data-i18n="matrix_col_model">Model</th>'
+           +   '<th data-i18n="spec_type">Type</th>'
+           +   '<th data-i18n="matrix_col_burners">Burners / Zones</th>'
+           +   '<th data-i18n="spec_power">Power</th>'
+           +   '<th data-i18n="matrix_dim">Dimensions</th>'
+           +   '<th data-i18n="matrix_col_supply">Gas / Supply</th>'
+           + '</tr></thead><tbody>';
       c.models.forEach(function(m){
         var img=(window.PROD_IMGS&&window.PROD_IMGS[m])?window.PROD_IMGS[m]:'';
         var disp=(typeof prodDisp==='function')?prodDisp(m):m;
-        var specs=pickSpecs(m);
-        html+='<button class="mx-card" type="button" data-goprod="'+esc(m)+'">';
-        html+= '<span class="mx-card-media">'+(img?'<img src="'+esc(img)+'" alt="'+esc(disp)+'" loading="lazy">':'')+'</span>';
-        html+= '<span class="mx-card-body">';
-        html+=  '<span class="mx-card-name">'+esc(disp)+'</span>';
-        if(specs.length){
-          html+='<span class="mx-card-specs">';
-          specs.forEach(function(sp){
-            var kkey=sp[0], val=sp[1];
-            // label: se e' una chiave i18n nota, usa data-i18n; matrix_dim gia' i18n
-            html+='<span class="mx-spec-row">'
-                +   '<span class="mx-spec-k" data-i18n="'+esc(kkey)+'"></span>'
-                +   '<span class="mx-spec-v">'+val+'</span>'
-                + '</span>';
-          });
-          html+='</span>';
-        }
-        html+=  '<span class="mx-card-cta" data-i18n="matrix_hint">Tap a model for details</span>';
-        html+= '</span>';
-        html+='</button>';
+        var map=specMap(m);
+        var typ=(map['spec_type']!==undefined)?map['spec_type']:map['specs_technology'];
+        var burn=(map['spec_burners']!==undefined)?map['spec_burners']:map['spec_zones'];
+        var pow=(map['spec_power']!==undefined)?map['spec_power']:((map['specs_total_power']!==undefined)?map['specs_total_power']:map['specs_hob_power']);
+        var sup=(map['spec_gas']!==undefined)?map['spec_gas']:map['spec_supply'];
+        html+='<tr class="mx-row" role="button" tabindex="0" data-goprod="'+esc(m)+'">';
+        html+= '<td class="mx-td mx-cell-model"><span class="mx-cell-idwrap">'
+             +   (img?'<img class="mx-thumb" src="'+esc(img)+'" alt="'+esc(disp)+'" loading="lazy">':'')
+             +   '<span class="mx-cell-name">'+esc(disp)+'</span>'
+             + '</span></td>';
+        html+= mxCell(typ);
+        html+= mxCell(burn);
+        html+= mxCell(pow);
+        html+= mxCell(map['spec_dimensions']);
+        html+= mxCell(sup);
+        html+='</tr>';
       });
-      html+='</div></div>';
+      html+='</tbody></table></div></div>';
     });
     host.innerHTML=html;
 
@@ -13968,7 +14539,7 @@ window.setLang = setLang;
     var host=document.getElementById('mx-body');
     if(!host) return;
     host.addEventListener('click', function(ev){
-      var card=ev.target.closest && ev.target.closest('.mx-card');
+      var card=ev.target.closest && ev.target.closest('.mx-row');
       if(card){
         var m=card.getAttribute('data-goprod');
         if(m && typeof goProd==='function'){
@@ -13997,6 +14568,8 @@ window.setLang = setLang;
     // tastiera sulle testate categoria
     host.addEventListener('keydown', function(ev){
       if((ev.key==='Enter'||ev.key===' ')){
+        var row=ev.target.closest && ev.target.closest('.mx-row');
+        if(row){ ev.preventDefault(); row.click(); return; }
         var head=ev.target.closest && ev.target.closest('.mx-cat-head');
         if(head){ ev.preventDefault(); head.click(); }
       }
@@ -14029,6 +14602,68 @@ window.setLang = setLang;
     var hdr=document.getElementById('hdr'); if(hdr) hdr.classList.remove('dark');
     pg.classList.remove('show');
     document.body.classList.remove('page-open');
+  };
+})();
+</script>
+
+<!-- COLLECTION GATE (password Leonardo/Galileo) -->
+<div id="collgate" onclick="if(event.target===this)closeCollGate()">
+  <div class="cg-box">
+    <button class="cg-close" onclick="closeCollGate()" aria-label="Close">&times;</button>
+    <span class="cg-kicker" data-i18n="gate_kicker">Private access</span>
+    <h3 class="cg-title" data-i18n="gate_title">Reserved collection</h3>
+    <p class="cg-sub" data-i18n="gate_sub">Enter the password to browse the collection catalogue.</p>
+    <input id="cg-input" class="cg-input" type="password" placeholder="Password" autocomplete="off" spellcheck="false">
+    <button class="cg-btn" onclick="submitCollGate()" data-i18n="gate_btn">Enter</button>
+    <div id="cg-err" class="cg-err" data-i18n="gate_err">Incorrect password.</div>
+  </div>
+</div>
+<script>
+(function(){
+  var _cgUrl=null;
+  function g(){return document.getElementById('collgate');}
+  window.openCollGate=function(url){
+    _cgUrl=url||null;
+    var box=g(); if(!box)return;
+    var inp=document.getElementById('cg-input'); if(inp){inp.value='';}
+    var err=document.getElementById('cg-err'); if(err){err.classList.remove('show');}
+    box.classList.add('show');
+    try{ if(typeof cm==='function')cm(); }catch(e){}
+    setTimeout(function(){ if(inp){try{inp.focus();}catch(e){}} },80);
+  };
+  window.closeCollGate=function(){ var box=g(); if(box)box.classList.remove('show'); };
+  window.submitCollGate=function(){
+    var inp=document.getElementById('cg-input');
+    var err=document.getElementById('cg-err');
+    var val=inp?String(inp.value).trim().toLowerCase():'';
+    if(val==='venezia'){
+      var url=_cgUrl; window.closeCollGate();
+      if(url){ window.open(url,'_blank','noopener'); }
+    }else{
+      if(err)err.classList.add('show');
+      if(inp){inp.value='';try{inp.focus();}catch(e){}}
+    }
+  };
+  document.addEventListener('keydown',function(e){
+    var box=g();
+    if(!box||!box.classList.contains('show'))return;
+    if(e.key==='Escape'){ window.closeCollGate(); }
+    else if(e.key==='Enter'){ window.submitCollGate(); }
+  });
+  window.hdZoom=function(url,alt){
+    var lb=document.getElementById('pp-lightbox'); if(!lb)return;
+    var im=document.getElementById('pp-lightbox-img'); if(!im)return;
+    im.src=url; im.alt=alt||''; im.style.filter=''; im.classList.remove('fading');
+    var pv=document.getElementById('pp-lb-prev'), nx=document.getElementById('pp-lb-next');
+    if(pv)pv.style.display='none'; if(nx)nx.style.display='none';
+    var dt=document.getElementById('pp-lb-dots'); if(dt)dt.innerHTML='';
+    lb.classList.add('on'); document.body.style.overflow='hidden';
+  };
+  window.toggleMarcoPolo=function(){
+    var el=document.getElementById('mx-acc-mp'); if(!el)return;
+    var open=el.classList.toggle('open');
+    var btn=el.querySelector('.mx-acc-head'); if(btn)btn.setAttribute('aria-expanded',open?'true':'false');
+    setTimeout(function(){ try{window.dispatchEvent(new Event('resize'));}catch(e){} },620);
   };
 })();
 </script>
