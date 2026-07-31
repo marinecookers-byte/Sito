@@ -3581,7 +3581,7 @@ body.page-open #home-scroll{ visibility:hidden; }
 /* Chi Siamo · griglia heavy-duty (dettagli robustezza) */
 .ab-hd{width:100%;max-width:1120px;margin:0 auto}
 .ab-hd-head{max-width:660px;margin:0 0 clamp(46px,5.5vw,80px)}
-.ab-hd-intro{font-family:"Outfit",sans-serif;font-weight:300;font-size:clamp(14px,1.15vw,16px);line-height:1.8;color:rgba(10,10,10,.66);margin:18px 0 0}
+.ab-hd-intro{font-family:"Outfit",sans-serif;font-weight:300;font-size:clamp(16px,1.4vw,20px);line-height:1.85;color:rgba(0,0,0,.6);margin:18px 0 0}
 .ab-hd-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(32px,3.4vw,56px)}
 .ab-hd-item{margin:0}
 .ab-hd-item{overflow:hidden}
@@ -3592,7 +3592,7 @@ body.page-open #home-scroll{ visibility:hidden; }
 .ab-hd-feature-img{width:100%;height:auto;display:block;cursor:zoom-in;filter:grayscale(.04);transition:transform .6s cubic-bezier(.23,1,.32,1)}
 .ab-hd-feature-img:hover{transform:scale(1.03)}
 .ab-hd-feature .ab-hd-cap{margin-top:12px}
-.ab-hd-feature-text p{font-family:"Outfit",sans-serif;font-weight:300;font-size:clamp(14px,1.15vw,16px);line-height:1.85;color:rgba(10,10,10,.72);margin:0 0 16px}
+.ab-hd-feature-text p{font-family:"Outfit",sans-serif;font-weight:300;font-size:clamp(16px,1.4vw,20px);line-height:1.85;color:rgba(0,0,0,.6);margin:0 0 24px}
 .ab-hd-feature-text p:last-child{margin-bottom:0}
 @media(min-width:769px){ .ab-hd-feature{grid-template-columns:0.9fr 1.5fr;gap:clamp(34px,3.6vw,64px);align-items:center} .ab-hd-feature-text{order:1} .ab-hd-feature-media{order:2;margin-right:calc(-1 * (clamp(40px,6vw,96px) + max(0px,(100vw - 1120px)/2)))} }
 .ab-hd-cap{margin-top:13px;font-family:"Outfit",sans-serif;font-weight:300;font-size:11px;line-height:1.55;letter-spacing:.05em;color:rgba(10,10,10,.62);padding-left:16px;position:relative}
@@ -3662,6 +3662,16 @@ body.page-open #home-scroll{ visibility:hidden; }
 
 /* Chi Siamo · respiro attorno al dettaglio al vivo a sinistra */
 .ab-hd-feature-left{margin-top:clamp(58px,7.5vw,114px)}
+
+/* Didascalie uniformi · variante allineata a destra per foto full-bleed a sinistra */
+.ab-hd-cap-r{text-align:right;padding-left:0;padding-right:16px}
+.ab-hd-cap-r::before{left:auto;right:0}
+/* Blocco figura sola full-bleed a sinistra (dettaglio cucina inox) */
+.ab-hd-solo{margin:clamp(58px,7.5vw,114px) 0 clamp(66px,8vw,120px)}
+.ab-hd-solo-img{width:100%;height:auto;display:block;cursor:zoom-in;filter:grayscale(.04);transition:transform .6s cubic-bezier(.23,1,.32,1)}
+.ab-hd-solo-img:hover{transform:scale(1.02)}
+@media(min-width:769px){ .ab-hd-solo-left{width:70%;margin-left:calc(-1 * (clamp(40px,6vw,96px) + max(0px,(100vw - 1120px)/2)))} }
+@media(max-width:768px){ .ab-hd-intro, .ab-hd-feature-text p{ font-size:clamp(17px,4.5vw,22px) } }
 </style>
 </head>
 <body>
@@ -4316,7 +4326,7 @@ body.page-open #home-scroll{ visibility:hidden; }
           <div class="ab-hd-head">
             <span class="ab-tag" data-i18n="ab_hd_tag">Heavy duty</span>
             <h2 class="ab-section-title" data-i18n-html="ab_hd_title"><em>Heavy duty</em>, down to the last detail</h2>
-            <p class="ab-hd-intro" data-i18n="ab_hd_intro">Solid stainless steel where others use plastic or thin sheet metal · turned, milled and welded to the standards of the professional kitchen.</p>
+            <p class="ab-hd-intro" data-i18n="ab_hd_intro">Heavy duty is not a slogan: it is how we bend, turn and weld every part. Generous thicknesses, machine-shop tolerances, finishes that stand up to salt and to time.</p>
           </div>
           <div class="ab-hd-feature">
             <figure class="ab-hd-feature-media">
@@ -4324,8 +4334,8 @@ body.page-open #home-scroll{ visibility:hidden; }
               <figcaption class="ab-hd-cap" data-i18n="ab_hd_feat_cap">MAXIMA · a chef at work in the galley</figcaption>
             </figure>
             <div class="ab-hd-feature-text">
-              <p data-i18n="ab_hd_feat1">A cooker at sea is worked as hard as one in a busy restaurant: heat, salt, motion, service after service. So we build ours the way a professional kitchen is built · heavy-duty, in solid stainless steel, with parts machined to be used and not merely to look right.</p>
-              <p data-i18n="ab_hd_feat2">It is no accident. We were born in the Inox Valley, the district around Conegliano where some of Italy's finest professional kitchens are made · a culture of thick steel and precise metalwork that we breathe every day and carry, unchanged, out to sea.</p>
+              <p data-i18n="ab_hd_feat1">At sea a cooker is under the same strain as in the brigade of a busy restaurant: heat, salt, motion, one service after another. So we build it by the rules of a professional kitchen · components cut from solid, turned and milled, welded joints, nothing left to chance.</p>
+              <p data-i18n="ab_hd_feat2">And we do not work alone. Between the Piave, the Pordenone plain and the Venetian lagoon lies a true triangle of steel: the industrial excellences of Veneto and Friuli, where some of the finest professional cooking equipment on the planet is born. It is the same know-how that fires the brigades of three-star restaurants and the kitchens of luxury hospitality, from Armani to Bulgari, and that we carry, unchanged, on board.</p>
             </div>
           </div>
           <div class="ab-hd-grid">
@@ -4334,12 +4344,17 @@ body.page-open #home-scroll{ visibility:hidden; }
             <figure class="ab-hd-item"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785488346/FOTO_DETTAGLIO_INOX_MASSICCIO_kling_20260731_IMAGE_Crea_una_i_4300_0_ocbavk.png" alt="Mirror-polished grill hinges in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785488346/FOTO_DETTAGLIO_INOX_MASSICCIO_kling_20260731_IMAGE_Crea_una_i_4300_0_ocbavk.png','Mirror-polished grill hinges in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_c">Mirror-polished grill hinges · heavy-gauge solid stainless steel</figcaption></figure>
             <figure class="ab-hd-item"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785493525/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_kling_20260731_IMAGE_Aumenta_la_4360_0_a_e7nfoe.png" alt="Door hinges made in our workshop in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785493525/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_kling_20260731_IMAGE_Aumenta_la_4360_0_a_e7nfoe.png','Door hinges made in our workshop in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_d">Door hinges made in our workshop · heavy-gauge solid stainless steel</figcaption></figure>
           </div>
+          <figure class="ab-hd-solo ab-hd-solo-left">
+            <img class="ab-hd-solo-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785496511/DETTAGLIO_CUCINA_INOX_kling_20260731_Creation__4915_0_jjuoit.png" alt="Kitchen detail in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785496511/DETTAGLIO_CUCINA_INOX_kling_20260731_Creation__4915_0_jjuoit.png','Kitchen detail in solid stainless steel')">
+            <figcaption class="ab-hd-cap ab-hd-cap-r" data-i18n="ab_hd_cap_e">Grate support block · solid stainless steel, turned and milled</figcaption>
+          </figure>
           <div class="ab-hd-feature ab-hd-feature-left">
             <figure class="ab-hd-feature-media">
-              <img class="ab-hd-feature-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785496511/DETTAGLIO_CUCINA_INOX_kling_20260731_Creation__4915_0_jjuoit.png" alt="Grate support block turned and milled in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785496511/DETTAGLIO_CUCINA_INOX_kling_20260731_Creation__4915_0_jjuoit.png','Grate support block turned and milled in solid stainless steel')">
+              <img class="ab-hd-feature-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785507665/FOTO_DETTAGLIO_RESISTENZA_kling_20260731_Creation__5677_0_j7zhyy.png" alt="Patented heating element with heavy-gauge stainless steel frame" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785507665/FOTO_DETTAGLIO_RESISTENZA_kling_20260731_Creation__5677_0_j7zhyy.png','Patented heating element with heavy-gauge stainless steel frame')">
+              <figcaption class="ab-hd-cap ab-hd-cap-r" data-i18n="ab_hd_res_cap">Patented heating element · heavy-gauge stainless steel frame</figcaption>
             </figure>
             <div class="ab-hd-feature-text">
-              <p class="ab-hd-feature-cap" data-i18n="ab_hd_cap_e">Grate support block · solid stainless steel, turned and milled</p>
+              <p data-i18n="ab_hd_res_body">We draw on the whole district: many of our components come from firms that work for the professional world alone. Burners and heating elements are often developed together with us · like this patented heating element, with a heavy-gauge stainless steel frame and special insulation, made with a leading manufacturer that works exclusively for the top-tier professional world.</p>
             </div>
           </div>
         </div>
@@ -4410,12 +4425,12 @@ body.page-open #home-scroll{ visibility:hidden; }
     <div class="ab-panel ab-panel-light ab-full" style="z-index:9;">
       <div class="ab-panel-inner">
         <div class="ab-section-grid layout-left photo-wide">
-          <figure class="ab-figure is-wide"><img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784872561/GRANLUX2000_DSC_9590_bwn4ma.jpg" alt="Our Clients · Granlux" width="1000" height="750" loading="lazy" decoding="async"><figcaption class="ab-cap">Granlux</figcaption></figure>
+          <figure class="ab-figure is-wide"><img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785510855/ORIZZONTE_1_cucina01-1_cqszhy_REV2_bmfbdl.jpg" alt="Our Clients · Orizzonte" width="1000" height="750" loading="lazy" decoding="async"><figcaption class="ab-cap">Orizzonte</figcaption></figure>
           <div class="ab-section-meta">
             <span class="ab-tag">05 · <span data-i18n="ab_p8_tag">Our Clients</span></span>
             <h2 class="ab-section-title" data-i18n-html="ab_p8_title">Trusted by the <em>world's finest</em> yards</h2>
             <div class="ab-section-body">
-              <p data-i18n="ab_p8_body1">Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to the yachts of celebrated artists, Formula One drivers, and leading figures from the worlds of entertainment and finance.</p>
+              <p data-i18n="ab_p8_body1">Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to the yachts of celebrated artists, Formula One champions, internationally renowned statesmen, and leading figures from the worlds of business and finance.</p>
               <p data-i18n="ab_p8_body2">A tradition that continues today with Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo, and many others · wherever excellence at sea demands excellence in the galley.</p>
             </div>
           </div>
@@ -6750,7 +6765,7 @@ window.PROD_GALLERY={
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784872576/GRANLUX3400_DSC_9708_hertaz.jpg'
   ],
   'ORIZZONTE':[
-    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784735291/ORIZZONTE_1_cucina01-1_cqszhy.jpg',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785510855/ORIZZONTE_1_cucina01-1_cqszhy_REV2_bmfbdl.jpg',
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785255783/ORIZZONTE_2_RITOCCATA_jsixb6.jpg',
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784735301/ORIZZONTE_3_cucina01-3_c0kvqo.jpg',
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784735319/ORIZZONTE_4_cucina01-4_zppgix.jpg',
@@ -8494,15 +8509,17 @@ var DICT = {
     cat_dl_btn3: "Browse the Leonardo Collection",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, down to the last detail",
-    ab_hd_intro: "Solid stainless steel where others use plastic or thin sheet metal · turned, milled and welded to the standards of the professional kitchen.",
+    ab_hd_intro: "Heavy duty is not a slogan: it is how we bend, turn and weld every part. Generous thicknesses, machine-shop tolerances, finishes that stand up to salt and to time.",
     ab_hd_cap_a: "Control knob turned from solid stainless steel",
     ab_hd_cap_b: "Grate in solid stainless steel · welded bars Ø 8-10 mm",
     ab_hd_cap_c: "Mirror-polished grill hinges · heavy-gauge solid stainless steel",
     ab_hd_cap_d: "Door hinges made in our workshop · heavy-gauge solid stainless steel",
     ab_hd_cap_e: "Grate support block · solid stainless steel, turned and milled",
-    ab_hd_feat1: "A cooker at sea is worked as hard as one in a busy restaurant: heat, salt, motion, service after service. So we build ours the way a professional kitchen is built · heavy-duty, in solid stainless steel, with parts machined to be used and not merely to look right.",
-    ab_hd_feat2: "It is no accident. We were born in the Inox Valley, the district around Conegliano where some of Italy's finest professional kitchens are made · a culture of thick steel and precise metalwork that we breathe every day and carry, unchanged, out to sea.",
+    ab_hd_feat1: "At sea a cooker is under the same strain as in the brigade of a busy restaurant: heat, salt, motion, one service after another. So we build it by the rules of a professional kitchen · components cut from solid, turned and milled, welded joints, nothing left to chance.",
+    ab_hd_feat2: "And we do not work alone. Between the Piave, the Pordenone plain and the Venetian lagoon lies a true triangle of steel: the industrial excellences of Veneto and Friuli, where some of the finest professional cooking equipment on the planet is born. It is the same know-how that fires the brigades of three-star restaurants and the kitchens of luxury hospitality, from Armani to Bulgari, and that we carry, unchanged, on board.",
     ab_hd_feat_cap: "MAXIMA · a chef at work in the galley",
+    ab_hd_res_body: "We draw on the whole district: many of our components come from firms that work for the professional world alone. Burners and heating elements are often developed together with us · like this patented heating element, with a heavy-gauge stainless steel frame and special insulation, made with a leading manufacturer that works exclusively for the top-tier professional world.",
+    ab_hd_res_cap: "Patented heating element · heavy-gauge stainless steel frame",
     ab_p4_title: "Where <em>Venice</em> set sail",
     ab_p4_body1: "Our cultural roots are tied to the maritime tradition of the Serenissima Republic of Venice · one of history's most influential naval powers. Just as Venice united culture, technique and mastery of the seas, we unite refined design and technical reliability to create unique cookers for those who love the sea.",
     ab_p4_body2: "We work with some of Italy's most distinguished designers, including Marco Zito, professor of design at IUAV Venice · one of Italy's most prestigious design institutes.",
@@ -8513,7 +8530,7 @@ var DICT = {
     ab_p6_body2: "Always for Wally, we developed the first fully aluminium lightweight cooker. And for Perini Navi, we engineered a special cooker with a unique reverse-gimballing system · a world first.",
     ab_p8_tag: "Our Clients",
     ab_p8_title: "Trusted by the <em>world's finest</em> yards",
-    ab_p8_body1: "Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to the yachts of celebrated artists, Formula One drivers, and leading figures from the worlds of entertainment and finance.",
+    ab_p8_body1: "Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to the yachts of celebrated artists, Formula One champions, internationally renowned statesmen, and leading figures from the worlds of business and finance.",
     ab_p8_body2: "A tradition that continues today with Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo, and many others · wherever excellence at sea demands excellence in the galley.",
     /* Catalogues */
     cat_page_label: "Library",
@@ -9680,15 +9697,17 @@ var DICT = {
     cat_dl_btn3: "Sfoglia la Leonardo Collection",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, fin nei minimi dettagli",
-    ab_hd_intro: "Acciaio inox massiccio dove altri usano plastica o lamiera sottile · tornito, fresato e saldato secondo gli standard della cucina professionale.",
+    ab_hd_intro: "Heavy duty non è uno slogan: è il modo in cui pieghiamo, torniamo e saldiamo ogni particolare. Spessori generosi, tolleranze da officina meccanica, finiture che resistono al sale e agli anni.",
     ab_hd_cap_a: "Manopola di comando in acciaio inox massiccio",
     ab_hd_cap_b: "Griglia in acciaio inox massiccio · barre solide saldate Ø 8-10 mm",
     ab_hd_cap_c: "Cerniere per grill lucidate a specchio · inox massiccio di forte spessore",
     ab_hd_cap_d: "Cerniere porta realizzate nella nostra officina · inox massiccio di forte spessore",
     ab_hd_cap_e: "Blocco di supporto griglie · acciaio inox massiccio, tornito e fresato",
-    ab_hd_feat1: "In mare una cucina lavora come in un ristorante affollato: calore, salsedine, movimento, servizio dopo servizio. Per questo la costruiamo come si costruisce una cucina professionale · heavy duty, in acciaio inox massiccio, con parti lavorate per essere usate e non solo per fare bella figura.",
-    ab_hd_feat2: "Non è un caso. Siamo nati nell'Inox Valley, il distretto attorno a Conegliano dove nascono alcune delle migliori cucine professionali d'Italia · una cultura di acciaio spesso e metalmeccanica di precisione che respiriamo ogni giorno e portiamo, intatta, per mare.",
+    ab_hd_feat1: "In mare una cucina è sotto sforzo come nella brigata di un ristorante affollato: calore, salsedine, movimento, un servizio dopo l'altro. Per questo la costruiamo con i criteri di una cucina professionale · componenti ricavati dal pieno, torniti e fresati, giunzioni saldate, nulla lasciato al caso.",
+    ab_hd_feat2: "E non lavoriamo da soli. Tra la sinistra Piave, il pordenonese e la laguna veneziana si nasconde un vero triangolo dell'acciaio: le eccellenze industriali di Veneto e Friuli, dove nascono alcune delle migliori apparecchiature di cottura professionale del pianeta. È lo stesso saper fare che accende le brigate dei ristoranti tristellati e le cucine dell'hospitality di lusso, da Armani a Bulgari, e che noi portiamo intatto a bordo.",
     ab_hd_feat_cap: "MAXIMA · uno chef al lavoro in cambusa",
+    ab_hd_res_body: "Attingiamo all'intero distretto: molti dei nostri componenti nascono da aziende che lavorano solo per il professionale. Bruciatori ed elementi riscaldanti sono spesso sviluppati insieme a noi · come questa resistenza brevettata, dal telaio in acciaio inox di forte spessore e isolante speciale, realizzata con un primario costruttore che lavora esclusivamente per il professionale di altissima gamma.",
+    ab_hd_res_cap: "Resistenza brevettata · telaio in acciaio inox di forte spessore",
     ab_p4_title: "Dove <em>Venezia</em> prendeva il largo",
     ab_p4_body1: "Le nostre radici culturali sono legate alla tradizione marittima della Serenissima Repubblica di Venezia · una delle potenze navali più influenti della storia. Come Venezia univa cultura, tecnica e dominio dei mari, noi uniamo design raffinato e affidabilità tecnica per creare cucine uniche per chi ama il mare.",
     ab_p4_body2: "Collaboriamo con alcuni dei designer italiani più illustri, tra cui Marco Zito, professore di design allo IUAV di Venezia · uno degli istituti di design più prestigiosi d'Italia.",
@@ -9699,7 +9718,7 @@ var DICT = {
     ab_p6_body2: "Sempre per Wally, sviluppammo la prima cucina completamente in alluminio ultraleggera. E per Perini Navi, progettammo una cucina speciale con un sistema di bilanciamento inverso unico · un primato mondiale.",
     ab_p8_tag: "I Nostri Clienti",
     ab_p8_title: "La fiducia dei <em>migliori</em> cantieri al mondo",
-    ab_p8_body1: "Le nostre cucine sono state scelte per decenni dai più importanti cantieri navali del mondo, dai più rinomati distributori e da armatori privati. Dai moderni yacht Solaris alle imbarcazioni classiche come la Latifa di William Fife III (1936), dall'Elmo's Fire di Giovanni Soldini agli yacht di grandi artisti, piloti di Formula Uno e personalità del mondo dello spettacolo e della finanza.",
+    ab_p8_body1: "Le nostre cucine sono state scelte per decenni dai più importanti cantieri navali del mondo, dai più rinomati distributori e da armatori privati. Dai moderni yacht Solaris alle imbarcazioni classiche come la Latifa di William Fife III (1936), dall'Elmo's Fire di Giovanni Soldini agli yacht di grandi artisti, campioni della Formula 1, statisti di fama internazionale e figure di primo piano dell'imprenditoria e della finanza.",
     ab_p8_body2: "Una tradizione che continua oggi con Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo e molti altri · ovunque l'eccellenza in mare richieda eccellenza in cucina.",
     cat_page_label: "Libreria",
     cat_page_title: "Cataloghi",
@@ -10862,15 +10881,17 @@ var DICT = {
     cat_dl_btn3: "Feuilleter la Leonardo Collection",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, jusque dans le moindre détail",
-    ab_hd_intro: "Inox massif là où d'autres emploient plastique ou tôle fine · tourné, fraisé et soudé selon les standards de la cuisine professionnelle.",
+    ab_hd_intro: "Heavy duty n'est pas un slogan : c'est notre façon de plier, tourner et souder chaque pièce. Épaisseurs généreuses, tolérances d'atelier mécanique, finitions qui résistent au sel et au temps.",
     ab_hd_cap_a: "Bouton de commande en inox massif",
     ab_hd_cap_b: "Grille en inox massif · barres pleines soudées Ø 8-10 mm",
     ab_hd_cap_c: "Charnières de grill polies miroir · inox massif de forte épaisseur",
     ab_hd_cap_d: "Charnières de porte fabriquées dans notre atelier · inox massif de forte épaisseur",
     ab_hd_cap_e: "Bloc de support de grille · inox massif, tourné et fraisé",
-    ab_hd_feat1: "En mer, une cuisinière travaille autant que dans un restaurant très fréquenté : chaleur, sel, mouvement, service après service. Nous la construisons donc comme une cuisine professionnelle · heavy duty, en inox massif, avec des pièces usinées pour servir et non pour faire joli.",
-    ab_hd_feat2: "Ce n'est pas un hasard. Nous sommes nés dans l'Inox Valley, la région autour de Conegliano où naissent quelques-unes des meilleures cuisines professionnelles d'Italie · une culture d'acier épais et de mécanique de précision que nous respirons chaque jour et portons, intacte, en mer.",
+    ab_hd_feat1: "En mer, une cuisinière subit la même contrainte que dans la brigade d'un restaurant très fréquenté : chaleur, sel, mouvement, un service après l'autre. Nous la construisons selon les règles d'une cuisine professionnelle · des pièces taillées dans la masse, tournées et fraisées, des jonctions soudées, rien laissé au hasard.",
+    ab_hd_feat2: "Et nous ne travaillons pas seuls. Entre la Piave, la plaine de Pordenone et la lagune de Venise se cache un véritable triangle de l'acier : les excellences industrielles de la Vénétie et du Frioul, où naissent quelques-uns des meilleurs équipements de cuisine professionnelle de la planète. C'est le même savoir-faire qui anime les brigades des restaurants trois étoiles et les cuisines de l'hôtellerie de luxe, d'Armani à Bulgari, et que nous emportons intact à bord.",
     ab_hd_feat_cap: "MAXIMA · un chef à l'œuvre à la cuisine du bord",
+    ab_hd_res_body: "Nous puisons dans tout le district : beaucoup de nos composants proviennent d'entreprises qui travaillent uniquement pour le professionnel. Brûleurs et éléments chauffants sont souvent développés avec nous · comme cette résistance brevetée, au cadre en inox de forte épaisseur et à l'isolant spécial, réalisée avec un fabricant de premier plan qui travaille exclusivement pour le professionnel de très haut de gamme.",
+    ab_hd_res_cap: "Résistance brevetée · cadre en inox de forte épaisseur",
     ab_p4_title: "Là où <em>Venise</em> prenait la mer",
     ab_p4_body1: "Nos racines culturelles sont liées à la tradition maritime de la Sérénissime République de Venise · l'une des puissances navales les plus influentes de l'histoire. Tout comme Venise unissait culture, technique et maîtrise des mers, nous unissons design raffiné et fiabilité technique pour créer des cuisinières uniques pour ceux qui aiment la mer.",
     ab_p4_body2: "Nous collaborons avec certains des designers italiens les plus distingués, dont Marco Zito, professeur de design à l'IUAV Venise · l'un des instituts de design les plus prestigieux d'Italie.",
@@ -10881,7 +10902,7 @@ var DICT = {
     ab_p6_body2: "Toujours pour Wally, nous avons développé la première cuisinière entièrement en aluminium ultra-légère. Et pour Perini Navi, nous avons conçu une cuisinière spéciale avec un système de cardan inversé unique · une première mondiale.",
     ab_p8_tag: "Nos Clients",
     ab_p8_title: "La confiance des <em>meilleurs</em> chantiers du monde",
-    ab_p8_body1: "Nos cuisinières sont la référence depuis des décennies des plus grands chantiers navals du monde, des distributeurs les plus réputés et des propriétaires privés. Des yachts Solaris modernes aux bateaux classiques comme le Latifa de William Fife III (1936), de l'Elmo's Fire de Giovanni Soldini aux yachts de grands artistes, de pilotes de Formule 1 et de personnalités du monde du spectacle et de la finance.",
+    ab_p8_body1: "Nos cuisinières sont la référence depuis des décennies des plus grands chantiers navals du monde, des distributeurs les plus réputés et des propriétaires privés. Des yachts Solaris modernes aux bateaux classiques comme le Latifa de William Fife III (1936), de l'Elmo's Fire de Giovanni Soldini aux yachts de grands artistes, de champions de Formule 1, d'hommes d'État de renommée internationale et de personnalités de premier plan de l'entrepreneuriat et de la finance.",
     ab_p8_body2: "Une tradition qui se poursuit aujourd'hui avec Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo et bien d'autres · partout où l'excellence en mer exige l'excellence en cuisine.",
     cat_page_label: "Bibliothèque",
     cat_page_title: "Catalogues",
@@ -12044,15 +12065,17 @@ var DICT = {
     cat_dl_btn3: "Die Leonardo Collection durchblättern",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, bis ins letzte Detail",
-    ab_hd_intro: "Massiver Edelstahl, wo andere Kunststoff oder dünnes Blech verwenden · gedreht, gefräst und geschweißt nach den Standards der Profiküche.",
+    ab_hd_intro: "Heavy duty ist kein Slogan: Es ist die Art, wie wir jedes Teil biegen, drehen und schweißen. Großzügige Materialstärken, Toleranzen wie in der mechanischen Werkstatt, Oberflächen, die Salz und Jahren standhalten.",
     ab_hd_cap_a: "Bedienknopf aus massivem Edelstahl",
     ab_hd_cap_b: "Rost aus massivem Edelstahl · verschweißte Vollstäbe Ø 8-10 mm",
     ab_hd_cap_c: "Spiegelpolierte Grill-Scharniere · massiver Edelstahl großer Stärke",
     ab_hd_cap_d: "Türscharniere aus unserer Werkstatt · massiver Edelstahl großer Stärke",
     ab_hd_cap_e: "Rost-Auflageblock · massiver Edelstahl, gedreht und gefräst",
-    ab_hd_feat1: "Auf See wird ein Herd so hart beansprucht wie in einem gut besuchten Restaurant: Hitze, Salz, Bewegung, Service um Service. Darum bauen wir ihn wie eine Profiküche · heavy duty, aus massivem Edelstahl, mit Teilen, die zum Arbeiten gemacht sind und nicht nur zum Ansehen.",
-    ab_hd_feat2: "Das ist kein Zufall. Wir sind im Inox Valley entstanden, der Region um Conegliano, in der einige der besten Profiküchen Italiens gebaut werden · eine Kultur aus dickem Stahl und präziser Metallverarbeitung, die wir täglich atmen und unverändert aufs Meer tragen.",
+    ab_hd_feat1: "Auf See steht ein Herd unter derselben Belastung wie in der Brigade eines gut besuchten Restaurants: Hitze, Salz, Bewegung, ein Service nach dem anderen. Darum bauen wir ihn nach den Regeln einer Profiküche · aus dem Vollen gearbeitete Teile, gedreht und gefräst, geschweißte Verbindungen, nichts dem Zufall überlassen.",
+    ab_hd_feat2: "Und wir arbeiten nicht allein. Zwischen Piave, der Ebene von Pordenone und der Lagune von Venedig liegt ein wahres Dreieck aus Stahl: die industriellen Spitzenleistungen von Venetien und Friaul, wo einige der besten professionellen Kochgeräte des Planeten entstehen. Es ist dasselbe Können, das die Brigaden der Drei-Sterne-Restaurants und die Küchen der Luxushotellerie befeuert, von Armani bis Bulgari, und das wir unverändert an Bord bringen.",
     ab_hd_feat_cap: "MAXIMA · ein Koch bei der Arbeit in der Kombüse",
+    ab_hd_res_body: "Wir schöpfen aus dem gesamten Distrikt: Viele unserer Komponenten stammen von Betrieben, die ausschließlich für den Profibereich arbeiten. Brenner und Heizelemente entstehen oft gemeinsam mit uns · wie dieses patentierte Heizelement mit Rahmen aus starkem Edelstahl und spezieller Isolierung, gefertigt mit einem führenden Hersteller, der ausschließlich für den professionellen Spitzenbereich arbeitet.",
+    ab_hd_res_cap: "Patentiertes Heizelement · Rahmen aus starkem Edelstahl",
     ab_p4_title: "Wo <em>Venedig</em> in See stach",
     ab_p4_body1: "Unsere kulturellen Wurzeln sind mit der maritimen Tradition der Serenissima Republik Venedig verbunden · einer der einflussreichsten Seemächte der Geschichte. So wie Venedig Kultur, Technik und Beherrschung der Meere vereinte, vereinen wir raffiniertes Design und technische Zuverlässigkeit, um einzigartige Herde für Meerliebhaber zu schaffen.",
     ab_p4_body2: "Wir arbeiten mit einigen der renommiertesten Designer Italiens zusammen, darunter Marco Zito, Professor für Design an der IUAV Venedig · einem der prestigiösesten Designinstitute Italiens.",
@@ -12063,7 +12086,7 @@ var DICT = {
     ab_p6_body2: "Ebenfalls für Wally entwickelten wir den ersten vollständig aus Aluminium gefertigten Leichtherd. Und für Perini Navi konzipierten wir einen Spezialkocher mit einzigartigem umgekehrtem Karda-System · eine Weltpremiere.",
     ab_p8_tag: "Unsere Kunden",
     ab_p8_title: "Vertraut von den <em>besten Werften</em> der Welt",
-    ab_p8_body1: "Unsere Herde sind seit Jahrzehnten die erste Wahl der bedeutendsten Werften der Welt, renommiertester Händler und privater Eigner. Von modernen Solaris-Yachten bis zu klassischen Schiffen wie William Fife III's Latifa (1936), von Giovanni Soldinis Elmo's Fire bis zu den Yachten großer Künstler, Formel-1-Fahrer und führender Persönlichkeiten aus Unterhaltung und Finanzwelt.",
+    ab_p8_body1: "Unsere Herde sind seit Jahrzehnten die erste Wahl der bedeutendsten Werften der Welt, renommiertester Händler und privater Eigner. Von modernen Solaris-Yachten bis zu klassischen Schiffen wie William Fife III's Latifa (1936), von Giovanni Soldinis Elmo's Fire bis zu den Yachten großer Künstler, Formel-1-Champions, international renommierter Staatsmänner und führender Persönlichkeiten aus Wirtschaft und Finanzwelt.",
     ab_p8_body2: "Eine Tradition, die sich heute mit Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo und vielen anderen fortsetzt · überall dort, wo Exzellenz auf See Exzellenz in der Kombüse erfordert.",
     cat_page_label: "Bibliothek",
     cat_page_title: "Kataloge",
@@ -13226,15 +13249,17 @@ var DICT = {
     cat_dl_btn3: "Hojear la Leonardo Collection",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, hasta el último detalle",
-    ab_hd_intro: "Acero inoxidable macizo donde otros usan plástico o chapa fina · torneado, fresado y soldado según los estándares de la cocina profesional.",
+    ab_hd_intro: "Heavy duty no es un eslogan: es la forma en que doblamos, torneamos y soldamos cada pieza. Espesores generosos, tolerancias de taller mecánico, acabados que resisten la sal y el tiempo.",
     ab_hd_cap_a: "Mando de control en acero inoxidable macizo",
     ab_hd_cap_b: "Parrilla en acero inoxidable macizo · barras macizas soldadas Ø 8-10 mm",
     ab_hd_cap_c: "Bisagras de grill pulidas a espejo · inox macizo de gran espesor",
     ab_hd_cap_d: "Bisagras de puerta hechas en nuestro taller · inox macizo de gran espesor",
     ab_hd_cap_e: "Bloque de soporte de parrilla · acero inoxidable macizo, torneado y fresado",
-    ab_hd_feat1: "En el mar una cocina trabaja como en un restaurante concurrido: calor, sal, movimiento, servicio tras servicio. Por eso la construimos como se construye una cocina profesional · heavy duty, en acero inoxidable macizo, con piezas mecanizadas para usarse y no solo para lucir.",
-    ab_hd_feat2: "No es casualidad. Nacimos en el Inox Valley, la comarca en torno a Conegliano donde se fabrican algunas de las mejores cocinas profesionales de Italia · una cultura de acero grueso y mecánica de precisión que respiramos cada día y llevamos, intacta, al mar.",
+    ab_hd_feat1: "En el mar una cocina soporta la misma exigencia que en la brigada de un restaurante concurrido: calor, sal, movimiento, un servicio tras otro. Por eso la construimos con las reglas de una cocina profesional · piezas sacadas del macizo, torneadas y fresadas, uniones soldadas, nada dejado al azar.",
+    ab_hd_feat2: "Y no trabajamos solos. Entre el Piave, la llanura de Pordenone y la laguna de Venecia se esconde un auténtico triángulo del acero: las excelencias industriales de Véneto y Friul, donde nacen algunos de los mejores equipos de cocina profesional del planeta. Es el mismo saber hacer que enciende las brigadas de los restaurantes de tres estrellas y las cocinas de la hostelería de lujo, de Armani a Bulgari, y que llevamos intacto a bordo.",
     ab_hd_feat_cap: "MAXIMA · un chef trabajando en la cocina de a bordo",
+    ab_hd_res_body: "Recurrimos a todo el distrito: muchos de nuestros componentes provienen de empresas que trabajan solo para el profesional. Quemadores y elementos calefactores se desarrollan a menudo junto a nosotros · como esta resistencia patentada, con marco de acero inoxidable de gran espesor y aislante especial, realizada con un fabricante de primer nivel que trabaja exclusivamente para el profesional de altísima gama.",
+    ab_hd_res_cap: "Resistencia patentada · marco de acero inoxidable de gran espesor",
     ab_p4_title: "Donde <em>Venecia</em> se hizo a la mar",
     ab_p4_body1: "Nuestras raíces culturales están ligadas a la tradición marítima de la Serenísima República de Venecia · una de las potencias navales más influyentes de la historia. Así como Venecia unía cultura, técnica y dominio de los mares, nosotros unimos diseño refinado y fiabilidad técnica para crear cocinas únicas para quienes aman el mar.",
     ab_p4_body2: "Colaboramos con algunos de los diseñadores italianos más distinguidos, entre ellos Marco Zito, profesor de diseño en el IUAV de Venecia · uno de los institutos de diseño más prestigiosos de Italia.",
@@ -13245,7 +13270,7 @@ var DICT = {
     ab_p6_body2: "También para Wally desarrollamos la primera cocina completamente de aluminio ultraligera. Y para Perini Navi, diseñamos una cocina especial con un sistema de cardán inverso único · una primicia mundial.",
     ab_p8_tag: "Nuestros Clientes",
     ab_p8_title: "La confianza de los <em>mejores astilleros</em> del mundo",
-    ab_p8_body1: "Nuestras cocinas han sido elegidas durante décadas por los astilleros más importantes del mundo, los distribuidores más renombrados y propietarios privados. Desde los modernos yates Solaris hasta embarcaciones clásicas como el Latifa de William Fife III (1936), desde el Elmo's Fire de Giovanni Soldini hasta los yates de grandes artistas, pilotos de Fórmula Uno y personalidades del mundo del espectáculo y las finanzas.",
+    ab_p8_body1: "Nuestras cocinas han sido elegidas durante décadas por los astilleros más importantes del mundo, los distribuidores más renombrados y propietarios privados. Desde los modernos yates Solaris hasta embarcaciones clásicas como el Latifa de William Fife III (1936), desde el Elmo's Fire de Giovanni Soldini hasta los yates de grandes artistas, campeones de Fórmula 1, estadistas de renombre internacional y figuras destacadas del mundo empresarial y de las finanzas.",
     ab_p8_body2: "Una tradición que continúa hoy con Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo y muchos otros · allí donde la excelencia en el mar exige excelencia en la cocina.",
     cat_page_label: "Biblioteca",
     cat_page_title: "Catálogos",
