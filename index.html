@@ -628,6 +628,7 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 html,body{cursor:none !important}
 #cursor{
   position:fixed;
+  opacity:0;
   width:9px;height:9px;
   background:var(--go);
   border-radius:50%;
@@ -639,6 +640,7 @@ html,body{cursor:none !important}
 }
 #cursor-ring{
   position:fixed;
+  opacity:0;
   width:38px;height:38px;
   border:1.5px solid rgba(184,150,90,.55);
   border-radius:50%;
@@ -1768,6 +1770,7 @@ header.hide{transform:translateY(-100%);}
 @media(max-width:768px){
   .pp-pdf-viewer iframe { height: 360px; }
 }
+.pp-draw-cap{font-family:"Outfit",sans-serif;font-size:9px;font-weight:400;letter-spacing:.28em;text-transform:uppercase;color:rgba(184,150,90,.78);padding:20px 2px 11px;line-height:1}
 .pp-drawing-img {
   width: 100%;
   cursor: zoom-in;
@@ -3628,9 +3631,9 @@ body.page-open #home-scroll{ visibility:hidden; }
 .mx-acc-ind::after{top:0;left:7px;width:1px;height:16px}
 .mx-acc.open .mx-acc-ind::after{transform:scaleY(0);opacity:0}
 .mx-acc-head:hover .mx-acc-name{color:var(--gl)}
-.mx-acc-panel{display:grid;grid-template-rows:0fr;transition:grid-template-rows .55s cubic-bezier(.4,0,.2,1)}
+.mx-acc-panel{display:grid;grid-template-rows:0fr;grid-template-columns:minmax(0,1fr);transition:grid-template-rows .55s cubic-bezier(.4,0,.2,1)}
 .mx-acc.open .mx-acc-panel{grid-template-rows:1fr}
-.mx-acc-clip{overflow:hidden;min-height:0}
+.mx-acc-clip{overflow:hidden;min-height:0;min-width:0}
 .mx-acc-panel-inner{padding-bottom:clamp(24px,4vw,52px)}
 .mx-acc-locked{cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:26px 0;transition:padding-left .35s ease}
 .mx-acc-locked:hover{padding-left:10px}
@@ -3687,6 +3690,8 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
+<!-- Back-to-top: pagine lunghe (home). Elegante, dorato, in basso a sinistra. -->
+<button id="backtotop" aria-label="Torna su" title="Torna su"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="7 14.5 12 9.5 17 14.5"></polyline></svg></button>
 <div id="bd" onclick="cm()"></div>
 
 <div id="np">
@@ -3949,10 +3954,13 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
           <span class="pp-section-title" data-i18n="pp_nav_drawing">Technical Drawing</span>
         </div>
         <div style="overflow:hidden;margin:0 -2px;">
-          <img class="pp-drawing-img" id="pp-drawing-img" onclick="ppLightbox()"
+          <div class="pp-draw-cap" id="pp-drawing-cap1" style="display:none"></div>
+          <img class="pp-drawing-img" id="pp-drawing-img" onclick="ppLightbox(this)"
             src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/HORIZON2_drawing_dark_1_bdwnvd"
             alt="Technical Drawing"
             style="filter:invert(1) brightness(1.05); width:calc(100% + 4px); margin:-2px -2px -2px -2px; display:block;">
+          <div class="pp-draw-cap" id="pp-drawing-cap2" style="display:none"></div>
+          <img class="pp-drawing-img" id="pp-drawing-img2" onclick="ppLightbox(this)" alt="Technical Drawing" style="width:calc(100% + 4px); margin:-2px -2px -2px -2px; display:none;">
         </div>
       </div>
 
@@ -4270,7 +4278,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 
     <!-- ── PANNELLO 0: HERO ── -->
     <div class="ab-panel ab-panel-dark" style="z-index:1;">
-      <img class="ab-panel-video ab-hero-video" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785171975/HERO_PER_CHI_SIAMO_kling_20260728_Creation__227_0_wyducq.png" alt="Marine Cookers · Chi siamo" loading="eager" decoding="async">
+      <img class="ab-panel-video ab-hero-video" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785566807/FOTO_SCENA_VENEZIA_pcg91y.jpg" alt="Marine Cookers · Chi siamo" loading="eager" decoding="async">
       <div class="ab-vbreak-overlay"></div>
       <div class="ab-panel-inner" style="align-items:flex-end; padding-bottom:80px;">
         <div>
@@ -4470,8 +4478,8 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="cat-intro-wrap">
       <div class="cat-intro-label" data-i18n="cat_edition">2025 Edition</div>
       <div class="cat-intro-text">
-        <p data-i18n="cat_desc1">Our product catalogue brings together the complete Marine Cookers range · from gimballed gas cookers to our latest electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · turned and milled where others rely on plastic and thin sheet.</p>
-        <p data-i18n="cat_desc2">Download the catalogue to explore technical specifications, dimensions, and the full collection.</p>
+        <p data-i18n="cat_desc1">Our catalogues bring together a selection of Marine Cookers' main models · from gimballed gas cookers to our innovative electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · with parts turned and milled where others rely on plastic and thin sheet metal.</p>
+        <p data-i18n="cat_desc2">Browse the catalogues to explore technical specifications, dimensions, and a selection of the products.</p>
         <div class="cat-dl-actions">
         <a class="cat-dl-btn" href="https://online.fliphtml5.com/jzkfe/cvcr/" target="_blank" rel="noopener">
           <span class="cat-dl-label" data-i18n="cat_dl_btn1">Browse the catalogue with a selection of products</span>
@@ -5022,7 +5030,35 @@ window.PROD_HERO_MEDIA = {
 // solo per i disegni chiari su fondo scuro (come HORIZON2); i disegni normali
 // (linee scure su fondo chiaro) NON vanno invertiti.
 window.PROD_DRAWING = {
-  'MAGNUS': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784992791/MAGNUS_DISEGNO_nv8jqg.jpg', invert:false}
+  'MAGNUS': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1784992791/MAGNUS_DISEGNO_nv8jqg.jpg', invert:false},
+  'BELLINI': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785578727/BELLINI_ogbf5k.jpg', invert:false},
+  'CAPITANO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785578727/CAPITANO_zsdcxs.jpg', invert:false},
+  'GIORGIONE': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582683/GIORGIONE_hu1k2r.jpg', invert:false},
+  'TINTORETTO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582682/TINTORETTO_xmhwgy.jpg', invert:false},
+  'MINIMO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582680/MINIMO_hokz4r.jpg', invert:false},
+  'FIRENZE': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582679/FIRENZE_pwe0nj.jpg', invert:false},
+  'ROMA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582677/ROMA_zjg5lc.jpg', invert:false},
+  'GRANDE': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582675/GRANDE_gpddo8.jpg', invert:false},
+  'BAIA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582674/BAIA_hi6cgh.jpg', invert:false},
+  'MADDALENA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582672/MADDALENA_aqymok.jpg', invert:false},
+  'CAPRERA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582670/CAPRERA_rkvld7.jpg', invert:false},
+  'ORIZZONTE': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785593074/ORIZZONTE_uy7lsp.jpg', invert:false},
+  'TOLOMEO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785593074/ORIZZONTE_uy7lsp.jpg', invert:false},
+  'ALTALUX': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582625/ALTALUX_feztg1.jpg', invert:false},
+  'VENTUS': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582624/VENTUS_iufyoi.jpg', invert:false},
+  'VERA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582623/VERA_auvjyq.jpg', invert:false},
+  'ALTAMAREA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582621/ALTAMAREA_pscxck.jpg', invert:false},
+  'LUX': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582618/LUX_eggutu.jpg', invert:false},
+  'ALTURA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582602/ALTURA_o1n05f.jpg', invert:false},
+  'MAREA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582600/MAREA_aqim6d.jpg', invert:false},
+  'MARIS': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582599/MARIS_dd0uyl.jpg', invert:false},
+  'FAVIGNANA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582593/FAVIGNANA_sjmvlp.jpg', invert:false},
+  'GUSTO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785591581/GUSTO_k7jqjh.jpg', invert:false},
+  'MARINA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785591580/MARINA_ritdgp.jpg', invert:false},
+  'NAUTA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785591542/NAUTA_xirhuo.jpg', invert:false},
+  'MARETTIMO': {invert:false, imgs:[{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582592/MARETTIMO_APPOGGIO_v2s8qq.jpg', label:'Countertop'},{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582593/MARETTIMO_INCASSO_euagjb.jpg', label:'Built-in'}]},
+  'VENTOTENE': {invert:false, imgs:[{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582596/VENTOTENE_APPOGGIO_dfoou9.jpg', label:'Countertop'},{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582596/VENTOTENE_INCASSO_p3uzlk.jpg', label:'Built-in'}]},
+  'MAXIMA': {invert:false, imgs:[{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785582617/MAXIMA_4_xiwwxo.jpg', label:'4 burners'},{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/v1785590153/MAXIMA_5_vpsbro.jpg', label:'5 burners'}]}
 };
 
 // Scheda tecnica della voce Downloads, per-modello (Vedi + Scarica).
@@ -5440,6 +5476,7 @@ function goProd(m){
   // gli altri prodotti si mostra l'invito a contattare l'azienda.
   (function(){
     var isM=(m==='MAGNUS');
+    var __hasDraw=!!(window.PROD_DRAWING&&window.PROD_DRAWING[m]);
     ['pp-section-drawing','pp-section-3d','pp-section-dl'].forEach(function(id){
       var sec=document.getElementById(id); if(!sec)return;
       var header=sec.querySelector('.pp-section-header');
@@ -5449,7 +5486,8 @@ function goProd(m){
         sec.__cuOrig=kids;
       }
       var cu=sec.querySelector('.pp-contact-info');
-      if(isM){
+      var __showReal=isM||(id==='pp-section-drawing'&&__hasDraw);
+      if(__showReal){
         if(cu&&cu.parentNode)cu.parentNode.removeChild(cu);
         sec.__cuOrig.forEach(function(o){o.el.style.display=o.disp;});
       } else {
@@ -5461,21 +5499,40 @@ function goProd(m){
   // DISEGNO TECNICO per-modello (sezione 04). Opt-in: se il modello non ha voce
   // in PROD_DRAWING resta il segnaposto (HORIZON2, disegno chiaro -> invertito).
   var __drawImg=document.getElementById('pp-drawing-img');
+  var __drawImg2=document.getElementById('pp-drawing-img2');
+  var __drawCap1=document.getElementById('pp-drawing-cap1');
+  var __drawCap2=document.getElementById('pp-drawing-cap2');
   var __drawDl=document.getElementById('pp-drawing-dl');
   var __d=(window.PROD_DRAWING&&window.PROD_DRAWING[m])?window.PROD_DRAWING[m]:null;
+  // normalizza a lista di disegni {src,label}; supporta 1 o 2 disegni per modello
+  var __dl = __d ? (__d.imgs ? __d.imgs : [{src:__d.src, label:(__d.label||'')}]) : null;
+  var __defd='https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/HORIZON2_drawing_dark_1_bdwnvd';
+  var __setCap=function(el,txt){ if(!el)return; if(txt){el.textContent=txt; el.style.display='';} else {el.textContent=''; el.style.display='none';} };
   if(__drawImg){
-    if(__d){
-      if(__drawImg.getAttribute('src')!==__d.src)__drawImg.setAttribute('src',__d.src);
-      __drawImg.style.filter=__d.invert?'invert(1) brightness(1.05)':'none';
+    if(__dl){
+      var __flt=__d.invert?'invert(1) brightness(1.05)':'none';
+      if(__drawImg.getAttribute('src')!==__dl[0].src)__drawImg.setAttribute('src',__dl[0].src);
+      __drawImg.style.filter=__flt;
+      __setCap(__drawCap1, __dl[0].label);
+      if(__drawImg2){
+        if(__dl.length>1){
+          if(__drawImg2.getAttribute('src')!==__dl[1].src)__drawImg2.setAttribute('src',__dl[1].src);
+          __drawImg2.style.filter=__flt;
+          __drawImg2.style.display='block';
+          __setCap(__drawCap2, __dl[1].label);
+        } else { __drawImg2.style.display='none'; __setCap(__drawCap2,''); }
+      }
     } else {
-      var __defd='https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto/HORIZON2_drawing_dark_1_bdwnvd';
       if(__drawImg.getAttribute('src')!==__defd)__drawImg.setAttribute('src',__defd);
       __drawImg.style.filter='invert(1) brightness(1.05)';
+      if(__drawImg2)__drawImg2.style.display='none';
+      __setCap(__drawCap1,''); __setCap(__drawCap2,'');
     }
   }
   if(__drawDl){
-    // il download punta allo stesso disegno, forzato come allegato (fl_attachment)
-    var __dlsrc = __d ? __d.src.replace('/image/upload/f_auto,q_auto/','/image/upload/fl_attachment/')
+    // il download punta al primo disegno, forzato come allegato (fl_attachment)
+    var __d0 = __dl ? __dl[0].src : null;
+    var __dlsrc = __d0 ? __d0.replace('/image/upload/f_auto,q_auto/','/image/upload/fl_attachment/')
                       : 'https://res.cloudinary.com/dseiw9ndw/image/upload/fl_attachment/HORIZON2_drawing_dark_1_bdwnvd';
     __drawDl.setAttribute('href', __dlsrc);
   }
@@ -7977,14 +8034,14 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     lb.classList.remove('on');
     document.body.style.overflow='';
   };
-  window.ppLightbox=function(){
-    var drawingImg=document.querySelector('.pp-drawing-img');
+  window.ppLightbox=function(imgEl){
+    var drawingImg=(imgEl&&imgEl.tagName==='IMG')?imgEl:document.querySelector('.pp-drawing-img');
     if(!drawingImg)return;
     stopVideo();
-    imgs=[{src:drawingImg.src,alt:'Technical Drawing'}];idx=0;
+    imgs=[{src:drawingImg.src,alt:drawingImg.alt||'Technical Drawing'}];idx=0;
     var lb=getLb();if(!lb)return;
     var el=getImg();if(!el)return;
-    el.src=imgs[0].src;el.alt=imgs[0].alt;el.style.filter='invert(1) brightness(1.05)';el.classList.remove('fading');
+    el.src=imgs[0].src;el.alt=imgs[0].alt;el.style.filter=(drawingImg.style&&drawingImg.style.filter)?drawingImg.style.filter:'';el.classList.remove('fading');
     buildDots();
     var prev=document.getElementById('pp-lb-prev');
     var next=document.getElementById('pp-lb-next');
@@ -8408,7 +8465,7 @@ var DICT = {
     /* Hero */
     hero_tag: "Marine Cooking, Crafted in Italy",
     hero_title: "Engineered<br>for the <em>open sea</em>",
-    hero_desc: "Handcrafted in the Inox Valley, Conegliano · turned and milled from solid stainless steel. Gimballed cookers, ovens and grills for professional yachts · gas, electric, induction.",
+    hero_desc: "Professional gimballed cookers, cooktops, ovens and grills for yachts · gas, electric and induction. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.",
     hero_btn_explore: "Explore Products",
     hero_btn_story: "Our Story",
     stat_craft: "Years of craft",
@@ -8543,8 +8600,8 @@ var DICT = {
     cat_page_label: "Library",
     cat_page_title: "Catalogues",
     cat_edition: "2025 Edition",
-    cat_desc1: "Our product catalogue brings together the complete Marine Cookers range · from gimballed gas cookers to our latest electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · turned and milled where others rely on plastic and thin sheet.",
-    cat_desc2: "Download the catalogue to explore technical specifications, dimensions, and the full collection.",
+    cat_desc1: "Our catalogues bring together a selection of Marine Cookers' main models · from gimballed gas cookers to our innovative electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · with parts turned and milled where others rely on plastic and thin sheet metal.",
+    cat_desc2: "Browse the catalogues to explore technical specifications, dimensions, and a selection of the products.",
     cat_dl_btn: "Download Catalogue",
     cat_dl_btn1: "Browse the catalogue with a selection of products",
     cat_dl_btn2: "Browse the Marco Polo Collection",
@@ -9599,8 +9656,8 @@ var DICT = {
     cs2_eoven_lead: "Forni elettrici in acciaio inox da incassare in cambusa, in diverse misure. Precisi, silenziosi e costruiti a mano, per una cottura all'altezza di una grande tavola.",
     cs2_eoven_points: "<li>Resistenze corazzate potenti e di alta qualità.</li><li>Termostati precisi, per un controllo fine della temperatura.</li><li>Griglie forno capienti e porte con vetri doppi di sicurezza, per una facciata più fresca.</li><li>Leccarde smaltate, per una diffusione del calore uniforme ed efficiente.</li><li>Interni in smalto ad alto spessore o acciaio inox lucidato a specchio, per igiene e resistenza alla corrosione.</li><li>Ogni pezzo realizzato a mano a Conegliano.</li>",
     hero_tag: "Cucine Marine d'Autore",
-    hero_title: "Progettato<br>per il <em>mare aperto</em>",
-    hero_desc: "Fatto a mano nell'Inox Valley, Conegliano · torniti e fresati nel pieno acciaio inox. Cucine orientabili, forni e griglie per yacht professionali · gas, elettrici, induzione.",
+    hero_title: "Ingegneria<br>per il <em>mare aperto</em>",
+    hero_desc: "Cucine basculanti, piani cottura, forni e grill professionali per yacht · a gas, elettrici e ad induzione. Fatti a mano nell'Inox Valley, Conegliano - Venezia · costruiti con elementi torniti e fresati dal pieno acciaio inox.",
     hero_btn_explore: "Esplora i Prodotti",
     hero_btn_story: "La Nostra Storia",
     stat_craft: "Anni di artigianalità",
@@ -9730,8 +9787,8 @@ var DICT = {
     cat_page_label: "Libreria",
     cat_page_title: "Cataloghi",
     cat_edition: "Edizione 2025",
-    cat_desc1: "Il nostro catalogo prodotti raccoglie l'intera gamma Marine Cookers · dalle cucine a gas orientabili alla nostra più recente serie elettrica e a induzione. Progettate per yacht professionali, disegnate nell'Inox Valley, Conegliano. Costruite in pieno acciaio inox di forte spessore · torniti e fresati là dove altri si affidano a plastica e lamiera sottile.",
-    cat_desc2: "Scarica il catalogo per esplorare le specifiche tecniche, le dimensioni e la collezione completa.",
+    cat_desc1: "I nostri cataloghi raccolgono una selezione dei principali modelli Marine Cookers · dalle cucine a gas orientabili alle nostre innovative serie elettriche e ad induzione. Progettate per yacht professionali, disegnate nell'Inox Valley, Conegliano. Costruite in pieno acciaio inox di forte spessore · con particolari torniti e fresati là dove altri si affidano a plastica e lamiere sottili.",
+    cat_desc2: "Sfoglia i cataloghi per esplorare le specifiche tecniche, le dimensioni e una selezione dei prodotti.",
     cat_dl_btn: "Scarica il Catalogo",
     cat_dl_btn1: "Sfoglia il catalogo con una selezione dei prodotti",
     cat_dl_btn2: "Sfoglia la Marco Polo Collection",
@@ -10784,7 +10841,7 @@ var DICT = {
     cs2_eoven_points: "<li>Résistances blindées puissantes et de haute qualité.</li><li>Thermostats précis, pour un contrôle fin de la température.</li><li>Grilles de four spacieuses et portes à double vitrage de sécurité, pour une façade plus fraîche.</li><li>Lèchefrites émaillées, pour une diffusion de la chaleur uniforme et efficace.</li><li>Intérieurs en émail épais ou acier inox poli miroir, pour l'hygiène et la résistance à la corrosion.</li><li>Chaque pièce fabriquée à la main à Conegliano.</li>",
     hero_tag: "Cuisines Marines d'Exception",
     hero_title: "Conçu pour<br><em>la haute mer</em>",
-    hero_desc: "Fabriqué à la main dans l'Inox Valley, Conegliano · tourné et fraisé dans l'inox massif. Cuisinières à cardan, fours et grils pour yachts professionnels · gaz, électrique, induction.",
+    hero_desc: "Cuisinières à cardan, plans de cuisson, fours et grils professionnels pour yachts · gaz, électrique et induction. Fabriqués à la main dans l'Inox Valley, Conegliano - Venezia · construits avec des pièces tournées et fraisées dans l'inox massif.",
     hero_btn_explore: "Découvrir les Produits",
     hero_btn_story: "Notre Histoire",
     stat_craft: "Années de savoir-faire",
@@ -10914,8 +10971,8 @@ var DICT = {
     cat_page_label: "Bibliothèque",
     cat_page_title: "Catalogues",
     cat_edition: "Édition 2025",
-    cat_desc1: "Notre catalogue produits rassemble la gamme complète Marine Cookers · des cuisinières à gaz à cardan à notre dernière série électrique et à induction. Conçues pour les yachts professionnels, dessinées dans l'Inox Valley, Conegliano. Construites en inox massif de forte épaisseur · tournées et fraisées là où d'autres se fient au plastique et à la tôle fine.",
-    cat_desc2: "Téléchargez le catalogue pour explorer les spécifications techniques, les dimensions et la collection complète.",
+    cat_desc1: "Nos catalogues rassemblent une sélection des principaux modèles Marine Cookers · des cuisinières à gaz à cardan à nos innovantes séries électriques et à induction. Conçues pour les yachts professionnels, dessinées dans l'Inox Valley, Conegliano. Construites en inox massif de forte épaisseur · avec des pièces tournées et fraisées là où d'autres se fient au plastique et à la tôle fine.",
+    cat_desc2: "Parcourez les catalogues pour explorer les spécifications techniques, les dimensions et une sélection des produits.",
     cat_dl_btn: "Télécharger le Catalogue",
     cat_dl_btn1: "Feuilleter le catalogue avec une sélection de produits",
     cat_dl_btn2: "Feuilleter la Marco Polo Collection",
@@ -11968,7 +12025,7 @@ var DICT = {
     cs2_eoven_points: "<li>Kräftige, hochwertige gepanzerte Heizelemente.</li><li>Präzise Thermostate für feine Temperaturkontrolle.</li><li>Geräumige Backroste und doppelt verglaste Sicherheitstüren, für eine kühlere Front.</li><li>Emaillierte Fettpfannen, für gleichmäßige, effiziente Wärmeverteilung.</li><li>Innenräume aus dickem Email oder spiegelpoliertem Edelstahl, für Hygiene und Korrosionsbeständigkeit.</li><li>Jedes Stück in Conegliano von Hand gefertigt.</li>",
     hero_tag: "Handgefertigte Marine-Küchen",
     hero_title: "Gebaut für<br><em>die offene See</em>",
-    hero_desc: "Handgefertigt im Inox Valley, Conegliano · gedreht und gefräst aus massivem Edelstahl. Kardanisch aufgehängte Kocher, Öfen und Grills für professionelle Yachten · Gas, Elektro, Induktion.",
+    hero_desc: "Kardanisch aufgehängte Kocher, Kochfelder, Backöfen und professionelle Grills für Yachten · Gas, Elektro und Induktion. Handgefertigt im Inox Valley, Conegliano - Venezia · gebaut mit gedrehten und gefrästen Teilen aus massivem Edelstahl.",
     hero_btn_explore: "Produkte Entdecken",
     hero_btn_story: "Unsere Geschichte",
     stat_craft: "Jahre Handwerkskunst",
@@ -12098,8 +12155,8 @@ var DICT = {
     cat_page_label: "Bibliothek",
     cat_page_title: "Kataloge",
     cat_edition: "Ausgabe 2025",
-    cat_desc1: "Unser Produktkatalog vereint das gesamte Marine Cookers Sortiment · von kardanisch aufgehängten Gasherden bis zu unserer neuesten Elektro- und Induktionsserie. Für professionelle Yachten konzipiert, im Inox Valley Conegliano entworfen. Gefertigt aus massivem Edelstahl großer Materialstärke · gedreht und gefräst, wo andere auf Kunststoff und dünnes Blech setzen.",
-    cat_desc2: "Laden Sie den Katalog herunter, um technische Daten, Abmessungen und die vollständige Kollektion zu entdecken.",
+    cat_desc1: "Unsere Kataloge vereinen eine Auswahl der wichtigsten Marine Cookers Modelle · von kardanisch aufgehängten Gasherden bis zu unseren innovativen Elektro- und Induktionsserien. Für professionelle Yachten konzipiert, im Inox Valley Conegliano entworfen. Gefertigt aus massivem Edelstahl großer Materialstärke · mit gedrehten und gefrästen Teilen, wo andere auf Kunststoff und dünnes Blech setzen.",
+    cat_desc2: "Blättern Sie durch die Kataloge, um technische Daten, Abmessungen und eine Auswahl der Produkte zu entdecken.",
     cat_dl_btn: "Katalog Herunterladen",
     cat_dl_btn1: "Katalog mit einer Produktauswahl durchblättern",
     cat_dl_btn2: "Die Marco Polo Collection durchblättern",
@@ -13152,7 +13209,7 @@ var DICT = {
     cs2_eoven_points: "<li>Resistencias blindadas potentes y de alta calidad.</li><li>Termostatos precisos, para un control fino de la temperatura.</li><li>Parrillas de horno amplias y puertas con doble cristal de seguridad, para un frontal más fresco.</li><li>Bandejas esmaltadas, para una difusión del calor uniforme y eficiente.</li><li>Interiores en esmalte de alto espesor o acero inox pulido a espejo, para higiene y resistencia a la corrosión.</li><li>Cada pieza hecha a mano en Conegliano.</li>",
     hero_tag: "Cocinas Marinas de Autor",
     hero_title: "Diseñado para<br><em>la mar abierta</em>",
-    hero_desc: "Fabricado a mano en el Inox Valley, Conegliano · torneado y fresado en acero inoxidable macizo. Cocinas cardánicas, hornos y parrillas para yates profesionales · gas, eléctrico, inducción.",
+    hero_desc: "Cocinas basculantes, encimeras, hornos y parrillas profesionales para yates · gas, eléctricos y de inducción. Hechos a mano en el Inox Valley, Conegliano - Venezia · construidos con elementos torneados y fresados en acero inoxidable macizo.",
     hero_btn_explore: "Explorar Productos",
     hero_btn_story: "Nuestra Historia",
     stat_craft: "Años de artesanía",
@@ -13282,8 +13339,8 @@ var DICT = {
     cat_page_label: "Biblioteca",
     cat_page_title: "Catálogos",
     cat_edition: "Edición 2025",
-    cat_desc1: "Nuestro catálogo de productos reúne la gama completa de Marine Cookers · desde cocinas de gas cardánicas hasta nuestra última serie eléctrica y de inducción. Diseñadas para yates profesionales, concebidas en el Inox Valley, Conegliano. Construidas en acero inoxidable macizo de gran espesor · torneadas y fresadas donde otros recurren al plástico y a la chapa fina.",
-    cat_desc2: "Descargue el catálogo para explorar las especificaciones técnicas, las dimensiones y la colección completa.",
+    cat_desc1: "Nuestros catálogos reúnen una selección de los principales modelos de Marine Cookers · desde cocinas de gas cardánicas hasta nuestras innovadoras series eléctricas y de inducción. Diseñadas para yates profesionales, concebidas en el Inox Valley, Conegliano. Construidas en acero inoxidable macizo de gran espesor · con piezas torneadas y fresadas donde otros recurren al plástico y a la chapa fina.",
+    cat_desc2: "Explore los catálogos para descubrir las especificaciones técnicas, las dimensiones y una selección de los productos.",
     cat_dl_btn: "Descargar Catálogo",
     cat_dl_btn1: "Hojear el catálogo con una selección de productos",
     cat_dl_btn2: "Hojear la Marco Polo Collection",
@@ -14699,5 +14756,79 @@ window.setLang = setLang;
   };
 })();
 </script>
+<style id="btt-style">
+#backtotop{
+  position:fixed; left:34px; bottom:34px;
+  width:52px; height:52px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; padding:0; margin:0;
+  border:1px solid rgba(184,150,90,.34);
+  background:rgba(10,10,10,.42);
+  -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px);
+  color:#b8965a; cursor:none; z-index:500;
+  opacity:0; pointer-events:none; transform:translateY(14px);
+  transition:opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1), border-color .4s ease, background .4s ease;
+}
+#backtotop.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
+#backtotop svg{ width:20px; height:20px; display:block; fill:none; stroke:#b8965a; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; transition:transform .45s cubic-bezier(.22,1,.36,1); }
+#backtotop:hover{ border-color:rgba(184,150,90,.78); background:rgba(10,10,10,.62); }
+#backtotop:hover svg{ transform:translateY(-3px); }
+/* Nascosto quando un overlay o la nav sono aperti (home congelata) */
+body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; pointer-events:none !important; transform:translateY(14px) !important; }
+@media(max-width:900px){
+  #backtotop{ left:18px; bottom:18px; width:46px; height:46px; }
+  #backtotop svg{ width:18px; height:18px; }
+}
+@media print{ #backtotop{ display:none !important; } }
+</style>
+<script>
+(function(){
+  var btn=document.getElementById('backtotop');
+  if(!btn) return;
+
+  function blocked(){
+    return document.body.classList.contains('page-open') || document.body.classList.contains('nav-open');
+  }
+  function threshold(){ return Math.max(480, window.innerHeight*0.7); }
+  function update(){
+    var y=window.scrollY||window.pageYOffset||document.documentElement.scrollTop||0;
+    if(!blocked() && y>threshold()) btn.classList.add('show');
+    else btn.classList.remove('show');
+  }
+
+  function toTop(){
+    var start=window.scrollY||window.pageYOffset||document.documentElement.scrollTop||0;
+    function done(){
+      document.documentElement.scrollTop=0; document.body.scrollTop=0;
+      /* Risincronizza lo stato interno del homeScroller: senza questo il primo
+         colpo di rotellina riporterebbe la home indietro (vedi __scrollSync). */
+      if(window.__scrollSync) window.__scrollSync('home');
+      update();
+    }
+    if(start<=0){ done(); return; }
+    var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){ done(); return; }
+    var t0=null, dur=Math.min(900, Math.max(460, start*0.55));
+    function ease(x){ return 1-Math.pow(1-x,3); } /* easeOutCubic */
+    function step(ts){
+      if(t0===null) t0=ts;
+      var pr=Math.min(1,(ts-t0)/dur);
+      var yy=Math.round(start*(1-ease(pr)));
+      document.documentElement.scrollTop=yy; document.body.scrollTop=yy;
+      if(pr<1) requestAnimationFrame(step); else done();
+    }
+    requestAnimationFrame(step);
+  }
+
+  btn.addEventListener('click', function(e){ e.preventDefault(); toTop(); });
+  window.addEventListener('scroll', update, {passive:true});
+  window.addEventListener('resize', update, {passive:true});
+  try{
+    var mo=new MutationObserver(update);
+    mo.observe(document.body,{attributes:true,attributeFilter:['class']});
+  }catch(e){}
+  update();
+})();
+</script>
+
 </body>
 </html>
