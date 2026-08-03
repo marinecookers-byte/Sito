@@ -7460,8 +7460,11 @@ function closeAbout(){
     });
   }
 
+  var __vpTick=false;
   ab.addEventListener('scroll', function(){
-    requestAnimationFrame(updateVideoParallax);
+    if(__vpTick) return;               // dedup: al massimo un update per frame (meno lavoro, meno scatti)
+    __vpTick=true;
+    requestAnimationFrame(function(){ __vpTick=false; updateVideoParallax(); });
   }, { passive: true });
 
   /* ── Re-init al resize ── */
@@ -7482,7 +7485,9 @@ function closeAbout(){
 })();
 
 /* CHI SIAMO · dettagli · scroll verticale -> traslazione orizzontale (pin, desktop).
-   Mobile/reduced-motion: swipe nativo via CSS. Nessuna libreria, nessun preventDefault. */
+   Mobile/reduced-motion: foto impilate/swipe via CSS. Nessuna libreria, nessun preventDefault.
+   SMOOTH: nessun read di layout nel handler di scroll (solo dentro rAF); smoothing
+   esponenziale indipendente dal frame-rate; loop auto-sospeso a riposo. */
 (function(){
   var ab=document.getElementById('aboutpage');
   var wrap=document.getElementById('ab-hd-hscroll');
@@ -7491,36 +7496,41 @@ function closeAbout(){
   var pin=wrap.querySelector('.ab-hd-hpin'); if(!pin) return;
   var mqDesk=window.matchMedia('(min-width:769px)');
   var mqRed=window.matchMedia('(prefers-reduced-motion:reduce)');
-  var maxShift=0, cur=0, goalX=0, raf=0, animating=false;
+  var maxShift=0, range=0, cur=0, running=false, idle=0, lastT=0;
   function active(){ return mqDesk.matches && !mqRed.matches; }
-  function measure(){ maxShift=active()?Math.max(0,track.scrollWidth-pin.clientWidth):0; }
-  function targetX(){
-    if(!active()) return 0;
-    if(maxShift<=0) measure();
-    var range=wrap.offsetHeight-window.innerHeight;
+  function measure(){
+    if(!active()){ maxShift=0; range=0; return; }
+    maxShift=Math.max(0, track.scrollWidth-pin.clientWidth);   // letture di layout SOLO qui (non nello scroll)
+    range=wrap.offsetHeight-window.innerHeight;
+  }
+  function goal(){
     if(range<=0) return 0;
-    var top=wrap.getBoundingClientRect().top;
-    var p=(-top)/range; p=p<0?0:(p>1?1:p);
+    var p=(-wrap.getBoundingClientRect().top)/range;           // unica lettura per frame, dentro rAF
+    p=p<0?0:(p>1?1:p);
     return -(p*maxShift);
   }
-  function tick(){
-    raf=0;
-    if(!active()){ if(track.style.transform){track.style.transform='';} cur=0; return; }
-    var diff=goalX-cur;
-    if(Math.abs(diff)>0.5){ cur+=diff*0.18; animating=true; raf=requestAnimationFrame(tick); }
-    else { cur=goalX; animating=false; }
+  function frame(t){
+    if(!active()){ running=false; if(track.style.transform){track.style.transform='';} cur=0; return; }
+    if(maxShift<=0) measure();
+    var g=goal();
+    var dt=lastT?Math.min(48,t-lastT):16.7; lastT=t;
+    var k=1-Math.exp(-dt/55);   // smoothing ~55ms · morbido su rotellina, minimo lag su trackpad · frame-rate independent
+    var diff=g-cur; cur+=diff*k;
+    if(Math.abs(diff)<0.25){ cur=g; idle++; } else { idle=0; }
     track.style.transform='translate3d('+cur.toFixed(2)+'px,0,0)';
+    if(idle>6){ running=false; return; }   // sospende il loop quando è fermo (riparte allo scroll)
+    requestAnimationFrame(frame);
   }
-  function onScroll(){ goalX=targetX(); if(!animating && !raf){ raf=requestAnimationFrame(tick); } }
-  ab.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', function(){ measure(); goalX=targetX(); cur=goalX; if(active())track.style.transform='translate3d('+cur.toFixed(2)+'px,0,0)'; else track.style.transform=''; }, {passive:true});
-  window.addEventListener('load', function(){ measure(); goalX=targetX(); cur=goalX; onScroll(); });
-  function reset(){ track.style.transform=''; measure(); goalX=targetX(); cur=goalX; onScroll(); }
+  function kick(){ if(active() && !running){ running=true; lastT=0; requestAnimationFrame(frame); } }  // handler leggerissimo
+  ab.addEventListener('scroll', kick, {passive:true});
+  window.addEventListener('resize', function(){ measure(); kick(); }, {passive:true});
+  window.addEventListener('load', function(){ measure(); cur=goal(); kick(); });
+  function reset(){ if(track.style.transform)track.style.transform=''; cur=0; measure(); kick(); }
   if(mqDesk.addEventListener) mqDesk.addEventListener('change', reset);
   if(mqRed.addEventListener) mqRed.addEventListener('change', reset);
   var _open=window.openAbout;
-  if(typeof _open==='function'){ window.openAbout=function(){ _open.apply(this,arguments); requestAnimationFrame(function(){ requestAnimationFrame(function(){ measure(); goalX=targetX(); cur=goalX; onScroll(); }); }); }; }
-  Array.prototype.forEach.call(track.querySelectorAll('img'), function(im){ im.addEventListener('load', function(){ measure(); onScroll(); }); });
+  if(typeof _open==='function'){ window.openAbout=function(){ _open.apply(this,arguments); requestAnimationFrame(function(){ requestAnimationFrame(function(){ measure(); cur=goal(); kick(); }); }); }; }
+  Array.prototype.forEach.call(track.querySelectorAll('img'), function(im){ im.addEventListener('load', function(){ measure(); kick(); }); });
   measure();
 })();
 
