@@ -1,0 +1,45 @@
+# robots.txt - Marine Cookers / Techimpex
+# Consente ai motori di ricerca e agli assistenti AI di trovare, indicizzare
+# e citare il sito. Per BLOCCARE un bot AI, aggiungere un blocco dedicato
+# (esempio commentato in fondo).
+
+# --- Tutti i crawler: accesso completo ---
+User-agent: *
+Allow: /
+
+# --- Assistenti / crawler AI: esplicitamente ammessi ---
+# (rispondono al proprio nome; li elenchiamo per chiarezza e futura gestione)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# --- Sitemap (da creare prima del lancio) ---
+Sitemap: https://www.techimpex.tv/sitemap.xml
+
+# ============================================================
+# PER BLOCCARE un bot AI in futuro, sostituire "Allow: /" con
+# "Disallow: /" nel blocco relativo. Esempio (per bloccare GPTBot):
+#
+# User-agent: GPTBot
+# Disallow: /
+# ============================================================
