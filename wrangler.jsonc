@@ -1,0 +1,23 @@
+{
+  // Configurazione del Worker che pubblica il sito Marine Cookers - Techimpex.
+  // "name" deve restare "sito": e' il nome del Worker gia' esistente su Cloudflare.
+  "name": "sito",
+
+  // Data di compatibilita' (comportamento del runtime). Sicura e recente.
+  "compatibility_date": "2026-08-03",
+
+  // Mantiene attiva la compatibilita' Node gia' presente sul Worker.
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    // "." = i file del sito stanno nella cartella principale del repository.
+    "directory": ".",
+
+    // *** LE "PORTE VERE" ***
+    // Con questa riga, quando qualcuno arriva su un indirizzo che non e' un file
+    // (es. /spareparts, /contact, /electric-grills...), Cloudflare mostra il sito
+    // (index.html) invece di dare "pagina non trovata". Poi il sito, da solo,
+    // apre il reparto giusto. E' cio' che serve a Google per trovare le pagine.
+    "not_found_handling": "single-page-application"
+  }
+}
