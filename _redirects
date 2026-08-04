@@ -1,0 +1,28 @@
+# _redirects — Marine Cookers / Techimpex (sess. 65)
+# Regole 301 per Cloudflare (Worker con asset statici).
+# NB: le CATEGORIE e i PRODOTTI con traffico NON sono qui: sono gestiti come
+# alias nel router (index.html, blocco ROUTES) per restare pagine reali crawlabili.
+# Qui stanno solo: consolidamento ricambi, testimonianze e vera spazzatura.
+
+# --- RICAMBI: consolidamento su /spareparts ---
+/vuoto-c1qos            /spareparts   301
+/ricambi                /spareparts   301
+/spare-parts-2          /spareparts   301
+
+# --- TESTIMONIANZE: contenuto reale -> sezione testimonianze in home ---
+# NB: richiede ancora #testimonianze sulla sezione rv- in home (micro-task, vedi STATO 64 §4.5).
+# Finche' l'ancora non esiste, questi atterrano in cima alla home (comunque no 404).
+/i-siggri-nicolosi      /#testimonianze   301
+/testimonials           /#testimonianze   301
+/testimonial3           /#testimonianze   301
+/testimonial2           /#testimonianze   301
+/enzo-padova            /#testimonianze   301
+
+# --- VERA SPAZZATURA -> home ---
+/promozione             /   301
+/null                   /   301
+/special-offer          /   301
+/prova                  /   301
+/prova7                 /   301
+/blog                   /   301
+/shop                   /   301
