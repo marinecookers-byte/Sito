@@ -1756,6 +1756,28 @@ header.hide{transform:translateY(-100%);}
   transition: color .3s;
 }
 .pp-dl-link:hover { color: rgba(184,150,90,1); }
+.pp-draw-dlbtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: "Outfit", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: #b8965a;
+  text-decoration: none;
+  padding: 12px 26px;
+  border: 1px solid #b8965a;
+  border-radius: 2px;
+  background: rgba(184,150,90,.08);
+  transition: color .3s, background .3s, border-color .3s;
+}
+.pp-draw-dlbtn:hover {
+  color: #0a0a0a;
+  background: #b8965a;
+  border-color: #b8965a;
+}
 
 /* ── PDF VIEWER INLINE ── */
 .pp-pdf-viewer {
@@ -1864,6 +1886,21 @@ header.hide{transform:translateY(-100%);}
   cursor: pointer;
   font-family: "Outfit", sans-serif;
 }
+#pp-lightbox-download {
+  position: absolute;
+  top: 24px; left: 32px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(184,150,90,.85);
+  text-decoration: none;
+  font-family: "Outfit", sans-serif;
+  z-index: 3;
+}
+#pp-lightbox-download:hover { color: rgba(184,150,90,1); }
 
 /* ── Scroll indicator · linea verticale pulsante ── */
 .pp-scroll-hint {
@@ -4093,6 +4130,12 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
           <div class="pp-draw-cap" id="pp-drawing-cap2" style="display:none"></div>
           <img class="pp-drawing-img" id="pp-drawing-img2" onclick="ppLightbox(this)" alt="Technical Drawing" style="width:calc(100% + 4px); margin:-2px -2px -2px -2px; display:none;">
         </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:16px">
+          <a class="pp-draw-dlbtn" id="pp-drawing-dl2" href="https://res.cloudinary.com/dseiw9ndw/image/upload/fl_attachment/HORIZON2_drawing_dark_1_bdwnvd" download>
+            <svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3 5l3 3 3-3M1 10h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-i18n="dl_download">Download</span>
+          </a>
+        </div>
       </div>
 
       <!-- 3D MODEL -->
@@ -4140,7 +4183,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
         </div>
         <ul class="pp-dl-list">
           <li class="pp-dl-item">
-            <span class="pp-dl-name" data-i18n="dl_drawing">3D Technical Drawing</span>
+            <span class="pp-dl-name" data-i18n="dl_drawing">Technical Drawing</span>
             <a class="pp-dl-link" id="pp-drawing-dl" href="https://res.cloudinary.com/dseiw9ndw/image/upload/fl_attachment/HORIZON2_drawing_dark_1_bdwnvd" download>
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3 5l3 3 3-3M1 10h10" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
               <span data-i18n="dl_download">Download</span>
@@ -4192,6 +4235,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
        context di #prodpage (evita veli/overlay sopra la foto ingrandita) -->
   <div id="pp-lightbox">
     <button id="pp-lightbox-close" onclick="ppLightboxClose()">Close</button>
+    <a id="pp-lightbox-download" href="#" download style="display:none">Download</a>
     <button class="pp-lb-arrow" id="pp-lb-prev" onclick="ppLbNav(-1)">&#8592;</button>
     <img id="pp-lightbox-img" src="" alt="">
     <div id="pp-lightbox-video"><iframe id="pp-lightbox-iframe" src="" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>
@@ -5236,32 +5280,463 @@ window.PROD_DRAWING = {
 // prodotto basta aggiungere una voce con 'ds' qui sotto (procedura nel checkpoint).
 // Modi alternativi: 'gdriveId' (PDF su Drive) o 'preview'/'download' (URL diretti).
 window.PROD_DATASHEET = {
-  'MAGNUS': { label:'MAGNUS · Technical Datasheet', ds:{
-    kicker:'The MAGNUS Story',
-    name:'MAGNUS',
-    tagline:'Italian fine dining takes on the open sea.',
-    cat1:'ELECTRIC BBQ', cat2:'DETACHABLE LID',
+  'MAGNUS': { label:'MAGNUS · Technical Datasheet',
+    kickerKey:'mag_full_kicker', name:'MAGNUS', taglineKey:'ppd_magnus_l0',
+    cat1:'Electric BBQ', cat2:'Detachable Lid',
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1778140760/perfetto_ma_devi_usare_il_202605070958_xs6ycy.jpg',
     drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784992791/MAGNUS_DISEGNO_nv8jqg.jpg',
     specs:[['Type','Electric BBQ'],['Power','3.7 kW'],['Power supply','220-240V · 50/60 Hz'],['Lid','Super-insulated · detachable'],['Construction','Double heater · stainless steel'],['Dimensions','74 × 52.2 × 8.5h cm'],['Lid open','41h cm']],
-    descTitle:'The Instrument',
-    paras:[
-      'Not a barbecue, but a precision cooking instrument developed with Italian chefs, MAGNUS carries the fire of a great restaurant to the heart of a yacht: to prepare fine-dining dishes on board and honour your guests.',
-      'Lid open, it is a radiant grill of pure power, for the four-finger Florentine steak seared in seconds. Lid closed at low, indirect heat it becomes an oven for slow cooking, the realm of brisket; the smaller element on the left creates a second, gentler zone to smoke, braise and hold. With both elements together the sealed, triple-insulated chamber reaches the high temperatures of a true oven, the oven a Neapolitan pizza, focaccia and freshly baked bread need.'
-    ],
-    lead:'Grill, oven and smoker at once: Michelin-level cooking, in the middle of the sea.',
-    highlights:['Double cooking zone · removable triple-layer lid','Works with the lid open and closed','Two separate controls','Differentiated-power heating elements']
-  }}
+    specText:['Stainless steel barbecue with a double cooking zone and a removable triple-layer lid.','Works with the lid both closed and open.','Two separate controls.','Heating elements with differentiated power.'],
+    paras:['In the kitchen of a great restaurant the fire is everything: it is where an ingredient becomes a dish that stays in the memory of whoever tastes it. MAGNUS was born to carry that fire where no one thought it possible: at the heart of a yacht, at anchor, before the open sea. Not a barbecue, but a precision cooking instrument developed with Italian chefs for a single purpose, to prepare fine-dining dishes on board and honour your guests.','With the lid open MAGNUS becomes a radiant grill of pure power, the cooking that meat demands. It is the four-finger Florentine steak that sears and seals in seconds, a dark crisp crust outside and a red, juicy heart within. The same force that instantly sets a tuna cut or the catch of the day, delivering the Maillard reaction that turns superb produce into a plate worthy of a starred table.','Lower the triple-insulated lid and MAGNUS turns into an oven for smoking and slow cooking. This is the realm of brisket, the American beef cut reinterpreted the Italian way, resting for hours at a low, indirect and steady temperature until it melts in the mouth. The secret is the smaller heating element on the left: it creates a second, gentler heat zone, so you can smoke, braise and hold while the other half works at full power.'],
+    specKeys:['ppd_magnus_s0','ppd_magnus_s1','ppd_magnus_s2','ppd_magnus_s3'],
+    paraKeys:['ppd_magnus_l1','ppd_magnus_l2','ppd_magnus_l3'] },
+  'ALTALUX': { label:'ALTALUX · Technical Datasheet',
+    kickerKey:'ppd_altalux_k', name:'ALTALUX', taglineKey:'ppd_altalux_t',
+    cat1:'Radiant Electric Cooker', cat2:'4 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784827108/ALTALUX_-_HORIZON4_RADIANTE_Gemini_Generated_Image_1iszqa1iszqa1isz_i8quuq.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582625/ALTALUX_feztg1.jpg',
+    specs:[['Dimensions (W×D×H)','52.5 x 55 x 48h cm'],['Technology','Electric Radiant'],['Hob power','3,6 / 4,8 kW'],['Oven power','~1,6 kW'],['Total max power','5,2 / 6,4 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
+    specText:['Electric cooker with high-performance radiant hob.','Hob available in 3 or 4 zones; great robustness, almost no electronics.','Tolerant of inverters, generators and dock power of uncertain quality.','Oven over 30 litres in mirror-polished stainless steel, three-element multifunction.','Precision thermostat; dual supply on separate lines; integrated safety features.','Patented adjustable gimbals; pot-holders adjustable horizontally and vertically.'],
+    paras:['Altalux comes from our radiant collection, a line we introduced first and that still enjoys huge success alongside induction. The radiant hob, available in three or four zones, is built like a tank: with almost no electronics, it tolerates inverters, generators and dock power of uncertain quality with no trouble, where an induction hob would struggle. On these powerful zones an arrabbiata sauce simmers steadily and a steak sears with conviction, without surprises.','The oven, over 30 litres in mirror-polished stainless steel, carries the three-element multifunction system, lower, upper and grill, governed by a precision thermostat: a tray of melanzane alla parmigiana gratinates evenly, a veal roast stays juicy. Solid stainless hinges built in-house, an enamelled drip tray made on our own molds, knobs turned from billet and integrated safety features speak of a cooker made to last twenty years and more, like our radiant models still in service.','Here too the design is Italian: mirror-finish stainless steel, pot-holders adjustable horizontally and vertically, patented adjustable gimbals. Altalux combines solidity and elegance and fits naturally into the galley, made to accompany life on board for a long time.'],
+    specKeys:['ppd_altalux_s0','ppd_altalux_s1','ppd_altalux_s2','ppd_altalux_s3','ppd_altalux_s4','ppd_altalux_s5'],
+    paraKeys:['ppd_altalux_p0','ppd_altalux_p1','ppd_altalux_p2'] },
+  'ALTAMAREA': { label:'ALTAMAREA · Technical Datasheet',
+    kickerKey:'ppd_altamarea_k', name:'ALTAMAREA', taglineKey:'ppd_altamarea_t',
+    cat1:'Gas Cooker', cat2:'2 Burners · Separate Grill',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657169/ALTAMAREA_-_mastergrill_wuezek.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582621/ALTAMAREA_pscxck.jpg',
+    specs:[['Type','Gas cooker · separate grill chamber'],['Burners','2'],['Power','7.0 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Oven','Enamelled or st. steel cavity'],['Dimensions (W×D×H)','47.5 × 44 × 52h cm']],
+    specText:['Ultra-compact chassis, 45 cm wide.','Additional grill compartment between oven and hob, with an upper vent acting as an extra burner.','Oven with a rear-set burner: multi-level cooking.','Static gas oven over 30 litres.','Hob burners with hot-forged solid brass flame spreaders, differentiated power.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','One-piece hob grate with front bar and arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.'],
+    paras:['Altamarea packs a surprising set of features into just 45 cm, thanks to an additional grill compartment set between the oven and the hob. In the morning this compartment toasts the bread and warms the croissants for a hotel-style breakfast; and since its upper vent works as an extra burner, you can keep a rabbit stew warm while you finish the gnocchi al pomodoro, or start the slow cooking of a stew.','The oven, with a rear-set burner, uses several levels: a tray of parmigiana below, cinnamon baked apples above. The burners with solid brass flame spreaders give a steady flame for a risotto or a delicate sauce, while the metal-sandwich insulation and the double tempered glass ensure even cooking. Compact outside, complete inside: nothing is left to chance.','So much substance in so little space is also a matter of design: compact proportions studied to the millimetre, mirror-finish steel and careful finishes let Altamarea fit elegantly even where space is minimal, without giving up a refined character.'],
+    specKeys:['ppd_altamarea_s0','ppd_altamarea_s1','ppd_altamarea_s2','ppd_altamarea_s3','ppd_altamarea_s4','ppd_altamarea_s5','ppd_altamarea_s6','ppd_altamarea_s7','ppd_altamarea_s8','ppd_altamarea_s9'],
+    paraKeys:['ppd_altamarea_p0','ppd_altamarea_p1','ppd_altamarea_p2'] },
+  'ALTURA': { label:'ALTURA · Technical Datasheet',
+    kickerKey:'ppd_altura_k', name:'ALTURA', taglineKey:'ppd_altura_t',
+    cat1:'Gas Cooker', cat2:'4 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784827878/ALTURA_-_TOP4_Gemini_Generated_Image_fx2rggfx2rggfx2r_qya8in.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582602/ALTURA_o1n05f.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','4'],['Power','8.95 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Electronic'],['Oven','St. steel · thermostatic'],['Dimensions (W×D×H)','52.5 × 53 × 51h cm']],
+    specText:['Wide and generous cooking top.','Hob grate in solid stainless steel bars, Ø 8 mm.','Space-saving one-piece grate that folds open for cleaning.','Pot-holder arms adjustable lengthways and in height.','Static gas oven over 30 litres, Italian-style static burner.','Hob burners with differentiated power, caps enamelled at 800°.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in fire-enamelled steel at over 800°; deep-drawn cooking top.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.'],
+    paras:['Altura is the cooker for those who face the real sea without giving up fine cooking. Its hob grate, made of solid stainless steel bars 8 mm in diameter, is a rock-solid base: it holds the tall pot of a cacciucco alla livornese steady even when the boat moves, and does not fear the weight of an ossobuco casserole with gremolata. The pot-holder arms, adjustable not only lengthways but also in height, embrace the vessel and lock it, giving you the confidence to turn a Barolo braise with a sea running.','The space-saving one-piece grate folds open for quick cleaning at the end of service. In the Italian-style static oven, wrapped in metal-sandwich insulation and closed by the double tempered glass, a herb-roasted lamb cooks slow and even, while on the hob a gentle flame brings a wine sauce to completion to go with it.','Sturdiness does not give up style: the solid stainless bars, the mirror-finish surfaces and the robust yet harmonious proportions give Altura a bold, elegant character, designed to fit coherently into the most demanding spaces on board.'],
+    specKeys:['ppd_altura_s0','ppd_altura_s1','ppd_altura_s2','ppd_altura_s3','ppd_altura_s4','ppd_altura_s5','ppd_altura_s6','ppd_altura_s7','ppd_altura_s8','ppd_altura_s9'],
+    paraKeys:['ppd_altura_p0','ppd_altura_p1','ppd_altura_p2'] },
+  'BAIA': { label:'BAIA · Technical Datasheet',
+    kickerKey:'ppd_baia_k', name:'BAIA', taglineKey:'ppd_baia_t',
+    cat1:'Gas Cooktop', cat2:'1 Burner',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785231995/BAIA_SEAFARER1_-_NEW_MODEL_a94ots.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582674/BAIA_hi6cgh.jpg',
+    specs:[['Technology','Gas'],['Burners','1'],['Power','1,7 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','32 × 22,5 cm']],
+    specText:['Single powerful-burner gas cooktop.','High-end valve, finely adjustable for simmering.','Patented one-piece grate, removable and mechanically locked (no vibration).','Burner caps fire-enamelled at over 800°; safety thermocouples as standard.','Optional piezo-electric ignition; optional space-saving pot-holders.','Available in various sizes besides the standard one.'],
+    paras:['Baia brings a real flame where space is precious: a single powerful burner, governed by a high-end valve finely adjustable down to a simmer. It is the right flame for cooking that calls for delicacy: on Baia a seafood risotto finishes to perfection, a béchamel does not catch and an arrabbiata sauce simmers steadily, without swings.','The one-piece grate, patented and easily removable, gives maximum stability to pots and is mechanically locked, so it does not vibrate under way. The burner caps are fire-enamelled at over 800°, the safety thermocouples are standard and the optional piezo-electric ignition avoids complex wiring. The optional pot-holders, unique of their kind, are space-saving when a protective top lid is fitted.','The design is the Italian one that sets us apart: stainless steel, clean lines and careful finishes. Baia offers the quality of a professional flame in the smallest footprint, available in various sizes besides the standard one, and blends elegantly into the onboard spaces, made for the interior project.'],
+    specKeys:['ppd_baia_s0','ppd_baia_s1','ppd_baia_s2','ppd_baia_s3','ppd_baia_s4','ppd_baia_s5'],
+    paraKeys:['ppd_baia_p0','ppd_baia_p1','ppd_baia_p2'] },
+  'BELLINI': { label:'BELLINI · Technical Datasheet',
+    kickerKey:'ppd_bellini_k', name:'BELLINI', taglineKey:'ppd_bellini_t',
+    cat1:'Electric Grill', cat2:'1 Heater',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657176/BELLINI_-_MADDALENA_-_POWERGRILL_352_fomfvz.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023012/BELLINI_DISEGNO_-_piano_grill_corazzata_300x520_volume_2_f5vlde.jpg',
+    specs:[['Type','Electric grill'],['Grilling zones','1 large'],['Power','2.4 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','All stainless · large drip tray'],['Dimensions (W×D×H)','52 × 30 × 5h cm']],
+    specText:['Compact grill with a tilting armoured radiant element.','Extremely low height.','Press-locked grate (exclusive anti-vibration system).','Removable, large-capacity drip tray.','Sturdy structure.'],
+    paras:['Bellini offers all the substance of a grill in an extremely low-profile body, a decisive advantage when the cockpit\'s vertical space is precious. Despite its compactness, the tilting armoured radiant element reaches the right temperature for a light mixed fish grill, for prawns in their shells or for slices of scamorza melting over roasted peppers.','The grate, press-locked with an anti-vibration solution, stays firm even under way, and the removable drip tray makes cleaning easy after the sunset aperitivo. In the morning, on the same grill, warm filled toasts open the day.','The low profile is also a style choice: essential and clean, in stainless steel, Bellini fits lightly into the cockpit without weighing it down, designed for those who want a grill that disappears into the layout when not needed and stays elegant when in use.'],
+    specKeys:['ppd_bellini_s0','ppd_bellini_s1','ppd_bellini_s2','ppd_bellini_s3','ppd_bellini_s4'],
+    paraKeys:['ppd_bellini_p0','ppd_bellini_p1','ppd_bellini_p2'] },
+  'CAPITANO': { label:'CAPITANO · Technical Datasheet',
+    kickerKey:'ppd_capitano_k', name:'CAPITANO', taglineKey:'ppd_capitano_t',
+    cat1:'Gas Grill', cat2:'2 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784910309/CAPITANO_-_bargas1_b1f2bq.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785578727/CAPITANO_zsdcxs.jpg',
+    specs:[['Type','Gas grill'],['Burners','2'],['Power','3.4 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','52.0 × 30 cm']],
+    specText:['Gas grill with DUPLEX technology: grill + cooktop in one.','With the plate it is a powerful grill; with the grate a 2-burner cooktop.','Extremely sturdy stainless steel structure.','Thick solid stainless plate (thermal flywheel) with built-in drip cup.','AA-battery electronic ignition, with no complex wiring.','Power 3.4 kW; butane/propane 30 mbar; 52 × 30 cm.'],
+    paras:['Capitano is a product without equal: our DUPLEX gas technology gives it two souls in one. With the supplied plate it is a very powerful grill, ideal for a fiorentina or charred vegetables; replacing the plate with the grate it becomes a two-burner cooktop on which to cook with pots, so on deck you can grill or finish a risotto with no compromise.','On a boat the outdoor space is precious and you usually cannot have both a grill and a cooktop: Capitano solves this limit. The structure is extremely sturdy in stainless steel, the thick solid stainless plate acts as a thermal flywheel and has a built-in drip cup, and the AA-battery electronic ignition avoids complex wiring.','The design is the Italian one that sets us apart: stainless steel, bold lines and careful finishes. Capitano combines two tools in one with elegance and fits with measure into the boat\'s outdoor spaces, made for the interior and exterior project.'],
+    specKeys:['ppd_capitano_s0','ppd_capitano_s1','ppd_capitano_s2','ppd_capitano_s3','ppd_capitano_s4','ppd_capitano_s5'],
+    paraKeys:['ppd_capitano_p0','ppd_capitano_p1','ppd_capitano_p2'] },
+  'CAPRERA': { label:'CAPRERA · Technical Datasheet',
+    kickerKey:'ppd_caprera_k', name:'CAPRERA', taglineKey:'ppd_caprera_t',
+    cat1:'Gas Cooktop', cat2:'3 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785230975/SEAFARER3_PER_SITO_fqarym.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582670/CAPRERA_rkvld7.jpg',
+    specs:[['Technology','Gas'],['Burners','3'],['Power','5,55 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','47 × 39 cm']],
+    specText:['Gas cooktop with 3 powerful burners.','High-end valves, finely adjustable for simmering.','One-piece grate, mechanically locked (no vibration); maximum stability.','Burner caps fire-enamelled at 800°; safety thermocouples as standard.','Optional AA-battery electronic ignition; optional pot-holders (various models).','Power 5.55 kW; butane/propane 30 mbar'],
+    paras:['Caprera lines up three powerful burners, governed by high-end valves finely adjustable down to a simmer: the freedom to prepare a full meal with no compromise. While on one burner the paccheri water comes to the boil, on the second a Neapolitan ragù simmers gently and on the third a pan of vegetables takes on flavour, all together.','The one-piece grate ensures maximum stability for pots and is mechanically locked, so it does not vibrate under way. The burner caps are fire-enamelled at 800 degrees, the safety thermocouples are standard and the optional AA-battery electronic ignition avoids complex wiring. The optional pot-holders, in various models, hold everything firm even in a swell.','The design is the Italian one that sets us apart: stainless steel, clean lines and careful finishes. Caprera combines the power of the flame with elegance and fits with measure into the galley worktop, made for the interior project.'],
+    specKeys:['ppd_caprera_s0','ppd_caprera_s1','ppd_caprera_s2','ppd_caprera_s3','ppd_caprera_s4','ppd_caprera_s5'],
+    paraKeys:['ppd_caprera_p0','ppd_caprera_p1','ppd_caprera_p2'] },
+  'CARAVAGGIO': { label:'CARAVAGGIO · Technical Datasheet',
+    kickerKey:'ppd_caravaggio_k', name:'CARAVAGGIO', taglineKey:'ppd_caravaggio_t',
+    cat1:'Electric Grill', cat2:'Minimal',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657169/CARAVAGGIO_u5xslh.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023035/CARAVAGGIO_DISEGNO_Assieme_GRILL_VETRO_290X510_MOD_02_REV06_kzorn9.jpg',
+    specs:[['Type','Electric grill · minimal'],['Power','1.3 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Sealed components · high IP · glass'],['Dimensions (W×D×H)','50.8 × 28.8 × 5h cm']],
+    specText:['Glass-ceramic grill.','Surface made entirely of glass-ceramic.','Sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind.','No bacterial retention, simplified cleaning.'],
+    paras:['Caravaggio interprets the glass-ceramic grill in its purest, most essential form. The surface made entirely of glass, minimal and refined, is ideal for simple, quality cooking: grilled vegetables dressed with oil and lemon, prawns seared in a flash, slices of bread for a tomato-and-basil bruschetta to serve in the cockpit.','The glass cleans with a single wipe and has no bacterial retention, a precious quality on board. The surface is sealable from the top for a high IP rating outdoors, and the element, protected by the glass, is unaffected by the open-sea wind that would cool a traditional grill. The essential, done well: perfect for the sunset aperitivo.','Its beauty lies in restraint: a continuous glass slab, no protrusions, lines reduced to the essential. Caravaggio is made for those who love minimal design and want a grill that blends cleanly and discreetly into the boat\'s outdoor spaces.'],
+    specKeys:['ppd_caravaggio_s0','ppd_caravaggio_s1','ppd_caravaggio_s2','ppd_caravaggio_s3','ppd_caravaggio_s4'],
+    paraKeys:['ppd_caravaggio_p0','ppd_caravaggio_p1','ppd_caravaggio_p2'] },
+  'DOPPIO': { label:'DOPPIO · Technical Datasheet',
+    kickerKey:'ppd_doppio_k', name:'DOPPIO', taglineKey:'ppd_doppio_t',
+    cat1:'Electric Grill', cat2:'Dual System',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657179/DOPPIO_-_BARFLYPF230T400_PIAVETR1GBL400_ritoccato_h0vosa.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023033/DOPPIO_RESISTENZE_DISEGNO_-_ASS.BBQ_COMPACT_400X400_1_b7sdar.jpg',
+    specs:[['Type','Radiant grill + glass-ceramic griddle'],['Power','1.5 + 1.2 kW'],['Power supply','220-240V · 50/60 Hz'],['Dimensions (W×D×H)','40 × 40 × 8h · each module cm']],
+    specText:['Combinable modular system: armoured-element module + glass-ceramic plancha module.','Armoured module with a large drip tray below and a mechanically locked grate (anti-vibration).','Glass-ceramic module: non-stick plancha with dual heat transmission (conduction + infrared), heat-resistant beyond 500°.','Stainless steel perimeter frames to contain liquids.'],
+    paras:['Doppio is the tool for those who do not want to choose, because it combines two technologies in a single modular appliance. The armoured-element module, with its mechanically locked grate and the large drip tray beneath, gives the classic char lines to a rib steak or to sausages, with that lightly smoky flavour everyone loves. The glass-ceramic plancha module, non-stick and quick to heat, cooks by conduction and infrared radiation: perfect for prawns and scallops seared in a flash or for a sautéed julienne of vegetables.','Being able to combine them means bringing to the table, at the same moment, a grill of meat and one of delicate fish, each with its ideal technique. The stainless steel perimeter frames contain the liquids and keep everything tidy, for a spectacular, worry-free service.','Modularity is also a matter of design: two modules that compose neatly, stainless steel frames and crisp lines give Doppio a clean, configurable look, designed to adapt to the cockpit layout and to fit coherently into the onboard project.'],
+    specKeys:['ppd_doppio_s0','ppd_doppio_s1','ppd_doppio_s2','ppd_doppio_s3'],
+    paraKeys:['ppd_doppio_p0','ppd_doppio_p1','ppd_doppio_p2'] },
+  'ESPRESSO12': { label:'ESPRESSO12 · Technical Datasheet',
+    kickerKey:'ppd_esp_k', name:'ESPRESSO12', taglineKey:'ppd_esp_l0',
+    cat1:'Espresso Coffee Maker', cat2:'12V',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785405492/EPRESSO12_bk29lb.webp', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023039/EPSRESSO12_DISEGNO_Assieme_macchina_caffe_f2by8z.jpg',
+    specs:[['Type','Espresso Coffee Maker'],['Power','0,35 kW'],['Power supply','12V DC'],['Dimensions (W×D×H)','15 × 14 × 32h cm']],
+    specText:['A genuine Italian espresso from just 12V and 350W.','No external inverter and no dedicated water tank.','Body machined entirely from light alloy: sturdy and ultra-light.','The smallest and lightest patented espresso maker of its kind.'],
+    paras:['In Italy, espresso is not simply a coffee: it is a daily rite, the short, dense cup crowned with a hazelnut crema, the pause that sets the rhythm of the day. ESPRESSO12 carries that rite on board, so that even in the middle of the sea the first gesture of the morning can be a true Italian espresso.','Behind the ritual lies an uncommon feat of engineering. ESPRESSO12 pulls a genuine espresso from just 12 volts and a mere 350 watts, with no external inverter and no dedicated tank: you simply slip in a half-litre bottle of water. Its body is machined entirely from light alloy, sturdy yet feather-light, made to live at sea.','The result is the smallest and lightest patented espresso machine of its kind, ready to serve the crema of a great Italian bar wherever the yacht drops anchor: at dawn before setting sail, or after dinner under the stars.'],
+    specKeys:['ppd_esp_s0','ppd_esp_s1','ppd_esp_s2','ppd_esp_s3'],
+    paraKeys:['ppd_esp_p0','ppd_esp_p1','ppd_esp_p2'] },
+  'FAVIGNANA': { label:'FAVIGNANA · Technical Datasheet',
+    kickerKey:'ppd_favi_k', name:'FAVIGNANA', taglineKey:'ppd_favi_t',
+    cat1:'Gas Cooker', cat2:'1 Burner',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657270/FAVIGNANA_-_ONER_-_FGEI01TFBA30D_clmohj.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582593/FAVIGNANA_sjmvlp.jpg',
+    specs:[['Type','Gas cooker'],['Burners','1'],['Power','1.6 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','24 × 24 × 10h cm']],
+    specText:['Single-burner gas cooker with stainless steel burner cap.','Solid stainless steel body, 10/10 thickness.','Latest-generation safety valves.','Optional battery electronic ignition (AA battery).','Heat-resistant knobs.','Pot holder with front bar and lengthways adjustment.','Gimbals for recessed or top installation.'],
+    paras:['Favignana concentrates in a single burner all the efficiency a galley chef needs. The stainless steel burner cap heats quickly and spreads the heat evenly: perfect for bringing the pasta water to the boil and finishing in the pan a plate of spaghetti alla chitarra with anchovy colatura and lemon zest. The solid 10/10 stainless steel body offers a firm base even for long cooking, such as a Piennolo cherry-tomato sauce that simmers slowly until it turns to syrup.','Ignition from a simple AA battery does away with wiring and makes everything immediate, while the heat-resistant knobs let you work safely as you turn a courgette and mint frittata. In the morning, on the same burner, the moka bubbles and the day begins with an espresso just like at the bar.','All of it in an essential, refined design: clean lines, gleaming steel and a minimal footprint let Favignana fit discreetly and elegantly into any corner of the boat, without ever giving up Italian style.'],
+    specKeys:['ppd_favi_s0','ppd_favi_s1','ppd_favi_s2','ppd_favi_s3','ppd_favi_s4','ppd_favi_s5','ppd_favi_s6'],
+    paraKeys:['ppd_favi_p0','ppd_favi_p1','ppd_favi_p2'] },
+  'FIRENZE': { label:'FIRENZE · Technical Datasheet',
+    kickerKey:'ppd_firenze_k', name:'FIRENZE', taglineKey:'ppd_firenze_t',
+    cat1:'Compact LP Gas Built-in Oven', cat2:'',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657222/FIRENZE_-_REEF_xhqayq.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582679/FIRENZE_pwe0nj.jpg',
+    specs:[['Type','Compact LP gas built-in oven'],['Power','1.7 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','48.6 × 41 × 24h cm']],
+    specText:['Ultra-compact built-in gas oven.','Full mirror-polished stainless steel cladding (inside and out).','Italian-style static burner optimised for performance and consumption.','Good capacity despite the compact size.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Door with double tempered safety glass.','Drip tray in steel, fire-enamelled at over 800°.','Full-width cooking grate.','Valve calibrated from minimum (simmering) to maximum.','Safety thermocouples as standard; automatic door lock.'],
+    paras:['Firenze is the ultra-compact gas oven entirely clad in mirror-polished stainless steel, inside and out: a choice that is not only aesthetic, because the mirror reflects the heat onto the food, hinders bacteria, resists salt air and cleans with a single wipe. Despite its minimal footprint, the capacity surprises and takes in a tall, soft olive focaccia or a pork fillet in a crust.','The burner, engineered for a true Italian static bake at low consumption, wraps the food in even heat, and the valve calibrated from simmering to full flame gives you the control needed for delicate vegetable timbales. The metal-sandwich insulation and the double tempered glass hold the heat, while the thermocouples and the automatic door lock ensure safety. With the optional soapstone, on Sunday, a tray of gratinated tortelli and a fruit tart come out as if from the oven at home.','The mirror cladding is also pure aesthetics: inside and out, the polished stainless steel gives Firenze a precious, luminous look that ennobles the galley, a built-in oven designed to blend elegantly into the most refined interior projects.'],
+    specKeys:['ppd_firenze_s0','ppd_firenze_s1','ppd_firenze_s2','ppd_firenze_s3','ppd_firenze_s4','ppd_firenze_s5','ppd_firenze_s6','ppd_firenze_s7','ppd_firenze_s8','ppd_firenze_s9'],
+    paraKeys:['ppd_firenze_p0','ppd_firenze_p1','ppd_firenze_p2'] },
+  'FORMA': { label:'FORMA · Technical Datasheet',
+    kickerKey:'ppd_forma_k', name:'FORMA', taglineKey:'ppd_forma_t',
+    cat1:'Radiant Electric Cooker', cat2:'2 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657252/FORMA_-_horizon2_induzione_vbkzhs.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786024610/FORMA_DISEGNO_mifo3x.jpg',
+    specs:[['Dimensions (W×D×H)','52.5 x 43 x 50h cm'],['Technology','Electric Induction'],['Hob power','1,5-3,7 kW'],['Oven power','1,6 kW'],['Total max power','2,25-5,3 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
+    specText:['Electric induction cooker with gimbal suspension.','Hob with 2 very powerful induction zones; PMS-ready (Bridge/Plus).','Oven over 30 litres in mirror-polished stainless steel, three-element multifunction.','Precision thermostat; dual supply on separate lines; integrated safety features.','Pot-holders adjustable horizontally and vertically.','Thanks to PMS the whole appliance can run on just 2.25 kW.'],
+    paras:['Forma packs two very powerful induction zones and our PMS setup for Bridge or Plus installations into a compact size. The zones heat instantly and precisely: on one you finish a risotto alla milanese, on the other you bring the pasta water to the boil or sear a tuna fillet in seconds. The pot-holders, adjustable horizontally and vertically, firmly secure pots of different sizes, even in a swell.','The oven, over 30 litres in mirror-polished stainless steel, carries the three-element multifunction system, lower, upper and grill, with a precision thermostat: a tart bakes with crisp pastry and a tray of vegetables gratinates just right. First in the world with gimballed induction in 2015, we bring the same build quality to Forma: solid stainless hinges, knobs turned from billet, dual supply on separate lines and integrated safety features.','The design is the Italian one that sets us apart: mirror-finish stainless steel, clean proportions, patented adjustable gimbals the owner levels with a gesture. Forma offers plenty of substance in little space and blends elegantly into the galley, designed to work with the interior project.'],
+    specKeys:['ppd_forma_s0','ppd_forma_s1','ppd_forma_s2','ppd_forma_s3','ppd_forma_s4','ppd_forma_s5'],
+    paraKeys:['ppd_forma_p0','ppd_forma_p1','ppd_forma_p2'] },
+  'GIORGIONE': { label:'GIORGIONE · Technical Datasheet',
+    kickerKey:'ppd_giorgione_k', name:'GIORGIONE', taglineKey:'ppd_giorgione_t',
+    cat1:'Electric Grill', cat2:'2 Heaters',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784869242/GIORGIONE_POWERGRILL_353_Gemini_Generated_Image_2itw5x2itw5x2itw_aey1gd.png', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582683/GIORGIONE_hu1k2r.jpg',
+    specs:[['Type','Electric grill'],['Grilling zones','2'],['Power','2.5 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','All stainless · large drip tray'],['Dimensions (W×D×H)','51 × 29 × 13.8h cm']],
+    specText:['Double armoured radiant element with independent dual control.','Tilting elements (for easy cleaning).','Mechanically locked grate (anti-vibration).','Sturdy stainless steel structure.','Removable, large-capacity drip tray.'],
+    paras:['Giorgione brings rare versatility on board thanks to its double element with independent dual control: two zones adjusted separately, to cook different dishes at the same time. On one side, over high heat, you can mark a rare steak with fine char lines; on the other, at a gentler temperature, slowly cook vegetables or delicate prawns without spoiling them.','It is ideal when guests have different tastes: well-done ribs beside just-seared fish fillets, each at its perfect temperature. The armoured radiant element tilts up for cleaning, the grate is mechanically locked against vibration and the stainless steel structure is extremely sturdy; the wide, removable drip tray completes an appliance built to last and to always show you at your best.','On board, too, looks matter: the clean lines, the stainless steel and the balanced proportions make Giorgione an elegant grill to leave in view in the cockpit, designed to blend discreetly into the boat\'s outdoor spaces and to work with the designer\'s choices.'],
+    specKeys:['ppd_giorgione_s0','ppd_giorgione_s1','ppd_giorgione_s2','ppd_giorgione_s3','ppd_giorgione_s4'],
+    paraKeys:['ppd_giorgione_p0','ppd_giorgione_p1','ppd_giorgione_p2'] },
+  'GRANDE': { label:'GRANDE · Technical Datasheet',
+    kickerKey:'ppd_grande_k', name:'GRANDE', taglineKey:'ppd_grande_t',
+    cat1:'Gas Cooktop', cat2:'4 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785231038/SEAFARER4_PER_SITO_xkheix.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582675/GRANDE_gpddo8.jpg',
+    specs:[['Technology','Gas'],['Burners','4'],['Power','6,1 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','50 × 40 cm']],
+    specText:['Gas cooktop with 4 powerful burners.','High-end valves, finely adjustable for simmering.','One-piece grate, mechanically locked (no vibration); maximum stability.','Burner caps fire-enamelled at 800°; safety thermocouples as standard.','Optional AA-battery electronic ignition; optional pot-holders (various models).','Power 6.1 kW; butane/propane 30 mbar'],
+    paras:['Grande lines up four powerful burners, governed by high-end valves finely adjustable down to a simmer: the complete onboard galley for those who entertain and will not give up anything. An important lunch takes shape with no waiting: the pasta water boiling, a sauce simmering, a pan browning and a sauce warming, all at the same time.','The one-piece grate ensures maximum stability for pots and is mechanically locked, so it does not vibrate under way. The burner caps are fire-enamelled at 800 degrees, the safety thermocouples are standard and the optional AA-battery electronic ignition avoids complex wiring. The optional pot-holders, in various models, hold everything firm even in a swell.','The design is the Italian one that sets us apart: stainless steel, clean lines and careful finishes. Grande combines the power of the flame with elegance and fits with measure into the galley worktop, made for the interior project.'],
+    specKeys:['ppd_grande_s0','ppd_grande_s1','ppd_grande_s2','ppd_grande_s3','ppd_grande_s4','ppd_grande_s5'],
+    paraKeys:['ppd_grande_p0','ppd_grande_p1','ppd_grande_p2'] },
+  'GUSTO': { label:'GUSTO · Technical Datasheet',
+    kickerKey:'ppd_gusto_k', name:'GUSTO', taglineKey:'ppd_gusto_t',
+    cat1:'Gas Cooker', cat2:'3 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657228/GUSTO_-_MARINER3_xvfjed.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785591581/GUSTO_k7jqjh.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','3'],['Power','6.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Battery electronic'],['Oven','Thermostatic · optional grill'],['Dimensions (W×D×H)','52.5 × 48 × 46h cm']],
+    specText:['Static gas oven over 30 litres, compact body.','Italian-style static oven burner, optimised for performance and consumption.','Oven-cavity insulation in rock wool or glass fibre, metal sandwich system.','Door with double tempered safety glass.','Thermometer on the door or automatic thermostat (depending on version).','Oven drip tray in special steel, fire-enamelled at over 800°.','Hob with differentiated-power burners, caps enamelled at 800°.','Deep-drawn cooking top for containing liquids.','One-piece hob grate with front bar and pot-holder arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum.'],
+    paras:['Gusto is made for those who put flavour first, and its Italian-style static oven is the perfect tool for it. The burner, designed for even heat distribution at low consumption, cooks without swings: an aubergine parmigiana gratinates evenly, a frittata di pasta sets golden, a tray of stuffed vegetables colours without burning at the edges.','The glass-fibre metal-sandwich insulation and the double tempered-glass door stabilise the temperature, the ideal condition for a ciambellone that must rise evenly or for a tart with crumbly pastry. The drip tray, fire-enamelled at over 800°, gives heat back from below, while on the hob the valves calibrated from minimum simmering to full flame carry you from the slow reduction of an amatriciana sauce to the quick searing of a tagliata. And with the optional soapstone, Neapolitan pizza finds its perfect base on board.','And it does so with the restraint of Italian design: balanced proportions, mirror-finish steel and careful details make Gusto a galley that is beautiful to look at, designed to blend discreetly into the boat\'s interiors and to follow the designer\'s choices.'],
+    specKeys:['ppd_gusto_s0','ppd_gusto_s1','ppd_gusto_s2','ppd_gusto_s3','ppd_gusto_s4','ppd_gusto_s5','ppd_gusto_s6','ppd_gusto_s7','ppd_gusto_s8','ppd_gusto_s9'],
+    paraKeys:['ppd_gusto_p0','ppd_gusto_p1','ppd_gusto_p2'] },
+  'LIPARI': { label:'LIPARI · Technical Datasheet',
+    kickerKey:'ppd_lipari_k', name:'LIPARI', taglineKey:'ppd_lipari_t',
+    cat1:'Gas Cooker', cat2:'3 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657249/LIPARI_VOYAGER_STOVE_3_BURNERS_-_PIC1_ntoo3c.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023023/LIPARI_DISEGNO_-_Assieme_CUCINA_3_FUOCHI_GAS_-_VOYAGER_3_gukwqj.jpg',
+    specs:[['Type','Gas cooker'],['Burners','3'],['Power','5.55 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','50 × 45 × 16h cm']],
+    specText:['Triple burner with flame spreader enamelled at 800°.','Differentiated power for each burner.','Mirror-polished stainless steel cooking top.','Optional battery electronic ignition (AA battery).','Pot holders available in several configurations.','Two types of gimbals (recessed in a compartment or on the top).'],
+    paras:['With its three burners of differentiated power, each with a flame spreader enamelled at 800°, Lipari lets you orchestrate a whole menu at once, giving every flame the right task. On the most powerful burner you bring to the boil the water for mezze maniche, on the middle one you simmer a scorpionfish guazzetto, and on the gentlest flame you slowly melt chocolate for a dark mousse.','The mirror-polished top protects against marine oxidation, reduces the bacterial load and makes cleaning immediate even after a sauté of Mazara red prawns. The optional AA-battery electronic ignition makes every start instant, with no wiring, and the pot holders, fitted in several configurations, keep everything in its place while you serve a Sunday lunch worthy of a restaurant.','Its elegance is thoroughly Italian: the mirror surface, the sober lines and the harmonious proportions make Lipari a cooktop that is beautiful to look at, designed to fit with style into the refined spaces of a yacht without ever looking bulky.'],
+    specKeys:['ppd_lipari_s0','ppd_lipari_s1','ppd_lipari_s2','ppd_lipari_s3','ppd_lipari_s4','ppd_lipari_s5'],
+    paraKeys:['ppd_lipari_p0','ppd_lipari_p1','ppd_lipari_p2'] },
+  'LUX': { label:'LUX · Technical Datasheet',
+    kickerKey:'ppd_lux_k', name:'LUX', taglineKey:'ppd_lux_t',
+    cat1:'Gas Cooker', cat2:'2-3 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657263/LUX_-_top3_gv1jtr.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582618/LUX_eggutu.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','2 or 3'],['Power','7.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Electronic'],['Oven','St. steel · thermostatic · optional grill'],['Dimensions (W×D×H)','52.5 × 48.5 × 51h cm']],
+    specText:['Three-piece side heat-shield system, tool-free removal and dishwasher-safe.','Hob grate in solid stainless steel bars, Ø 8 mm.','Space-saving one-piece grate that folds open for cleaning.','Pot-holder arms adjustable lengthways and in height.','Static gas oven over 30 litres, Italian-style static burner.','Hob burners with differentiated power, caps enamelled at 800°.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.'],
+    paras:['Lux is dedicated to those who cook with passion and want the space to stay impeccable. Its exclusive three-piece side heat shield comes apart in a few seconds without tools and washes conveniently in the dishwasher: so after frying courgettes in carpione or sautéing garlic prawns, cleaning is immediate.','The hob grate in solid stainless steel bars of 8 mm holds without vibration the pot of a seafood risotto that must be stirred energetically, while the pot-holder arms, adjustable in height too, lock the pan when you make a fish soup at sea. The Italian-style static oven, insulated with a metal-sandwich system and closed by the double tempered glass, ensures the even cooking needed for a tall, fragrant Genoese focaccia or a macaroni timballo. And when the evening ends with a tiramisù, everything is already ready to come clean in a moment.','The care for cleaning goes with a clean design: washable heat shields, a solid stainless grate and mirror-finish surfaces give Lux a tidy, elegant look, designed to blend discreetly into the interiors and to stay beautiful over time.'],
+    specKeys:['ppd_lux_s0','ppd_lux_s1','ppd_lux_s2','ppd_lux_s3','ppd_lux_s4','ppd_lux_s5','ppd_lux_s6','ppd_lux_s7','ppd_lux_s8','ppd_lux_s9'],
+    paraKeys:['ppd_lux_p0','ppd_lux_p1','ppd_lux_p2'] },
+  'MADDALENA': { label:'MADDALENA · Technical Datasheet',
+    kickerKey:'ppd_maddalena_k', name:'MADDALENA', taglineKey:'ppd_maddalena_t',
+    cat1:'Gas Cooktop', cat2:'2 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785230935/SEAFARER2_PER_SITO_qo6bed.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582672/MADDALENA_aqymok.jpg',
+    specs:[['Technology','Gas'],['Burners','2'],['Power','4,55 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','47 × 34 cm']],
+    specText:['Gas cooktop with 2 powerful burners.','High-end valves, finely adjustable for simmering.','One-piece grate, mechanically locked (no vibration); maximum stability.','Burner caps fire-enamelled at 800°; safety thermocouples as standard.','Optional AA-battery electronic ignition; optional pot-holders (various models).','Power 4.55 kW; butane/propane 30 mbar'],
+    paras:['Maddalena brings a real flame on board with two powerful burners, governed by high-end valves finely adjustable down to a simmer. It is the perfect condition for cooking that calls for delicacy: on one burner a seafood risotto finishes to perfection, on the other a béchamel does not catch as it gently simmers.','The one-piece grate ensures maximum stability for pots and is mechanically locked, so it does not vibrate under way. The burner caps are fire-enamelled at 800 degrees, the safety thermocouples are standard and the optional AA-battery electronic ignition avoids complex wiring. The optional pot-holders, in various models, hold everything firm even in a swell.','The design is the Italian one that sets us apart: stainless steel, clean lines and careful finishes. Maddalena combines the power of the flame with elegance and fits with measure into the galley worktop, made for the interior project.'],
+    specKeys:['ppd_maddalena_s0','ppd_maddalena_s1','ppd_maddalena_s2','ppd_maddalena_s3','ppd_maddalena_s4','ppd_maddalena_s5'],
+    paraKeys:['ppd_maddalena_p0','ppd_maddalena_p1','ppd_maddalena_p2'] },
+  'MAREA': { label:'MAREA · Technical Datasheet',
+    kickerKey:'ppd_marea_k', name:'MAREA', taglineKey:'ppd_marea_t',
+    cat1:'Compact Gas Cooker', cat2:'2 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657253/MAREA_-_CLASSIC_yono1c.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582600/MAREA_aqim6d.jpg',
+    specs:[['Type','Compact gas cooker with oven'],['Burners','2'],['Power','5.5 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Oven','Enamelled cavity'],['Dimensions (W×D×H)','47.5 × 44 × 46h cm']],
+    specText:['Ultra-compact chassis, 45 cm wide.','Oven with a rear-set burner: multi-level cooking.','Static gas oven over 30 litres.','Hob burners with hot-forged solid brass flame spreaders, differentiated power.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','One-piece hob grate with front bar and arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.','Safety thermocouples; latch and automatic door lock.'],
+    paras:['Marea shows that great cooking is possible even in just 45 cm of width. The secret is the oven with a rear-set burner, which frees up internal space and lets you cook on several levels at once: on the lower shelf a tray of gratinated vegetables, on the upper one a ricotta-and-pear tart baking with the same care.','The burners with solid brass flame spreaders give a steady flame, ideal for simmering a sauce for trofie al pesto or for gently cooking a chicken fricassee. The metal-sandwich insulated cavity and the double tempered-glass door hold the heat, so even in a compact space the cooking stays even. And when space is at a premium, being able to count on a full oven means giving up neither the first course, nor the main, nor the dessert.','Compactness and design go hand in hand: in just 45 cm Marea offers clean lines, mirror-finish steel and careful finishes that let it fit elegantly even into the smallest galleys, making the most of every centimetre of the onboard project.'],
+    specKeys:['ppd_marea_s0','ppd_marea_s1','ppd_marea_s2','ppd_marea_s3','ppd_marea_s4','ppd_marea_s5','ppd_marea_s6','ppd_marea_s7','ppd_marea_s8','ppd_marea_s9'],
+    paraKeys:['ppd_marea_p0','ppd_marea_p1','ppd_marea_p2'] },
+  'MARETTIMO': { label:'MARETTIMO · Technical Datasheet',
+    kickerKey:'ppd_maret_k', name:'MARETTIMO', taglineKey:'ppd_maret_t',
+    cat1:'Gas Cooker', cat2:'2 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657232/MARETTIMO_-_RACER_foptgp.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582592/MARETTIMO_APPOGGIO_v2s8qq.jpg',
+    specs:[['Type','Gas cooker'],['Burners','2'],['Power','3.2 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','45.6 × 24 × 15h cm'],['Dimensions (with side flaps)','51 × 24 × 27.3h cm']],
+    specText:['Two-burner gas cooker with stainless steel burner caps.','Solid stainless steel body, 10/10 thickness.','Latest-generation safety valves.','Optional electronic ignition.','Pot holder with front bar and lengthways adjustment of the arms.','Gimbals for recessed installation in a compartment or top mounting.'],
+    paras:['Marettimo is made for those who want to cook like a great chef even where space is cut to the essentials. Its two independent burners, fed by high-efficiency stainless steel burner caps, let you run two preparations in parallel: on one flame you gently simmer a cuttlefish-ink risotto finished with butter and lemon, while on the other you sear a slice of amberjack in a pistachio crust over a lively fire.','The solid 10/10 stainless steel body and the latest-generation safety valves give you the stability to bring off even a hollandaise sauce without risk, and the front pot-holder bar, adjustable lengthways, keeps the pan firmly in place while you whip a Marsala zabaglione with the sea on the move. With the optional electronic ignition the flame is ready in an instant: just long enough to heat the moka and serve hot croissants and coffee on deck.','Then there is the hand of Italian design. The compact proportions, the polished stainless steel and the carefully drawn details make Marettimo an object that is beautiful to look at, conceived to blend elegantly into the galley worktop: a professional instrument that is also a piece of the boat\'s style.'],
+    specKeys:['ppd_maret_s0','ppd_maret_s1','ppd_maret_s2','ppd_maret_s3','ppd_maret_s4','ppd_maret_s5'],
+    paraKeys:['ppd_maret_p0','ppd_maret_p1','ppd_maret_p2'] },
+  'MARINA': { label:'MARINA · Technical Datasheet',
+    kickerKey:'ppd_marina_k', name:'MARINA', taglineKey:'ppd_marina_t',
+    cat1:'Gas Cooker', cat2:'2 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657235/MARINA_-_mariner2_copiare_in_foto_idjllk.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785591580/MARINA_ritdgp.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','2'],['Power','6.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Battery electronic'],['Oven','Thermostatic · optional grill'],['Dimensions (W×D×H)','52.5 × 48 × 46h cm']],
+    specText:['Static gas oven over 30 litres, compact body.','Italian-style static oven burner, optimised for performance and consumption.','Oven-cavity insulation in rock wool or glass fibre, metal sandwich system.','Door with double tempered safety glass.','Thermometer on the door or automatic thermostat (depending on version).','Oven drip tray in special steel, fire-enamelled at over 800°.','Hob with differentiated-power burners, caps enamelled at 800°.','Deep-drawn cooking top for containing liquids.','One-piece hob grate with front bar and pot-holder arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum.'],
+    paras:['Marina brings the heart of Italian cooking on board: a true static oven. Its burner, engineered for optimal performance at low consumption, wraps the food in an even heat that is the secret of lasagne alla bolognese with just the right crust, or of a pork roast in milk, tender within. The rock-wool insulated cavity in a metal-sandwich system and the double tempered-glass door keep the temperature constant, essential for raising a soft pan brioche or for gratinating a tray of cannelloni just right.','The steel drip tray, fire-enamelled at over 800°, radiates heat downward, perfect for browning the potatoes beneath an oven-baked sea bass. Meanwhile, on the hob, the differentiated-power burners and the valves adjustable from simmering to full flame let you finish an asparagus risotto while the oven works; and with the optional soapstone, homemade bread and pizza come out with a crisp base like a real pizzeria.','All of this in a galley designed with Italian taste: mirror-finish steel surfaces, essential lines and careful finishes that let it blend elegantly into the galley project, like an element conceived together with the interior architect.'],
+    specKeys:['ppd_marina_s0','ppd_marina_s1','ppd_marina_s2','ppd_marina_s3','ppd_marina_s4','ppd_marina_s5','ppd_marina_s6','ppd_marina_s7','ppd_marina_s8','ppd_marina_s9'],
+    paraKeys:['ppd_marina_p0','ppd_marina_p1','ppd_marina_p2'] },
+  'MARINA E': { label:'MARINA E · Technical Datasheet',
+    kickerKey:'ppd_marinae_k', name:'MARINA E', taglineKey:'ppd_marinae_t',
+    cat1:'Induction Electric Cooker', cat2:'2 Burners · Multifunction Microwave Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657257/MARINA_E_-_HORIZON2_MICRO_INDUCTION_l70g4a.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023025/FORMA_DISEGNO_-_CES2INDUZMICRO_-_HORIZON2_MICRO_INDUCTION_cucina_piano_2F_microonde_REV_01_zrpdn4.jpg',
+    specs:[['Dimensions (W×D×H)','52.5 x 47 x 50h cm'],['Technology','Electric Induction'],['Hob power','1,5-3,7 kW'],['Oven power','~1,35 kW'],['Total max power','2,85-5,1 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
+    specText:['Electric induction cooker with gimbal suspension.','Hob with 2 induction zones + multifunction oven with built-in microwave (20 litres).','Microwave, grill and convection in a single oven; compact format.','Hob controls independent of the oven; dual supply on separate lines.','Integrated safety features; patented adjustable gimbals.','Total power adjustable from 2.85 to 5.1 kW.'],
+    paras:['Marina E combines two powerful induction zones with a multifunction oven with built-in microwave, in a compact body. The zones heat instantly: on one you finish a seafood risotto, on the other you bring the pasta water to the boil. The oven, microwave, grill and convection together, defrosts a sea bass fillet in minutes, reheats without drying or gratinates a tray of baked pasta.','Our history as pioneers of marine induction shows in the build quality: hob controls independent of the oven, dual supply on separate lines, precision thermostat and integrated safety features. Marina E saves time and space without giving up flavour, so even a multi-course dinner becomes simple, even under way.','The design is the Italian one that sets us apart: stainless steel, adjustable pot-holders, patented adjustable gimbals and careful finishes. Compact and complete, Marina E fits neatly into the galley, made for the interior project.'],
+    specKeys:['ppd_marinae_s0','ppd_marinae_s1','ppd_marinae_s2','ppd_marinae_s3','ppd_marinae_s4','ppd_marinae_s5'],
+    paraKeys:['ppd_marinae_p0','ppd_marinae_p1','ppd_marinae_p2'] },
+  'MARIS': { label:'MARIS · Technical Datasheet',
+    kickerKey:'ppd_maris_k', name:'MARIS', taglineKey:'ppd_maris_t',
+    cat1:'Gas Cooker', cat2:'2 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784901110/MARIS_-_xl2_con_paraventi_sfondo_nero_kq3qmq.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582599/MARIS_dd0uyl.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','2'],['Power','5.7 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Oven','Enamelled or st. steel cavity'],['Dimensions (W×D×H)','52.5 × 48 × 46h cm']],
+    specText:['Hob burners with hot-forged solid brass flame spreaders.','Burners with differentiated power.','Static gas oven over 30 litres, Italian-style static burner.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','One-piece hob grate with front bar and arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.','Safety thermocouples; latch and automatic door lock.','Oven interior enamelled at 800° or mirror-polished stainless steel; solid stainless steel gimbal brackets.'],
+    paras:['Maris makes the quality of its flame its strong point: the burners with hot-forged solid brass flame spreaders store the heat and release it softly and steadily, the perfect condition for cooking that calls for delicacy. On this flame a seafood risotto finishes to perfection, a bechamel does not catch and an English custard stays silky.','The Italian-style static oven, with an optimised burner and a drip tray fire-enamelled at over 800°, wraps in its even heat a sea bream all\'acqua pazza scented with cherry tomatoes and capers, or a tray of stuffed peppers. The metal-sandwich insulated cavity and the double tempered-glass door keep the temperature stable, while the safety features, thermocouples and an automatic door lock, let you cook with peace of mind. To finish, a wild-berry panna cotta, cooked gently over the brass flame.','Behind the performance lies the care of Italian design: mirror-finish steel external panels, clean proportions and finishes attended to in the smallest detail make Maris a galley that blends elegantly into the spaces on board, conceived to work with the interior designer\'s project rather than impose on it.'],
+    specKeys:['ppd_maris_s0','ppd_maris_s1','ppd_maris_s2','ppd_maris_s3','ppd_maris_s4','ppd_maris_s5','ppd_maris_s6','ppd_maris_s7','ppd_maris_s8','ppd_maris_s9'],
+    paraKeys:['ppd_maris_p0','ppd_maris_p1','ppd_maris_p2'] },
+  'MAXIMA': { label:'MAXIMA · Technical Datasheet',
+    kickerKey:'ppd_maxima_k', name:'MAXIMA', taglineKey:'ppd_maxima_t',
+    cat1:'Gas Cooker', cat2:'4-5 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657261/MAXIMA_-_LT4GL2-2_lwxf0d.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582617/MAXIMA_4_xiwwxo.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','4 or 5'],['Power','6.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Battery electronic'],['Oven','Thermostatic · optional grill'],['Dimensions (W×D×H)','64.6 × 51.5 × 49.5h cm']],
+    specText:['Oversized, extra-large oven with a large-capacity drip tray.','Oversized, large cooking top.','Individual grates for each burner, lockable and fully removable (patented system).','Pot-holder arms adjustable lengthways and in height.','Extra-large static gas oven, Italian-style static burner.','Hob burners with differentiated power, caps enamelled at 800°.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.'],
+    paras:['Maxima is the cooker for grand occasions, when you cook on board for a large table. Its extra-large oven easily takes a tray of lasagne for all the guests, a veal roast with a side of potatoes, or several preparations together; the extra-capacity drip tray gathers the cooking juices for a rich sauce to serve on the side. The large cooking top leaves room to work freely: the water for tortellini in broth on one burner, a white ragù on another, a pan of sautéed mushrooms on the third.','The real signature is the individual grates for each burner, lockable and fully removable thanks to a patented system: after a fry or a stew that has made a mess, you take them off and wash them one by one in a moment. The pot-holder arms, adjustable in height too, keep everything steady, so you can focus on the result, perhaps finishing with a tray of cantucci to serve with vin santo.','Behind its generosity lies Italian design: substantial dimensions handled with elegant proportions, mirror-finish steel and careful finishes make Maxima a striking yet restrained galley, designed to fit with measure into the interiors of the largest yachts.'],
+    specKeys:['ppd_maxima_s0','ppd_maxima_s1','ppd_maxima_s2','ppd_maxima_s3','ppd_maxima_s4','ppd_maxima_s5','ppd_maxima_s6','ppd_maxima_s7','ppd_maxima_s8','ppd_maxima_s9'],
+    paraKeys:['ppd_maxima_p0','ppd_maxima_p1','ppd_maxima_p2'] },
+  'MEDITERRANEO': { label:'MEDITERRANEO · Technical Datasheet',
+    kickerKey:'ppd_mediterraneo_k', name:'MEDITERRANEO', taglineKey:'ppd_mediterraneo_t',
+    cat1:'Radiant Cooktop', cat2:'Duplex',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657256/MEDITERRANEO_-CRYSTAL1_DUPLEX_dq5gxq.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023019/MEDITERRANEO_DISEGNO_-_CLAV.076.A_1_q1yvol.jpg',
+    specs:[['Technology','Radiant · Duplex'],['Burners','1'],['Power','0,6-1,2 kW'],['Power supply','220-240V · 50/60 Hz'],['Dimensions (W×D×H)','30 × 30 × 6h cm']],
+    specText:['Patented dual-function DUPLEX radiant hob: cooktop + grill.','Grill directly on the glass-ceramic (fish, meat, vegetables, eggs).','Surface reaches up to 500°: grills even a thick fiorentina steak.','Perimeter frame contains fats and liquids; exclusive anti-vibration system.','Optional pot-holders mount on the stainless frame with no extra holes.','Also available in a 2-zone version.'],
+    paras:['Mediterraneo is born of a patent of ours, DUPLEX technology: in the space of a single hob you have two tools. You can cook with pots or grill directly on the glass-ceramic, with no need to choose. On a boat where space is precious it is a small revolution: fish, meat, vegetables, toast and even eggs cook directly on the glass, which, having no porosity, holds no bacteria and lets you cook different dishes in sequence.','When grilling, efficiency can exceed that of induction, and the surface reaches up to 500 degrees in moments: so Mediterraneo grills even a thick fiorentina steak, impossible for traditional grills. The perimeter frame contains fats and liquids, the exclusive anti-vibration system keeps everything stable, and the optional pot-holders mount directly on the stainless frame, with no extra holes in the worktop.','The design is the Italian one that sets us apart: glass and steel, clean lines, nothing superfluous. Mediterraneo packs two products into the smallest space, also available in a two-zone version, and blends elegantly into the galley, made for the interior project.'],
+    specKeys:['ppd_mediterraneo_s0','ppd_mediterraneo_s1','ppd_mediterraneo_s2','ppd_mediterraneo_s3','ppd_mediterraneo_s4','ppd_mediterraneo_s5'],
+    paraKeys:['ppd_mediterraneo_p0','ppd_mediterraneo_p1','ppd_mediterraneo_p2'] },
+  'MINIMO': { label:'MINIMO · Technical Datasheet',
+    kickerKey:'ppd_minimo_k', name:'MINIMO', taglineKey:'ppd_minimo_t',
+    cat1:'Electric Grill', cat2:'Compact',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784867831/MINIMO_COMPACT_BBQ_Gemini_Generated_Image_dks15sdks15sdks1_zipejg.png', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023016/MINIMO_DISEGNO_-_ASS.BBQ_COMPACT_400X400_1_ibbjat.jpg',
+    specs:[['Type','Electric grill · ultra compact'],['Grilling zones','1'],['Power','1.5 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','All stainless · large drip tray'],['Dimensions (W×D×H)','34.3 × 39.3 × 9h cm']],
+    specText:['Compact grill with a tilting armoured radiant element (for easy cleaning).','Mechanically locked grate (anti-vibration).','Removable and extremely large drip tray.','Sturdy structure.'],
+    paras:['Minimo is the essential grill that is not afraid of work. The armoured radiant element, tilting for easy cleaning, heats decisively and lets you grill at any time of day: herb chicken skewers for a quick lunch at anchor, sausages and vegetables for an informal dinner, aubergine slices to dress with oil, mint and garlic.','The mechanically locked grate removes the vibrations of sailing, giving you stability while you turn a mixed grill. The drip tray, large and removable, empties and washes in a moment, so even the aperitivo with bruschetta becomes child\'s play. Sturdy and compact, it is ready to follow you on every outing.','Its essentiality is also aesthetic: no frills, just stainless steel and clean lines that keep it discreet and tidy on board, a restrained complement designed to look good in any cockpit without stealing the scene from the project.'],
+    specKeys:['ppd_minimo_s0','ppd_minimo_s1','ppd_minimo_s2','ppd_minimo_s3'],
+    paraKeys:['ppd_minimo_p0','ppd_minimo_p1','ppd_minimo_p2'] },
+  'NAPOLI': { label:'NAPOLI · Technical Datasheet',
+    kickerKey:'ppd_napoli_k', name:'NAPOLI', taglineKey:'ppd_napoli_t',
+    cat1:'Electric Built-in Oven with Grill', cat2:'',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784696003/NAPOLI_FORNO_INCASSO_ELETTRICO_aaacrp.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023029/NAPOLI_DISEGNO_-_Cucina_elettrica_450_incasso_R_qbucao.jpg',
+    specs:[['Type','Electric built-in oven'],['Power','1.6 kW'],['Power supply','220/240V · 50/60 Hz'],['Oven','Grill · optional ventilation'],['Dimensions (W×D×H)','50.4 × 39 × 47h cm']],
+    specText:['Built-in electric oven, body made entirely of stainless steel.','Triple-element system with a dedicated selector (lower only / upper only / lower+upper / boosted upper grill).','Lower armoured element engineered for performance and consumption (Italian-style static).','Capacity over 30 litres, very compact body.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Door with double tempered safety glass.','Automatic thermostat.','Drip tray in special steel, fire-enamelled at over 800°.','Full-width cooking grate; powerful upper grill.','Oven interior fire-enamelled at over 800° or mirror-polished stainless steel.'],
+    paras:['Napoli brings on board an electric oven with behaviour that is rare in the nautical world, thanks to its triple-element system governed by a dedicated selector. You can cook from below only to boost the base of a Neapolitan pizza laid on the soapstone, from above only to gratinate the top of a parmigiana, or below and above together for a roast browned evenly; and with the boosted upper grill the crust of a timballo becomes irresistible.','Over 30 litres of capacity in a very compact body leave room for large trays, while the metal-sandwich insulation and the double tempered glass keep the temperature stable. The interior and the mirror-polished stainless surfaces reflect the heat onto the food, hinder bacteria, resist salt air and clean in a moment. To finish, a fragrant apple cake baked with the lower element alone for a perfect base.','Built in and all in mirror-finish steel, Napoli combines technology and aesthetics: a complete electric oven that fits neatly and luminously into the galley cabinetry, designed to blend coherently into the onboard interior project.'],
+    specKeys:['ppd_napoli_s0','ppd_napoli_s1','ppd_napoli_s2','ppd_napoli_s3','ppd_napoli_s4','ppd_napoli_s5','ppd_napoli_s6','ppd_napoli_s7','ppd_napoli_s8','ppd_napoli_s9'],
+    paraKeys:['ppd_napoli_p0','ppd_napoli_p1','ppd_napoli_p2'] },
+  'NAUTA': { label:'NAUTA · Technical Datasheet',
+    kickerKey:'ppd_nauta_k', name:'NAUTA', taglineKey:'ppd_nauta_t',
+    cat1:'Gas Cooker', cat2:'3 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784902924/NAUTA_XL3_Gemini_Generated_Image_qd4te4qd4te4qd4t_ejjcje.png', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785591542/NAUTA_xirhuo.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','3'],['Power','6.7 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Oven','Enamelled or st. steel cavity'],['Dimensions (W×D×H)','52.5 × 48 × 46h cm']],
+    specText:['Hob burners with hot-forged solid brass flame spreaders.','Burners with differentiated power.','Static gas oven over 30 litres, Italian-style static burner.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','One-piece hob grate with front bar and arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.','Safety thermocouples; latch and automatic door lock.','Oven interior enamelled at 800° or mirror-polished stainless steel; solid stainless steel gimbal brackets.'],
+    paras:['Nauta is the cooker for long passages, sturdy and dependable without giving up excellence at the table. Its burners with hot-forged solid brass flame spreaders offer a full, steady flame that makes even the most technical preparations easy: a pasta alla Norma with its thick tomato sauce, or a mascarpone cream whipped over the flame.','The Italian-style static oven, with a drip tray in steel enamelled at very high temperature, cooks saltimbocca alla romana or a tray of melanzane a funghetto evenly. The metal-sandwich insulation and the double tempered glass waste no energy, a precious advantage when you are far from the coast; the deep-drawn top contains any liquids and the one-piece grate with front bar keeps the pots firmly in place. On waking, toast and orange marmalade; at the end of dinner, a zuppa inglese made at leisure.','The look, too, is made for life on board: sober lines, mirror-finish steel and careful finishes give Nauta a discreet, refined presence, designed to fit naturally into the yacht\'s interiors and to enhance the work of whoever styled them.'],
+    specKeys:['ppd_nauta_s0','ppd_nauta_s1','ppd_nauta_s2','ppd_nauta_s3','ppd_nauta_s4','ppd_nauta_s5','ppd_nauta_s6','ppd_nauta_s7','ppd_nauta_s8','ppd_nauta_s9'],
+    paraKeys:['ppd_nauta_p0','ppd_nauta_p1','ppd_nauta_p2'] },
+  'NAUTICA': { label:'NAUTICA · Technical Datasheet',
+    kickerKey:'ppd_nautica_k', name:'NAUTICA', taglineKey:'ppd_nautica_t',
+    cat1:'Induction Electric Cooker', cat2:'2 Burners · Microwave Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657198/NAUTICA_-_horizon2_micro_compact_f8izcd.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023031/NAUTICA_DISEGNO_-_cucina_piano_450_microonde_2_xftrbf.jpg',
+    specs:[['Dimensions (W×D×H)','47.5 x 42 x 45/50h cm'],['Technology','Electric Induction'],['Hob power','1,5-3,7 kW'],['Oven power','~1,35 kW'],['Total max power','2,85-5,1 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
+    specText:['Ultra-compact electric induction cooker with gimbal suspension.','Hob with 2 induction zones + multifunction microwave oven.','Microwave, grill and convection in a single oven; minimal footprint.','Hob controls independent of the oven; dual supply on separate lines.','Integrated safety features; patented adjustable gimbals.','Total power adjustable from 2.85 to 5.1 kW.'],
+    paras:['Nautica brings two induction zones and a multifunction microwave oven into the smallest footprint, made for boats where every centimetre is precious. Despite its reduced size it gives up nothing: on the two zones you sear prawns and finish a risotto, while the oven with microwave, grill and convection defrosts, reheats or gratinates as needed.','Compact but complete, Nautica comes from our experience as pioneers of marine induction: hob controls independent of the oven, dual supply on separate lines, precision thermostat and integrated safety features. It is the ideal solution to cook properly even in the most confined spaces, with no compromise on quality.','The design is Italian down to the details: stainless steel, adjustable pot-holders, patented adjustable gimbals. Nautica packs a lot of technology into the smallest space and blends discreetly into the galley, made for the interior project.'],
+    specKeys:['ppd_nautica_s0','ppd_nautica_s1','ppd_nautica_s2','ppd_nautica_s3','ppd_nautica_s4','ppd_nautica_s5'],
+    paraKeys:['ppd_nautica_p0','ppd_nautica_p1','ppd_nautica_p2'] },
+  'ORIZZONTE': { label:'ORIZZONTE · Technical Datasheet',
+    kickerKey:'ppd_oriz_k', name:'ORIZZONTE', taglineKey:'ppd_oriz_t',
+    cat1:'Induction Electric Cooker', cat2:'3 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657202/ORIZZONTE_-_horizon3_induction_HIGH_DEF_p8odfz.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785593074/ORIZZONTE_uy7lsp.jpg',
+    specs:[['Dimensions (W×D×H)','52.5 x 55 x 50h cm'],['Technology','Electric Induction'],['Hob power','adjustable 1 to 5.2 kW'],['Oven power','1.6 kW'],['Total max power','adjustable from just 1.75 up to 6.8 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
+    specText:['Electric induction cooker with gimbal suspension.','Hob with 3 zones, one of exceptional power; PMS-ready (Bridge/Plus).','Oven over 30 litres in mirror-polished stainless steel.','Three-element multifunction system (lower, upper, grill) with precision thermostat.','Dual supply for oven and hob on separate lines; integrated safety features.','Thanks to PMS the whole appliance can run on just 1.75 kW.'],
+    paras:['Orizzonte is born of a record: in 2015 we were the first in the world to bring gimballed induction to sea, after being, back in the early 2000s, the absolute pioneers of the marine electric cooker. The three hob zones, one of exceptional power, heat instantly and precisely: the water for spaghetti alle vongole comes to the boil in a moment, while on a gentler zone a Neapolitan ragù simmers for hours without swings. The PMS setup, in the Plus version, offers an independent zone of extraordinary power for a perfect sear.','The oven, over 30 litres in mirror-polished stainless steel, carries a three-element multifunction system unique in the nautical sector: lower, upper and a high-power grill, usable together and governed by a precision thermostat. So a lasagne alla bolognese gratinates on top while it bakes evenly, and a tagliata is finished under the grill in a few minutes. The solid stainless hinges built in-house, the knobs turned from billet and the integrated safety features, automatic door lock and anti-roll stop, speak of a build made to sail for years.','Behind the performance lies Italian design: mirror-finish stainless steel, pot-holders adjustable horizontally and vertically, and the patented adjustable gimbals the owner levels with a single gesture. Orizzonte blends elegantly into the galley, designed to work with the interior designer\'s project rather than impose on it.'],
+    specKeys:['ppd_oriz_s0','ppd_oriz_s1','ppd_oriz_s2','ppd_oriz_s3','ppd_oriz_s4','ppd_oriz_s5'],
+    paraKeys:['ppd_oriz_p0','ppd_oriz_p1','ppd_oriz_p2'] },
+  'PRINCIPE': { label:'PRINCIPE · Technical Datasheet',
+    kickerKey:'ppd_principe_k', name:'PRINCIPE', taglineKey:'ppd_principe_t',
+    cat1:'Gas Cooker with Oven', cat2:'Bespoke for Vintage Yachts',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785247399/PRINCIPE30_kjdbxz.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582618/LUX_eggutu.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','2 or 3'],['Power','7.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Electronic'],['Oven','St. steel · thermostatic · optional grill'],['Dimensions (W×D×H)','52.5 × 48.5 × 51h cm']],
+    specText:['Gas cooker with oven, a bespoke jewel for vintage yachts.','Entirely artisanal, made wholly by hand; at least 3 months of work.','Burners with solid brass flame-spreaders; stainless static oven with thermostat, optional grill.','Customisable in finishes and in technical and dimensional characteristics.','Colours inspired by Florentine, Neapolitan and Venetian artisan history; solid brass details, gildable on request.','Power 7.25 kW; butane/propane 30 mbar; also available with 2 or 4 burners.'],
+    paras:['Principe is not a production cooker: it is a jewel made entirely by hand, in a wholly artisanal way, by a team of craftsmen working together. Each piece takes no less than three months to build and is the only one in the world conceived for vintage yachts, sail or motor: a collection already installed in countless boats, where every model can be customised not only in its finishes but also in its technical and dimensional characteristics.','Beneath the beauty lies the substance of fine cooking: the burners with solid brass flame-spreaders store the heat and return it soft and steady, the perfect flame for delicate cooking. On Principe a Livornese fish soup simmers for hours without catching, an Adriatic fritto misto stays dry and crisp, and in the stainless static oven with precision thermostat a baked sea bass with potatoes and Taggiasca olives cooks evenly, wrapped in a gentle heat.','The oven, with optional grill, is the realm of traditional recipes: a golden tray of lasagne al ragù, a Ligurian rabbit with olives and pine nuts, or a sour-cherry tart to finish. The double-glazed door and integrated safety features let you cook with peace of mind even under way, while steel and brass converse with the wood and brass fittings of a classic boat.','But it is in colour that Principe becomes unique. Its surfaces can be made in shades inspired by Italian artisan history: the Rosso Medici and Verde Arno of Renaissance Florence, the Blu Borbone and Corallo di Napoli, the Rosso Doge and Blu Laguna of the Serenissima. They are colours that seem to come from the past, chosen together with the owner. The details are in solid brass and, on request, further gilded, for a jeweller\'s effect.','Principe is the only cooker in the world for antique sailing ships and vintage boats: its made-to-measure colours let it integrate perfectly into the restorations of historic vessels, as well as into new classic boats with the highest-end finishes. Every Principe is born of a dialogue with the tastes of the owner, the shipyard and the architect: a unique piece, like the hull that holds it.'],
+    specKeys:['ppd_principe_s0','ppd_principe_s1','ppd_principe_s2','ppd_principe_s3','ppd_principe_s4','ppd_principe_s5'],
+    paraKeys:['ppd_principe_p0','ppd_principe_p1','ppd_principe_p2','ppd_principe_p3','ppd_principe_p4'] },
+  'RAFFAELLO': { label:'RAFFAELLO · Technical Datasheet',
+    kickerKey:'ppd_raffaello_k', name:'RAFFAELLO', taglineKey:'ppd_raffaello_t',
+    cat1:'Electric Grill', cat2:'Duplex',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657205/RAFFAELLO_ujagqg.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023037/RAFFAELLO_DISEGNO_Assieme_GRILL_VETRO_290X510_REV00_1_zaps2h.jpg',
+    specs:[['Type','Electric grill · Duplex'],['Power','1.8 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Sealed components · high IP · glass'],['Dimensions (W×D×H)','50.8 × 28.8 × 7h cm']],
+    specText:['Patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Electronic control.','Surface made entirely of glass-ceramic, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind.','No bacterial retention, simplified cleaning.'],
+    paras:['Raffaello is much more than a grill: patented, with a two-stage element adjustable from 300 to 500°, it brings together two tools in a single appliance, because it cooks both directly on the glass and with pots. On the hot glass a citrus tuna tagliata sears in a few seconds; on its zones, using a saucepan, you finish a seafood risotto without changing station, a luxury on a boat, where every centimetre counts.','The two zones work independently, so you can grill vegetables on one side and cook a sauce on the other. The element, protected by the upper glass, is unaffected by the open-sea wind that would cool a traditional grill, and the surface is sealable from the top for a high IP rating outdoors. Minimal, all-glass-ceramic aesthetic, extremely easy to clean: even a caramelised pineapple, cooked directly on the glass, leaves no trace.','All in glass-ceramic, with no edges or visible parts, Raffaello is a design object before it is a cooking tool: a continuous, elegant surface that fits naturally into the cockpit and speaks to the lines of the interiors and exteriors signed by the designer.'],
+    specKeys:['ppd_raffaello_s0','ppd_raffaello_s1','ppd_raffaello_s2','ppd_raffaello_s3','ppd_raffaello_s4','ppd_raffaello_s5','ppd_raffaello_s6','ppd_raffaello_s7'],
+    paraKeys:['ppd_raffaello_p0','ppd_raffaello_p1','ppd_raffaello_p2'] },
+  'ROMA': { label:'ROMA · Technical Datasheet',
+    kickerKey:'ppd_roma_k', name:'ROMA', taglineKey:'ppd_roma_t',
+    cat1:'LP Gas Built-in Oven', cat2:'',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657207/ROMA_-_MAXI_dq8ys8.webp', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582677/ROMA_zjg5lc.jpg',
+    specs:[['Type','LP gas built-in oven'],['Power','1.7 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Oven','Thermostat and timer'],['Dimensions (W×D×H)','55 × 38 × 54h cm']],
+    specText:['Built-in gas oven, Italian-style static burner optimised for performance and consumption.','Capacity over 30 litres.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer on the door or automatic thermostat (depending on version).','Drip tray in special steel, fire-enamelled at over 800°.','Full-width cooking grate.','Valves calibrated from minimum (simmering) to maximum.','Optional electronic AA-battery ignition.','Safety thermocouples as standard; automatic door lock.','End-of-cooking timer as standard; upper grill optional.'],
+    paras:['Roma packs an authentic Italian-style static oven into a compact built-in, with a burner engineered for the best performance at low consumption that distributes the heat evenly. It is the right bake for a tray of ricotta-and-spinach cannelloni gratinated, for a roast chicken with crisp-skinned potatoes or for a homemade bread that rises evenly.','The steel drip tray, fire-enamelled at over 800°, radiates heat from below, while the metal-sandwich insulation and the double tempered glass keep the temperature stable even in long bakes. The standard end-of-cooking timer leaves you free: set it and attend to your guests while a tart browns in the oven. With the optional soapstone, pizza finds its ideal base, and the optional upper grill adds the final gratin to a vegetable bake. Over 30 litres of capacity and all the safety features, thermocouples and an automatic door lock, complete a full oven in little space.','Built in, Roma disappears into the galley cabinetry, leaving only the clean steel front in view: an oven that fits neatly into the interior project, designed to speak to the onboard joinery without imposing itself.'],
+    specKeys:['ppd_roma_s0','ppd_roma_s1','ppd_roma_s2','ppd_roma_s3','ppd_roma_s4','ppd_roma_s5','ppd_roma_s6','ppd_roma_s7','ppd_roma_s8','ppd_roma_s9'],
+    paraKeys:['ppd_roma_p0','ppd_roma_p1','ppd_roma_p2'] },
+  'TINTORETTO': { label:'TINTORETTO · Technical Datasheet',
+    kickerKey:'ppd_tintoretto_k', name:'TINTORETTO', taglineKey:'ppd_tintoretto_t',
+    cat1:'Glass-Ceramic Griddle', cat2:'',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657209/TINTORETTO_SUPERGR220_n6da5w.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023008/TINTORETTO_DISEGNO_-_MC_004-000_1_1_p3h1l7.jpg',
+    specs:[['Type','Glass-ceramic griddle'],['Power','1.3 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Super easy-clean flat surface'],['Dimensions (W×D×H)','50.9 × 28.7 × 5h cm']],
+    specText:['Glass-ceramic plancha surface (heat-resistant beyond 500°).','Dual heat transmission: conduction + infrared radiation.','Naturally non-stick surface, virtually no bacterial retention.','Stainless steel perimeter frame to contain cooking liquids.','Quickly reaches operating temperature.'],
+    paras:['Tintoretto turns grilling on board into a clean, elegant gesture, thanks to its glass-ceramic plancha surface. The glass, which withstands over 500°, cooks in two ways at once (by direct conduction and by infrared rays that penetrate the food), quickly sealing in the juices: a beef tagliata stays pink inside, prawns roast without drying out and seasonal vegetables keep their crunch and colour.','The naturally non-stick surface lets you sear a sea bass fillet without it sticking and with very little fat, for light, refined cooking. The stainless steel perimeter frame collects the cooking liquids, and at the end of service cleaning is immediate: the glass holds no residue and has virtually no bacterial retention. Even breakfast finds its place here, with golden pancakes cooked directly on the plancha.','The glass-ceramic is also pure elegance: the smooth, continuous surface, the stainless steel frame and the absence of protrusions give Tintoretto a minimal, sophisticated look that fits naturally into the cockpit and enhances the design of the boat\'s outdoor spaces.'],
+    specKeys:['ppd_tintoretto_s0','ppd_tintoretto_s1','ppd_tintoretto_s2','ppd_tintoretto_s3','ppd_tintoretto_s4'],
+    paraKeys:['ppd_tintoretto_p0','ppd_tintoretto_p1','ppd_tintoretto_p2'] },
+  'TIRRENO': { label:'TIRRENO · Technical Datasheet',
+    kickerKey:'ppd_tirreno_k', name:'TIRRENO', taglineKey:'ppd_tirreno_t',
+    cat1:'Radiant Cooktop', cat2:'',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657242/TIRRENO_-_PANTELLERIA_crystal1_v1am8v.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023017/TIRRENO_DISEGNO_-_CLAV.067.A_TOP_rpaibc.jpg',
+    specs:[['Technology','Radiant'],['Burners','1'],['Power','1,2 kW'],['Power supply','220-240V · 50/60 Hz'],['Dimensions (W×D×H)','30 × 30 × 6h cm']],
+    specText:['Single-zone radiant hob, extremely compact and efficient.','Virtually no bacterial retention; hygienic and easy to clean.','Perimeter frame that contains fats and liquids.','Robustness of radiant; tolerant of generators and dock power.','Optional pot-holders mount on the stainless frame with no extra holes.','Power supply 220-240V; optional 120V 60 Hz.'],
+    paras:['Tirreno is the single-zone radiant hob, extremely compact and efficient, made to bring real cooking where space is minimal. Its surface has virtually no bacterial retention, a precious quality on board, and the perimeter frame contains any fats and liquids. On this zone a sauce simmers steadily and a pan of prawns sears just right.','The robustness of radiant makes it reliable even far from a berth: very little electronics, tolerance of generators and dock power of uncertain quality. The optional pot-holders mount directly on the stainless frame of the hob, with no need to drill extra holes in the worktop.','The design is the Italian one that sets us apart: essential, in glass and steel, with nothing superfluous. Tirreno offers quality cooking in the smallest footprint and blends discreetly into the onboard spaces, made for the interior project.'],
+    specKeys:['ppd_tirreno_s0','ppd_tirreno_s1','ppd_tirreno_s2','ppd_tirreno_s3','ppd_tirreno_s4','ppd_tirreno_s5'],
+    paraKeys:['ppd_tirreno_p0','ppd_tirreno_p1','ppd_tirreno_p2'] },
+  'TIZIANO': { label:'TIZIANO · Technical Datasheet',
+    kickerKey:'ppd_tiziano_k', name:'TIZIANO', taglineKey:'ppd_tiziano_t',
+    cat1:'Electric Grill', cat2:'Duplex',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657210/TIZIANO1_1_xw92vd.png', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023010/TIZIANO_DISEGNO_-_MC015-300_rev03_1_njf6pk.jpg',
+    specs:[['Type','Electric grill · patented Duplex'],['Power','1.8 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Triple heater · removable drip tray'],['Dimensions (W×D×H)','51 × 29 × 10h cm']],
+    specText:['Patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Removable drip tray to collect cooking fats.','Electronic control.','Glass-ceramic surface, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind; no bacterial retention.'],
+    paras:['Tiziano combines the patented dual function with even more convenient cleaning. The two-stage element, adjustable from 300 to 500°, lets you grill sea bass fillets on the glass or cook with pots, for example a mussel soup alla marinara, on the two independent zones working at different temperatures.','The removable drip tray collects the cooking fats and pulls out for impeccable cleaning after roasting some crisp vegetables. The surface, made entirely of glass-ceramic, is sealable from the top for outdoor use with a high IP rating, and the element, protected by the glass, does not fear the wind under way. Electronic control and a clean aesthetic make it the ideal tool for healthy, light, refined cooking on board.','The technical heart is dressed in elegance: the continuous glass-ceramic surface, the flush electronic controls and the absence of superfluous details give Tiziano a clean, contemporary look, designed to blend refinedly into the outdoor spaces and to follow the designer\'s project.'],
+    specKeys:['ppd_tiziano_s0','ppd_tiziano_s1','ppd_tiziano_s2','ppd_tiziano_s3','ppd_tiziano_s4','ppd_tiziano_s5','ppd_tiziano_s6','ppd_tiziano_s7'],
+    paraKeys:['ppd_tiziano_p0','ppd_tiziano_p1','ppd_tiziano_p2'] },
+  'TOLOMEO': { label:'TOLOMEO · Technical Datasheet',
+    kickerKey:'ppd_tolomeo_k', name:'TOLOMEO', taglineKey:'ppd_tolomeo_t',
+    cat1:'Induction Electric Cooker', cat2:'3 Burners · Ventilated',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657213/TOLOMEO_zv6wsb.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785593074/ORIZZONTE_uy7lsp.jpg',
+    specs:[['Dimensions (W×D×H)','52.5 x 55 x 50h cm'],['Technology','Electric Induction'],['Hob power','1-5,2 kW'],['Oven power','1,5 + 1,65 kW'],['Total max power','1,75-7,7 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
+    specText:['Electric induction cooker with gimbal suspension.','Four-element multifunction oven (lower, upper, grill, rear circular with fan), unique in the nautical sector.','Hob with 3 zones, one of exceptional power; PMS-ready (Bridge/Plus).','Mirror-polished stainless steel oven interior; precision thermostat.','Dual supply for oven and hob on separate lines; integrated safety features.','Thanks to PMS the whole appliance can run on just 1.75 kW.'],
+    paras:['Tolomeo is our pinnacle: the only marine cooker with four heating elements in the oven, working in combination through a special selector. To the lower element of a true Italian static oven it adds the upper element, a high-power grill and a fourth rear circular element with fan convection. So you can bake a roast and a tray of potatoes at the same time in convection with no flavour transfer, cook a pizza with the dedicated function, or gratinate a parmigiana under the grill. The induction hob with three zones, one of exceptional power and PMS-ready, brings the tortellini water to the boil while the oven works.','Behind the versatility lies our history: in 2015 the first in the world with gimballed induction, already pioneers of the marine electric cooker in the early 2000s. The mirror-polished stainless steel oven interior, the enamelled drip tray made on our own molds, the precision thermostat and the dual supply on separate lines make Tolomeo a true restaurant-grade tool. With four modes in a single appliance, a salt-crusted sea bass and a chocolate soufflé each find their ideal bake.','Every detail is Italian design: solid stainless hinges built in-house, knobs turned from billet with no plastic, pot-holders adjustable horizontally and vertically, patented adjustable gimbals. Tolomeo combines power and elegance and fits with measure into the galley, designed to work with the interior project.'],
+    specKeys:['ppd_tolomeo_s0','ppd_tolomeo_s1','ppd_tolomeo_s2','ppd_tolomeo_s3','ppd_tolomeo_s4','ppd_tolomeo_s5'],
+    paraKeys:['ppd_tolomeo_p0','ppd_tolomeo_p1','ppd_tolomeo_p2'] },
+  'TRE': { label:'TRE · Technical Datasheet',
+    kickerKey:'ppd_tre_k', name:'TRE', taglineKey:'ppd_tre_t',
+    cat1:'Induction Cooktop', cat2:'3 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657214/TRE_-_CRYSTAL3_REVOLUTION_NERO_ZENITALE_CON_COMANDI_ACCESI_dilsep.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023006/TRE_DISEGNO_-_BIM430_-_FABITA_3_FUOCHI_IND_wcncmr.jpg',
+    specs:[['Technology','Induction'],['Burners','3'],['Power','1-5,2 kW'],['Power supply','220-240V · 50/60 Hz'],['Oven','Optional bridge function'],['Dimensions (W×D×H)','47 × 43 × 6h cm']],
+    specText:['Ultra-compact 3-zone electric induction cooktop.','Power adjustable from 1 to 5.2 kW; touch controls.','Integrated PMS to reduce the power drawn.','Hygienic glass-ceramic, almost no bacterial retention, instant cleaning.','Very high IP rating from above once installed.','Many pot-holder systems can be fitted.'],
+    paras:['Tre brings three induction zones on board in an ultra-compact cooktop, with power adjustable from 1 up to 5.2 kW to suit every dish and every system. The zones heat instantly: on one you sear a tuna fillet in seconds, on another you simmer an arrabbiata sauce, on the third you keep a velouté warm. The touch controls and the integrated PMS let you reduce the power drawn when needed.','The glass-ceramic surface cleans in a moment and has virtually no bacterial retention, ideal in the galley. Once installed, the cooktop is essentially sealed with a very high IP rating from above, and the many pot-holder systems available fit easily to secure pots of different sizes, even under way.','The design is Italian down to the details: glass and steel, clean lines, flush controls. Tre combines flexibility and elegance and blends naturally into the galley worktop, made to accompany life on board without imposing.'],
+    specKeys:['ppd_tre_s0','ppd_tre_s1','ppd_tre_s2','ppd_tre_s3','ppd_tre_s4','ppd_tre_s5'],
+    paraKeys:['ppd_tre_p0','ppd_tre_p1','ppd_tre_p2'] },
+  'UNO': { label:'UNO · Technical Datasheet',
+    kickerKey:'ppd_uno_k', name:'UNO', taglineKey:'ppd_uno_t',
+    cat1:'Induction Cooktop', cat2:'1 Burner',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657216/UNO_-_CRYSTAL1_INDUCTION_lxrbuk.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786022991/UNO_DISEGNO_300x300_INDUZIONE_DOMINO_MONOZONA_-_CRYSTAL1_INDUZ_rwddur.jpg',
+    specs:[['Technology','Induction'],['Burners','1'],['Power','1,2 kW'],['Power supply','220-240V · 50/60 Hz'],['Dimensions (W×D×H)','30 × 30 × 6h cm']],
+    specText:['Ultra-compact single-zone electric induction cooktop.','Made to cook where space is minimal; touch controls.','Exclusive anti-vibration system, unique on the market.','Hygienic glass-ceramic, almost no bacterial retention, instant cleaning.','Very high IP rating from above once installed; pot-holders can be fitted.','Power supply 220-240V; optional 120V 60 Hz.'],
+    paras:['Uno is the ultra-compact single-zone induction cooktop, made to bring real cooking where space is minimal: a flybridge, a dinette, a tender. Despite its small size it heats instantly and precisely, so a risotto finishes perfectly, a moka pot rises gently or a pan of prawns in guazzetto sizzles just right. The touch controls make it immediate to use.','The glass-ceramic surface cleans in a moment and has virtually no bacterial retention, a precious quality on board. Our exclusive anti-vibration system, unique on the market, keeps cooking stable even in rough seas, and once installed the cooktop is essentially sealed with a very high IP rating from above. The many pot-holders available fit easily.','The design is the Italian one that sets us apart: essential, in glass and steel, with nothing superfluous. Uno offers quality cooking in the smallest footprint and blends discreetly into the onboard spaces, made for the interior project.'],
+    specKeys:['ppd_uno_s0','ppd_uno_s1','ppd_uno_s2','ppd_uno_s3','ppd_uno_s4','ppd_uno_s5'],
+    paraKeys:['ppd_uno_p0','ppd_uno_p1','ppd_uno_p2'] },
+  'VENTOTENE': { label:'VENTOTENE · Technical Datasheet',
+    kickerKey:'ppd_vento_k', name:'VENTOTENE', taglineKey:'ppd_vento_t',
+    cat1:'Gas Cooker', cat2:'2 Burners with Grill',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657246/VENTOTENE_-_59_CON_GRILL_RITOCCATO_sjkfjy.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582596/VENTOTENE_APPOGGIO_dfoou9.jpg',
+    specs:[['Type','Gas cooker with grill'],['Burners','2'],['Power','5.5 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','55.7 × 28 × 27.3h cm']],
+    specText:['Twin burner with solid brass flame spreaders.','Mirror-polished stainless steel cooking top.','Lower grill compartment with an upper vent that acts as an extra burner.','One-piece cooking grate.','Dedicated grate for the grill compartment.','Drip tray in special steel, enamelled at over 800°.','Guide provision for front pot holders with heat-resistant knobs (optional).','Two types of gimbals (recessed in a compartment or on the top).'],
+    paras:['Ventotene puts two burners with solid brass flame spreaders at the chef\'s disposal, a material that stores and releases heat gently and evenly: the flame becomes enveloping, ideal for a crème pâtissière that must never split or for a velvety Parmesan fondue. The mirror-polished top is not only elegant: it reduces bacterial retention, resists the salt air and wipes clean in an instant after plating paccheri with lobster.','Below, the grill compartment is a precious resource: in the morning it toasts bread and warms the croissants, and thanks to its upper vent that works as an extra burner you can keep a braise warm while you finish the side dish, or start the slow cooking of a beef cheek in red wine. The one-piece grate ensures stability even with a heavy pot of Neapolitan ragù, and the drip tray, enamelled at over 800°, spreads the heat perfectly beneath a tray of vegetables.','The eye has its share too: the mirror-polished steel top, the balanced proportions and the care for detail give Ventotene an elegant, discreet presence, designed to blend naturally into the spaces on board in the finest tradition of Italian style.'],
+    specKeys:['ppd_vento_s0','ppd_vento_s1','ppd_vento_s2','ppd_vento_s3','ppd_vento_s4','ppd_vento_s5','ppd_vento_s6','ppd_vento_s7'],
+    paraKeys:['ppd_vento_p0','ppd_vento_p1','ppd_vento_p2'] },
+  'VENTUS': { label:'VENTUS · Technical Datasheet',
+    kickerKey:'ppd_ventus_k', name:'VENTUS', taglineKey:'ppd_ventus_t',
+    cat1:'Gas Cooker', cat2:'3-4 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657218/VENTUS_-_xxl3-2_fspppu.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582624/VENTUS_iufyoi.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','3 or 4'],['Power','7.95 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Oven','Enamelled or st. steel cavity'],['Dimensions (W×D×H)','52.5 × 53.4 × 47.4h cm']],
+    specText:['Wide and generous cooking top.','Static gas oven over 30 litres.','Italian-style static oven burner, optimised for performance and consumption.','Hob burners with differentiated power, caps enamelled at 800°.','Oven-cavity insulation in rock wool or glass fibre, metal sandwich system.','Door with double tempered safety glass.','Thermometer on the door or automatic thermostat (depending on version).','Oven drip tray in special steel, fire-enamelled at over 800°.','Deep-drawn cooking top; one-piece grate with front bar and arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum.'],
+    paras:['Ventus gives the chef what is needed when there are many guests: a wide, generous cooking top, able to hold at the same time the tall pot for paccheri, the large pan for a mixed fry of small fish and the pot for a mussel-and-clam guazzetto. Below, the Italian-style static oven works like the one at home: the optimised burner and the drip tray fire-enamelled at over 800° wrap in even heat a tray of sea bream with potatoes and olives, or a parmigiana that gratinates slowly.','The metal-sandwich insulated cavity and the double tempered-glass door hold the heat where it is needed, while the deep-drawn top collects any spills when the pasta water boils vigorously. The one-piece grate with front bar and arms with heat-proof knobs keeps the largest pots firmly in place even under way: so you bring to the table an abundant lunch, from the first course to dessert (perhaps a torta caprese), without giving up anything.','The generous top does not give up elegance: the wide, clean lines, the mirror-finish steel and the careful finishes make Ventus an imposing yet harmonious galley, designed to fit into the galley of the most spacious yachts and to work with the interior project.'],
+    specKeys:['ppd_ventus_s0','ppd_ventus_s1','ppd_ventus_s2','ppd_ventus_s3','ppd_ventus_s4','ppd_ventus_s5','ppd_ventus_s6','ppd_ventus_s7','ppd_ventus_s8','ppd_ventus_s9'],
+    paraKeys:['ppd_ventus_p0','ppd_ventus_p1','ppd_ventus_p2'] },
+  'VERA': { label:'VERA · Technical Datasheet',
+    kickerKey:'ppd_vera_k', name:'VERA', taglineKey:'ppd_vera_t',
+    cat1:'Radiant Electric Cooker', cat2:'2 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784785096/VERA4_cucina03-25_tsmjxp.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582623/VERA_auvjyq.jpg',
+    specs:[['Technology','Electric Radiant'],['Hob power','2,4 kW'],['Oven power','2,4 kW'],['Total max power','2,7-4,8 kW'],['Dimensions (W×D×H)','52.5 × 42.9 × 42.4h cm'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
+    specText:['Electric cooker with high-performance radiant hob.','Hob with 2 powerful radiant zones; great robustness, almost no electronics.','Tolerant of inverters, generators and dock power of uncertain quality.','Oven over 30 litres in mirror-polished stainless steel, three-element multifunction.','Precision thermostat; dual supply on separate lines; integrated safety features.','Patented adjustable gimbals; pot-holders adjustable horizontally and vertically.'],
+    paras:['Vera brings our radiant tradition into an essential format with two powerful, high-performance cooking zones. Like all our radiant hobs it is extremely sturdy and almost free of electronics: it tolerates inverters, generators and dock power of uncertain quality with no trouble, ensuring stable cooking even far from a reliable berth. On these zones a ragù alla bolognese simmers for hours and a lemon escalope browns in a few minutes.','The oven, over 30 litres in mirror-polished stainless steel, carries the three-element multifunction system, lower, upper and grill, with a precision thermostat: a homemade bread rises evenly and a tray of lasagne gratinates uniformly. Solid stainless hinges built in-house, an enamelled drip tray made on our own molds, knobs turned from billet and integrated safety features make Vera a reliable cooker, made to last.','The design is Italian down to the details: mirror-finish stainless steel, pot-holders adjustable horizontally and vertically, patented adjustable gimbals. Vera combines simplicity and solidity and blends elegantly into the galley, made to accompany life on board without imposing.'],
+    specKeys:['ppd_vera_s0','ppd_vera_s1','ppd_vera_s2','ppd_vera_s3','ppd_vera_s4','ppd_vera_s5'],
+    paraKeys:['ppd_vera_p0','ppd_vera_p1','ppd_vera_p2'] },
+  'VIRTUS': { label:'VIRTUS · Technical Datasheet',
+    kickerKey:'ppd_virtus_k', name:'VIRTUS', taglineKey:'ppd_virtus_t',
+    cat1:'Electric Grill', cat2:'XL Duplex',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657221/VIRTUS_nbwrtn.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023014/VIRTUS_-_MC008_050_ingombro_1_xiroxi.jpg',
+    specs:[['Type','XL electric grill · Duplex'],['Power','2.5 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Sealed components · high IP · glass'],['Dimensions (W×D×H)','70 × 42 × 7h cm']],
+    specText:['Large-format patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Electronic control.','Glass-ceramic surface, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind; no bacterial retention.'],
+    paras:['Virtus is the large-format version of the patented glass-ceramic grill, made for those who love to entertain. Its large surface, with a two-stage element from 300 to 500° and two independent zones, lets you turn grilling into a banquet: on one side prawns, squid and vegetables cooking on the glass, on the other a pan of spaghetti allo scoglio simmering in its sauce.','The zones work at different temperatures to handle delicate and livelier cooking together. The element, insulated by the upper glass, is unaffected by the open-sea wind, and the surface is sealable from the top for a high IP rating outdoors. Elegant, hygienic and extremely easy to clean, it ends on a high note with slices of grilled peach to serve with ice cream.','The large size is handled with elegance: a wide, continuous glass-ceramic slab, essential controls and no superfluous elements make Virtus a striking yet refined protagonist of the cockpit, designed to blend harmoniously into the outdoor spaces of the most generous yachts.'],
+    specKeys:['ppd_virtus_s0','ppd_virtus_s1','ppd_virtus_s2','ppd_virtus_s3','ppd_virtus_s4','ppd_virtus_s5','ppd_virtus_s6'],
+    paraKeys:['ppd_virtus_p0','ppd_virtus_p1','ppd_virtus_p2'] }
+};
+// Etichette fisse del datasheet nelle 5 lingue + disclaimer.
+window.__DS_LABELS = {
+  en:{ meta:'Technical Datasheet', place:'Early 1900s · Conegliano · Italy', specs:'Technical Specifications', desc:'Description', draw:'Technical Drawing', save:'Save as PDF', foot:'Master artisans since the early 1900s', disc:'All data and images in this datasheet are indicative and provided for guidance only; specifications may vary and are not binding. For complete and up-to-date information please contact the company.' },
+  it:{ meta:'Scheda Tecnica', place:'Inizio \u2019900 · Conegliano · Italia', specs:'Specifiche Tecniche', desc:'Descrizione', draw:'Disegno Tecnico', save:'Salva come PDF', foot:'Maestri artigiani dagli inizi del \u2019900', disc:'Tutti i dati e le immagini di questa scheda sono indicativi e forniti a solo titolo orientativo; le specifiche possono variare e non sono vincolanti. Per informazioni complete e aggiornate si prega di contattare l\u2019azienda.' },
+  fr:{ meta:'Fiche Technique', place:'D\u00e9but du XXe · Conegliano · Italie', specs:'Sp\u00e9cifications Techniques', desc:'Description', draw:'Dessin Technique', save:'Enregistrer en PDF', foot:'Ma\u00eetres artisans depuis le d\u00e9but du XXe si\u00e8cle', disc:'Toutes les donn\u00e9es et images de cette fiche sont indicatives et fournies \u00e0 titre informatif ; les sp\u00e9cifications peuvent varier et ne sont pas contractuelles. Pour des informations compl\u00e8tes et \u00e0 jour, veuillez contacter l\u2019entreprise.' },
+  de:{ meta:'Datenblatt', place:'Anfang des 20. Jh. · Conegliano · Italien', specs:'Technische Daten', desc:'Beschreibung', draw:'Technische Zeichnung', save:'Als PDF speichern', foot:'Meisterhandwerker seit Anfang des 20. Jahrhunderts', disc:'Alle Angaben und Bilder in diesem Datenblatt sind unverbindlich und dienen nur zur Orientierung; die Spezifikationen k\u00f6nnen abweichen. F\u00fcr vollst\u00e4ndige und aktuelle Informationen wenden Sie sich bitte an das Unternehmen.' },
+  es:{ meta:'Ficha T\u00e9cnica', place:'Principios del s. XX · Conegliano · Italia', specs:'Especificaciones T\u00e9cnicas', desc:'Descripci\u00f3n', draw:'Dibujo T\u00e9cnico', save:'Guardar como PDF', foot:'Maestros artesanos desde principios del s. XX', disc:'Todos los datos e im\u00e1genes de esta ficha son indicativos y se facilitan a modo orientativo; las especificaciones pueden variar y no son vinculantes. Para informaci\u00f3n completa y actualizada, contacte con la empresa.' }
 };
 window.__buildDatasheetHTML = function(d){
   function esc(x){ return String(x==null?'':x).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  var specs=(d.specs||[]).map(function(r){ return '<div class="srow"><span class="k">'+esc(r[0])+'</span><span class="v">'+esc(r[1])+'</span></div>'; }).join('');
-  var paras=(d.paras||[]).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('');
-  var hl=(d.highlights||[]).map(function(h){ return '<div>'+esc(h)+'</div>'; }).join('');
-  var lead=d.lead?('<div class="lead">'+esc(d.lead)+'</div>'):'';
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(d.name)} · Technical Datasheet</title>
+  // lingua attiva del sito e dizionario i18n
+  var L=(typeof curLang!=='undefined'&&curLang)?curLang:'en';
+  var DD=(typeof DICT!=='undefined'&&DICT[L])?DICT[L]:{};
+  var LB=(window.__DS_LABELS[L]||window.__DS_LABELS.en);
+  function tr(key,fb){ if(!key)return fb||''; return (DD[key]!==undefined?DD[key]:(fb!==undefined?fb:key)); }
+  // Risoluzione robusta: il testo FISSO (paras/specText, in inglese) è la base
+  // sempre presente anche se DICT non è ancora caricato. Se DICT ha la traduzione
+  // nella lingua attiva, la usiamo al posto del fisso. Mai vuoto.
+  function trIdx(key, fallback){
+    if(key && DD[key]!==undefined && DD[key]!=='') return DD[key];
+    return fallback!==undefined?fallback:'';
+  }
+  var kicker = trIdx(d.kickerKey, d.kicker||'');
+  var tagline= trIdx(d.taglineKey, d.tagline||'');
+  // descrizione: parte dal testo fisso d.paras; traduce ogni paragrafo via paraKeys se DICT c'è
+  var basePara = d.paras||[];
+  var paraList = basePara.map(function(txt,i){
+    var k=(d.paraKeys&&d.paraKeys[i])?d.paraKeys[i]:null;
+    return trIdx(k, txt);
+  });
+  if(!paraList.length && d.paraKeys){ paraList=d.paraKeys.map(function(k){return trIdx(k,'');}).filter(Boolean); }
+  // specifiche testuali: parte dal fisso d.specText; traduce via specKeys se DICT c'è
+  var baseSpec = d.specText||[];
+  var specList = baseSpec.map(function(txt,i){
+    var k=(d.specKeys&&d.specKeys[i])?d.specKeys[i]:null;
+    return trIdx(k, txt);
+  });
+  if(!specList.length && d.specKeys){ specList=d.specKeys.map(function(k){return trIdx(k,'');}).filter(Boolean); }
+  // tabella specifiche numeriche (coppie [k,v]) sempre come righe
+  var specsHTML='';
+  if(d.specs && d.specs.length){
+    specsHTML+=(d.specs).map(function(r){ return '<div class="srow"><span class="k">'+esc(r[0])+'</span><span class="v">'+esc(r[1])+'</span></div>'; }).join('');
+  }
+  if(specList.length){
+    specsHTML+=specList.map(function(s){ return '<div class="sitem">'+esc(s)+'</div>'; }).join('');
+  }
+  var paras=paraList.map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('');
+  return `<!doctype html><html lang="${esc(L)}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(d.name)} · ${esc(LB.meta)}</title>
   <style>
-   @page{size:A4;margin:13mm;}
+   @page{size:A4;margin:11mm 0;}
    *{box-sizing:border-box;margin:0;padding:0;}
    body{background:#fff;color:#0a0a0a;font-family:"Helvetica Neue",Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
    .sheet{max-width:820px;margin:0 auto;padding:26px 30px 20px;}
@@ -5269,6 +5744,7 @@ window.__buildDatasheetHTML = function(d){
    .hd{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:10px;}
    .wm{font-weight:700;letter-spacing:.22em;font-size:17px;}
    .wm small{display:block;color:#b8965a;letter-spacing:.34em;font-size:8px;font-weight:400;margin-top:3px;}
+   .wm img{display:block;height:38px;width:auto;}
    .meta{text-align:right;color:#666;font-size:8px;letter-spacing:.24em;text-transform:uppercase;line-height:1.7;}
    .kick{color:#b8965a;letter-spacing:.34em;font-size:8px;text-transform:uppercase;margin:20px 0 4px;}
    .titrow{display:flex;justify-content:space-between;align-items:flex-end;}
@@ -5278,52 +5754,70 @@ window.__buildDatasheetHTML = function(d){
    .tag{font-family:Georgia,serif;font-style:italic;color:#b8965a;font-size:14px;margin:8px 0 12px;}
    .cols{display:flex;gap:24px;margin-top:14px;}
    .colL{flex:0 0 52%;}
-   .photo{width:100%;height:190px;object-fit:cover;border:1px solid #e7e2d7;display:block;background:#f8f6f1;}
+   .photo{width:100%;height:240px;object-fit:contain;object-position:center;border:1px solid #e7e2d7;display:block;background:#f8f6f1;padding:3px;}
    .colR{flex:1;}
    .sec{font-weight:700;letter-spacing:.16em;font-size:8.5px;text-transform:uppercase;}
    .specrule{height:1px;background:#b8965a;margin:6px 0 4px;}
    .srow{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid #ededed;}
    .srow .k{color:#777;font-size:7.6px;letter-spacing:.1em;text-transform:uppercase;}
    .srow .v{font-family:Georgia,serif;font-size:10.5px;}
+   .sitem{font-size:9.5px;line-height:1.5;color:#222;padding:5px 0 5px 12px;border-bottom:1px solid #ededed;position:relative;}
+   .sitem:before{content:"";position:absolute;left:0;top:10px;width:4px;height:4px;border-radius:50%;background:#b8965a;}
    .desc{margin-top:20px;}
    .desc p{font-family:Georgia,serif;font-size:10.5px;line-height:1.55;color:#222;margin-top:7px;}
    .lead{font-family:Georgia,serif;font-style:italic;color:#b8965a;font-size:11px;margin-top:9px;}
    .hl{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;}
    .hl div{font-size:8.6px;color:#333;position:relative;padding-left:12px;}
    .hl div:before{content:"";position:absolute;left:0;top:5px;width:4px;height:4px;border-radius:50%;background:#b8965a;}
-   .draw{margin-top:20px;}
+   .draw{margin-top:20px;break-inside:avoid;page-break-inside:avoid;}
+   @media print{ .draw{padding-top:8mm;} }
+   .draw .sec,.draw .specrule{break-after:avoid;page-break-after:avoid;}
    .drawimg{width:100%;border:1px solid #e7e2d7;display:block;background:#f8f6f1;}
    .ft{margin-top:22px;}
+   .disclaimer{margin-top:18px;font-size:7.4px;line-height:1.6;color:#999;font-style:italic;letter-spacing:.02em;}
    .ftrow{display:flex;justify-content:space-between;padding-top:8px;font-size:8px;color:#666;letter-spacing:.04em;line-height:1.7;}
    .ftrow b{color:#0a0a0a;letter-spacing:.14em;}
    .pbtn{position:fixed;top:16px;right:16px;background:#0a0a0a;color:#f8f6f1;border:0;padding:11px 18px;font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-family:inherit;border-radius:2px;z-index:99;}
-   @media print{.pbtn{display:none!important;}.sheet{padding:0;}body{margin:0;}}
+   @media print{.pbtn{display:none!important;}.sheet{padding:2mm 13mm;max-width:none;}body{margin:0;}}
   </style></head>
   <body>
-   <button class="pbtn" onclick="window.print()">Save as PDF</button>
+   <button class="pbtn" onclick="window.print()">${esc(LB.save)}</button>
    <div class="sheet">
      <hr class="rule">
-     <div class="hd"><div class="wm">TECHIMPEX<small>MARINE COOKERS</small></div><div class="meta">Technical Datasheet<br>Est. 1974 · Conegliano · Italy</div></div>
-     <div class="kick">${esc(d.kicker||'')}</div>
+     <div class="hd"><div class="wm"><img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,h_120/v1786030506/Logo_Techimpex_Marine_Cookers_Def_icexcz.jpg" alt="Techimpex · Marine Cookers"></div><div class="meta">${esc(LB.meta)}<br>${esc(LB.place)}</div></div>
+     <div class="kick">${esc(kicker)}</div>
      <div class="titrow"><h1>${esc(d.name)}</h1><div class="cat"><b>${esc(d.cat1||'')}</b><br><span>${esc(d.cat2||'')}</span></div></div>
-     <div class="tag">${esc(d.tagline||'')}</div>
+     <div class="tag">${esc(tagline)}</div>
      <hr style="height:1px;background:#e6e6e6;border:0;">
      <div class="cols">
        <div class="colL"><img class="photo" src="${d.photo||''}" alt="${esc(d.name)}"></div>
-       <div class="colR"><div class="sec">Technical Specifications</div><div class="specrule"></div>${specs}</div>
+       <div class="colR"><div class="sec">${esc(LB.specs)}</div><div class="specrule"></div>${specsHTML}</div>
      </div>
-     <div class="desc"><div class="sec">${esc(d.descTitle||'Description')}</div>${paras}${lead}
-       <div class="hl">${hl}</div></div>
-     <div class="draw"><div class="sec">Technical Drawing · Dimensions (cm)</div><div class="specrule"></div><img class="drawimg" src="${d.drawing||''}" alt="${esc(d.name)} Technical Drawing"></div>
-     <div class="ft"><hr class="rule"><div class="ftrow"><div><b>MARINE COOKERS · TECHIMPEX</b><br>Conegliano (TV), Italy · Master artisans since 1974</div><div style="text-align:right">info@marinecookers.com · +39 0438 1840230<br>www.marinecookers.com</div></div></div>
+     <div class="desc"><div class="sec">${esc(LB.desc)}</div>${paras}</div>
+     <div class="draw"><div class="sec">${esc(LB.draw)}</div><div class="specrule"></div><img class="drawimg" src="${d.drawing||''}" alt="${esc(d.name)} ${esc(LB.draw)}"></div>
+     <div class="disclaimer">${esc(LB.disc)}</div>
+     <div class="ft"><hr class="rule"><div class="ftrow"><div><b>MARINE COOKERS · TECHIMPEX</b><br>Conegliano (TV), Italy · ${esc(LB.foot)}</div><div style="text-align:right">+39 0438 1840230<br>www.techimpex.tv</div></div></div>
    </div>
   </body></html>`;
 };
 window.__dsBlobHtml = function(html){ try{ return URL.createObjectURL(new Blob([html],{type:'text/html'})); }catch(e){ return ''; } };
 window.__dsUrls = function(ds){
-  if(ds && ds.ds){
-    if(!ds.__html) ds.__html=window.__buildDatasheetHTML(ds.ds);
-    if(!ds.__url) ds.__url=window.__dsBlobHtml(ds.__html);
+  // Nuova struttura i18n: i campi (kickerKey, specKeys, ...) sono al top-level.
+  // Legacy: i dati stanno in ds.ds. Il datasheet dipende dalla lingua attiva
+  // (curLang) e dal dizionario DICT: rigeneriamo l'HTML quando cambia la lingua
+  // o se la prima generazione era avvenuta prima che DICT fosse pronto.
+  var isI18n = ds && (ds.taglineKey || ds.specKeys || ds.paraKeys);
+  if(isI18n || (ds && ds.ds)){
+    var L=(typeof curLang!=='undefined'&&curLang)?curLang:'en';
+    var dictReady=(typeof DICT!=='undefined' && DICT && DICT[L]);
+    // se prima non c'era DICT e i testi erano stati risolti a vuoto, rigenera ora
+    var staleNoDict = ds.__dictReady===false && dictReady;
+    if(ds.__lang!==L || !ds.__html || staleNoDict){
+      ds.__html=window.__buildDatasheetHTML(isI18n?ds:ds.ds);
+      ds.__url=window.__dsBlobHtml(ds.__html);
+      ds.__lang=L;
+      ds.__dictReady=!!dictReady;
+    }
     return { preview:ds.__url, download:ds.__url, open:ds.__url, htmlStr:ds.__html, label:(ds.label||'Technical Datasheet'), html:true };
   }
   if(ds && ds.htmlFn && typeof window[ds.htmlFn]==='function'){
@@ -5640,11 +6134,11 @@ function goProd(m){
   // Etichetta hero = categoria di appartenenza (invece del generico "Electric")
   var __lbl=document.querySelector('.pp-hero-label');
   if(__lbl && __cat){ __lbl.removeAttribute('data-i18n'); __lbl.textContent='Marine Cookers · '+__cat; }
-  // Sezioni Drawing/3D/Download: solo MAGNUS mostra i dati reali; per tutti
-  // gli altri prodotti si mostra l'invito a contattare l'azienda.
+  // Sezioni Drawing/3D/Download: i prodotti con dati reali (disegno in PROD_DRAWING
+  // o scheda in PROD_DATASHEET) mostrano i contenuti; gli altri l'invito a contattare.
   (function(){
-    var isM=(m==='MAGNUS');
     var __hasDraw=!!(window.PROD_DRAWING&&window.PROD_DRAWING[m]);
+    var __hasDs=!!(window.PROD_DATASHEET&&window.PROD_DATASHEET[m]);
     ['pp-section-drawing','pp-section-3d','pp-section-dl'].forEach(function(id){
       var sec=document.getElementById(id); if(!sec)return;
       var header=sec.querySelector('.pp-section-header');
@@ -5654,7 +6148,9 @@ function goProd(m){
         sec.__cuOrig=kids;
       }
       var cu=sec.querySelector('.pp-contact-info');
-      var __showReal=isM||(id==='pp-section-drawing'&&__hasDraw);
+      // Downloads: reale se il prodotto ha disegno o datasheet. Drawing: se ha disegno.
+      var __showReal=(id==='pp-section-dl')?(__hasDraw||__hasDs)
+                    :(id==='pp-section-drawing'&&__hasDraw);
       if(__showReal){
         if(cu&&cu.parentNode)cu.parentNode.removeChild(cu);
         sec.__cuOrig.forEach(function(o){o.el.style.display=o.disp;});
@@ -5703,10 +6199,14 @@ function goProd(m){
     var __dlsrc = __d0 ? __d0.replace('/image/upload/f_auto,q_auto,w_1600/','/image/upload/fl_attachment/')
                       : 'https://res.cloudinary.com/dseiw9ndw/image/upload/fl_attachment/HORIZON2_drawing_dark_1_bdwnvd';
     __drawDl.setAttribute('href', __dlsrc);
+    // stesso link per il pulsante Download posto sotto l'immagine del disegno
+    var __drawDl2=document.getElementById('pp-drawing-dl2');
+    if(__drawDl2)__drawDl2.setAttribute('href', __dlsrc);
   }
   // SCHEDA TECNICA PDF per-modello (voce Downloads · Vedi + Scarica). Default =
   // scheda FORMA se il modello non ha voce in PROD_DATASHEET.
   var __dsCfg=(window.PROD_DATASHEET&&window.PROD_DATASHEET[m])?window.PROD_DATASHEET[m]:null;
+  window.__ppCurrentModel=m;
   var __ds=__dsCfg?window.__dsUrls(__dsCfg):{
     preview:'https://drive.google.com/file/d/1ih2LC1a9u329mVEsE0iBAs6IZbSQ3R7Y/preview',
     download:'https://drive.google.com/uc?export=download&id=1ih2LC1a9u329mVEsE0iBAs6IZbSQ3R7Y',
@@ -7301,6 +7801,7 @@ function ppLightbox(){
 }
 function ppLightboxClose(){
   var lb=document.getElementById('pp-lightbox');
+  var d=document.getElementById('pp-lightbox-download'); if(d)d.style.display='none';
   if(lb){lb.classList.remove('on');document.body.style.overflow='';}
 }
 
@@ -8332,6 +8833,7 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     var lb=getLb();if(!lb)return;
     stopVideo();
     lb.classList.remove('on');
+    var __lbDl=document.getElementById('pp-lightbox-download'); if(__lbDl)__lbDl.style.display='none';
     document.body.style.overflow='';
   };
   window.ppLightbox=function(imgEl){
@@ -8342,6 +8844,14 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     var lb=getLb();if(!lb)return;
     var el=getImg();if(!el)return;
     el.src=imgs[0].src;el.alt=imgs[0].alt;el.style.filter=(drawingImg.style&&drawingImg.style.filter)?drawingImg.style.filter:'';el.classList.remove('fading');
+    // pulsante Download nel lightbox: usa lo stesso link fl_attachment del disegno
+    var __lbDl=document.getElementById('pp-lightbox-download');
+    if(__lbDl){
+      var __src=document.getElementById('pp-drawing-dl');
+      var __href=__src?__src.getAttribute('href'):(drawingImg.src||'');
+      __lbDl.setAttribute('href',__href||'#');
+      __lbDl.style.display='flex';
+    }
     buildDots();
     var prev=document.getElementById('pp-lb-prev');
     var next=document.getElementById('pp-lb-next');
@@ -9732,7 +10242,7 @@ var DICT = {
     spec_ignition: "Ignition",
     spec_oven: "Oven",
     spec_lid: "Lid",
-    dl_drawing: "3D Technical Drawing",
+    dl_drawing: "Technical Drawing",
     dl_datasheet: "Product Datasheet",
     dl_download: "Download",
     dl_view: "View",
@@ -10930,7 +11440,7 @@ var DICT = {
     spec_ignition: "Accensione",
     spec_oven: "Forno",
     spec_lid: "Coperchio",
-    dl_drawing: "Disegno Tecnico 3D",
+    dl_drawing: "Disegno Tecnico",
     dl_datasheet: "Scheda Tecnica",
     dl_download: "Scarica",
     dl_view: "Visualizza",
@@ -12128,7 +12638,7 @@ var DICT = {
     spec_ignition: "Allumage",
     spec_oven: "Four",
     spec_lid: "Couvercle",
-    dl_drawing: "Dessin Technique 3D",
+    dl_drawing: "Dessin Technique",
     dl_datasheet: "Fiche Technique",
     dl_download: "Télécharger",
     dl_view: "Voir",
@@ -13326,7 +13836,7 @@ var DICT = {
     spec_ignition: "Zündung",
     spec_oven: "Ofen",
     spec_lid: "Deckel",
-    dl_drawing: "3D-Technische Zeichnung",
+    dl_drawing: "Technische Zeichnung",
     dl_datasheet: "Datenblatt",
     dl_download: "Herunterladen",
     dl_view: "Ansehen",
@@ -14524,7 +15034,7 @@ var DICT = {
     spec_ignition: "Encendido",
     spec_oven: "Horno",
     spec_lid: "Tapa",
-    dl_drawing: "Dibujo Técnico 3D",
+    dl_drawing: "Dibujo Técnico",
     dl_datasheet: "Ficha Técnica",
     dl_download: "Descargar",
     dl_view: "Ver",
@@ -14649,6 +15159,22 @@ function setLang(lang) {
 
   /* Save preference */
   try { localStorage.setItem('txLang', lang); } catch(e){}
+
+  /* Rigenera la scheda tecnica (datasheet) del prodotto aperto nella nuova lingua */
+  try {
+    var __m=window.__ppCurrentModel;
+    var __cfg=(window.PROD_DATASHEET&&__m&&window.PROD_DATASHEET[__m])?window.PROD_DATASHEET[__m]:null;
+    if(__cfg && typeof window.__dsUrls==='function'){
+      var __u=window.__dsUrls(__cfg);
+      window.__ppDatasheet=__u;
+      var __dl=document.getElementById('pp-ds-dl'); if(__dl){ __dl.setAttribute('href',__u.download); if(__u.html){__dl.removeAttribute('download');__dl.setAttribute('target','_blank');} }
+      var __op=document.getElementById('pp-ds-open'); if(__op)__op.setAttribute('href',__u.open);
+      // se il viewer inline e' aperto, ricarico l'iframe con la nuova lingua
+      var __fr=document.getElementById('pp-pdf-iframe');
+      var __wrap=document.getElementById('pp-pdf-viewer-wrap');
+      if(__fr && __wrap && __wrap.style.display!=='none' && __u.htmlStr){ __fr.setAttribute('srcdoc',__u.htmlStr); }
+    }
+  } catch(e){}
 }
 
 /* Auto-detect on load */
@@ -15292,6 +15818,7 @@ window.setLang = setLang;
     var pv=document.getElementById('pp-lb-prev'), nx=document.getElementById('pp-lb-next');
     if(pv)pv.style.display='none'; if(nx)nx.style.display='none';
     var dt=document.getElementById('pp-lb-dots'); if(dt)dt.innerHTML='';
+    var __lbDl=document.getElementById('pp-lightbox-download'); if(__lbDl)__lbDl.style.display='none';
     lb.classList.add('on'); document.body.style.overflow='hidden';
   };
   window.toggleMarcoPolo=function(){
