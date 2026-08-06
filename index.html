@@ -4277,6 +4277,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   <!-- Video di sfondo hero - desaturato e scuro come in About Us -->
   <video id="heroVid" loop muted playsinline preload="none"
     data-src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/kling_20260427_%E4%BD%9C%E5%93%81_Siamo_a_bo_5390_0_ckji0x.mp4"
+    data-src-mobile="https://res.cloudinary.com/dseiw9ndw/video/upload/v1786012610/VIDEO_HERO_HOME_MOBILE_q3cmbc.mp4"
     poster="https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,w_1200,h_1600,c_fill,g_auto,f_auto,q_auto/kling_20260427_%E4%BD%9C%E5%93%81_Siamo_a_bo_5390_0_ckji0x.jpg"
     style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85);transition:opacity .8s ease">
     <track kind="captions" src="" label="No captions">
@@ -7511,21 +7512,26 @@ function openAbout(){
 }
 /* ── HERO: foto subito, video dopo 6s (alleggerisce il caricamento mobile) ── */
 (function(){
+  var isMobile = window.matchMedia('(max-width:768px)').matches;
   function startHeroVideo(){
     var v=document.getElementById('heroVid');
     if(!v||v.dataset.loaded) return;
-    var src=v.getAttribute('data-src'); if(!src) return;
+    // MOBILE: video hero dedicato; DESKTOP: video originale.
+    var src=(isMobile && v.getAttribute('data-src-mobile')) || v.getAttribute('data-src');
+    if(!src) return;
     v.dataset.loaded='1';
+    v.style.opacity='0';
     var srcEl=document.createElement('source');
     srcEl.src=src; srcEl.type='video/mp4';
     v.insertBefore(srcEl, v.firstChild);
     v.load();
-    v.play().catch(function(){});
+    var reveal=function(){ v.style.opacity='1'; };
+    v.addEventListener('playing', reveal, {once:true});
+    v.play().then(function(){ reveal(); }).catch(function(){ reveal(); });
   }
   // DESKTOP: video subito (comportamento originale, punteggio gia' ottimo).
-  // MOBILE (<=768px): foto per 6s, poi entra il video (alleggerisce il caricamento).
-  var isMobile = window.matchMedia('(max-width:768px)').matches;
-  var delay = isMobile ? 6000 : 0;
+  // MOBILE (<=768px): foto (poster) per ~5s, poi entra il video in dissolvenza.
+  var delay = isMobile ? 5000 : 0;
   if(document.readyState==='complete'){ setTimeout(startHeroVideo,delay); }
   else { window.addEventListener('load', function(){ setTimeout(startHeroVideo,delay); }); }
 })();
