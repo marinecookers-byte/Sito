@@ -4410,7 +4410,12 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 
     <!-- ── PANNELLO 0: HERO ── -->
     <div class="ab-panel ab-panel-dark" style="z-index:1;">
-      <img class="ab-panel-video ab-hero-video" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785566807/FOTO_SCENA_VENEZIA_pcg91y.jpg" alt="Marine Cookers · Chi siamo" loading="eager" decoding="async">
+      <img class="ab-panel-video ab-hero-video" id="abHeroImg" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785566807/FOTO_SCENA_VENEZIA_pcg91y.jpg" alt="Marine Cookers · Chi siamo" loading="eager" decoding="async" style="transition:opacity .8s ease;">
+      <video class="ab-panel-video ab-hero-video" id="abHeroVid" loop muted playsinline preload="none"
+        data-src-mobile="https://res.cloudinary.com/dseiw9ndw/video/upload/v1786013913/HERO_ABOUT_US_MOBILE_ozsafo.mp4"
+        style="display:none;opacity:0;transition:opacity .8s ease;">
+        <track kind="captions" src="" label="No captions">
+      </video>
       <div class="ab-vbreak-overlay"></div>
       <div class="ab-panel-inner" style="align-items:flex-end; padding-bottom:80px;">
         <div>
@@ -7509,6 +7514,22 @@ function openAbout(){
     var v=document.getElementById(id);
     if(v){ try{ v.preload='auto'; v.play().catch(function(){}); }catch(e){} }
   });
+  // HERO ABOUT US · SOLO MOBILE: foto (anteprima) per ~5s, poi video in dissolvenza.
+  (function(){
+    if(!window.matchMedia('(max-width:768px)').matches) return;
+    var v=document.getElementById('abHeroVid'), img=document.getElementById('abHeroImg');
+    if(!v||v.dataset.loaded) return;
+    var src=v.getAttribute('data-src-mobile'); if(!src) return;
+    setTimeout(function(){
+      if(v.dataset.loaded) return; v.dataset.loaded='1';
+      var s=document.createElement('source'); s.src=src; s.type='video/mp4';
+      v.insertBefore(s, v.firstChild);
+      v.style.display='block'; v.load();
+      var reveal=function(){ v.style.opacity='1'; if(img) img.style.opacity='0'; };
+      v.addEventListener('playing', reveal, {once:true});
+      v.play().then(function(){ reveal(); }).catch(function(){ reveal(); });
+    },5000);
+  })();
 }
 /* ── HERO: foto subito, video dopo 6s (alleggerisce il caricamento mobile) ── */
 (function(){
