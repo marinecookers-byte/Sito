@@ -1,8 +1,10 @@
-# _redirects — Marine Cookers / Techimpex (sess. 65)
-# Regole 301 per Cloudflare (Worker con asset statici).
+# _redirects — Marine Cookers / Techimpex (sess. 78 — versione NETLIFY)
+# Regole 301 + fallback SPA per Netlify.
 # NB: le CATEGORIE e i PRODOTTI con traffico NON sono qui: sono gestiti come
 # alias nel router (index.html, blocco ROUTES) per restare pagine reali crawlabili.
-# Qui stanno solo: consolidamento ricambi, testimonianze e vera spazzatura.
+# Qui stanno solo: consolidamento ricambi, testimonianze, vera spazzatura e il fallback.
+# L'ORDINE CONTA: Netlify applica la prima regola che corrisponde.
+# Il fallback /* deve restare SEMPRE l'ultima riga.
 
 # --- RICAMBI: consolidamento su /spareparts ---
 /vuoto-c1qos            /spareparts   301
@@ -26,3 +28,13 @@
 /prova7                 /   301
 /blog                   /   301
 /shop                   /   301
+
+# --- FALLBACK SPA — LA RIGA PIU' IMPORTANTE DEL FILE ---
+# Equivalente Netlify di "not_found_handling: single-page-application" (wrangler.jsonc,
+# che su Netlify NON viene letto). Senza questa riga TUTTI i path reali della sitemap
+# (/spareparts, /cookers-with-oven, /horizon, /about, /contact...) danno 404.
+# Il router in index.html legge location.pathname e apre la sezione giusta.
+# Status 200 SENZA "!" (no force): i file veri (sitemap.xml, robots.txt, llms.txt,
+# immagini) continuano a essere serviti normalmente e non vengono oscurati.
+# DEVE RESTARE L'ULTIMA RIGA DEL FILE.
+/*                      /index.html   200
