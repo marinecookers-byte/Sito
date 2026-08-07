@@ -228,18 +228,18 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .nbtn:hover .narr::after,.nbtn.open .narr::after{border-color:var(--go)}
 .nbtn.open .nplus{transform:rotate(45deg);color:var(--go)}
 .ndrop{
-  display:grid;
-  grid-template-rows:0fr;
+  max-height:0;
+  overflow:hidden;
   opacity:0;
-  transition:grid-template-rows .55s cubic-bezier(.4,0,.2,1),opacity .35s ease;
+  transition:max-height .85s cubic-bezier(.33,1,.68,1),opacity .55s ease;
+  will-change:max-height;
 }
 .ndrop-inner{overflow:hidden}
 .ndrop.open{
-  grid-template-rows:1fr;
   opacity:1;
-  transition:grid-template-rows .6s cubic-bezier(.4,0,.2,1),opacity .4s ease .08s;
+  transition:max-height .9s cubic-bezier(.33,1,.68,1),opacity .5s ease;
 }
-.ncat{display:block;padding:12px 0 12px 36px;font-size:11px;font-weight:300;letter-spacing:.16em;text-transform:uppercase;color:rgba(248,246,241,.35);text-decoration:none;border-top:1px solid rgba(255,255,255,.04);cursor:pointer;font-family:"Outfit",sans-serif;opacity:0;transform:translateX(10px);transition:color .4s,padding-left .4s,opacity .4s ease,transform .4s ease}
+.ncat{display:block;padding:12px 0 12px 36px;font-size:11px;font-weight:300;letter-spacing:.16em;text-transform:uppercase;color:rgba(248,246,241,.35);text-decoration:none;border-top:1px solid rgba(255,255,255,.04);cursor:pointer;font-family:"Outfit",sans-serif;opacity:0;transform:translateX(14px);transition:color .45s ease,padding-left .45s ease,opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1)}
 .ndrop.open .ncat{opacity:1;transform:translateX(0)}
 .ndrop.open .ncat:nth-child(1){transition-delay:.1s}
 .ndrop.open .ncat:nth-child(2){transition-delay:.15s}
@@ -2134,6 +2134,42 @@ header.hide{transform:translateY(-100%);}
 }
 .pgrid::-webkit-scrollbar { display: none; }
 
+/* Frecce dorate minimali "scorri in orizzontale" — una a sinistra, una a
+   destra. Design essenziale: solo la punta di freccia sottile in oro, senza
+   cerchi vistosi. Danno una piccola spinta al click; ognuna svanisce quando
+   in quella direzione non c'è più nulla da scorrere (classe .at-end via JS).
+   NON toccano lo scroll fluido con mouse/drag. */
+.pgrid-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:40px; height:40px;
+  border:none;
+  background:transparent;
+  color:rgba(184,150,90,.75);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  z-index:6;
+  padding:0;
+  opacity:.85;
+  transition:opacity .45s ease, color .3s ease, transform .3s ease;
+}
+.pgrid-arrow svg{ width:26px; height:26px; display:block; }
+.pgrid-arrow-prev{ left:10px; }
+.pgrid-arrow-next{ right:10px; }
+@media(hover:hover){
+  .pgrid-arrow:hover{ color:#b8965a; opacity:1; }
+  .pgrid-arrow-prev:hover{ transform:translateY(-50%) translateX(-2px); }
+  .pgrid-arrow-next:hover{ transform:translateY(-50%) translateX(2px); }
+  /* Sopra le frecce torna il cursore normale: sono controlli cliccabili. */
+  .pgallery-wrap .pgrid-arrow{ cursor:pointer !important; }
+}
+/* Quando non c'è nulla da scorrere in quella direzione: svanisce e non clicca. */
+.pgrid-arrow.at-end{
+  opacity:0;
+  pointer-events:none;
+}
+
 .pcard {
   position: relative;
   cursor: pointer;
@@ -2250,6 +2286,7 @@ header.hide{transform:translateY(-100%);}
     cursor: auto;
   }
   #pg-cursor { display: none !important; }
+  .pgrid-arrow { display: none !important; }
 }
 
 
@@ -2287,6 +2324,230 @@ header.hide{transform:translateY(-100%);}
     font-size: 8px;
     letter-spacing: .16em;
   }
+  .bte{ margin-top:26px; font-size:9px; letter-spacing:.16em; }
+}
+
+
+/* ═══ ENERGY EFFICIENCY · A FLAG (pop-up modale scrollabile) ═══
+   Non è una pagina full-screen né una voce di menu: è un capitolo cliccabile
+   dalla hero che apre un modale centrato, con backdrop scuro e pannello
+   scrollabile. Stile luxury marine: nero #0a0a0a, dorato #b8965a. */
+#effpage{
+  position:fixed;
+  inset:0;
+  z-index:500;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px 20px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  background:rgba(5,5,5,.72);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .45s ease;
+}
+#effpage.show{ opacity:1; pointer-events:all; }
+.ef-modal{
+  position:relative;
+  width:min(1040px,100%);
+  max-height:90vh;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  background:#0a0a0a;
+  border:1px solid rgba(184,150,90,.22);
+  box-shadow:0 40px 120px rgba(0,0,0,.6);
+  transform:translateY(24px) scale(.985);
+  transition:transform .45s cubic-bezier(.16,1,.3,1);
+}
+#effpage.show .ef-modal{ transform:translateY(0) scale(1); }
+.ef-modal::-webkit-scrollbar{ width:8px; }
+.ef-modal::-webkit-scrollbar-thumb{ background:rgba(184,150,90,.25); border-radius:4px; }
+
+/* Pulsante di chiusura (X) · fisso rispetto al viewport, sopra il modale */
+.ef-x{
+  position:fixed;
+  top:calc(50% - 45vh + 14px);
+  right:max(24px,calc(50% - 520px + 14px));
+  display:flex; align-items:center; justify-content:center;
+  width:46px; height:46px;
+  background:rgba(10,10,10,.9);
+  border:1px solid rgba(184,150,90,.3);
+  border-radius:50%;
+  cursor:pointer;
+  color:rgba(248,246,241,.75);
+  z-index:6;
+  transition:color .3s ease, background .3s ease, border-color .3s ease;
+}
+.ef-x:hover{ color:#0a0a0a; background:#b8965a; border-color:#b8965a; }
+.ef-x svg{ width:18px; height:18px; }
+
+/* HERO del modale */
+.ef-hero{
+  position:relative;
+  padding:80px 60px 60px;
+  overflow:hidden;
+  border-bottom:1px solid rgba(184,150,90,.12);
+}
+.ef-hero-media{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  z-index:0;
+  filter:grayscale(.5) brightness(.5);
+}
+.ef-hero-ovl{
+  position:absolute; inset:0; z-index:1;
+  background:linear-gradient(to bottom,rgba(10,10,10,.6) 0%,rgba(10,10,10,.4) 45%,rgba(10,10,10,.96) 100%);
+}
+.ef-hero-inner{ position:relative; z-index:2; }
+.ef-hero-tag{
+  font-family:"Outfit",sans-serif;
+  font-size:10px; font-weight:300;
+  letter-spacing:.5em; text-transform:uppercase;
+  color:rgba(184,150,90,.7);
+  margin-bottom:22px; display:block;
+}
+.ef-hero-title{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(34px,4.4vw,64px);
+  font-weight:300; color:#f8f6f1;
+  line-height:.98; margin:0 0 24px;
+}
+.ef-hero-title em{ font-style:italic; color:rgba(184,150,90,.9); }
+.ef-hero-lead{
+  font-family:"Outfit",sans-serif;
+  font-size:clamp(14px,1.2vw,17px);
+  font-weight:300; color:rgba(248,246,241,.7);
+  line-height:1.85; max-width:640px;
+}
+
+/* CORPO · capitoli editoriali */
+.ef-body{ padding:70px 60px 20px; }
+.ef-chapter{
+  display:grid;
+  grid-template-columns:220px 1fr;
+  gap:50px;
+  padding:56px 0;
+  border-bottom:1px solid rgba(184,150,90,.1);
+}
+.ef-chapter:first-child{ padding-top:0; }
+.ef-ch-num{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(28px,2.6vw,40px);
+  font-weight:300; font-style:italic;
+  color:rgba(184,150,90,.55);
+  line-height:1; display:block; margin-bottom:16px;
+}
+.ef-ch-label{
+  font-family:"Outfit",sans-serif;
+  font-size:9px; font-weight:300;
+  letter-spacing:.4em; text-transform:uppercase;
+  color:rgba(184,150,90,.55);
+  display:block;
+}
+.ef-ch-title{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(24px,2.6vw,36px);
+  font-weight:300; color:#f8f6f1;
+  line-height:1.08; margin:0 0 20px;
+}
+.ef-ch-title em{ font-style:italic; color:rgba(184,150,90,.85); }
+.ef-ch-body{
+  font-family:"Outfit",sans-serif;
+  font-size:clamp(14px,1.1vw,16px);
+  font-weight:300; color:rgba(248,246,241,.6);
+  line-height:1.95; margin:0 0 18px;
+}
+.ef-ch-body:last-child{ margin-bottom:0; }
+.ef-ch-body strong{ color:rgba(248,246,241,.9); font-weight:400; }
+.ef-list{ list-style:none; margin:20px 0 0; padding:0; }
+.ef-list li{
+  position:relative;
+  font-family:"Outfit",sans-serif;
+  font-size:clamp(14px,1.1vw,16px);
+  font-weight:300; color:rgba(248,246,241,.6);
+  line-height:1.8; padding:0 0 16px 26px;
+}
+.ef-list li::before{
+  content:""; position:absolute; left:0; top:11px;
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(184,150,90,.7);
+}
+.ef-list li strong{ color:rgba(248,246,241,.9); font-weight:400; }
+
+/* PRIMATI · riga numeri chiave */
+.ef-milestones{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:34px;
+  margin:50px 0 0; padding:60px;
+  border-top:1px solid rgba(184,150,90,.14);
+}
+.ef-ms{ text-align:center; }
+.ef-ms-num{
+  display:block;
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(34px,4vw,56px);
+  font-weight:300; font-style:italic;
+  color:rgba(184,150,90,.9);
+  line-height:1; margin-bottom:12px;
+}
+.ef-ms-label{
+  display:block;
+  font-family:"Outfit",sans-serif;
+  font-size:11px; font-weight:300;
+  letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(248,246,241,.5); line-height:1.5;
+}
+
+/* CHIUSURA · citazione + CTA */
+.ef-close{ padding:70px 60px 90px; text-align:center; }
+.ef-quote{
+  font-family:"Cormorant Garamond",serif;
+  font-size:clamp(22px,2.6vw,36px);
+  font-weight:300; font-style:italic;
+  color:rgba(248,246,241,.72);
+  line-height:1.4; margin:0 0 44px;
+  max-width:760px; margin-left:auto; margin-right:auto;
+}
+.ef-cta{
+  display:inline-flex; align-items:center; gap:12px;
+  font-family:"Outfit",sans-serif;
+  font-size:12px; font-weight:400;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:#b8965a; text-decoration:none;
+  padding:16px 34px;
+  border:1px solid rgba(184,150,90,.5);
+  transition:background .3s ease,color .3s ease;
+  cursor:pointer;
+}
+.ef-cta:hover{ background:#b8965a; color:#0a0a0a; }
+
+/* Il pulsante nella hero che apre il modale */
+.bte{
+  display:inline-flex; align-items:center; gap:10px;
+  margin-top:34px;
+  opacity:0; animation:fiu 1s ease 1.1s forwards;
+  font-family:"Outfit",sans-serif;
+  font-size:12px; font-weight:400;
+  letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(248,246,241,.85); text-decoration:none;
+  cursor:pointer;
+  transition:color .3s ease;
+}
+.bte svg{ width:16px; height:16px; color:rgba(184,150,90,.9); }
+.bte:hover{ color:#b8965a; }
+
+@media(max-width:768px){
+  #effpage{ padding:0; }
+  .ef-modal{ max-height:100vh; height:100vh; width:100%; border:none; }
+  .ef-x{ top:16px; right:16px; }
+  .ef-hero{ padding:70px 24px 48px; }
+  .ef-body{ padding:48px 24px 12px; }
+  .ef-chapter{ grid-template-columns:1fr; gap:18px; padding:40px 0; }
+  .ef-milestones{ grid-template-columns:1fr; gap:30px; padding:44px 24px; }
+  .ef-close{ padding:52px 24px 72px; }
 }
 
 
@@ -3652,8 +3913,8 @@ header.hide{transform:translateY(-100%);}
 .ncoll-head{cursor:pointer;position:relative}
 .ncoll-plus{position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:15px;font-weight:300;color:rgba(184,150,90,.6);transition:transform .4s ease}
 .ncoll.open .ncoll-plus{transform:translateY(-50%) rotate(45deg)}
-.ncoll-body{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.4,0,.2,1)}
-.ncoll.open .ncoll-body{max-height:640px}
+.ncoll-body{max-height:0;overflow:hidden;transition:max-height .95s cubic-bezier(.22,1,.36,1)}
+.ncoll.open .ncoll-body{max-height:800px}
 .ncat-sub-link:hover .ncat-sub-name{color:var(--gl)}
 .ncat-lock{position:absolute;right:2px;top:17px;color:rgba(184,150,90,.55);transition:color .35s}
 .ncat-sub-link:hover .ncat-lock{color:var(--gl)}
@@ -4338,6 +4599,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <a href="#" class="btm" onclick="openMatrix();return false;" data-i18n="matrix_btn">Product Overview</a>
       <a href="#" class="btg" onclick="openAbout();return false;"><span data-i18n="hero_btn_story">Our Story</span><svg viewBox="0 0 16 16" fill="none"><path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
+    <a href="#" class="bte" onclick="openEff();return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 13.5H11L10 22L18.5 10.5H12L13 2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span data-i18n="eff_btn">Energy Efficiency, a flag of ours</span></a>
   </div>
   <div class="hsb">
     <div class="hsi"><span class="hsn">50+</span><span class="hsl" data-i18n="stat_craft">Years of craft</span></div>
@@ -4360,7 +4622,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv0">"We installed a FORMA induction cooker on our 52-foot sloop and it has been flawless for three Atlantic crossings. The gimbal system is exceptionally smooth and the oven actually bakes bread properly at sea."</p>
       <div class="rv-author">
-        <span class="rv-name">James R. Whitfield</span>
+        <span class="rv-name">James W.</span>
         <span class="rv-detail">S/Y Albatross · Newport, USA</span>
       </div>
     </div>
@@ -4368,7 +4630,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv1">"After 20 years with a gas cooker from another brand, switching to the Techimpex radiant electric was the best decision we made for our boat refit. Build quality is outstanding · unmistakably Italian."</p>
       <div class="rv-author">
-        <span class="rv-name">Henrik Brandt</span>
+        <span class="rv-name">Henrik B.</span>
         <span class="rv-detail">M/Y Nordlicht · Hamburg, Germany</span>
       </div>
     </div>
@@ -4376,7 +4638,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv2">"The spare parts service is remarkable. Our cooker is 18 years old and we could still get every component we needed. No other manufacturer in the market offers this level of support."</p>
       <div class="rv-author">
-        <span class="rv-name">Sophie Marchand</span>
+        <span class="rv-name">Sophie M.</span>
         <span class="rv-detail">S/Y Belle Étoile · La Rochelle, France</span>
       </div>
     </div>
@@ -4384,7 +4646,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv3">"We specified Techimpex for all six yachts in our latest fleet build. The induction models are perfect for charter · fast, safe, and the mirror-polished interior wipes clean in seconds even after a passage."</p>
       <div class="rv-author">
-        <span class="rv-name">Constantinos Papadimitriou</span>
+        <span class="rv-name">Constantinos P.</span>
         <span class="rv-detail">Aegean Charter Co. · Athens, Greece</span>
       </div>
     </div>
@@ -4392,7 +4654,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv4">"The built-in gas barbecue is simply brilliant. We use it almost every anchorage in the Med. Installation was straightforward and the gimballed mount means it stays level even on a beam reach."</p>
       <div class="rv-author">
-        <span class="rv-name">Marco Ferrini</span>
+        <span class="rv-name">Marco F.</span>
         <span class="rv-detail">S/Y Tramontana · Genova, Italia</span>
       </div>
     </div>
@@ -4400,7 +4662,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv5">"As a professional delivery skipper I have cooked on dozens of boats. The Techimpex oven is the only one I have encountered that genuinely works properly at sea. Temperature holds, the door locks, and it doesn't smell of gas."</p>
       <div class="rv-author">
-        <span class="rv-name">Claire O'Sullivan</span>
+        <span class="rv-name">Claire O.</span>
         <span class="rv-detail">Ocean Deliveries · Cork, Ireland</span>
       </div>
     </div>
@@ -4408,7 +4670,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv6">"Our 80-foot ketch needed a custom solution with three hob zones and a double oven. The Techimpex team designed exactly what we needed. The result is a professional-grade galley that performs as well offshore as any shoreside kitchen."</p>
       <div class="rv-author">
-        <span class="rv-name">Lars-Erik Svensson</span>
+        <span class="rv-name">Lars-Erik S.</span>
         <span class="rv-detail">S/Y Fjord Queen · Gothenburg, Sweden</span>
       </div>
     </div>
@@ -4416,7 +4678,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv7">"The induction hob we ordered for our motor yacht is exceptionally powerful and heats up almost instantly. We crossed the Pacific with it and had zero issues. Customer service in Italy was always responsive and helpful."</p>
       <div class="rv-author">
-        <span class="rv-name">David Chen</span>
+        <span class="rv-name">David C.</span>
         <span class="rv-detail">M/Y Pacific Star · Auckland, New Zealand</span>
       </div>
     </div>
@@ -4424,7 +4686,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv8">"We're on our second Techimpex gas cooker. The first one served us for 22 years and we only replaced it during a full refit. We didn't even consider any other brand · the quality and longevity speak for themselves."</p>
       <div class="rv-author">
-        <span class="rv-name">Eduardo & Pilar Vargas</span>
+        <span class="rv-name">Eduardo & Pilar V.</span>
         <span class="rv-detail">S/Y Brisa del Mar · Palma de Mallorca, Spain</span>
       </div>
     </div>
@@ -4432,7 +4694,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv9">"The combination of the radiant electric cooktop and the gimballed oven transformed our liveaboard experience. We sail the Caribbean full time and entertain often · this galley handles everything from a quick pasta to a full dinner party."</p>
       <div class="rv-author">
-        <span class="rv-name">Thomas & Amelia Worthington</span>
+        <span class="rv-name">Thomas & Amelia W.</span>
         <span class="rv-detail">S/Y Blue Horizon · Antigua, Caribbean</span>
       </div>
     </div>
@@ -4684,6 +4946,118 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     </div>
   </div>
 </div><!-- /catpage -->
+
+
+<!-- ENERGY EFFICIENCY · A FLAG (pagina dedicata) -->
+<div id="effpage" onclick="if(event.target===this)closeEff()">
+ <div class="ef-modal">
+  <button class="ef-x" onclick="closeEff()" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+  </button>
+
+  <div class="ef-hero">
+    <img class="ef-hero-media" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785566807/FOTO_SCENA_VENEZIA_pcg91y.jpg" alt="" loading="lazy" decoding="async">
+    <div class="ef-hero-ovl"></div>
+    <div class="ef-hero-inner">
+      <span class="ef-hero-tag" data-i18n="eff_hero_tag">Off-grid Cooking · Research & Development</span>
+      <h1 class="ef-hero-title" data-i18n-html="eff_hero_title">Energy efficiency<br>is our <em>flag</em></h1>
+      <p class="ef-hero-lead" data-i18n="eff_hero_lead">Whether at sea or on expedition, a galley demands dedicated engineering that eliminates energy stress and guarantees constant performance and safety. Our appliances are designed to redefine the standards of the sector — built around absolute efficiency and structural excellence.</p>
+    </div>
+  </div>
+
+  <div class="ef-body">
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">I</span>
+        <span class="ef-ch-label" data-i18n="eff_c1_label">Build & Hygiene</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="eff_c1_title">Steel-grade robustness, impeccable hygiene</h2>
+        <p class="ef-ch-body" data-i18n="eff_c1_b1">The first pillar of a true off-grid professional galley is solidity. Our appliances are built with a structural robustness comparable to a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.</p>
+        <p class="ef-ch-body" data-i18n="eff_c1_b2">This strength is paired with the highest standard of hygiene: for the oven muffles we use mirror-polished stainless steel. This finish makes surfaces exceptionally quick and easy to clean, while offering natural antibacterial properties that prevent dirt and microorganisms from settling.</p>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">II</span>
+        <span class="ef-ch-label" data-i18n="eff_c2_label">Thermal Insulation</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n-html="eff_c2_title">Advanced insulation, an <em>efficiency flag</em></h2>
+        <p class="ef-ch-body" data-i18n="eff_c2_b1">Energy efficiency is our true flag. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the stability of rock wool to special sandwich structures built with the most innovative and technologically advanced materials available on the global market.</p>
+        <p class="ef-ch-body" data-i18n="eff_c2_b2">The result keeps thermal dispersion to a minimum, retains heat optimally and delivers a drastic energy saving that relieves the onboard batteries from continuous recharge cycles.</p>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">III</span>
+        <span class="ef-ch-label" data-i18n="eff_c3_label">Gas & Electric</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="eff_c3_title">Professional performance, at the top</h2>
+        <p class="ef-ch-body" data-i18n="eff_c3_b1">We don't just contain consumption — we maximise culinary output to achieve the gastronomic results that made Italian cooking famous worldwide.</p>
+        <ul class="ef-list">
+          <li data-i18n-html="eff_c3_l1"><strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.</li>
+          <li data-i18n-html="eff_c3_l2"><strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.</li>
+          <li data-i18n-html="eff_c3_l3"><strong>Induction first (2015).</strong> In 2015 we were the very first to develop a line of cookers with tilting induction hobs for sailing and motor yachts.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">IV</span>
+        <span class="ef-ch-label" data-i18n="eff_c4_label">Marine Induction</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="eff_c4_title">Marine induction is not home induction</h2>
+        <p class="ef-ch-body" data-i18n="eff_c4_b1">Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions — available in custom variants too.</p>
+        <ul class="ef-list">
+          <li data-i18n-html="eff_c4_l1"><strong>Structural resistance.</strong> Electrical components engineered specifically to withstand constant vibration and mechanical shock.</li>
+          <li data-i18n-html="eff_c4_l2"><strong>Intelligent generator management.</strong> Powerful inductors and bridge systems paired with electronic configurations that regulate and modulate power fluidly, drastically reducing stress on inverters and generators and preventing the sudden trips of onboard safety systems.</li>
+          <li data-i18n-html="eff_c4_l3"><strong>Extreme optimisation (the 1 kW limit).</strong> Our R&D division reached an extraordinary milestone, creating optimised models capable of running an entire hob within an absolute limit of just 1 kW.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">V</span>
+        <span class="ef-ch-label" data-i18n="eff_c5_label">The Italian Method</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n-html="eff_c5_title">The Italian art of <em>intelligent cooking</em></h2>
+        <p class="ef-ch-body" data-i18n="eff_c5_b1">True energy efficiency is not limited to electronics — it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.</p>
+        <p class="ef-ch-body" data-i18n="eff_c5_b2">We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, our research reached as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ef-milestones">
+    <div class="ef-ms">
+      <span class="ef-ms-num">1<span style="font-size:.5em">st</span></span>
+      <span class="ef-ms-label" data-i18n="eff_ms1">First in the world with a complete electric marine range</span>
+    </div>
+    <div class="ef-ms">
+      <span class="ef-ms-num">2015</span>
+      <span class="ef-ms-label" data-i18n="eff_ms2">First tilting induction hobs for yachts</span>
+    </div>
+    <div class="ef-ms">
+      <span class="ef-ms-num">1 kW</span>
+      <span class="ef-ms-label" data-i18n="eff_ms3">An entire hob within one kilowatt</span>
+    </div>
+  </div>
+
+  <div class="ef-close">
+    <p class="ef-quote" data-i18n="eff_quote">A well-sized electrical system is an excellent starting point. Relying on those who design instruments that optimise energy, resist every stress and elevate the cooking method — that is the choice of professionals.</p>
+    <a class="ef-cta" onclick="closeEff();openContact();" data-i18n="eff_cta">Talk to our engineers</a>
+  </div>
+ </div><!-- /ef-modal -->
+</div><!-- /effpage -->
 
 
 <!-- CONTACT PAGE -->
@@ -4946,6 +5320,16 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   <div class="cpbd">
     <div class="pgallery-wrap">
       <div class="pgrid" id="pgrid"></div>
+      <!-- Indicatori di scorrimento orizzontale: due frecce dorate minimali
+           (sinistra + destra). Puramente un invito/spinta: NON alterano lo
+           scroll fluido con mouse/drag (che resta identico). Ognuna sparisce
+           quando non c'è più nulla da scorrere in quella direzione. -->
+      <button type="button" class="pgrid-arrow pgrid-arrow-prev at-end" id="pgrid-arrow-prev" aria-label="Previous" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="pgrid-arrow pgrid-arrow-next" id="pgrid-arrow-next" aria-label="Next" tabindex="-1">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
     <div class="cp-cat-divider" id="cp-cat-divider"></div>
   </div>
@@ -5044,13 +5428,48 @@ function cm(){
 }
 function tDrop(){
   dO=!dO;
-  DR.classList.toggle('open',dO);
   BC.classList.toggle('open',dO);
+  if(!DR){ return; }
+  if(dO){
+    // Apertura: misuro l'altezza reale del contenuto e la uso come target,
+    // così la transizione è calibrata (niente "corsa a vuoto" = niente scatto).
+    DR.classList.add('open');
+    DR.style.maxHeight = DR.scrollHeight + 'px';
+    // Le voci interne crescono con lo stagger: ricalibro il target finché
+    // l'apertura è in corso, poi sblocco a 'none' per contenuti fluidi/responsive.
+    var _grow = function(){
+      if(!dO) return;
+      DR.style.maxHeight = DR.scrollHeight + 'px';
+    };
+    setTimeout(_grow, 120);
+    setTimeout(_grow, 300);
+    var _done = function(e){
+      if(e.propertyName!=='max-height') return;
+      DR.removeEventListener('transitionend', _done);
+      if(dO){ DR.style.maxHeight = 'none'; } // aperto: nessun limite
+    };
+    DR.addEventListener('transitionend', _done);
+  } else {
+    // Chiusura: riparto dall'altezza attuale (da 'none' a px) e vado a 0.
+    DR.style.maxHeight = DR.scrollHeight + 'px';
+    void DR.offsetHeight; // forza reflow così il browser registra il valore
+    requestAnimationFrame(function(){
+      DR.classList.remove('open');
+      DR.style.maxHeight = '0px';
+    });
+  }
 }
 function cDrop(){
   dO=false;
-  if(DR)DR.classList.remove('open');
   if(BC)BC.classList.remove('open');
+  if(DR){
+    DR.style.maxHeight = DR.scrollHeight + 'px';
+    void DR.offsetHeight;
+    requestAnimationFrame(function(){
+      DR.classList.remove('open');
+      DR.style.maxHeight = '0px';
+    });
+  }
 }
 function toggleColl(which){
   var el=document.getElementById('ncoll-'+which); if(!el)return;
@@ -5060,6 +5479,8 @@ function toggleColl(which){
 
 function goHome(){
   var hdr=document.getElementById('hdr');if(hdr)hdr.classList.remove('dark');
+  var ef=document.getElementById('effpage');
+  if(ef){ef.classList.remove('show');}
   var ab=document.getElementById('aboutpage');
   if(ab){ab.classList.remove('show');}
   var cat=document.getElementById('catpage');
@@ -6049,7 +6470,47 @@ function openCat(name,models){
   document.body.style.overflow='hidden';
   requestAnimationFrame(function(){cpEl.classList.add('show');});
   document.body.classList.add('page-open');
+  // Attiva l'indicatore "scorri in orizzontale" per questa galleria appena
+  // popolata (aspetta un frame per avere le larghezze reali). Non altera lo
+  // scroll: aggiunge solo la freccia dorata e la nasconde a fine corsa.
+  if(typeof window.__initPgridHint==='function'){
+    requestAnimationFrame(function(){ window.__initPgridHint(); });
+  }
 }
+
+// Indicatori di scorrimento della galleria categoria (frecce dorate minimali,
+// sinistra + destra).
+// - Un click dà una piccola SPINTA (scroll morbido nativo) in quella direzione.
+// - Ogni freccia svanisce quando in quella direzione non c'è più da scorrere.
+// - Puramente additivo: lo scroll fluido con mouse/drag (lerp/velocity) resta
+//   identico, qui non viene toccato.
+window.__initPgridHint=function(){
+  var g=document.getElementById('pgrid');
+  var prev=document.getElementById('pgrid-arrow-prev');
+  var next=document.getElementById('pgrid-arrow-next');
+  if(!g||!prev||!next)return;
+  function refresh(){
+    var max=g.scrollWidth-g.clientWidth;
+    var noScroll=(max<=8);
+    // Sinistra: nascosta se siamo (quasi) all'inizio o non c'è overflow.
+    prev.classList.toggle('at-end', noScroll || g.scrollLeft<=8);
+    // Destra: nascosta se siamo (quasi) in fondo o non c'è overflow.
+    next.classList.toggle('at-end', noScroll || g.scrollLeft>=max-8);
+  }
+  function push(dir){
+    var step=Math.max(g.clientWidth*0.8, 320);
+    try{ g.scrollBy({left:dir*step, behavior:'smooth'}); }
+    catch(e){ g.scrollLeft+=dir*step; }
+  }
+  // Evita doppie registrazioni se openCat viene richiamata più volte.
+  if(g.__hintBound){ refresh(); return; }
+  g.__hintBound=true;
+  g.addEventListener('scroll', refresh, {passive:true});
+  window.addEventListener('resize', refresh);
+  prev.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); push(-1); });
+  next.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); push(1); });
+  refresh();
+};
 
 function closeCat(){
   var hdr=document.getElementById('hdr');if(hdr)hdr.classList.remove('dark');
@@ -6086,6 +6547,24 @@ function ppBack(){
 function goProd(m){
   var pp=document.getElementById('prodpage');
   if(!pp)return;
+  // FIX HERO: alcuni punti d'ingresso (ricerca con la lente, doppio-click sul
+  // carosello) chiamano goProd senza impostare window.__prodBackCat. In quel
+  // caso restava la categoria dell'apertura PRECEDENTE -> hero/etichetta di un
+  // altro prodotto ("hero attaccata che non c'entra"). Qui verifichiamo che
+  // __prodBackCat contenga davvero il modello che stiamo aprendo; se no, lo
+  // ricostruiamo dalla vera categoria del modello (window.CATS). Centralizzato:
+  // protegge ogni punto d'ingresso, presente e futuro.
+  (function(){
+    var bc=window.__prodBackCat;
+    if(bc && bc.models && bc.models.indexOf(m)!==-1) return; // già corretto
+    var cats=window.CATS||[];
+    for(var i=0;i<cats.length;i++){
+      if(cats[i].models && cats[i].models.indexOf(m)!==-1){
+        window.__prodBackCat={ name:cats[i].name, models:cats[i].models.slice() };
+        return;
+      }
+    }
+  })();
   // Chiudi tutte le altre pagine
   var hdr=document.getElementById('hdr');
   if(hdr){hdr.classList.add('dark');hdr.classList.remove('hide');}
@@ -7169,6 +7648,8 @@ document.addEventListener('keydown',function(e){
   if(_mx&&_mx.classList.contains('show')){if(window.closeMatrix)window.closeMatrix();return;}
   var _sp=document.getElementById('sparepage');
   if(_sp&&_sp.classList.contains('show')){closeSpare();return;}
+  var _ef=document.getElementById('effpage');
+  if(_ef&&_ef.classList.contains('show')){closeEff();return;}
   var _ab=document.getElementById('aboutpage');
   if(_ab&&_ab.classList.contains('show')){goHome();return;}
   var _ca=document.getElementById('catpage');
@@ -8100,6 +8581,27 @@ function closeAbout(){
   document.body.classList.remove('page-open');
 }
 
+/* ═══ ENERGY EFFICIENCY · pop-up modale scrollabile ═══
+   Aperto dal pulsante nella hero. Overlay centrato che si sovrappone: non
+   chiude né sostituisce le altre pagine. Blocca lo scroll di fondo. */
+function openEff(){
+  var ef=document.getElementById('effpage');
+  if(!ef) return;
+  if(typeof cm==='function'){ try{ cm(); }catch(e){} } // chiude il menu se aperto
+  var modal=ef.querySelector('.ef-modal'); if(modal) modal.scrollTop=0;
+  document.body.style.overflow='hidden';
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){ ef.classList.add('show'); if(window.__efScrollReset) window.__efScrollReset(); });
+  });
+}
+function closeEff(){
+  var ef=document.getElementById('effpage');
+  if(!ef) return;
+  ef.classList.remove('show');
+  if(!document.body.classList.contains('page-open')){ document.body.style.overflow=''; }
+}
+window.openEff=openEff; window.closeEff=closeEff;
+
 
 /* ══════════════════════════════════════════════════════════
    ABOUT US · STICKY STACK PARALLAX ENGINE
@@ -8440,6 +8942,8 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     var sp=document.getElementById('sparepage');
     var mx=document.getElementById('matrixpage');
     var lg=document.getElementById('legalpage');
+    var ef=document.getElementById('effpage');
+    var efModal=ef?ef.querySelector('.ef-modal'):null;
 
     var ppL=pp?divScroller(pp):null;
     var cpL=cp?divScroller(cp):null;
@@ -8450,12 +8954,15 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     var spL=sp?divScroller(sp):null;
     var mxL=mx?divScroller(mx):null;
     var lgL=lg?divScroller(lg):null;
+    var efL=efModal?divScroller(efModal):null;
+    window.__efScrollReset=function(){ efL&&efL.reset(); };
     var homeL=homeScroller();
 
     function isOpen(el,cls){return el&&el.classList.contains(cls);}
     function navOpen(){return np&&np.classList.contains('on');}
 
     document.addEventListener('wheel',function(e){
+      if(isOpen(ef,'show')){ if(efModal&&efModal.contains(e.target)){ efL&&efL.wheel(e); } return; }
       if(navOpen()){ if(np&&np.contains(e.target)){ npL&&npL.wheel(e); } return; }
       if(isOpen(pp,'show')&&pp.contains(e.target)){ppL&&ppL.wheel(e);return;}
       if(isOpen(cp,'show')&&cp.contains(e.target)){cpL&&cpL.wheel(e);return;}
@@ -8488,7 +8995,7 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     // colpo di rotellina riporterebbe indietro la pagina. Questo helper lo
     // risincronizza. Chiamarlo SEMPRE dopo aver scritto a mano scrollTop.
     window.__scrollSync=function(which){
-      var map={pp:ppL,cp:cpL,np:npL,ab:abL,cat:catL,ct:ctL,sp:spL,home:homeL};
+      var map={pp:ppL,cp:cpL,np:npL,ab:abL,cat:catL,ct:ctL,sp:spL,mx:mxL,lg:lgL,home:homeL};
       var s=map[which];
       if(s&&s.reset)s.reset();
     };
@@ -9291,6 +9798,40 @@ var DICT = {
     nav_rv: "The Luxury RV Collections",
     nav_home: "The Residential Collections",
     nav_about: "About Us",
+    nav_efficiency: "Energy Efficiency",
+    eff_btn: "Energy Efficiency, a flag of ours",
+    eff_hero_tag: "Off-grid Cooking · Research & Development",
+    eff_hero_title: "Energy efficiency<br>is our <em>flag</em>",
+    eff_hero_lead: "Whether at sea or on expedition, a galley demands dedicated engineering that eliminates energy stress and guarantees constant performance and safety. Our appliances are designed to redefine the standards of the sector — built around absolute efficiency and structural excellence.",
+    eff_c1_label: "Build & Hygiene",
+    eff_c1_title: "Steel-grade robustness, impeccable hygiene",
+    eff_c1_b1: "The first pillar of a true off-grid professional galley is solidity. Our appliances are built with a structural robustness comparable to a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.",
+    eff_c1_b2: "This strength is paired with the highest standard of hygiene: for the oven muffles we use mirror-polished stainless steel. This finish makes surfaces exceptionally quick and easy to clean, while offering natural antibacterial properties that prevent dirt and microorganisms from settling.",
+    eff_c2_label: "Thermal Insulation",
+    eff_c2_title: "Advanced insulation, an <em>efficiency flag</em>",
+    eff_c2_b1: "Energy efficiency is our true flag. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the stability of rock wool to special sandwich structures built with the most innovative and technologically advanced materials available on the global market.",
+    eff_c2_b2: "The result keeps thermal dispersion to a minimum, retains heat optimally and delivers a drastic energy saving that relieves the onboard batteries from continuous recharge cycles.",
+    eff_c3_label: "Gas & Electric",
+    eff_c3_title: "Professional performance, at the top",
+    eff_c3_b1: "We don't just contain consumption — we maximise culinary output to achieve the gastronomic results that made Italian cooking famous worldwide.",
+    eff_c3_l1: "<strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.",
+    eff_c3_l2: "<strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.",
+    eff_c3_l3: "<strong>Induction first (2015).</strong> In 2015 we were the very first to develop a line of cookers with tilting induction hobs for sailing and motor yachts.",
+    eff_c4_label: "Marine Induction",
+    eff_c4_title: "Marine induction is not home induction",
+    eff_c4_b1: "Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions — available in custom variants too.",
+    eff_c4_l1: "<strong>Structural resistance.</strong> Electrical components engineered specifically to withstand constant vibration and mechanical shock.",
+    eff_c4_l2: "<strong>Intelligent generator management.</strong> Powerful inductors and bridge systems paired with electronic configurations that regulate and modulate power fluidly, drastically reducing stress on inverters and generators and preventing the sudden trips of onboard safety systems.",
+    eff_c4_l3: "<strong>Extreme optimisation (the 1 kW limit).</strong> Our R&D division reached an extraordinary milestone, creating optimised models capable of running an entire hob within an absolute limit of just 1 kW.",
+    eff_c5_label: "The Italian Method",
+    eff_c5_title: "The Italian art of <em>intelligent cooking</em>",
+    eff_c5_b1: "True energy efficiency is not limited to electronics — it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.",
+    eff_c5_b2: "We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, our research reached as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.",
+    eff_ms1: "First in the world with a complete electric marine range",
+    eff_ms2: "First tilting induction hobs for yachts",
+    eff_ms3: "An entire hob within one kilowatt",
+    eff_quote: "A well-sized electrical system is an excellent starting point. Relying on those who design instruments that optimise energy, resist every stress and elevate the cooking method — that is the choice of professionals.",
+    eff_cta: "Talk to our engineers",
     nav_catalogues: "Catalogues",
     nav_contact: "Contact Us",
     nav_spare: "Spare Parts",
@@ -10495,6 +11036,40 @@ var DICT = {
     nav_rv: "Collezioni Overland Luxury",
     nav_home: "Collezioni Residenziali",
     nav_about: "Chi Siamo",
+    nav_efficiency: "Efficienza Energetica",
+    eff_btn: "Efficienza Energetica, una nostra bandiera",
+    eff_hero_tag: "Cucina Off-grid · Ricerca & Sviluppo",
+    eff_hero_title: "L'efficienza energetica<br>è la nostra <em>bandiera</em>",
+    eff_hero_lead: "In mare come in spedizione, la cucina di bordo richiede soluzioni ingegneristiche dedicate capaci di azzerare lo stress energetico e garantire prestazioni e sicurezza costanti. I nostri apparecchi sono progettati per ridefinire gli standard del settore, puntando sull'efficienza assoluta e sull'eccellenza strutturale.",
+    eff_c1_label: "Robustezza & Igiene",
+    eff_c1_title: "Robustezza d'acciaio, igiene impeccabile",
+    eff_c1_b1: "Il primo pilastro di una vera cucina professionale off-grid è la solidità. I nostri apparecchi vantano una robustezza strutturale paragonabile a quella di un carro armato, pensata per sfidare le sollecitazioni più estreme in mare aperto e sui terreni più accidentati.",
+    eff_c1_b2: "Questa forza si unisce alla massima igiene: per le muffole utilizziamo acciaio inox lucidato a specchio. Questa finitura rende le superfici eccezionalmente facili e rapide da pulire e garantisce proprietà antibatteriche naturali, impedendo a sporco e microrganismi di annidarsi.",
+    eff_c2_label: "Isolamento Termico",
+    eff_c2_title: "Isolamento d'avanguardia, una <em>bandiera di efficienza</em>",
+    eff_c2_b1: "L'efficienza energetica è la nostra vera bandiera. Non ci limitiamo a un isolamento standard: per i nostri forni e apparecchi impieghiamo molteplici sistemi di isolamento combinati, dalla stabilità della lana di roccia fino a speciali sistemi a sandwich che utilizzano i materiali più innovativi e tecnologicamente avanzati oggi esistenti sul mercato globale.",
+    eff_c2_b2: "Il risultato garantisce dispersioni termiche ridotte al minimo, un mantenimento ottimale del calore e un risparmio energetico drastico che solleva le batterie di bordo da cicli di ricarica continui.",
+    eff_c3_label: "Gas & Elettrico",
+    eff_c3_title: "Performance professionali, al vertice",
+    eff_c3_b1: "Non ci limitiamo a contenere i consumi: massimizziamo la resa culinaria per ottenere quei risultati gastronomici che hanno reso celebre la cucina italiana nel mondo.",
+    eff_c3_l1: "<strong>Sistemi a gas.</strong> I nostri modelli sono dotati di bruciatori ad alta efficienza realizzati in collaborazione con le primarie aziende della ristorazione professionale.",
+    eff_c3_l2: "<strong>Pionieri dell'elettrico.</strong> Siamo stati la prima azienda al mondo nel settore nautico a realizzare una serie completa di cucine nautiche elettriche.",
+    eff_c3_l3: "<strong>Primato nell'induzione (2015).</strong> Nel 2015 siamo stati i primi in assoluto a sviluppare una linea di cucine con piani a induzione basculanti per imbarcazioni a vela e a motore.",
+    eff_c4_label: "Induzione Nautica",
+    eff_c4_title: "L'induzione nautica non è quella di casa",
+    eff_c4_b1: "Cucinare a induzione in mezzo all'oceano o nel deserto richiede accorgimenti specifici rispetto all'ambiente domestico. Forti di anni di esperienza e leadership, abbiamo stretto una partnership strategica con uno dei principali produttori europei di componenti per l'induzione, sviluppando soluzioni flessibili e uniche, realizzabili anche in varianti custom.",
+    eff_c4_l1: "<strong>Resistenza strutturale.</strong> Componentistica elettrica progettata specificamente per resistere a vibrazioni costanti e shock meccanici.",
+    eff_c4_l2: "<strong>Gestione intelligente dei generatori.</strong> Induttori potenti e sistemi bridge abbinati a configurazioni elettroniche che regolano e parzializzano la potenza in modo fluido, riducendo drasticamente lo stress su inverter e generatori e prevenendo i distacchi improvvisi dei sistemi di sicurezza di bordo.",
+    eff_c4_l3: "<strong>Ottimizzazione estrema (il limite di 1 kW).</strong> La nostra divisione R&S ha raggiunto un traguardo straordinario, creando modelli ottimizzati capaci di far lavorare un intero piano cottura con un limite assoluto di solo 1 kW.",
+    eff_c5_label: "Il Metodo Italiano",
+    eff_c5_title: "L'arte italiana della <em>cottura intelligente</em>",
+    eff_c5_b1: "La vera efficienza energetica non si limita all'elettronica, ma si estende al modo stesso in cui si affronta la preparazione del cibo in contesti sfidanti. Il nostro reparto di Ricerca e Sviluppo ha approfondito la cultura della cucina fuori casa, andando oltre la semplice performance tecnica.",
+    eff_c5_b2: "Abbiamo studiato e messo a punto tutta una serie di tecniche di cottura ottimizzate per la barca e i veicoli off-grid, capaci di ridurre drasticamente l'uso di risorse ed energia durante la preparazione. Essendo italiani, la nostra ricerca si è spinta fino alla selezione e combinazione di particolari materie prime, individuate appositamente per efficientare e accelerare i processi termici. Questo connubio tra metodo gastronomico e ingredienti strategici taglia i consumi reali esaltando la qualità finale.",
+    eff_ms1: "Primi al mondo con una gamma elettrica nautica completa",
+    eff_ms2: "Primi piani a induzione basculanti per yacht",
+    eff_ms3: "Un intero piano cottura entro un kilowatt",
+    eff_quote: "Avere a bordo un impianto elettrico ben dimensionato è un ottimo punto di partenza. Affidarsi a chi progetta strumenti capaci di ottimizzare l'energia, resistere a ogni sollecitazione e valorizzare il metodo di cottura è la scelta dei professionisti.",
+    eff_cta: "Parla con i nostri tecnici",
     nav_catalogues: "Cataloghi",
     nav_contact: "Contattaci",
     nav_spare: "Ricambi",
@@ -11693,6 +12268,40 @@ var DICT = {
     nav_rv: "Collections Overland Luxury",
     nav_home: "Collections Résidentielles",
     nav_about: "À Propos",
+    nav_efficiency: "Efficacité Énergétique",
+    eff_btn: "Efficacité énergétique, un étendard qui est le nôtre",
+    eff_hero_tag: "Cuisine Off-grid · Recherche & Développement",
+    eff_hero_title: "L'efficacité énergétique<br>est notre <em>étendard</em>",
+    eff_hero_lead: "En mer comme en expédition, la cuisine de bord exige des solutions d'ingénierie dédiées, capables d'éliminer le stress énergétique et de garantir des performances et une sécurité constantes. Nos appareils sont conçus pour redéfinir les standards du secteur, autour d'une efficacité absolue et d'une excellence structurelle.",
+    eff_c1_label: "Robustesse & Hygiène",
+    eff_c1_title: "Robustesse d'acier, hygiène impeccable",
+    eff_c1_b1: "Le premier pilier d'une véritable cuisine professionnelle off-grid est la solidité. Nos appareils offrent une robustesse structurelle comparable à celle d'un char, pensée pour affronter les sollicitations les plus extrêmes en haute mer et sur les terrains les plus accidentés.",
+    eff_c1_b2: "Cette force s'allie à la plus grande hygiène : pour les moufles des fours, nous utilisons de l'acier inoxydable poli miroir. Cette finition rend les surfaces exceptionnellement faciles et rapides à nettoyer, tout en offrant des propriétés antibactériennes naturelles qui empêchent la saleté et les micro-organismes de se loger.",
+    eff_c2_label: "Isolation Thermique",
+    eff_c2_title: "Isolation d'avant-garde, un <em>étendard d'efficacité</em>",
+    eff_c2_b1: "L'efficacité énergétique est notre véritable étendard. Nous ne nous limitons pas à une isolation standard : pour nos fours et appareils, nous employons de multiples systèmes d'isolation combinés, de la stabilité de la laine de roche à des structures sandwich spéciales utilisant les matériaux les plus innovants et technologiquement avancés existant aujourd'hui sur le marché mondial.",
+    eff_c2_b2: "Le résultat réduit au minimum les déperditions thermiques, maintient la chaleur de façon optimale et procure une économie d'énergie drastique qui soulage les batteries de bord des cycles de recharge continus.",
+    eff_c3_label: "Gaz & Électrique",
+    eff_c3_title: "Des performances professionnelles, au sommet",
+    eff_c3_b1: "Nous ne nous contentons pas de contenir la consommation : nous maximisons le rendement culinaire pour obtenir ces résultats gastronomiques qui ont rendu la cuisine italienne célèbre dans le monde.",
+    eff_c3_l1: "<strong>Systèmes à gaz.</strong> Nos modèles sont dotés de brûleurs à haute efficacité développés avec les grands noms de la restauration professionnelle.",
+    eff_c3_l2: "<strong>Pionniers de l'électrique.</strong> Nous avons été la première entreprise au monde du secteur nautique à réaliser une gamme complète de cuisinières marines électriques.",
+    eff_c3_l3: "<strong>Première dans l'induction (2015).</strong> En 2015, nous avons été les tout premiers à développer une ligne de cuisinières à plaques à induction basculantes pour voiliers et bateaux à moteur.",
+    eff_c4_label: "Induction Marine",
+    eff_c4_title: "L'induction marine n'est pas celle de la maison",
+    eff_c4_b1: "Cuisiner à l'induction en plein océan ou dans le désert exige des précautions spécifiques par rapport à un environnement domestique. Forts d'années d'expérience et de leadership, nous avons noué un partenariat stratégique avec l'un des principaux fabricants européens de composants d'induction, développant des solutions flexibles et uniques, réalisables aussi en variantes sur mesure.",
+    eff_c4_l1: "<strong>Résistance structurelle.</strong> Des composants électriques conçus spécifiquement pour résister aux vibrations constantes et aux chocs mécaniques.",
+    eff_c4_l2: "<strong>Gestion intelligente des générateurs.</strong> Des inducteurs puissants et des systèmes bridge associés à des configurations électroniques qui régulent et modulent la puissance de façon fluide, réduisant drastiquement le stress sur les onduleurs et les générateurs et évitant les coupures soudaines des systèmes de sécurité de bord.",
+    eff_c4_l3: "<strong>Optimisation extrême (la limite de 1 kW).</strong> Notre division R&D a atteint un jalon extraordinaire, créant des modèles optimisés capables de faire fonctionner une plaque entière dans une limite absolue de seulement 1 kW.",
+    eff_c5_label: "La Méthode Italienne",
+    eff_c5_title: "L'art italien de la <em>cuisson intelligente</em>",
+    eff_c5_b1: "La véritable efficacité énergétique ne se limite pas à l'électronique : elle s'étend à la manière même d'aborder la préparation des aliments dans des contextes exigeants. Notre département Recherche & Développement a approfondi la culture de la cuisine hors du foyer, allant au-delà de la simple performance technique.",
+    eff_c5_b2: "Nous avons étudié et mis au point tout un ensemble de techniques de cuisson optimisées pour le bateau et les véhicules off-grid, capables de réduire drastiquement l'usage des ressources et de l'énergie pendant la préparation. Étant italiens, notre recherche est allée jusqu'à la sélection et la combinaison de matières premières particulières, choisies spécifiquement pour rendre les processus thermiques plus rapides et efficaces. Cette union entre méthode gastronomique et ingrédients stratégiques réduit la consommation réelle tout en rehaussant la qualité finale.",
+    eff_ms1: "Premiers au monde avec une gamme marine électrique complète",
+    eff_ms2: "Premières plaques à induction basculantes pour yachts",
+    eff_ms3: "Une plaque entière en un seul kilowatt",
+    eff_quote: "Disposer à bord d'une installation électrique bien dimensionnée est un excellent point de départ. S'en remettre à ceux qui conçoivent des instruments capables d'optimiser l'énergie, de résister à toute sollicitation et de valoriser la méthode de cuisson, c'est le choix des professionnels.",
+    eff_cta: "Parlez à nos ingénieurs",
     nav_catalogues: "Catalogues",
     nav_contact: "Nous Contacter",
     nav_spare: "Pièces Détachées",
@@ -12891,6 +13500,40 @@ var DICT = {
     nav_rv: "Overland Luxury Kollektionen",
     nav_home: "Residential Kollektionen",
     nav_about: "Über Uns",
+    nav_efficiency: "Energieeffizienz",
+    eff_btn: "Energieeffizienz, eine Fahne von uns",
+    eff_hero_tag: "Off-grid-Küche · Forschung & Entwicklung",
+    eff_hero_title: "Energieeffizienz<br>ist unser <em>Banner</em>",
+    eff_hero_lead: "Ob auf See oder auf Expedition — die Bordküche verlangt eigens entwickelte Ingenieurlösungen, die Energiestress ausschließen und beständige Leistung und Sicherheit gewährleisten. Unsere Geräte sind darauf ausgelegt, die Standards der Branche neu zu definieren, mit Fokus auf absolute Effizienz und strukturelle Exzellenz.",
+    eff_c1_label: "Robustheit & Hygiene",
+    eff_c1_title: "Stahlharte Robustheit, tadellose Hygiene",
+    eff_c1_b1: "Die erste Säule einer echten professionellen Off-grid-Küche ist die Solidität. Unsere Geräte bieten eine strukturelle Robustheit vergleichbar mit einem Panzer, konzipiert für die extremsten Belastungen auf hoher See und in unwegsamstem Gelände.",
+    eff_c1_b2: "Diese Stärke verbindet sich mit höchster Hygiene: Für die Ofenmuffeln verwenden wir spiegelpolierten Edelstahl. Dieses Finish macht die Oberflächen außergewöhnlich schnell und leicht zu reinigen und bietet natürliche antibakterielle Eigenschaften, die verhindern, dass sich Schmutz und Mikroorganismen festsetzen.",
+    eff_c2_label: "Wärmedämmung",
+    eff_c2_title: "Wegweisende Dämmung, ein <em>Effizienz-Banner</em>",
+    eff_c2_b1: "Energieeffizienz ist unser wahres Banner. Wir beschränken uns nicht auf eine Standarddämmung: Für unsere Öfen und Geräte setzen wir mehrere kombinierte Dämmsysteme ein — von der Stabilität der Steinwolle bis zu speziellen Sandwich-Systemen mit den innovativsten und technologisch fortschrittlichsten Materialien, die es heute auf dem Weltmarkt gibt.",
+    eff_c2_b2: "Das Ergebnis hält Wärmeverluste auf ein Minimum, speichert die Wärme optimal und liefert eine drastische Energieeinsparung, die die Bordbatterien von ständigen Ladezyklen entlastet.",
+    eff_c3_label: "Gas & Elektro",
+    eff_c3_title: "Professionelle Leistung, an der Spitze",
+    eff_c3_b1: "Wir begrenzen nicht nur den Verbrauch — wir maximieren die kulinarische Ausbeute, um jene gastronomischen Ergebnisse zu erzielen, die die italienische Küche weltberühmt gemacht haben.",
+    eff_c3_l1: "<strong>Gassysteme.</strong> Unsere Modelle verfügen über Hochleistungsbrenner, die gemeinsam mit führenden Namen der professionellen Gastronomie entwickelt wurden.",
+    eff_c3_l2: "<strong>Elektro-Pioniere.</strong> Wir waren das weltweit erste Unternehmen im Marinesektor, das eine komplette Serie elektrischer Bordküchen realisierte.",
+    eff_c3_l3: "<strong>Erste bei der Induktion (2015).</strong> 2015 waren wir die allerersten, die eine Linie von Kochern mit schwenkbaren Induktionskochfeldern für Segel- und Motoryachten entwickelten.",
+    eff_c4_label: "Marine-Induktion",
+    eff_c4_title: "Marine-Induktion ist nicht die aus dem Haushalt",
+    eff_c4_b1: "Das Kochen mit Induktion mitten im Ozean oder in der Wüste erfordert besondere Vorkehrungen gegenüber dem häuslichen Umfeld. Gestützt auf jahrelange Erfahrung und Führung haben wir eine strategische Partnerschaft mit einem der führenden europäischen Hersteller von Induktionskomponenten geschlossen und flexible, einzigartige Lösungen entwickelt — auch in Sonderanfertigungen.",
+    eff_c4_l1: "<strong>Strukturelle Widerstandsfähigkeit.</strong> Elektrische Komponenten, die speziell dafür ausgelegt sind, ständigen Vibrationen und mechanischen Stößen standzuhalten.",
+    eff_c4_l2: "<strong>Intelligentes Generatormanagement.</strong> Leistungsstarke Induktoren und Bridge-Systeme in Verbindung mit elektronischen Konfigurationen, die die Leistung fließend regeln und modulieren, den Stress auf Wechselrichter und Generatoren drastisch reduzieren und das plötzliche Auslösen der Bordsicherheitssysteme verhindern.",
+    eff_c4_l3: "<strong>Extreme Optimierung (das 1-kW-Limit).</strong> Unsere F&E-Abteilung hat einen außergewöhnlichen Meilenstein erreicht und optimierte Modelle geschaffen, die ein ganzes Kochfeld innerhalb einer absoluten Grenze von nur 1 kW betreiben können.",
+    eff_c5_label: "Die Italienische Methode",
+    eff_c5_title: "Die italienische Kunst des <em>intelligenten Kochens</em>",
+    eff_c5_b1: "Wahre Energieeffizienz beschränkt sich nicht auf die Elektronik, sondern erstreckt sich auf die Art und Weise, wie die Zubereitung von Speisen in anspruchsvollen Kontexten angegangen wird. Unsere Forschungs- und Entwicklungsabteilung hat die Kultur des Kochens außer Haus vertieft und ist über die bloße technische Leistung hinausgegangen.",
+    eff_c5_b2: "Wir haben eine ganze Reihe von Kochtechniken erforscht und verfeinert, die für Boote und Off-grid-Fahrzeuge optimiert sind und den Einsatz von Ressourcen und Energie bei der Zubereitung drastisch senken. Als Italiener reichte unsere Forschung bis zur Auswahl und Kombination bestimmter Rohstoffe, die gezielt ausgewählt wurden, um thermische Prozesse schneller und effizienter zu machen. Diese Verbindung aus gastronomischer Methode und strategischen Zutaten senkt den realen Verbrauch und hebt zugleich die Endqualität.",
+    eff_ms1: "Weltweit Erste mit einer kompletten elektrischen Marine-Reihe",
+    eff_ms2: "Erste schwenkbare Induktionskochfelder für Yachten",
+    eff_ms3: "Ein ganzes Kochfeld innerhalb eines Kilowatts",
+    eff_quote: "Eine gut dimensionierte elektrische Anlage an Bord ist ein hervorragender Ausgangspunkt. Sich auf jene zu verlassen, die Instrumente entwerfen, die Energie optimieren, jeder Belastung standhalten und die Kochmethode aufwerten — das ist die Wahl der Profis.",
+    eff_cta: "Sprechen Sie mit unseren Technikern",
     nav_catalogues: "Kataloge",
     nav_contact: "Kontakt",
     nav_spare: "Ersatzteile",
@@ -14089,6 +14732,40 @@ var DICT = {
     nav_rv: "Colecciones Overland Luxury",
     nav_home: "Colecciones Residenciales",
     nav_about: "Quiénes Somos",
+    nav_efficiency: "Eficiencia Energética",
+    eff_btn: "Eficiencia Energética, una bandera nuestra",
+    eff_hero_tag: "Cocina Off-grid · Investigación y Desarrollo",
+    eff_hero_title: "La eficiencia energética<br>es nuestra <em>bandera</em>",
+    eff_hero_lead: "Tanto en el mar como en expedición, la cocina de a bordo exige soluciones de ingeniería dedicadas, capaces de eliminar el estrés energético y garantizar prestaciones y seguridad constantes. Nuestros aparatos están diseñados para redefinir los estándares del sector, apostando por la eficiencia absoluta y la excelencia estructural.",
+    eff_c1_label: "Robustez e Higiene",
+    eff_c1_title: "Robustez de acero, higiene impecable",
+    eff_c1_b1: "El primer pilar de una verdadera cocina profesional off-grid es la solidez. Nuestros aparatos presentan una robustez estructural comparable a la de un tanque, pensada para afrontar las solicitaciones más extremas en mar abierto y en los terrenos más accidentados.",
+    eff_c1_b2: "Esta fuerza se une a la máxima higiene: para las muflas utilizamos acero inoxidable pulido a espejo. Este acabado hace que las superficies sean excepcionalmente fáciles y rápidas de limpiar, además de ofrecer propiedades antibacterianas naturales que impiden que la suciedad y los microorganismos aniden.",
+    eff_c2_label: "Aislamiento Térmico",
+    eff_c2_title: "Aislamiento de vanguardia, una <em>bandera de eficiencia</em>",
+    eff_c2_b1: "La eficiencia energética es nuestra verdadera bandera. No nos limitamos a un aislamiento estándar: para nuestros hornos y aparatos empleamos múltiples sistemas de aislamiento combinados, desde la estabilidad de la lana de roca hasta especiales sistemas sándwich que utilizan los materiales más innovadores y tecnológicamente avanzados que existen hoy en el mercado global.",
+    eff_c2_b2: "El resultado reduce al mínimo las dispersiones térmicas, mantiene el calor de forma óptima y aporta un ahorro energético drástico que libera a las baterías de a bordo de ciclos de recarga continuos.",
+    eff_c3_label: "Gas y Eléctrico",
+    eff_c3_title: "Prestaciones profesionales, en la cima",
+    eff_c3_b1: "No nos limitamos a contener el consumo: maximizamos el rendimiento culinario para obtener esos resultados gastronómicos que han hecho célebre la cocina italiana en el mundo.",
+    eff_c3_l1: "<strong>Sistemas de gas.</strong> Nuestros modelos cuentan con quemadores de alta eficiencia desarrollados junto a las principales empresas de la restauración profesional.",
+    eff_c3_l2: "<strong>Pioneros de lo eléctrico.</strong> Fuimos la primera empresa del mundo en el sector náutico en realizar una serie completa de cocinas náuticas eléctricas.",
+    eff_c3_l3: "<strong>Primacía en la inducción (2015).</strong> En 2015 fuimos los primeros en absoluto en desarrollar una línea de cocinas con placas de inducción basculantes para embarcaciones de vela y de motor.",
+    eff_c4_label: "Inducción Náutica",
+    eff_c4_title: "La inducción náutica no es la de casa",
+    eff_c4_b1: "Cocinar con inducción en medio del océano o en el desierto exige precauciones específicas respecto al entorno doméstico. Con años de experiencia y liderazgo, hemos establecido una alianza estratégica con uno de los principales fabricantes europeos de componentes para inducción, desarrollando soluciones flexibles y únicas, realizables también en variantes a medida.",
+    eff_c4_l1: "<strong>Resistencia estructural.</strong> Componentes eléctricos diseñados específicamente para resistir vibraciones constantes y choques mecánicos.",
+    eff_c4_l2: "<strong>Gestión inteligente de los generadores.</strong> Inductores potentes y sistemas bridge combinados con configuraciones electrónicas que regulan y modulan la potencia de forma fluida, reduciendo drásticamente el estrés sobre inversores y generadores y previniendo los cortes repentinos de los sistemas de seguridad de a bordo.",
+    eff_c4_l3: "<strong>Optimización extrema (el límite de 1 kW).</strong> Nuestra división de I+D ha alcanzado un hito extraordinario, creando modelos optimizados capaces de hacer funcionar una placa entera dentro de un límite absoluto de solo 1 kW.",
+    eff_c5_label: "El Método Italiano",
+    eff_c5_title: "El arte italiano de la <em>cocción inteligente</em>",
+    eff_c5_b1: "La verdadera eficiencia energética no se limita a la electrónica, sino que se extiende al modo mismo de afrontar la preparación de los alimentos en contextos exigentes. Nuestro departamento de Investigación y Desarrollo ha profundizado en la cultura de la cocina fuera de casa, yendo más allá de la simple prestación técnica.",
+    eff_c5_b2: "Hemos estudiado y puesto a punto toda una serie de técnicas de cocción optimizadas para el barco y los vehículos off-grid, capaces de reducir drásticamente el uso de recursos y energía durante la preparación. Al ser italianos, nuestra investigación ha llegado hasta la selección y combinación de determinadas materias primas, elegidas específicamente para hacer más rápidos y eficientes los procesos térmicos. Esta unión entre método gastronómico e ingredientes estratégicos recorta el consumo real y realza al mismo tiempo la calidad final.",
+    eff_ms1: "Primeros en el mundo con una gama eléctrica náutica completa",
+    eff_ms2: "Primeras placas de inducción basculantes para yates",
+    eff_ms3: "Una placa entera dentro de un kilovatio",
+    eff_quote: "Tener a bordo una instalación eléctrica bien dimensionada es un excelente punto de partida. Confiar en quien diseña instrumentos capaces de optimizar la energía, resistir cualquier solicitación y valorizar el método de cocción es la elección de los profesionales.",
+    eff_cta: "Habla con nuestros técnicos",
     nav_catalogues: "Catálogos",
     nav_contact: "Contacto",
     nav_spare: "Repuestos",
@@ -15730,7 +16407,12 @@ window.setLang = setLang;
   window.legalGo=function(key){
     var map={privacy:'chap-privacy',cookie:'chap-cookie',legalnotice:'chap-legalnotice'};
     var pg=document.getElementById('legalpage'); var el=document.getElementById(map[key]||'');
-    if(pg&&el){ pg.scrollTop=Math.max(0, el.offsetTop-24); }
+    if(pg&&el){
+      pg.scrollTop=Math.max(0, el.offsetTop-24);
+      // Risincronizza lo stato del lerp (divScroller) con la nuova posizione,
+      // altrimenti il primo tocco di rotellina riporterebbe in cima la pagina.
+      if(window.__scrollSync){ requestAnimationFrame(function(){ window.__scrollSync('lg'); }); }
+    }
   };
   window.closeLegal=function(){ var pg=document.getElementById('legalpage'); if(pg)pg.classList.remove('show'); document.body.classList.remove('page-open'); };
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var pg=document.getElementById('legalpage'); if(pg&&pg.classList.contains('show')) window.closeLegal(); } });
