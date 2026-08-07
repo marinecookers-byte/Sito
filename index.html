@@ -543,6 +543,25 @@ body.nav-open #ai-note{opacity:0;pointer-events:none}
     max-width:100%;
     overflow-wrap:break-word;
   }
+  /* ── LEGGIBILITA' PAROLE ORO SOPRA LE HERO (solo mobile) ──
+     Su schermi piccoli il testo dorato dei titoli hero cade su foto/video
+     spesso chiari e risulta poco leggibile. Qui aumento il contrasto: oro
+     pieno e piu' saturo (niente opacita' ridotta ne' l'oro chiaro --gl) piu'
+     un'ombra scura sottile che stacca le lettere dallo sfondo. Vale per tutti
+     i titoli hero con parola in <em> dorato. Nessun effetto su desktop. */
+  .hti em,
+  .cp-electric-hero-title em,
+  .ab-hero-title em,
+  .ef-hero-title em{
+    color:#c9a568;
+    text-shadow:0 1px 10px rgba(0,0,0,.55), 0 0 2px rgba(0,0,0,.4);
+  }
+  /* Rinforzo anche l'intero titolo hero (parte bianca) e l'occhiello,
+     cosi' l'intera scritta resta nitida sopra media chiari. */
+  .hti, .cp-electric-hero-title, .ab-hero-title, .ef-hero-title{
+    text-shadow:0 1px 12px rgba(0,0,0,.5);
+  }
+  .hey{ text-shadow:0 1px 8px rgba(0,0,0,.55); }
   .hco{max-width:100%;width:100%}
   /* I due pulsanti sono ancorati al FONDO della hero (justify-content:flex-end):
      per abbassarli si riduce il padding inferiore, aggiungere spazio sopra li
@@ -554,7 +573,7 @@ body.nav-open #ai-note{opacity:0;pointer-events:none}
   .hac .btp{align-self:flex-start;width:auto;padding:12px 26px;font-size:8.5px;letter-spacing:.2em}
   .hac .btm{align-self:flex-end;width:auto;text-align:center;margin-top:48px;padding:12px 26px;font-size:8.5px;letter-spacing:.2em}
   .hac .btg{align-self:flex-end;margin-top:14px;font-size:8.5px;letter-spacing:.2em}
-  #np{width:100%;padding:calc(var(--hh) + 20px) 28px 28px;padding-bottom:calc(28px + 96px)}
+  #np{width:100%;height:100vh;height:100dvh;padding:calc(var(--hh) + 20px) 28px 28px;padding-bottom:calc(28px + 120px)}
   .cphd,.cpbd{padding-left:24px;padding-right:24px}
   .hsb{display:none}
   /* Mobile snap scroll */
@@ -1601,6 +1620,20 @@ header.hide{transform:translateY(-100%);}
   padding: 18px;
   box-sizing: border-box;
 }
+/* Didascalia opzionale sotto una foto della galleria (voce oggetto {src,cap}) */
+.pp-gallery-item.has-cap{position:relative}
+.pp-gallery-cap{
+  display:block;
+  text-align:center;
+  font-family:"Outfit",sans-serif;
+  font-size:10px;
+  font-weight:400;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:rgba(10,10,10,.55);
+  padding:0 12px 14px;
+  margin-top:-4px;
+}
 /* Galleria multi-foto (es. ORIZZONTE): cornice proporzionata alla foto, piu foto per riga */
 .pp-gallery-grid.pp-gallery-multi{grid-template-columns:repeat(3,1fr);gap:12px}
 .pp-gallery-grid.pp-gallery-multi .pp-gallery-item img{aspect-ratio:auto;height:auto;padding:8px}
@@ -2383,6 +2416,7 @@ header.hide{transform:translateY(-100%);}
 }
 .ef-x:hover{ color:#0a0a0a; background:#b8965a; border-color:#b8965a; }
 .ef-x svg{ width:18px; height:18px; }
+.ef-x-lbl{ display:none; }
 
 /* HERO del modale */
 .ef-hero{
@@ -2541,9 +2575,35 @@ header.hide{transform:translateY(-100%);}
 
 @media(max-width:768px){
   #effpage{ padding:0; }
-  .ef-modal{ max-height:100vh; height:100vh; width:100%; border:none; }
-  .ef-x{ top:16px; right:16px; }
-  .ef-hero{ padding:70px 24px 48px; }
+  .ef-modal{ max-height:100dvh; height:100dvh; width:100%; border:none; }
+  /* Il modale a tutto schermo non ha bisogno del transform d'ingresso: lo
+     azzero cosi' che la barra di chiusura (position:fixed) si ancori al
+     viewport e non al modale. Senza questo la X non compariva su iOS. */
+  #effpage .ef-modal{ transform:none; }
+  #effpage.show .ef-modal{ transform:none; }
+  /* Su mobile la X diventa una barra di chiusura fissa in cima allo schermo:
+     sempre visibile, ben contrastata e facile da toccare. Uso position:fixed
+     (non sticky) perche' sticky dentro un contenitore scrollabile e'
+     inaffidabile su Safari iOS. */
+  .ef-x{
+    position:fixed; top:0; left:0; right:0;
+    width:100%; height:auto; min-height:54px;
+    border-radius:0;
+    border:none; border-bottom:1px solid rgba(184,150,90,.3);
+    background:rgba(8,8,8,.97);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    color:var(--gl);
+    gap:10px;
+    padding:16px 20px;
+    letter-spacing:.22em; text-transform:uppercase; font-size:11px;
+    font-family:"Outfit",sans-serif;
+    z-index:30;
+  }
+  .ef-x:hover{ color:var(--gl); background:rgba(8,8,8,.97); border-color:rgba(184,150,90,.3); }
+  .ef-x-lbl{ display:inline; }
+  .ef-x svg{ width:16px; height:16px; }
+  /* La hero parte sotto la barra fissa (54px + respiro) */
+  .ef-hero{ padding:78px 24px 48px; }
   .ef-body{ padding:48px 24px 12px; }
   .ef-chapter{ grid-template-columns:1fr; gap:18px; padding:40px 0; }
   .ef-milestones{ grid-template-columns:1fr; gap:30px; padding:44px 24px; }
@@ -4952,6 +5012,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 <div id="effpage" onclick="if(event.target===this)closeEff()">
  <div class="ef-modal">
   <button class="ef-x" onclick="closeEff()" aria-label="Close">
+    <span class="ef-x-lbl" data-i18n="ppd_hint_close">Close</span>
     <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
   </button>
 
@@ -6714,7 +6775,13 @@ function goProd(m){
       // (PROD_GALLERY_VIDEO), inserito subito DOPO la foto indicata da `after`.
       var media=[];
       for(var gi=0;gi<imgs.length;gi++){
-        media.push({type:'image', src:imgs[gi], alt:m+' view '+(gi+1)});
+        // Ogni voce puo' essere una stringa (URL) o un oggetto {src, cap}
+        // con didascalia. Retrocompatibile con tutte le gallerie esistenti.
+        var _g=imgs[gi];
+        var _src=(typeof _g==='string')?_g:(_g&&_g.src)||'';
+        var _cap=(typeof _g==='object'&&_g)?(_g.cap||''):'';
+        if(!_src)continue;
+        media.push({type:'image', src:_src, alt:m+' view '+(gi+1), cap:_cap});
       }
       var gv=(window.PROD_GALLERY_VIDEO&&window.PROD_GALLERY_VIDEO[m])?window.PROD_GALLERY_VIDEO[m]:null;
       if(gv){
@@ -6741,7 +6808,10 @@ function goProd(m){
             +'</div>';
         } else {
           var cls=(dyn && gj%3===0)?'pp-gallery-item span-all':'pp-gallery-item';
-          gh+='<div class="'+cls+'" data-lb-type="image" data-lb-src="'+it.src+'" data-lb-alt="'+it.alt+'" onclick="ppGalleryOpenFromGrid('+gj+')"><img src="'+it.src+'" alt="'+it.alt+'" loading="lazy" decoding="async"></div>';
+          if(it.cap) cls+=' has-cap';
+          gh+='<div class="'+cls+'" data-lb-type="image" data-lb-src="'+it.src+'" data-lb-alt="'+it.alt+'" onclick="ppGalleryOpenFromGrid('+gj+')"><img src="'+it.src+'" alt="'+it.alt+'" loading="lazy" decoding="async">'
+            +(it.cap?'<span class="pp-gallery-cap">'+it.cap+'</span>':'')
+            +'</div>';
         }
       }
       gg.innerHTML=gh;
@@ -8032,6 +8102,18 @@ window.PROD_GALLERY={
   'ESPRESSO12':[
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785405715/ESPRESSO12_SOLDINI_kz7ath.webp',
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785405713/ESPRESSO12_SOLDINI_2_ddshfv.webp'
+  ],
+  'GUSTO':[
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1784657228/GUSTO_-_MARINER3_xvfjed.jpg',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786079793/GUSTO_FOTO3_flt6di.jpg',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786079779/GUSTO_FOTO2_oqtgx3.jpg'
+  ],
+  'MARIS':[
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1784901110/MARIS_-_xl2_con_paraventi_sfondo_nero_kq3qmq.jpg',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786089137/MARIS_XL2_FOTO10_dhtp0l.jpg',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786090133/MARIS_FOTO_12_fphy4u.jpg',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786089116/MARIS_XL2_FOTO_2_vrkqc9.jpg',
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786089112/MARIS_XL2_EVO_FOTO_1_n5o6qo.webp', cap:'MARIS EVO'}
   ]
 };
 
@@ -9007,6 +9089,140 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
 // Indice costruito una sola volta alla prima apertura, da fonti gia' presenti
 // nel file: window.CATS (categorie e modelli), window.PROD_DESCS (sottotitoli)
 // e le schede .item-card di #sparepage (codice + descrizione ricambio).
+//
+// KEYWORD MULTILINGUA · l'indice base e' in inglese (c.name / PROD_DESCS), quindi
+// una ricerca in italiano/francese/tedesco/spagnolo non trovava le categorie.
+// Qui aggiungo, per ogni slug di categoria, i termini equivalenti nelle 5 lingue
+// (piu' sinonimi comuni). Vengono accodati alla "key" di categoria e prodotti,
+// cosi' "cucina", "forno", "four", "Herd", "cocina", "hornillo", "piano cottura",
+// "lavello", "caffe", ecc. portano al risultato giusto. Solo dati, nessuna logica.
+window.SRCH_KW = {
+  'electric-cookers-with-oven':
+    'cucine elettriche cucina elettrica con forno induzione piano cottura fornello '+
+    'electric cookers cooker oven induction stove range '+
+    'cuisiniere electrique four induction rechaud '+
+    'elektroherd herd backofen induktion kochfeld '+
+    'cocina electrica horno induccion',
+  'gas-cookers-with-oven':
+    'cucine a gas cucina gas con forno fornello piano cottura '+
+    'gas cookers cooker oven stove range hob '+
+    'cuisiniere a gaz four rechaud '+
+    'gasherd herd backofen gaskocher '+
+    'cocina de gas horno hornillo',
+  'gas-cookers':
+    'cucine a gas cucina gas fornello compatta '+
+    'gas cookers cooker stove compact freestanding '+
+    'cuisiniere a gaz rechaud gaz compacte '+
+    'gasherd herd gaskocher kompakt '+
+    'cocina de gas hornillo compacta',
+  'built-in-electric-cooktops':
+    'piani cottura elettrici piano cottura incasso induzione vetroceramica fornelli '+
+    'built in electric cooktops cooktop hob induction ceramic '+
+    'plaque electrique table de cuisson encastrable induction vitroceramique '+
+    'elektrokochfeld kochfeld einbau induktion glaskeramik '+
+    'placa electrica encastrable induccion vitroceramica encimera',
+  'gas-grills':
+    'griglia a gas barbecue gas grill piastra '+
+    'gas grills grill barbecue bbq griddle '+
+    'grill a gaz barbecue plancha '+
+    'gasgrill grill barbecue '+
+    'parrilla de gas barbacoa plancha',
+  'built-in-gas-cooktops':
+    'piani cottura a gas piano cottura gas incasso fornelli bruciatori '+
+    'built in gas cooktops cooktop hob burners '+
+    'plaque gaz table de cuisson encastrable bruleurs '+
+    'gaskochfeld kochfeld einbau gas brenner '+
+    'placa de gas encastrable encimera quemadores',
+  'coffee-makers':
+    'macchina caffe caffe espresso moka 12v '+
+    'coffee makers maker espresso machine '+
+    'machine a cafe expresso cafetiere '+
+    'kaffeemaschine espresso kaffee '+
+    'cafetera espresso cafe',
+  'panholders':
+    'fermapentole ferma pentole supporti pentole basculanti '+
+    'panholders pan holders pot holders potholders '+
+    'support casseroles porte casseroles '+
+    'topfhalter pfannenhalter '+
+    'sujeta ollas soporte cacerolas',
+  'electric-grills':
+    'griglia elettrica grill elettrico barbecue elettrico piastra vetroceramica '+
+    'electric grills grill griddle barbecue bbq '+
+    'grill electrique plancha barbecue '+
+    'elektrogrill grill barbecue plancha '+
+    'parrilla electrica plancha barbacoa',
+  'electric-bbqs':
+    'barbecue elettrici barbecue elettrico bbq grill '+
+    'electric bbqs barbecue bbq grill '+
+    'barbecue electrique '+
+    'elektro barbecue grill '+
+    'barbacoa electrica',
+  'built-in-gas-ovens':
+    'forni a gas forno gas incasso da incasso '+
+    'built in gas ovens oven '+
+    'four a gaz encastrable '+
+    'gasbackofen backofen einbau '+
+    'horno de gas encastrable',
+  'built-in-electric-ovens':
+    'forni elettrici forno elettrico incasso da incasso grill '+
+    'built in electric ovens oven '+
+    'four electrique encastrable '+
+    'elektrobackofen backofen einbau '+
+    'horno electrico encastrable',
+  'antiche-cambuse':
+    'antiche cambuse cucine yacht epoca vintage classiche storiche '+
+    'vintage yacht galley classic historic cookers '+
+    'cuisines yacht ancien vintage classiques '+
+    'vintage yacht kombuse klassisch '+
+    'cocinas yate epoca clasicas vintage',
+  'accessori-per-la-cottura':
+    'accessori cottura accessori cucina pentole padelle utensili '+
+    'cooking accessories accessories cookware pots pans utensils '+
+    'accessoires cuisson ustensiles casseroles '+
+    'kochzubehor zubehor topfe pfannen '+
+    'accesorios cocina utensilios ollas',
+  'manuali':
+    'manuali manuale libretti istruzioni uso installazione documenti '+
+    'manuals manual instructions installation documents guides '+
+    'manuels manuel notices instructions '+
+    'handbucher handbuch anleitungen bedienungsanleitung '+
+    'manuales manual instrucciones',
+  'custom-projects':
+    'progetti su misura personalizzati custom bespoke realizzazioni speciali '+
+    'custom projects bespoke tailor made special '+
+    'projets sur mesure personnalises '+
+    'sonderanfertigung massanfertigung individuell projekte '+
+    'proyectos a medida personalizados',
+  'sinks':
+    'lavelli lavello lavabo acquaio inox '+
+    'sinks sink washbasin basin '+
+    'eviers evier lavabo '+
+    'spulbecken becken waschbecken '+
+    'fregaderos fregadero lavabo'
+};
+
+// Mappa slug categoria -> chiave i18n del nome, cosi' nella ricerca il nome
+// della categoria appare TRADOTTO nella lingua attiva (non piu' solo in EN).
+window.SRCH_CATKEY = {
+  'electric-cookers-with-oven':'cat_electric_oven',
+  'gas-cookers-with-oven':'cat_gas_oven',
+  'gas-cookers':'cat_gas',
+  'built-in-electric-cooktops':'cat_elec_builtin',
+  'gas-grills':'cat_gas_grill',
+  'built-in-gas-cooktops':'cat_gas_builtin',
+  'coffee-makers':'cat_coffee',
+  'panholders':'cat_panholders',
+  'electric-grills':'cat_elec_grill',
+  'electric-bbqs':'cat_elec_bbq',
+  'built-in-gas-ovens':'cat_gas_oven_builtin',
+  'built-in-electric-ovens':'cat_elec_oven_builtin',
+  'antiche-cambuse':'cat_antiche',
+  'accessori-per-la-cottura':'cat_accessori',
+  'manuali':'cat_manuali',
+  'custom-projects':'cat_custom',
+  'sinks':'cat_sinks'
+};
+
 (function(){
   var idx=null, res=[], sel=-1, built=false;
 
@@ -9022,11 +9238,22 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
       {fn:'openAbout',       k:'nav_about'},
       {fn:'openCatalogues',  k:'nav_catalogues'},
       {fn:'openSpare',       k:'nav_spare'},
-      {fn:'openContact',     k:'nav_contact'}
+      {fn:'openContact',     k:'nav_contact'},
+      {fn:'openEff',         k:'eff_btn', kw:'efficienza energetica efficienza energia risparmio energetico consumi '+
+        'energy efficiency energy saving consumption off grid '+
+        'efficacite energetique energie economie '+
+        'energieeffizienz energie effizienz sparen '+
+        'eficiencia energetica energia ahorro'}
     ];
   }
 
   function txt(key, fb){
+    // Fonte primaria: dizionario i18n (window.__t), cosi' i nomi categoria
+    // escono nella lingua attiva. Fallback: testo dell'elemento nel DOM.
+    if(typeof window.__t==='function'){
+      var t=window.__t(key, null);
+      if(t!=null && t!==key) return t;
+    }
     var el=document.querySelector('[data-i18n="'+key+'"]');
     return (el&&el.textContent.trim())||fb||key;
   }
@@ -9037,16 +9264,18 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
 
     // 1 · categorie e prodotti
     (window.CATS||[]).forEach(function(c){
+      var kw=(window.SRCH_KW&&window.SRCH_KW[c.slug])||'';
+      var ik=(window.SRCH_CATKEY&&window.SRCH_CATKEY[c.slug])||'';
       out.push({
-        g:'cat', label:c.name, sub:c.models.length+' '+lbl('srch-t-mod','models'),
-        key:norm(c.name+' '+c.models.join(' ')),
+        g:'cat', label:c.name, i18nKey:ik, sub:c.models.length+' '+lbl('srch-t-mod','models'),
+        key:norm(c.name+' '+c.models.join(' ')+' '+kw),
         act:function(){ if(typeof openCat==='function')openCat(c.name, c.models); }
       });
       c.models.forEach(function(m){
         var d=(window.PROD_DESCS&&window.PROD_DESCS[m])||'';
         out.push({
-          g:'prod', label:m, sub:d||c.name,
-          key:norm(m+' '+d+' '+c.name),
+          g:'prod', label:m, sub:d||c.name, i18nKeySub:ik, __catName:c.name,
+          key:norm(m+' '+d+' '+c.name+' '+kw),
           act:function(){ if(typeof goProd==='function')goProd(m); }
         });
       });
@@ -9072,8 +9301,8 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
       if(typeof window[p.fn]!=='function')return;
       var lb=txt(p.k, p.fn);
       out.push({
-        g:'page', label:lb, sub:'',
-        key:norm(lb+' '+p.fn),
+        g:'page', label:lb, sub:'', i18nKey:p.k,
+        key:norm(lb+' '+p.fn+' '+(p.kw||'')),
         act:function(){ window[p.fn](); }
       });
     });
@@ -9107,19 +9336,69 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     }, 70);
   }
 
+  // Matching per TOKEN, tollerante a plurali e accenti (gia' rimossi da norm).
+  // La query viene spezzata in parole; ogni parola deve trovare nella key una
+  // parola che condivide con essa un prefisso "sufficiente". Cosi' "cuisinieres"
+  // trova "cuisiniere", "cucine" trova "cucina", ecc. Le query multi-parola
+  // ("cucina gas") richiedono che TUTTE le parole matchino (in qualunque punto).
+  function tokMatch(word, keyWords){
+    for(var j=0;j<keyWords.length;j++){
+      var kw=keyWords[j];
+      if(!kw)continue;
+      if(kw===word)return 0;                 // parola identica
+      // prefisso: la piu' corta e' inizio della piu' lunga (gestisce plurali:
+      // cuisiniere⊂cuisinieres, forno⊂forni? no -> serve radice condivisa)
+      if(word.length>=3 && kw.indexOf(word)===0)return 1;   // query prefisso di key
+      if(kw.length>=3 && word.indexOf(kw)===0)return 1;      // key prefisso di query
+      // radice condivisa (>=4 char comuni all'inizio): cucina/cucine, forno/forni
+      var n=Math.min(word.length,kw.length), p=0;
+      while(p<n && word.charCodeAt(p)===kw.charCodeAt(p))p++;
+      if(p>=4 && p>=Math.min(word.length,kw.length)-2)return 2;
+    }
+    return -1;
+  }
+
   function score(it,q){
-    var i=it.key.indexOf(q);
-    if(i<0)return -1;
+    var words=q.split(' ').filter(Boolean);
+    if(!words.length)return -1;
+    var keyWords=it.key.split(' ');
+    var best=99, all=true;
+    for(var w=0;w<words.length;w++){
+      var m=tokMatch(words[w], keyWords);
+      if(m<0){ all=false; break; }
+      if(m<best)best=m;
+    }
+    if(!all)return -1;
+    // bonus se la query (intera) e' prefisso del label -> risultato piu' pertinente
     var lb=norm(it.label);
     if(lb===q)return 0;
-    if(lb.indexOf(q)===0)return 1;
-    if(i===0)return 2;
-    return 3+Math.min(i,40)/100;
+    if(lb.indexOf(q)===0)return 0.5;
+    if(it.key.indexOf(q)===0)return 1;
+    return 2+best;
   }
 
   var GRP={cat:'srch-t-cat', prod:'srch-t-prod', part:'srch-t-part', page:'srch-t-page'};
   var ORD=['prod','cat','part','page'];
   function lbl(id,fb){ var e=$(id); return (e&&e.textContent.trim())||fb; }
+
+  // Traduzione al volo dei sottotitoli prodotto (PROD_DESCS e' solo EN). Sono
+  // composti da pochi frammenti ricorrenti: qui li sostituisco nella lingua
+  // attiva. Ordine dalle frasi piu' lunghe alle piu' corte per evitare match
+  // parziali. Se la lingua e' EN o sconosciuta, torna il testo originale.
+  var SUB_TR={
+    it:[['Custom Modular Electric Cookers','Cucine Elettriche Modulari su Misura'],['Multifunction Microwave Oven','Forno a Microonde Multifunzione'],['Induction Electric Cooker','Cucina Elettrica a Induzione'],['Radiant Electric Cooker','Cucina Elettrica Radiante'],['Compact Gas Cooker','Cucina a Gas Compatta'],['Espresso Coffee Maker','Macchina Espresso'],['Electric Cooker','Cucina Elettrica'],['Glass-Ceramic Griddle','Piastra in Vetroceramica'],['LP Gas Built-in Oven','Forno da Incasso a Gas GPL'],['Compact LP Gas Built-in Oven','Forno da Incasso a Gas GPL Compatto'],['Electric Built-in Oven','Forno Elettrico da Incasso'],['Built-in Oven','Forno da Incasso'],['Radiant Cooktop','Piano Cottura Radiante'],['Gas Cooktop','Piano Cottura a Gas'],['Induction Cooktop','Piano Cottura a Induzione'],['Gas Cooker','Cucina a Gas'],['Gas Grill','Barbecue a Gas'],['Electric Grill','Grill Elettrico'],['Electric BBQ','Barbecue Elettrico'],['Coffee Maker','Macchina da Caffè'],['Microwave Oven','Forno a Microonde'],['Separate Grill','Grill Separato'],['Detachable Lid','Coperchio Rimovibile'],['Optional Cover','Coperchio Opzionale'],['Dual System','Sistema Doppio'],['with Oven','con Forno'],['with Grill','con Grill'],['Ventilated','Ventilato'],['Duplex','Duplex'],['Heaters','Resistenze'],['Heater','Resistenza'],['Minimal','Minimal'],['Compact','Compatto'],['Bespoke for Vintage Yachts','su Misura per Yacht d\'Epoca'],['Burners','Bruciatori'],['Burner','Bruciatore']],
+    fr:[['Custom Modular Electric Cookers','Cuisinières Électriques Modulaires sur Mesure'],['Multifunction Microwave Oven','Four à Micro-ondes Multifonction'],['Induction Electric Cooker','Cuisinière Électrique à Induction'],['Radiant Electric Cooker','Cuisinière Électrique Radiante'],['Compact Gas Cooker','Cuisinière à Gaz Compacte'],['Espresso Coffee Maker','Machine à Expresso'],['Electric Cooker','Cuisinière Électrique'],['Glass-Ceramic Griddle','Plaque Vitrocéramique'],['Compact LP Gas Built-in Oven','Four Encastrable à Gaz GPL Compact'],['LP Gas Built-in Oven','Four Encastrable à Gaz GPL'],['Electric Built-in Oven','Four Électrique Encastrable'],['Built-in Oven','Four Encastrable'],['Radiant Cooktop','Plaque Radiante'],['Gas Cooktop','Plaque à Gaz'],['Induction Cooktop','Plaque à Induction'],['Gas Cooker','Cuisinière à Gaz'],['Gas Grill','Barbecue à Gaz'],['Electric Grill','Grill Électrique'],['Electric BBQ','Barbecue Électrique'],['Coffee Maker','Machine à Café'],['Microwave Oven','Four à Micro-ondes'],['Separate Grill','Grill Séparé'],['Detachable Lid','Couvercle Amovible'],['Optional Cover','Couvercle en Option'],['Dual System','Système Double'],['with Oven','avec Four'],['with Grill','avec Grill'],['Ventilated','Ventilé'],['Duplex','Duplex'],['Heaters','Résistances'],['Heater','Résistance'],['Minimal','Minimal'],['Compact','Compact'],['Bespoke for Vintage Yachts','sur Mesure pour Yachts Anciens'],['Burners','Brûleurs'],['Burner','Brûleur']],
+    de:[['Custom Modular Electric Cookers','Modulare Elektroherde nach Maß'],['Multifunction Microwave Oven','Multifunktions-Mikrowellenofen'],['Induction Electric Cooker','Elektro-Induktionsherd'],['Radiant Electric Cooker','Elektro-Strahlungsherd'],['Compact Gas Cooker','Kompakter Gasherd'],['Espresso Coffee Maker','Espressomaschine'],['Electric Cooker','Elektroherd'],['Glass-Ceramic Griddle','Glaskeramik-Grillplatte'],['Compact LP Gas Built-in Oven','Kompakter LPG-Einbaubackofen'],['LP Gas Built-in Oven','LPG-Einbaubackofen'],['Electric Built-in Oven','Elektro-Einbaubackofen'],['Built-in Oven','Einbaubackofen'],['Radiant Cooktop','Strahlungskochfeld'],['Gas Cooktop','Gaskochfeld'],['Induction Cooktop','Induktionskochfeld'],['Gas Cooker','Gasherd'],['Gas Grill','Gasgrill'],['Electric Grill','Elektrogrill'],['Electric BBQ','Elektro-Barbecue'],['Coffee Maker','Kaffeemaschine'],['Microwave Oven','Mikrowellenofen'],['Separate Grill','Separater Grill'],['Detachable Lid','Abnehmbarer Deckel'],['Optional Cover','Optionaler Deckel'],['Dual System','Doppelsystem'],['with Oven','mit Backofen'],['with Grill','mit Grill'],['Ventilated','Umluft'],['Duplex','Duplex'],['Heaters','Heizelemente'],['Heater','Heizelement'],['Minimal','Minimal'],['Compact','Kompakt'],['Bespoke for Vintage Yachts','nach Maß für klassische Yachten'],['Burners','Brenner'],['Burner','Brenner']],
+    es:[['Custom Modular Electric Cookers','Cocinas Eléctricas Modulares a Medida'],['Multifunction Microwave Oven','Horno Microondas Multifunción'],['Induction Electric Cooker','Cocina Eléctrica de Inducción'],['Radiant Electric Cooker','Cocina Eléctrica Radiante'],['Compact Gas Cooker','Cocina de Gas Compacta'],['Espresso Coffee Maker','Cafetera Espresso'],['Electric Cooker','Cocina Eléctrica'],['Glass-Ceramic Griddle','Plancha Vitrocerámica'],['Compact LP Gas Built-in Oven','Horno Empotrable de Gas GLP Compacto'],['LP Gas Built-in Oven','Horno Empotrable de Gas GLP'],['Electric Built-in Oven','Horno Eléctrico Empotrable'],['Built-in Oven','Horno Empotrable'],['Radiant Cooktop','Placa Radiante'],['Gas Cooktop','Placa de Gas'],['Induction Cooktop','Placa de Inducción'],['Gas Cooker','Cocina de Gas'],['Gas Grill','Barbacoa de Gas'],['Electric Grill','Grill Eléctrico'],['Electric BBQ','Barbacoa Eléctrica'],['Coffee Maker','Cafetera'],['Microwave Oven','Horno Microondas'],['Separate Grill','Grill Separado'],['Detachable Lid','Tapa Extraíble'],['Optional Cover','Tapa Opcional'],['Dual System','Sistema Doble'],['with Oven','con Horno'],['with Grill','con Grill'],['Ventilated','Ventilado'],['Duplex','Duplex'],['Heaters','Resistencias'],['Heater','Resistencia'],['Minimal','Minimal'],['Compact','Compacto'],['Bespoke for Vintage Yachts','a Medida para Yates de Época'],['Burners','Quemadores'],['Burner','Quemador']]
+  };
+  function subTr(text){
+    if(!text)return text;
+    var L=(window.__curLang)||'en';
+    var tab=SUB_TR[L]; if(!tab)return text;
+    var out=text;
+    for(var i=0;i<tab.length;i++){ out=out.split(tab[i][0]).join(tab[i][1]); }
+    return out;
+  }
 
   function render(){
     var box=$('srch-res'), cnt=$('srch-count'), quick=$('srch-quick');
@@ -9163,8 +9442,19 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
       }
       var b=document.createElement('button');
       b.type='button'; b.className='srch-it';
-      var a=document.createElement('span'); a.className='srch-it-lb'; a.textContent=it.label;
-      var c=document.createElement('span'); c.className='srch-it-sb'; c.textContent=it.sub||'';
+      // Label/sub tradotti nella lingua attiva quando disponibile:
+      // categoria -> nome tradotto via i18nKey; prodotto -> sottotitolo che, se
+      // era il nome categoria, viene tradotto anch'esso. Fallback: testo EN.
+      var lblTxt=it.i18nKey?txt(it.i18nKey,it.label):it.label;
+      var subTxt=it.sub||'';
+      if(it.g==='prod'){
+        // se il sottotitolo e' il nome categoria (desc mancante) uso la
+        // traduzione categoria; altrimenti traduco i frammenti EN del desc
+        if(it.i18nKeySub && it.sub===it.__catName){ subTxt=txt(it.i18nKeySub, it.sub); }
+        else { subTxt=subTr(subTxt); }
+      }
+      var a=document.createElement('span'); a.className='srch-it-lb'; a.textContent=lblTxt;
+      var c=document.createElement('span'); c.className='srch-it-sb'; c.textContent=subTxt;
       b.appendChild(a); b.appendChild(c);
       b.addEventListener('click',function(){ go(i); });
       box.appendChild(b);
@@ -9199,7 +9489,8 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
       .concat(idx.filter(function(x){return x.g==='page';}));
     picks.forEach(function(it){
       var b=document.createElement('button');
-      b.type='button'; b.className='srch-chip'; b.textContent=it.label;
+      b.type='button'; b.className='srch-chip';
+      b.textContent=it.i18nKey?txt(it.i18nKey,it.label):it.label;
       b.addEventListener('click',function(){ srchClose(); setTimeout(function(){ try{it.act();}catch(e){} },120); });
       row.appendChild(b);
     });
@@ -15809,7 +16100,13 @@ function setLang(lang) {
 
   var d = DICT[lang];
 
-  /* Translate all [data-i18n] elements · textContent */
+  /* Helper di traduzione diretto dal dizionario (fonte autorevole), esposto
+     globalmente: la ricerca lo usa per mostrare i nomi categoria nella lingua
+     attiva senza dipendere dal DOM. Aggiornato ad ogni cambio lingua. */
+  window.__t = function(key, fb){
+    return (d && d[key] !== undefined) ? d[key] : (fb !== undefined ? fb : key);
+  };
+  window.__curLang = lang;
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     var key = el.getAttribute('data-i18n');
     if (d[key] !== undefined) el.textContent = d[key];
