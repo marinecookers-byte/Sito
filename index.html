@@ -2586,7 +2586,9 @@ header.hide{transform:translateY(-100%);}
      (non sticky) perche' sticky dentro un contenitore scrollabile e'
      inaffidabile su Safari iOS. */
   .ef-x{
-    position:fixed; top:0; left:0; right:0;
+    /* FIX: ancorata SOTTO l'header (fixed, top:0, height:var(--hh), z-index:800).
+       Prima era a top:0 e finiva esattamente sotto l'header, che la copriva. */
+    position:fixed; top:var(--hh); left:0; right:0;
     width:100%; height:auto; min-height:54px;
     border-radius:0;
     border:none; border-bottom:1px solid rgba(184,150,90,.3);
@@ -2602,12 +2604,14 @@ header.hide{transform:translateY(-100%);}
   .ef-x:hover{ color:var(--gl); background:rgba(8,8,8,.97); border-color:rgba(184,150,90,.3); }
   .ef-x-lbl{ display:inline; }
   .ef-x svg{ width:16px; height:16px; }
-  /* La hero parte sotto la barra fissa (54px + respiro) */
-  .ef-hero{ padding:78px 24px 48px; }
+  /* La hero parte sotto header (72px) + barra di chiusura (54px) + respiro */
+  .ef-hero{ padding:150px 24px 48px; }
   .ef-body{ padding:48px 24px 12px; }
   .ef-chapter{ grid-template-columns:1fr; gap:18px; padding:40px 0; }
   .ef-milestones{ grid-template-columns:1fr; gap:30px; padding:44px 24px; }
-  .ef-close{ padding:52px 24px 72px; }
+  /* +spazio in fondo: il ticker clienti .twrap e' fixed bottom:0 z-index:800
+     e alto ~68px su mobile; senza margine la CTA ci finiva sotto. */
+  .ef-close{ padding:52px 24px 96px; }
 }
 
 
@@ -5734,7 +5738,7 @@ window.PROD_DRAWING = {
   'FAVIGNANA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582593/FAVIGNANA_sjmvlp.jpg', invert:false},
   'GUSTO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785591581/GUSTO_k7jqjh.jpg', invert:false},
   'MARINA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785591580/MARINA_ritdgp.jpg', invert:false},
-  'MARINA E': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023025/FORMA_DISEGNO_-_CES2INDUZMICRO_-_HORIZON2_MICRO_INDUCTION_cucina_piano_2F_microonde_REV_01_zrpdn4.jpg', invert:false},
+  'MARINA E': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786168030/MARINA_E__DISEGNO_-_CES2INDUZMICRO_-_HORIZON2_MICRO_INDUCTION_cucina_piano_2F_microonde_REV_01_pk9mhg.jpg', invert:false},
   'NAUTA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785591542/NAUTA_xirhuo.jpg', invert:false},
   'MARETTIMO': {invert:false, imgs:[{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582592/MARETTIMO_APPOGGIO_v2s8qq.jpg', label:'Countertop'},{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582593/MARETTIMO_INCASSO_euagjb.jpg', label:'Built-in'}]},
   'VENTOTENE': {invert:false, imgs:[{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582596/VENTOTENE_APPOGGIO_dfoou9.jpg', label:'Countertop'},{src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582596/VENTOTENE_INCASSO_p3uzlk.jpg', label:'Built-in'}]},
@@ -5743,11 +5747,14 @@ window.PROD_DRAWING = {
   'RAFFAELLO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023037/RAFFAELLO_DISEGNO_Assieme_GRILL_VETRO_290X510_REV00_1_zaps2h.jpg', invert:false},
   'CARAVAGGIO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023035/CARAVAGGIO_DISEGNO_Assieme_GRILL_VETRO_290X510_MOD_02_REV06_kzorn9.jpg', invert:false},
   'NAUTICA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023031/NAUTICA_DISEGNO_-_cucina_piano_450_microonde_2_xftrbf.jpg', invert:false},
+  'NOBILIS': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786167569/NOBILIS_DISEGNO_cucina_piano_550x502_microonde_REV_01_rwxous.jpg', invert:false},
   'NAPOLI': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023029/NAPOLI_DISEGNO_-_Cucina_elettrica_450_incasso_R_qbucao.jpg', invert:false},
-  'FORMA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786024610/FORMA_DISEGNO_mifo3x.jpg', invert:false},
+  'FORMA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786167997/FORMA_DISEGNO_HORIZON2_INDUCTION_-_FORMA_rev01_1_9_f7zhsh.jpg', invert:false},
   'LIPARI': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023023/LIPARI_DISEGNO_-_Assieme_CUCINA_3_FUOCHI_GAS_-_VOYAGER_3_gukwqj.jpg', invert:false},
   'MEDITERRANEO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023019/MEDITERRANEO_DISEGNO_-_CLAV.076.A_1_q1yvol.jpg', invert:false},
+  'MEGA GRILL': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786167583/MEGAGRILL_DISEGNO_PCRBAR074230_CON_COPERCHIO_OPZIONALE_2_nmlj0d.jpg', invert:false},
   'TIRRENO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023017/TIRRENO_DISEGNO_-_CLAV.067.A_TOP_rpaibc.jpg', invert:false},
+  'ADRIATICO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786167538/ADRIATICO_DISEGNO_Assieme_cornice_piano_vetro_incassato_290X520_mod01_mf0oif.jpg', invert:false},
   'VIRTUS': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023014/VIRTUS_-_MC008_050_ingombro_1_xiroxi.jpg', invert:false},
   'TIZIANO': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023010/TIZIANO_DISEGNO_-_MC015-300_rev03_1_njf6pk.jpg', invert:false},
   'TRE': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023006/TRE_DISEGNO_-_BIM430_-_FABITA_3_FUOCHI_IND_wcncmr.jpg', invert:false},
@@ -5772,6 +5779,15 @@ window.PROD_DATASHEET = {
     paras:['In the kitchen of a great restaurant the fire is everything: it is where an ingredient becomes a dish that stays in the memory of whoever tastes it. MAGNUS was born to carry that fire where no one thought it possible: at the heart of a yacht, at anchor, before the open sea. Not a barbecue, but a precision cooking instrument developed with Italian chefs for a single purpose, to prepare fine-dining dishes on board and honour your guests.','With the lid open MAGNUS becomes a radiant grill of pure power, the cooking that meat demands. It is the four-finger Florentine steak that sears and seals in seconds, a dark crisp crust outside and a red, juicy heart within. The same force that instantly sets a tuna cut or the catch of the day, delivering the Maillard reaction that turns superb produce into a plate worthy of a starred table.','Lower the triple-insulated lid and MAGNUS turns into an oven for smoking and slow cooking. This is the realm of brisket, the American beef cut reinterpreted the Italian way, resting for hours at a low, indirect and steady temperature until it melts in the mouth. The secret is the smaller heating element on the left: it creates a second, gentler heat zone, so you can smoke, braise and hold while the other half works at full power.'],
     specKeys:['ppd_magnus_s0','ppd_magnus_s1','ppd_magnus_s2','ppd_magnus_s3'],
     paraKeys:['ppd_magnus_l1','ppd_magnus_l2','ppd_magnus_l3'] },
+  'ADRIATICO': { label:'ADRIATICO · Technical Datasheet',
+    kickerKey:'ppd_adriatico_k', name:'ADRIATICO', taglineKey:'ppd_adriatico_t',
+    cat1:'Induction Cooktop', cat2:'2 Burners',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657173/ADRIATICO_-_CRYSTAL2_INDUCTION_ls4uv1.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786167538/ADRIATICO_DISEGNO_Assieme_cornice_piano_vetro_incassato_290X520_mod01_mf0oif.jpg',
+    specs:[['Technology','Induction'],['Burners','2 · integrated panholders'],['Power','3.6 kW'],['Power supply','220-240V · 50/60 Hz'],['Dimensions (W×D)','52 × 29 cm']],
+    specText:['Induction hob with a perimeter frame for pot-holders.','Various types of pot-holders installable with no extra holes in the worktop.','Optional bridge system; PMS to lower the power drawn.','Hygienic glass-ceramic, almost no bacterial retention, instant cleaning.','Available in many variants with 2, 3 and 4 zones.','Power supply 220-240V.'],
+    paras:['Adriatico is the induction hob built around a practical idea: the perimeter frame on which you install various types of pot-holders with no need to drill extra holes in the worktop. The induction zones heat instantly and precisely, so on one you finish a risotto while on the other you bring the pasta water to the boil or sear a fillet in seconds.','The glass-ceramic surface cleans in a moment and has virtually no bacterial retention. The optional bridge system joins the zones to take large pots, and the PMS lets you lower the power drawn when the system requires it. Adriatico is available in many variants with two, three and four zones, to suit every galley.','The design is the Italian one that sets us apart: glass and steel, a clean stainless frame, essential lines. Adriatico combines practicality and elegance and blends naturally into the galley worktop, made for the interior project.'],
+    specKeys:['ppd_adriatico_s0','ppd_adriatico_s1','ppd_adriatico_s2','ppd_adriatico_s3','ppd_adriatico_s4','ppd_adriatico_s5'],
+    paraKeys:['ppd_adriatico_p0','ppd_adriatico_p1','ppd_adriatico_p2'] },
   'ALTALUX': { label:'ALTALUX · Technical Datasheet',
     kickerKey:'ppd_altalux_k', name:'ALTALUX', taglineKey:'ppd_altalux_t',
     cat1:'Radiant Electric Cooker', cat2:'4 Burners',
@@ -5883,7 +5899,7 @@ window.PROD_DATASHEET = {
   'FORMA': { label:'FORMA · Technical Datasheet',
     kickerKey:'ppd_forma_k', name:'FORMA', taglineKey:'ppd_forma_t',
     cat1:'Radiant Electric Cooker', cat2:'2 Burners',
-    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657252/FORMA_-_horizon2_induzione_vbkzhs.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786024610/FORMA_DISEGNO_mifo3x.jpg',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657252/FORMA_-_horizon2_induzione_vbkzhs.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786167997/FORMA_DISEGNO_HORIZON2_INDUCTION_-_FORMA_rev01_1_9_f7zhsh.jpg',
     specs:[['Dimensions (W×D×H)','52.5 x 43 x 50h cm'],['Technology','Electric Induction'],['Hob power','1,5-3,7 kW'],['Oven power','1,6 kW'],['Total max power','2,25-5,3 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
     specText:['Electric induction cooker with gimbal suspension.','Hob with 2 very powerful induction zones; PMS-ready (Bridge/Plus).','Oven over 30 litres in mirror-polished stainless steel, three-element multifunction.','Precision thermostat; dual supply on separate lines; integrated safety features.','Pot-holders adjustable horizontally and vertically.','Thanks to PMS the whole appliance can run on just 2.25 kW.'],
     paras:['Forma packs two very powerful induction zones and our PMS setup for Bridge or Plus installations into a compact size. The zones heat instantly and precisely: on one you finish a risotto alla milanese, on the other you bring the pasta water to the boil or sear a tuna fillet in seconds. The pot-holders, adjustable horizontally and vertically, firmly secure pots of different sizes, even in a swell.','The oven, over 30 litres in mirror-polished stainless steel, carries the three-element multifunction system, lower, upper and grill, with a precision thermostat: a tart bakes with crisp pastry and a tray of vegetables gratinates just right. First in the world with gimballed induction in 2015, we bring the same build quality to Forma: solid stainless hinges, knobs turned from billet, dual supply on separate lines and integrated safety features.','The design is the Italian one that sets us apart: mirror-finish stainless steel, clean proportions, patented adjustable gimbals the owner levels with a gesture. Forma offers plenty of substance in little space and blends elegantly into the galley, designed to work with the interior project.'],
@@ -5973,7 +5989,7 @@ window.PROD_DATASHEET = {
   'MARINA E': { label:'MARINA E · Technical Datasheet',
     kickerKey:'ppd_marinae_k', name:'MARINA E', taglineKey:'ppd_marinae_t',
     cat1:'Induction Electric Cooker', cat2:'2 Burners · Multifunction Microwave Oven',
-    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657257/MARINA_E_-_HORIZON2_MICRO_INDUCTION_l70g4a.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023025/FORMA_DISEGNO_-_CES2INDUZMICRO_-_HORIZON2_MICRO_INDUCTION_cucina_piano_2F_microonde_REV_01_zrpdn4.jpg',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657257/MARINA_E_-_HORIZON2_MICRO_INDUCTION_l70g4a.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786168030/MARINA_E__DISEGNO_-_CES2INDUZMICRO_-_HORIZON2_MICRO_INDUCTION_cucina_piano_2F_microonde_REV_01_pk9mhg.jpg',
     specs:[['Dimensions (W×D×H)','52.5 x 47 x 50h cm'],['Technology','Electric Induction'],['Hob power','1,5-3,7 kW'],['Oven power','~1,35 kW'],['Total max power','2,85-5,1 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
     specText:['Electric induction cooker with gimbal suspension.','Hob with 2 induction zones + multifunction oven with built-in microwave (20 litres).','Microwave, grill and convection in a single oven; compact format.','Hob controls independent of the oven; dual supply on separate lines.','Integrated safety features; patented adjustable gimbals.','Total power adjustable from 2.85 to 5.1 kW.'],
     paras:['Marina E combines two powerful induction zones with a multifunction oven with built-in microwave, in a compact body. The zones heat instantly: on one you finish a seafood risotto, on the other you bring the pasta water to the boil. The oven, microwave, grill and convection together, defrosts a sea bass fillet in minutes, reheats without drying or gratinates a tray of baked pasta.','Our history as pioneers of marine induction shows in the build quality: hob controls independent of the oven, dual supply on separate lines, precision thermostat and integrated safety features. Marina E saves time and space without giving up flavour, so even a multi-course dinner becomes simple, even under way.','The design is the Italian one that sets us apart: stainless steel, adjustable pot-holders, patented adjustable gimbals and careful finishes. Compact and complete, Marina E fits neatly into the galley, made for the interior project.'],
@@ -6006,6 +6022,15 @@ window.PROD_DATASHEET = {
     paras:['Mediterraneo is born of a patent of ours, DUPLEX technology: in the space of a single hob you have two tools. You can cook with pots or grill directly on the glass-ceramic, with no need to choose. On a boat where space is precious it is a small revolution: fish, meat, vegetables, toast and even eggs cook directly on the glass, which, having no porosity, holds no bacteria and lets you cook different dishes in sequence.','When grilling, efficiency can exceed that of induction, and the surface reaches up to 500 degrees in moments: so Mediterraneo grills even a thick fiorentina steak, impossible for traditional grills. The perimeter frame contains fats and liquids, the exclusive anti-vibration system keeps everything stable, and the optional pot-holders mount directly on the stainless frame, with no extra holes in the worktop.','The design is the Italian one that sets us apart: glass and steel, clean lines, nothing superfluous. Mediterraneo packs two products into the smallest space, also available in a two-zone version, and blends elegantly into the galley, made for the interior project.'],
     specKeys:['ppd_mediterraneo_s0','ppd_mediterraneo_s1','ppd_mediterraneo_s2','ppd_mediterraneo_s3','ppd_mediterraneo_s4','ppd_mediterraneo_s5'],
     paraKeys:['ppd_mediterraneo_p0','ppd_mediterraneo_p1','ppd_mediterraneo_p2'] },
+  'MEGA GRILL': { label:'MEGA GRILL · Technical Datasheet',
+    kickerKey:'ppd_megag_k', name:'MEGA GRILL', taglineKey:'ppd_megag_t',
+    cat1:'Electric Grill', cat2:'Optional Cover',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657236/MEGA_GRILL_-_FOTO5_PCRBAR74230COP_cssuyb.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786167583/MEGAGRILL_DISEGNO_PCRBAR074230_CON_COPERCHIO_OPZIONALE_2_nmlj0d.jpg',
+    specs:[['Type','Electric BBQ · optional cover'],['Power','3.9 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Double heater · large drip tray · stainless steel'],['Dimensions (W×D×H)','72 × 43.3 × 8.5h cm']],
+    specText:['Large-format grill.','Double element with differentiated power and independent dual control.','Tilting armoured radiant element (for cleaning).','Mechanically locked grate (anti-vibration).','Sturdy stainless steel structure; removable, large-capacity drip tray.','Optional stainless steel lid with friction safety hinges, lock and automatic safety switch.'],
+    paras:['Mega Grill is the protagonist of great grilling, when there is a big crowd celebrating on board. Its ample size and the double element with differentiated power and independent dual control let you manage two different cooks together: on the more powerful zone fiorentine steaks and chops that call for intense heat, on the gentler one vegetables, scamorza and skewers of prawns and scallops not to be dried out.','The tilting armoured element and the mechanically locked grate give stability and easy cleaning, while the extremely sturdy stainless structure and the large tray stand up to even the most demanding service. At the end of the grill, the optional stainless steel lid, with friction safety hinges, lock and automatic switch, closes everything safely, ready for the next party.','Large but well finished: bold lines, stainless steel and balanced proportions make Mega Grill a striking element of the cockpit, designed for those who want an imposing grill that still stays elegant and consistent with the design of the boat\'s outdoor spaces.'],
+    specKeys:['ppd_megag_s0','ppd_megag_s1','ppd_megag_s2','ppd_megag_s3','ppd_megag_s4','ppd_megag_s5'],
+    paraKeys:['ppd_megag_p0','ppd_megag_p1','ppd_megag_p2'] },
   'MINIMO': { label:'MINIMO · Technical Datasheet',
     kickerKey:'ppd_minimo_k', name:'MINIMO', taglineKey:'ppd_minimo_t',
     cat1:'Electric Grill', cat2:'Compact',
@@ -6042,6 +6067,15 @@ window.PROD_DATASHEET = {
     paras:['Nautica brings two induction zones and a multifunction microwave oven into the smallest footprint, made for boats where every centimetre is precious. Despite its reduced size it gives up nothing: on the two zones you sear prawns and finish a risotto, while the oven with microwave, grill and convection defrosts, reheats or gratinates as needed.','Compact but complete, Nautica comes from our experience as pioneers of marine induction: hob controls independent of the oven, dual supply on separate lines, precision thermostat and integrated safety features. It is the ideal solution to cook properly even in the most confined spaces, with no compromise on quality.','The design is Italian down to the details: stainless steel, adjustable pot-holders, patented adjustable gimbals. Nautica packs a lot of technology into the smallest space and blends discreetly into the galley, made for the interior project.'],
     specKeys:['ppd_nautica_s0','ppd_nautica_s1','ppd_nautica_s2','ppd_nautica_s3','ppd_nautica_s4','ppd_nautica_s5'],
     paraKeys:['ppd_nautica_p0','ppd_nautica_p1','ppd_nautica_p2'] },
+  'NOBILIS': { label:'NOBILIS · Technical Datasheet',
+    kickerKey:'ppd_nobilis_k', name:'NOBILIS', taglineKey:'ppd_nobilis_t',
+    cat1:'Induction Electric Cooker', cat2:'3 Burners · Multifunction Microwave Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657201/NOBILIS_-_CES3INDUZMICRO_bmli43.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786167569/NOBILIS_DISEGNO_cucina_piano_550x502_microonde_REV_01_rwxous.jpg',
+    specs:[['Dimensions (W×D×H)','52.5 x 55 x 50h cm'],['Technology','Electric Induction'],['Hob power','1-5,2 kW'],['Oven power','~1,35 kW'],['Total max power','2,35-6,6 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
+    specText:['Electric induction cooker with gimbal suspension.','Multifunction oven with built-in microwave (20 litres): microwave, grill and convection in one.','10 power levels, 9 automatic programmes, pizza function; LCD display.','Hob with 3 zones, one of exceptional power.','Dual supply for oven and hob on separate lines; integrated safety features.','Hob controls independent of the oven; patented adjustable gimbals.'],
+    paras:['With Nobilis we brought to sea an idea that sets us apart: not a microwave oven, but ALSO a microwave. The 20-litre multifunction oven combines microwave, grill and fan convection in a single appliance, with ten power levels, nine automatic programmes and a pizza function with convection. So you can defrost a sea bass in minutes, reheat a leftover risotto without drying it, or bake a golden lasagne as in a traditional oven, choosing the right mode each time on the LCD display.','Below, the induction hob with three zones, one of exceptional power, heats instantly: the water for spaghetti alle vongole boils in a moment while the oven works in parallel. Our history as pioneers of marine induction shows in every detail, from the hob controls independent of the oven to the dual supply on separate lines, from the precision thermostat to the integrated safety features. Nobilis saves time without taking anything away from flavour.','And it does so with Italian design: stainless steel, adjustable pot-holders, patented adjustable gimbals and careful finishes. Compact and complete, Nobilis fits neatly into the galley, designed to blend into the interior project and simplify life on board.'],
+    specKeys:['ppd_nobilis_s0','ppd_nobilis_s1','ppd_nobilis_s2','ppd_nobilis_s3','ppd_nobilis_s4','ppd_nobilis_s5'],
+    paraKeys:['ppd_nobilis_p0','ppd_nobilis_p1','ppd_nobilis_p2'] },
   'ORIZZONTE': { label:'ORIZZONTE · Technical Datasheet',
     kickerKey:'ppd_oriz_k', name:'ORIZZONTE', taglineKey:'ppd_oriz_t',
     cat1:'Induction Electric Cooker', cat2:'3 Burners',
@@ -8670,6 +8704,9 @@ function openEff(){
   var ef=document.getElementById('effpage');
   if(!ef) return;
   if(typeof cm==='function'){ try{ cm(); }catch(e){} } // chiude il menu se aperto
+  // Su mobile la barra di chiusura e' ancorata a top:var(--hh): se l'header
+  // fosse nascosto dallo scroll resterebbe un vuoto sopra di essa.
+  var _efHdr=document.getElementById('hdr'); if(_efHdr) _efHdr.classList.remove('hide');
   var modal=ef.querySelector('.ef-modal'); if(modal) modal.scrollTop=0;
   document.body.style.overflow='hidden';
   requestAnimationFrame(function(){
