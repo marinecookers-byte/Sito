@@ -259,7 +259,7 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .nfoot a:hover{color:var(--gl)}
 #ai-note{position:fixed;right:40px;bottom:82px;z-index:801;pointer-events:none;font-family:"Outfit",sans-serif;font-size:9px;font-weight:300;letter-spacing:.07em;line-height:1.4;color:rgba(248,246,241,.5);text-shadow:0 1px 4px rgba(0,0,0,.6);max-width:240px;text-align:right;transition:bottom .2s ease}
 @media(max-width:600px){#ai-note{font-size:7px;max-width:130px;right:14px;letter-spacing:.05em}}
-body.nav-open #ai-note{opacity:0;pointer-events:none}
+#ai-note .ai-note-link{pointer-events:auto;cursor:pointer;text-decoration:underline;color:inherit;white-space:nowrap} body.nav-open #ai-note{opacity:0;pointer-events:none}
 /* HERO */
 .hero{height:100vh;min-height:640px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:0 60px min(100px,8vh);overflow:hidden}
 
@@ -10241,12 +10241,12 @@ var DICT = {
     cat_manuali:'Manuals',
     cat_custom:'Custom Projects',
     cat_sinks:'Sinks',
-    prod_disclaimer:'Technical data and product images are indicative and may change without notice. Please contact us to confirm the exact specifications before ordering.',
+    prod_disclaimer:'Product images and technical data are indicative and non-contractual, and may change without notice. Please contact us before ordering to confirm the exact specifications and any technical updates in force at the time of purchase.',
     cookie_title:'Cookies & Privacy',
     cookie_text:'We use cookies to make this site work and to improve your experience. Essential cookies are always active. You can accept all cookies or continue with only the essential ones. See our Cookie Policy for details.',
     cookie_ok:'Accept all',
     cookie_reject:'Only essential',
-    ai_notice:'All content on this site is indicative, and a selection of it is created or enhanced with AI.',
+    ai_notice:'Some images and video are AI-assisted. Technical data and datasheets refer to real products.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Gas<br><em>Grills</em>',
     ggrill_hero_sub:'Gas grills in 316L stainless steel, with sealed burners, built for the open cockpit and for the salt that comes with it.',
@@ -11480,12 +11480,12 @@ var DICT = {
     cat_manuali:'Manuali',
     cat_custom:'Progetti su misura',
     cat_sinks:'Lavelli',
-    prod_disclaimer:'I dati tecnici e le immagini dei prodotti sono indicativi e possono variare senza preavviso. Contattaci sempre per verificare le caratteristiche esatte prima dell\'ordine.',
+    prod_disclaimer:'Le immagini e i dati tecnici dei prodotti sono indicativi e non contrattuali e possono variare senza preavviso. Contattaci sempre prima dell\'ordine per confermare le caratteristiche esatte e gli eventuali aggiornamenti tecnici in vigore al momento dell\'acquisto.',
     cookie_title:'Cookie e Privacy',
     cookie_text:'Usiamo i cookie per far funzionare il sito e migliorare la tua esperienza. I cookie essenziali sono sempre attivi. Puoi accettare tutti i cookie oppure proseguire solo con quelli essenziali. Consulta la Cookie Policy per i dettagli.',
     cookie_ok:'Accetta tutti',
     cookie_reject:'Solo necessari',
-    ai_notice:'Tutti i contenuti del sito sono indicativi e una parte è creata o migliorata con l\'AI.',
+    ai_notice:'Alcune immagini e video sono elaborati con AI. I dati tecnici e le schede si riferiscono a prodotti reali.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Barbecue<br><em>a Gas</em>',
     ggrill_hero_sub:'Barbecue a gas in acciaio inox 316L, con bruciatori sigillati, costruiti per il pozzetto aperto e per il sale che comporta.',
@@ -12714,12 +12714,12 @@ var DICT = {
     cat_manuali:'Manuels',
     cat_custom:'Projets sur mesure',
     cat_sinks:'Éviers',
-    prod_disclaimer:'Les données techniques et les images des produits sont indicatives et peuvent changer sans préavis. Contactez-nous pour vérifier les caractéristiques exactes avant toute commande.',
+    prod_disclaimer:'Les images et les données techniques des produits sont indicatives et non contractuelles et peuvent changer sans préavis. Contactez-nous avant toute commande pour confirmer les caractéristiques exactes et les éventuelles mises à jour techniques en vigueur au moment de l\'achat.',
     cookie_title:'Cookies et confidentialité',
     cookie_text:'Nous utilisons des cookies pour faire fonctionner le site et améliorer votre expérience. Les cookies essentiels sont toujours actifs. Vous pouvez accepter tous les cookies ou continuer avec les cookies essentiels uniquement. Consultez notre politique en matière de cookies pour plus de détails.',
     cookie_ok:'Tout accepter',
     cookie_reject:'Essentiels uniquement',
-    ai_notice:'Tous les contenus de ce site sont indicatifs et une partie est créée ou améliorée avec l\'IA.',
+    ai_notice:'Certaines images et vidéos sont assistées par IA. Les données techniques et les fiches concernent des produits réels.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Barbecues<br><em>à Gaz</em>',
     ggrill_hero_sub:'Barbecues à gaz en acier inoxydable 316L, à brûleurs scellés, conçus pour le cockpit ouvert et pour le sel qui va avec.',
@@ -13948,12 +13948,12 @@ var DICT = {
     cat_manuali:'Handbücher',
     cat_custom:'Sonderprojekte',
     cat_sinks:'Spülbecken',
-    prod_disclaimer:'Technische Daten und Produktbilder sind Richtwerte und können ohne Vorankündigung geändert werden. Bitte kontaktieren Sie uns, um die genauen Spezifikationen vor der Bestellung zu bestätigen.',
+    prod_disclaimer:'Produktbilder und technische Daten sind Richtwerte, unverbindlich und können ohne Vorankündigung geändert werden. Bitte kontaktieren Sie uns vor der Bestellung, um die genauen Spezifikationen und etwaige zum Kaufzeitpunkt geltende technische Aktualisierungen zu bestätigen.',
     cookie_title:'Cookies & Datenschutz',
     cookie_text:'Wir verwenden Cookies, damit die Website funktioniert und um Ihr Erlebnis zu verbessern. Essenzielle Cookies sind immer aktiv. Sie können alle Cookies akzeptieren oder nur mit den essenziellen fortfahren. Weitere Informationen finden Sie in unserer Cookie-Richtlinie.',
     cookie_ok:'Alle akzeptieren',
     cookie_reject:'Nur essenzielle',
-    ai_notice:'Alle Inhalte dieser Website sind Richtwerte, und ein Teil davon wird mit KI erstellt oder bearbeitet.',
+    ai_notice:'Einige Bilder und Videos sind KI-gestützt. Technische Daten und Datenblätter beziehen sich auf reale Produkte.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Gas<br><em>Grills</em>',
     ggrill_hero_sub:'Gasgrills aus Edelstahl 316L mit versiegelten Brennern, gebaut für das offene Cockpit und für das Salz, das dazugehört.',
@@ -15182,12 +15182,12 @@ var DICT = {
     cat_manuali:'Manuales',
     cat_custom:'Proyectos a medida',
     cat_sinks:'Fregaderos',
-    prod_disclaimer:'Los datos técnicos y las imágenes de los productos son indicativos y pueden cambiar sin previo aviso. Contáctanos para confirmar las características exactas antes de realizar el pedido.',
+    prod_disclaimer:'Las imágenes y los datos técnicos de los productos son indicativos y no contractuales y pueden cambiar sin previo aviso. Contáctanos antes de realizar el pedido para confirmar las características exactas y las posibles actualizaciones técnicas vigentes en el momento de la compra.',
     cookie_title:'Cookies y privacidad',
     cookie_text:'Usamos cookies para que el sitio funcione y para mejorar tu experiencia. Las cookies esenciales están siempre activas. Puedes aceptar todas las cookies o continuar solo con las esenciales. Consulta nuestra Política de cookies para más detalles.',
     cookie_ok:'Aceptar todas',
     cookie_reject:'Solo esenciales',
-    ai_notice:'Todos los contenidos de este sitio son indicativos y una parte se crea o mejora con IA.',
+    ai_notice:'Algunas imágenes y vídeos están asistidos por IA. Los datos técnicos y las fichas se refieren a productos reales.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Barbacoas<br><em>de Gas</em>',
     ggrill_hero_sub:'Barbacoas de gas en acero inoxidable 316L, con quemadores sellados, construidas para la bañera abierta y para la sal que conlleva.',
@@ -16722,7 +16722,7 @@ window.setLang = setLang;
 <h2>Terms &amp; Conditions</h2><p>The website <strong>www.techimpex.tv</strong> (the &ldquo;Website&rdquo;) is privately owned and maintained and is governed by the terms and conditions set out below (the &ldquo;T&amp;C&rdquo;). Please read them carefully; if you disagree with all or part of them, do not continue to visit the Website. By accessing the Website you unconditionally consent to the following T&amp;C, including the Copyright and Intellectual Property Rights notice, the Disclaimers, the Privacy Policy and the Cookie Policy. The owner of the Website may modify the T&amp;C at any time and without further notice, so we ask you to visit this page frequently to check for updates.</p>
 <h2>Copyright and Intellectual Property Rights</h2><p>This Website contains information, images, photographs, logos, advertising, video and other contents which are the exclusive property of the Website owner or granted under license by their respective right owners. All trademarks, copyright, patents, industrial design rights and trade dress, registered or not, arising from the works of the owner displayed on the Website are the exclusive property of the owner. These signs and materials are protected against unauthorised use by intellectual property laws, and you may not reproduce (totally or partially), publish, transmit, modify or sell any of the material contained in this Website. No right or claim is assigned to you as a result of downloading and/or copying such materials.</p>
 <h2>Disclaimers</h2><p>This Website is intended for promotional and advertising purposes and may be used only for private, personal and non-commercial use. The Website may contain links to other websites which are not under the owner&rsquo;s control; these T&amp;C apply only to this Website. The owner and its employees, officers, directors and shareholders shall not be deemed responsible for the contents or security of such third-party websites, nor for viruses or other negative consequences arising from visiting them.</p><p>This Website is provided &ldquo;as is&rdquo; and the owner makes no warranty as to the absence of malicious programs (such as viruses, malware, bugs or trojans). We encourage you to install one or more antivirus programs to protect your device. The owner and its employees, officers, directors and shareholders shall not be responsible or liable for any damages of any kind arising out of, caused by or related to your use of this Website. The owner does not represent or warrant that the information contained in this Website is accurate and complete. Where the law in force does not allow the exclusion of implied warranties, the exclusions set out in this paragraph will not apply, in whole or in part, to you.</p><p>The owner of this Website opposes human trafficking, child labour, slavery and discrimination, and is developing internal standards and procedures to ensure that such illegal conduct is not incorporated into its supply chain.</p>
-<h2>Artificial intelligence</h2><p>Selected images and videos on this Website have been created or enhanced with the assistance of artificial intelligence.</p>
+<h2>Images &amp; Transparency</h2><p>Marine Cookers &middot; Techimpex designs and finishes every appliance in Conegliano, Italy. Technical data, drawings, 3D models and specifications published on this site refer to real products and are verified by our technical office.</p><p>Some editorial and atmosphere images and video sequences on this site &middot; scenes, settings and contexts &middot; are created or enhanced with AI-assisted tools. Product photographs, technical drawings and datasheets are not.</p><p>All editorial texts on this site are reviewed and approved by Marine Cookers &middot; Techimpex, which assumes editorial responsibility for them.</p><p>Product images and technical data are indicative and non-contractual. Products, finishes, dimensions and specifications may vary. Please contact us before ordering to confirm the exact characteristics and any technical updates in force at the time of purchase.</p><p>For any clarification: <a href="mailto:info@marinecookers.com">info@marinecookers.com</a></p>
 <h2>Privacy &amp; Cookies</h2><p>For information on how we process personal data, see our <a onclick="openLegal('privacy')">Privacy Policy</a>. For information on cookies, see our <a onclick="openLegal('cookie')">Cookie Policy</a>.</p></section></template>
 <template id="legal-cookie"><p class="eyebrow">Legal</p><h1>Cookie Policy</h1><div class="rule"></div>
 <h2>What is a cookie</h2><p>A cookie, also known as an HTTP cookie, web cookie, or browser cookie, is a small piece of data sent from a website and stored into your web browser so that they are recognized by the website in your next visit.</p>
@@ -16747,7 +16747,7 @@ window.setLang = setLang;
 <h2>Terms &amp; Conditions</h2><p>The website <strong>www.techimpex.tv</strong> (the &ldquo;Website&rdquo;) is privately owned and maintained and is governed by the terms and conditions set out below (the &ldquo;T&amp;C&rdquo;). Please read them carefully; if you disagree with all or part of them, do not continue to visit the Website. By accessing the Website you unconditionally consent to the following T&amp;C, including the Copyright and Intellectual Property Rights notice, the Disclaimers, the Privacy Policy and the Cookie Policy. The owner of the Website may modify the T&amp;C at any time and without further notice, so we ask you to visit this page frequently to check for updates.</p>
 <h2>Copyright and Intellectual Property Rights</h2><p>This Website contains information, images, photographs, logos, advertising, video and other contents which are the exclusive property of the Website owner or granted under license by their respective right owners. All trademarks, copyright, patents, industrial design rights and trade dress, registered or not, arising from the works of the owner displayed on the Website are the exclusive property of the owner. These signs and materials are protected against unauthorised use by intellectual property laws, and you may not reproduce (totally or partially), publish, transmit, modify or sell any of the material contained in this Website. No right or claim is assigned to you as a result of downloading and/or copying such materials.</p>
 <h2>Disclaimers</h2><p>This Website is intended for promotional and advertising purposes and may be used only for private, personal and non-commercial use. The Website may contain links to other websites which are not under the owner&rsquo;s control; these T&amp;C apply only to this Website. The owner and its employees, officers, directors and shareholders shall not be deemed responsible for the contents or security of such third-party websites, nor for viruses or other negative consequences arising from visiting them.</p><p>This Website is provided &ldquo;as is&rdquo; and the owner makes no warranty as to the absence of malicious programs (such as viruses, malware, bugs or trojans). We encourage you to install one or more antivirus programs to protect your device. The owner and its employees, officers, directors and shareholders shall not be responsible or liable for any damages of any kind arising out of, caused by or related to your use of this Website. The owner does not represent or warrant that the information contained in this Website is accurate and complete. Where the law in force does not allow the exclusion of implied warranties, the exclusions set out in this paragraph will not apply, in whole or in part, to you.</p><p>The owner of this Website opposes human trafficking, child labour, slavery and discrimination, and is developing internal standards and procedures to ensure that such illegal conduct is not incorporated into its supply chain.</p>
-<h2>Artificial intelligence</h2><p>Selected images and videos on this Website have been created or enhanced with the assistance of artificial intelligence.</p>
+<h2>Images &amp; Transparency</h2><p>Marine Cookers &middot; Techimpex designs and finishes every appliance in Conegliano, Italy. Technical data, drawings, 3D models and specifications published on this site refer to real products and are verified by our technical office.</p><p>Some editorial and atmosphere images and video sequences on this site &middot; scenes, settings and contexts &middot; are created or enhanced with AI-assisted tools. Product photographs, technical drawings and datasheets are not.</p><p>All editorial texts on this site are reviewed and approved by Marine Cookers &middot; Techimpex, which assumes editorial responsibility for them.</p><p>Product images and technical data are indicative and non-contractual. Products, finishes, dimensions and specifications may vary. Please contact us before ordering to confirm the exact characteristics and any technical updates in force at the time of purchase.</p><p>For any clarification: <a href="mailto:info@marinecookers.com">info@marinecookers.com</a></p>
 <h2>Privacy &amp; Cookies</h2><p>For information on how we process personal data, see our <a onclick="openLegal('privacy')">Privacy Policy</a>. For information on cookies, see our <a onclick="openLegal('cookie')">Cookie Policy</a>.</p>
 <div class="legal-nav"><a onclick="openLegal('cookie')">Cookie Policy</a><a onclick="openLegal('privacy')">Privacy Policy</a></div></template>
 <script>
@@ -16780,7 +16780,7 @@ window.setLang = setLang;
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var pg=document.getElementById('legalpage'); if(pg&&pg.classList.contains('show')) window.closeLegal(); } });
 })();
 </script>
-<div id="ai-note" data-i18n="ai_notice">All content on this site is indicative, and a selection of it is created or enhanced with AI.</div>
+<div id="ai-note"><span data-i18n="ai_notice">Some images and video are AI-assisted. Technical data and datasheets refer to real products.</span> <a class="ai-note-link" onclick="openLegal('legalnotice')">Info</a></div>
 <script>(function(){function place(){var t=document.querySelector(".twrap"),h=t?(t.offsetHeight+6):88;["ai-note"].forEach(function(id){var n=document.getElementById(id);if(n)n.style.bottom=h+"px";});}window.addEventListener("load",place);window.addEventListener("resize",place);setTimeout(place,400);})();</script>
 <div id="ckbanner" role="dialog" aria-modal="true" aria-live="polite" aria-labelledby="ckb-title-h">
   <div class="ckb-box">
