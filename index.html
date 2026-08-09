@@ -4662,7 +4662,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   </video>
   <div class="hovl" style="background:linear-gradient(to bottom,rgba(5,5,5,.65) 0%,rgba(0,0,0,.25) 40%,rgba(5,5,5,.82) 100%)"></div>
   <div class="hci"></div>
-  <div class="hyr"><span>Venezia · Italy · Three Generations of Italian Steel Craft</span></div>
+  <div class="hyr"><span data-i18n="ab_hero_sub">Venezia · Italy · Three Generations of Italian Steel Craft</span></div>
   <div class="hco">
     <p class="hey" data-i18n="hero_tag">Artisan Marine Cooking Equipment</p>
     <h1 class="hti" data-i18n-html="hero_title">Engineered<br>for the <em>open sea</em></h1>
@@ -4675,7 +4675,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <a href="#" class="bte" onclick="openEff();return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 13.5H11L10 22L18.5 10.5H12L13 2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span data-i18n="eff_btn">Energy Efficiency, a flag of ours</span></a>
   </div>
   <div class="hsb">
-    <div class="hsi"><span class="hsn">50+</span><span class="hsl" data-i18n="stat_craft">Years of craft</span></div>
+    <div class="hsi"><span class="hsn">1st</span><span class="hsl" data-i18n="stat_craft">Complete electric marine range</span></div>
     <div class="hsi"><span class="hsn">40yr</span><span class="hsl" data-i18n="stat_spare">Spare parts guarantee</span></div>
     <div class="hsi"><span class="hsn">Global</span><span class="hsl" data-i18n="stat_dist">Distribution</span></div>
   </div>
@@ -4683,7 +4683,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 
 
 <!-- REVIEWS SECTION -->
-<section class="rv-section">
+<section class="rv-section" id="testimonianze">
 
   <div class="rv-header">
     <span class="rv-label" data-i18n="rv_label">Testimonials</span>
@@ -4692,6 +4692,22 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   </div>
 
   <div class="rv-grid">
+
+    <div class="rv-card">
+      <p class="rv-text" data-i18n="rv9">"The stove is now installed, and we have already prepared our first test meals. Everything works perfectly · and it looks absolutely beautiful too."</p>
+      <div class="rv-author">
+        <span class="rv-name">Heinz P.</span>
+        <span class="rv-detail">Altalux · Austria</span>
+      </div>
+    </div>
+
+    <div class="rv-card">
+      <p class="rv-text" data-i18n="rv10">"Very friendly, professional and reliable service. Quick responses, a smooth process and excellent advice. You feel well taken care of from start to finish."</p>
+      <div class="rv-author">
+        <span class="rv-name">Hans H.</span>
+        <span class="rv-detail">Forma Induction · Germania</span>
+      </div>
+    </div>
 
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv0">"We have had a Techimpex cooker for thirty-two years and it still works perfectly."</p>
@@ -5368,7 +5384,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     </div>
     <div class="cp-electric-hero-overlay"></div>
     <div class="cp-electric-hero-content">
-      <span class="cp-electric-hero-tag">Venezia · Italy · Three Generations of Italian Steel Craft</span>
+      <span class="cp-electric-hero-tag" data-i18n="ab_hero_sub">Venezia · Italy · Three Generations of Italian Steel Craft</span>
       <h2 class="cp-electric-hero-title" id="cp-h-title" data-i18n-html="elec_hero_title">Electric Cookers<br><em>for the Sea</em></h2>
       <p class="cp-electric-hero-sub" id="cp-h-sub" data-i18n="elec_hero_sub">Precision engineering and artisanal craft, designed to perform at the highest level on the world's finest yachts.</p>
     </div>
@@ -10115,7 +10131,7 @@ var DICT = {
     hero_desc: "Professional gimballed cookers, cooktops, ovens and grills for yachts · gas, electric and induction. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.",
     hero_btn_explore: "Explore Products",
     hero_btn_story: "Our Story",
-    stat_craft: "Years of craft",
+    stat_craft: "Complete electric marine range",
     stat_spare: "Spare parts guarantee",
     stat_dist: "Distribution",
     /* Reviews */
@@ -11189,7 +11205,9 @@ var DICT = {
     rv5: "\"Excellent products and service. Top in every respect. Always available for cooker spare parts, and they always answer extremely promptly and quickly. Impeccable!\"",
     rv6: "\"Courteous and knowledgeable. Very helpful.\"",
     rv7: "\"Extraordinary and swift service. I have always bought from them and have never felt let down, an excellent relationship with customers. What can I say, a highly recommended company.\"",
-    rv8: "\"I rarely give five stars. But the service is good, from the start right through to after the purchase.\""
+    rv8: "\"I rarely give five stars. But the service is good, from the start right through to after the purchase.\"",
+    rv9: "\"The stove is now installed, and we have already prepared our first test meals. Everything works perfectly · and it looks absolutely beautiful too.\"",
+    rv10: "\"Very friendly, professional and reliable service. Quick responses, a smooth process and excellent advice. You feel well taken care of from start to finish.\""
   },
 
   it: {
@@ -11355,7 +11373,7 @@ var DICT = {
     hero_desc: "Cucine basculanti, piani cottura, forni e grill professionali per yacht · a gas, elettrici e ad induzione. Fatti a mano nell'Inox Valley, Conegliano - Venezia · costruiti con elementi torniti e fresati dal pieno acciaio inox.",
     hero_btn_explore: "Esplora i Prodotti",
     hero_btn_story: "La Nostra Storia",
-    stat_craft: "Anni di artigianalità",
+    stat_craft: "Gamma elettrica marina completa",
     stat_spare: "Garanzia ricambi",
     stat_dist: "Distribuzione globale",
     rv_label: "Testimonianze",
@@ -12421,7 +12439,9 @@ var DICT = {
     rv5: "\"Prodotti e servizio eccellenti. Top in tutti i sensi. Sempre disponibili per i ricambi delle cucine, rispondono sempre in modo estremamente puntuale e veloce. Impeccabili!\"",
     rv6: "\"Gentili e preparati. Molto disponibili.\"",
     rv7: "\"Un servizio straordinario e celere, mi sono sempre servito da loro e non mi sono mai sentito tradito, ottima relazione con il pubblico. Che dire, azienda consigliatissima.\"",
-    rv8: "\"Raramente do cinque stelle. Ma il servizio è buono, dall'inizio fino al dopo acquisto.\""
+    rv8: "\"Raramente do cinque stelle. Ma il servizio è buono, dall'inizio fino al dopo acquisto.\"",
+    rv9: "\"La cucina è installata e abbiamo già preparato i primi pasti di prova. Funziona tutto alla perfezione · ed è anche bellissima.\"",
+    rv10: "\"Servizio cordiale, professionale e affidabile. Risposte rapide, tutto liscio e consigli eccellenti. Ci si sente seguiti dall’inizio alla fine.\""
   },
 
   fr: {
@@ -12587,7 +12607,7 @@ var DICT = {
     hero_desc: "Cuisinières à cardan, plans de cuisson, fours et grils professionnels pour yachts · gaz, électrique et induction. Fabriqués à la main dans l'Inox Valley, Conegliano - Venezia · construits avec des pièces tournées et fraisées dans l'inox massif.",
     hero_btn_explore: "Découvrir les Produits",
     hero_btn_story: "Notre Histoire",
-    stat_craft: "Années de savoir-faire",
+    stat_craft: "Gamme électrique marine complète",
     stat_spare: "Garantie pièces détachées",
     stat_dist: "Distribution mondiale",
     rv_label: "Témoignages",
@@ -13653,7 +13673,9 @@ var DICT = {
     rv5: "\"Produits et service excellents. Au top à tous points de vue. Toujours disponibles pour les pièces détachées des cuisinières, ils répondent toujours de façon extrêmement ponctuelle et rapide. Impeccables !\"",
     rv6: "\"Aimables et compétents. Très disponibles.\"",
     rv7: "\"Un service extraordinaire et rapide, je me suis toujours fourni chez eux et je ne me suis jamais senti trompé, une excellente relation avec le public. Que dire, une entreprise vivement recommandée.\"",
-    rv8: "\"Rarement je donne les cinq étoiles. Mais le service est bon, du début jusqu'à après l'achat.\""
+    rv8: "\"Rarement je donne les cinq étoiles. Mais le service est bon, du début jusqu'à après l'achat.\"",
+    rv9: "\"La cuisinière est installée et nous avons déjà préparé nos premiers repas d’essai. Tout fonctionne parfaitement · et elle est superbe.\"",
+    rv10: "\"Service aimable, professionnel et fiable. Réponses rapides, démarche fluide et excellents conseils. On se sent accompagné du début à la fin.\""
   },
 
   de: {
@@ -13819,7 +13841,7 @@ var DICT = {
     hero_desc: "Kardanisch aufgehängte Kocher, Kochfelder, Backöfen und professionelle Grills für Yachten · Gas, Elektro und Induktion. Handgefertigt im Inox Valley, Conegliano - Venezia · gebaut mit gedrehten und gefrästen Teilen aus massivem Edelstahl.",
     hero_btn_explore: "Produkte Entdecken",
     hero_btn_story: "Unsere Geschichte",
-    stat_craft: "Jahre Handwerkskunst",
+    stat_craft: "Komplette elektrische Marine-Baureihe",
     stat_spare: "Ersatzteilgarantie",
     stat_dist: "Weltweiter Vertrieb",
     rv_label: "Kundenstimmen",
@@ -14885,7 +14907,9 @@ var DICT = {
     rv5: "\"Ausgezeichnete Produkte und ausgezeichneter Service. In jeder Hinsicht top. Immer verfügbar für Ersatzteile der Herde, und sie antworten stets äußerst pünktlich und schnell. Tadellos!\"",
     rv6: "\"Freundlich und kompetent. Sehr hilfsbereit.\"",
     rv7: "\"Ein außergewöhnlicher und schneller Service. Ich habe immer bei ihnen gekauft und mich nie im Stich gelassen gefühlt, ein ausgezeichneter Umgang mit den Kunden. Was soll man sagen, ein sehr empfehlenswertes Unternehmen.\"",
-    rv8: "\"Ich vergebe selten fünf Sterne. Aber der Service ist gut, vom Anfang bis nach dem Kauf.\""
+    rv8: "\"Ich vergebe selten fünf Sterne. Aber der Service ist gut, vom Anfang bis nach dem Kauf.\"",
+    rv9: "\"Der Herd ist eingebaut, und wir haben bereits die ersten Probemahlzeiten gekocht. Alles funktioniert einwandfrei · und er sieht auch wunderbar aus.\"",
+    rv10: "\"Sehr freundlicher, professioneller und zuverlässiger Service. Schnelle Antworten, ein reibungsloser Ablauf und hervorragende Beratung. Man fühlt sich von Anfang bis Ende gut aufgehoben.\""
   },
 
   es: {
@@ -15051,7 +15075,7 @@ var DICT = {
     hero_desc: "Cocinas basculantes, encimeras, hornos y parrillas profesionales para yates · gas, eléctricos y de inducción. Hechos a mano en el Inox Valley, Conegliano - Venezia · construidos con elementos torneados y fresados en acero inoxidable macizo.",
     hero_btn_explore: "Explorar Productos",
     hero_btn_story: "Nuestra Historia",
-    stat_craft: "Años de artesanía",
+    stat_craft: "Gama eléctrica marina completa",
     stat_spare: "Garantía de repuestos",
     stat_dist: "Distribución mundial",
     rv_label: "Testimonios",
@@ -16117,7 +16141,9 @@ var DICT = {
     rv5: "\"Productos y servicio excelentes. Top en todos los sentidos. Siempre disponibles para los recambios de las cocinas, y responden siempre de forma extremadamente puntual y rápida. ¡Impecables!\"",
     rv6: "\"Amables y competentes. Muy dispuestos a ayudar.\"",
     rv7: "\"Un servicio extraordinario y rápido; siempre he comprado con ellos y nunca me he sentido defraudado, una relación excelente con el público. Qué decir, una empresa muy recomendable.\"",
-    rv8: "\"Rara vez doy cinco estrellas. Pero el servicio es bueno, desde el principio hasta después de la compra.\""
+    rv8: "\"Rara vez doy cinco estrellas. Pero el servicio es bueno, desde el principio hasta después de la compra.\"",
+    rv9: "\"La cocina ya está instalada y hemos preparado las primeras comidas de prueba. Todo funciona a la perfección · y además es preciosa.\"",
+    rv10: "\"Servicio amable, profesional y fiable. Respuestas rápidas, un proceso sencillo y excelentes consejos. Te sientes bien atendido de principio a fin.\""
   }
 };
 
