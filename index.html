@@ -257,8 +257,8 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .nfootl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,150,90,.35);margin-bottom:10px;display:block}
 .nfoot a{display:block;font-size:11px;letter-spacing:.08em;color:rgba(248,246,241,.35);text-decoration:none;transition:color .3s;margin-bottom:4px}
 .nfoot a:hover{color:var(--gl)}
-#ai-note{position:fixed;right:40px;bottom:104px;z-index:801;pointer-events:none;font-family:"Outfit",sans-serif;font-size:9px;font-weight:300;letter-spacing:.07em;line-height:1.45;color:rgba(248,246,241,.62);max-width:250px;text-align:right;transition:bottom .2s ease;background:rgba(10,10,10,.44);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:8px 11px;border-radius:2px}
-@media(max-width:600px){#ai-note{font-size:7px;max-width:142px;right:14px;letter-spacing:.05em;padding:6px 8px}}
+#ai-note{position:fixed;right:40px;bottom:104px;z-index:801;pointer-events:none;font-family:"Outfit",sans-serif;font-size:9px;font-weight:300;letter-spacing:.07em;line-height:1.45;color:rgba(248,246,241,.62);max-width:300px;text-align:right;transition:bottom .2s ease;background:rgba(10,10,10,.30);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:8px 11px;border-radius:2px}
+@media(max-width:600px){#ai-note{font-size:7px;max-width:220px;right:14px;letter-spacing:.05em;padding:6px 8px}}
 #ai-note .ai-note-link{pointer-events:auto;cursor:pointer;text-decoration:underline;color:inherit;white-space:nowrap} body.nav-open #ai-note{opacity:0;pointer-events:none}
 /* HERO */
 .hero{height:100vh;min-height:640px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:0 60px min(100px,8vh);overflow:hidden}
@@ -10264,7 +10264,7 @@ var DICT = {
     cookie_text:'We use cookies to make this site work and to improve your experience. Essential cookies are always active. You can accept all cookies or continue with only the essential ones. See our Cookie Policy for details.',
     cookie_ok:'Accept all',
     cookie_reject:'Only essential',
-    ai_notice:'Some images and video are AI-assisted. Technical data and datasheets refer to real products.',
+    ai_notice:'Some images and video are AI-assisted.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Gas<br><em>Grills</em>',
     ggrill_hero_sub:'Gas grills in 316L stainless steel, with sealed burners, built for the open cockpit and for the salt that comes with it.',
@@ -11503,7 +11503,7 @@ var DICT = {
     cookie_text:'Usiamo i cookie per far funzionare il sito e migliorare la tua esperienza. I cookie essenziali sono sempre attivi. Puoi accettare tutti i cookie oppure proseguire solo con quelli essenziali. Consulta la Cookie Policy per i dettagli.',
     cookie_ok:'Accetta tutti',
     cookie_reject:'Solo necessari',
-    ai_notice:'Alcune immagini e video sono elaborati con AI. I dati tecnici e le schede si riferiscono a prodotti reali.',
+    ai_notice:'Alcune immagini e video sono elaborati con AI.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Barbecue<br><em>a Gas</em>',
     ggrill_hero_sub:'Barbecue a gas in acciaio inox 316L, con bruciatori sigillati, costruiti per il pozzetto aperto e per il sale che comporta.',
@@ -12737,7 +12737,7 @@ var DICT = {
     cookie_text:'Nous utilisons des cookies pour faire fonctionner le site et améliorer votre expérience. Les cookies essentiels sont toujours actifs. Vous pouvez accepter tous les cookies ou continuer avec les cookies essentiels uniquement. Consultez notre politique en matière de cookies pour plus de détails.',
     cookie_ok:'Tout accepter',
     cookie_reject:'Essentiels uniquement',
-    ai_notice:'Certaines images et vidéos sont assistées par IA. Les données techniques et les fiches concernent des produits réels.',
+    ai_notice:'Certaines images et vidéos sont assistées par IA.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Barbecues<br><em>à Gaz</em>',
     ggrill_hero_sub:'Barbecues à gaz en acier inoxydable 316L, à brûleurs scellés, conçus pour le cockpit ouvert et pour le sel qui va avec.',
@@ -13971,7 +13971,7 @@ var DICT = {
     cookie_text:'Wir verwenden Cookies, damit die Website funktioniert und um Ihr Erlebnis zu verbessern. Essenzielle Cookies sind immer aktiv. Sie können alle Cookies akzeptieren oder nur mit den essenziellen fortfahren. Weitere Informationen finden Sie in unserer Cookie-Richtlinie.',
     cookie_ok:'Alle akzeptieren',
     cookie_reject:'Nur essenzielle',
-    ai_notice:'Einige Bilder und Videos sind KI-gestützt. Technische Daten und Datenblätter beziehen sich auf reale Produkte.',
+    ai_notice:'Einige Bilder und Videos sind KI-gestützt.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Gas<br><em>Grills</em>',
     ggrill_hero_sub:'Gasgrills aus Edelstahl 316L mit versiegelten Brennern, gebaut für das offene Cockpit und für das Salz, das dazugehört.',
@@ -15205,7 +15205,7 @@ var DICT = {
     cookie_text:'Usamos cookies para que el sitio funcione y para mejorar tu experiencia. Las cookies esenciales están siempre activas. Puedes aceptar todas las cookies o continuar solo con las esenciales. Consulta nuestra Política de cookies para más detalles.',
     cookie_ok:'Aceptar todas',
     cookie_reject:'Solo esenciales',
-    ai_notice:'Algunas imágenes y vídeos están asistidos por IA. Los datos técnicos y las fichas se refieren a productos reales.',
+    ai_notice:'Algunas imágenes y vídeos están asistidos por IA.',
     cookie_info:'Cookie Policy',
     ggrill_hero_title:'Barbacoas<br><em>de Gas</em>',
     ggrill_hero_sub:'Barbacoas de gas en acero inoxidable 316L, con quemadores sellados, construidas para la bañera abierta y para la sal que conlleva.',
@@ -16798,7 +16798,7 @@ window.setLang = setLang;
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ var pg=document.getElementById('legalpage'); if(pg&&pg.classList.contains('show')) window.closeLegal(); } });
 })();
 </script>
-<div id="ai-note"><span data-i18n="ai_notice">Some images and video are AI-assisted. Technical data and datasheets refer to real products.</span> <a class="ai-note-link" onclick="openLegal('legalnotice')">Info</a></div>
+<div id="ai-note"><span data-i18n="ai_notice">Some images and video are AI-assisted.</span> <a class="ai-note-link" onclick="openLegal('legalnotice')">Info</a></div>
 <script>(function(){function place(){var t=document.querySelector(".twrap"),h=t?(t.offsetHeight+22):104;["ai-note"].forEach(function(id){var n=document.getElementById(id);if(n)n.style.bottom=h+"px";});}window.addEventListener("load",place);window.addEventListener("resize",place);setTimeout(place,400);})();</script>
 <div id="ckbanner" role="dialog" aria-modal="true" aria-live="polite" aria-labelledby="ckb-title-h">
   <div class="ckb-box">
