@@ -3906,8 +3906,11 @@ header.hide{transform:translateY(-100%);}
   position:fixed;top:calc(var(--hh) + 6px);right:22px;
   width:292px;padding:26px 26px 22px;
   background:rgba(12,12,12,.94);color:var(--wh);
-  -webkit-backdrop-filter:blur(14px) saturate(120%);
-  backdrop-filter:blur(14px) saturate(120%);
+  /* ⚠️ La sfocatura dello sfondo NON va dichiarata qui: il pannello sta
+     dentro <header> ed e' nel DOM fin dal primo disegno. Un elemento che
+     sfoca cio' che ha dietro viene promosso a livello grafico separato anche
+     se invisibile, e su macchine lente ruba lavoro alla GPU proprio mentre
+     parte la hero. Dichiarata in #hctp.on: costa solo a pannello aperto. */
   border:1px solid rgba(184,150,90,.34);
   box-shadow:0 22px 60px rgba(0,0,0,.55);
   opacity:0;visibility:hidden;
@@ -3923,6 +3926,8 @@ header.hide{transform:translateY(-100%);}
 #hctp.on{
   opacity:1;visibility:visible;
   transform:translateY(0) scale(1);
+  -webkit-backdrop-filter:blur(14px) saturate(120%);
+  backdrop-filter:blur(14px) saturate(120%);
   transition:opacity .58s cubic-bezier(.16,.84,.28,1),
              transform .64s cubic-bezier(.16,.84,.28,1),
              visibility 0s linear 0s;
@@ -3988,6 +3993,24 @@ header.hide{transform:translateY(-100%);}
   }
   .hct svg{width:18px;height:18px}
   .hct.on{background:rgba(10,10,10,.72);border-color:rgba(184,150,90,.8)}
+
+  /* Dopo il primo contatto la pastiglia ha fatto il suo lavoro: resta solo
+     la bustina, senza cerchio ne' bordo, appena percettibile sopra la foto.
+     L'ombra si rinforza perche' senza fondo scuro l'icona deve restare
+     leggibile su immagini chiare. Al tocco torna piena, cosi' si capisce
+     che e' viva. */
+  .hct.discreta{
+    background:none;border-color:transparent;
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+    opacity:.5;
+    filter:drop-shadow(0 1px 3px rgba(0,0,0,.85));
+  }
+  .hct.discreta:active,
+  .hct.discreta.on{
+    opacity:1;
+    background:rgba(10,10,10,.62);
+    border-color:rgba(184,150,90,.55);
+  }
   #hctp{top:calc(var(--hh) + 62px);right:14px;left:14px;width:auto;
         padding:22px 22px 18px}
 }
@@ -8946,7 +8969,14 @@ function openAbout(){
     var src=(isMobile && v.getAttribute('data-src-mobile')) || v.getAttribute('data-src');
     if(!src) return;
     v.dataset.loaded='1';
-    v.style.opacity='0';
+    /* ⚠️ NON si azzera l'opacita' del video.
+       Il poster e' un attributo del <video> stesso: portando l'elemento a
+       opacity:0 sparisce anche la foto, e finche' il video non ha bufferizzato
+       abbastanza da emettere 'playing' si vede il NERO del fondo. Era lo
+       stacco nero fra la foto e il video. Lasciando l'elemento visibile, il
+       browser mostra il poster e lo sostituisce da solo con il primo
+       fotogramma appena e' pronto: nessun buco. */
+    v.style.opacity='1';
     var srcEl=document.createElement('source');
     srcEl.src=src; srcEl.type='video/mp4';
     v.insertBefore(srcEl, v.firstChild);
@@ -17388,18 +17418,53 @@ body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; point
     b.classList.toggle('on', open);
     b.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
-  window.hctToggle = function(){ chiuso = true; set(!open); };
-  window.hctClose  = function(){ chiuso = true; if(open) set(false); };
+  /* ── Primo contatto: da li' in poi la pastiglia mobile si fa discreta ──
+     Si ricorda in localStorage, quindi vale anche alle visite successive:
+     chi ha gia' visto il contatto non se lo ritrova addosso ogni volta.
+     Su desktop non cambia nulla: li' il pulsante e' dentro l'header. */
+  function segnaUso(){
+    try { localStorage.setItem('hct_usato','1'); } catch(e){}
+    var b = el('hct'); if (b) b.classList.add('discreta');
+  }
+  function giaUsato(){
+    try { return localStorage.getItem('hct_usato') === '1'; } catch(e){ return false; }
+  }
+  if (giaUsato()) {
+    var _b = el('hct'); if (_b) _b.classList.add('discreta');
+  }
 
-  /* ── Apertura automatica dopo 10 secondi ──────────────────────────
+  window.hctToggle = function(){
+    chiuso = true;
+    segnaUso();
+    if (spegni) { clearTimeout(spegni); spegni = null; }
+    set(!open);
+  };
+  window.hctClose = function(){
+    chiuso = true;
+    segnaUso();
+    if (spegni) { clearTimeout(spegni); spegni = null; }
+    if (open) set(false);
+  };
+
+  /* ── Apertura automatica dopo 20 secondi, poi si richiude da sola ──
      Cautele volute:
       · una volta sola per sessione (sessionStorage), non a ogni pagina;
       · niente se l'utente ha gia' usato il pannello o l'ha chiuso;
       · niente se sono aperti menu, ricerca o una pagina overlay;
       · niente se la scheda del browser non e' in primo piano;
       · niente per chi ha ridotto le animazioni di sistema.
-     Se poi si preferisce disattivarla, basta cambiare AUTO in false. */
-  var AUTO = true, RITARDO = 10000, chiuso = false;
+     Quanto resta aperto:
+      · DURATA (18 s) se nessuno lo tocca;
+      · a tempo indefinito finche' il cursore e' SOPRA il pannello;
+      · USCITA (0,9 s) dopo che il cursore ne esce.
+     Niente lo chiude prima: ne' i movimenti del mouse altrove, ne' lo
+     scroll. Era la causa per cui restava visibile troppo poco.
+     Per disattivare tutto: AUTO = false. */
+  var AUTO = true,      /* false per disattivare l'apertura automatica      */
+      RITARDO = 20000,  /* attesa prima dell'apertura                       */
+      DURATA  = 18000,  /* quanto resta aperto se nessuno lo tocca          */
+      USCITA  = 900,    /* chiusura dopo che il cursore esce dal pannello   */
+      chiuso = false, spegni = null;
 
   function occupato(){
     /* Attenzione: tm() NON applica mai body.nav-open, segnala l'apertura del
@@ -17417,27 +17482,96 @@ body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; point
     try { sessionStorage.setItem('hct_auto','1'); } catch(e){}
   }
 
+  /* Apre e programma lo spegnimento.
+     Nessun movimento del mouse altrove lo chiude: cosi' restava visibile
+     troppo poco. Ora la sua vita dipende da due cose sole:
+      · il tetto DURATA, per chi non lo tocca;
+      · il contatto con il pannello: se il cursore ci entra il conto alla
+        rovescia si annulla e resta aperto finche' ci si sta dentro; quando
+        esce, si chiude dopo USCITA millisecondi.
+     ⚠️ Non si chiude ALL'INGRESSO del mouse: il cursore deve entrare per
+     forza nel pannello per cliccare email o telefono, e chiudersi in quel
+     momento renderebbe i link impossibili da usare. */
+  function apriAuto(){
+    segna();
+    set(true);
+    var p = el('hctp'), b = el('hct');
+    if (!p) return;
+
+    var dentro = false, uscita = null;
+
+    function fermaTutto(){
+      if (spegni) { clearTimeout(spegni); spegni = null; }
+      if (uscita) { clearTimeout(uscita); uscita = null; }
+    }
+    function chiudi(){
+      fermaTutto();
+      p.removeEventListener('mouseenter', entra);
+      p.removeEventListener('mouseleave', esce);
+      if (b) b.removeEventListener('mouseenter', entra);
+      if (open && !chiuso) set(false);
+    }
+    function entra(){ dentro = true; fermaTutto(); }
+    function esce(){
+      dentro = false;
+      uscita = setTimeout(function(){ if (!dentro) chiudi(); }, USCITA);
+    }
+
+    spegni = setTimeout(function(){ if (!dentro) chiudi(); }, DURATA);
+
+    p.addEventListener('mouseenter', entra);
+    p.addEventListener('mouseleave', esce);
+    if (b) b.addEventListener('mouseenter', entra);
+    p.addEventListener('touchstart', entra, { passive:true });
+    p.addEventListener('focusin',    entra);
+  }
+
   if (AUTO && !giaVisto() &&
       !(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches)) {
-    /* Al decimo secondo si prova. Se in quel momento l'utente sta usando
-       menu o ricerca, o la scheda non e' in primo piano, non si insiste:
-       si riprova ogni 2 secondi finche' il momento e' buono, per un minuto
-       al massimo. Cosi' il pannello appare ovunque, ma mai a sproposito. */
-    var tentativi = 0;
-    var timer = setInterval(function(){
-      if (chiuso || giaVisto() || ++tentativi > 30) { clearInterval(timer); return; }
-      if (open || occupato() || document.hidden) return;
-      clearInterval(timer);
-      segna();
-      set(true);
-    }, 2000);
+    /* Il primo tentativo avviene SOLO allo scadere di RITARDO.
+       ⚠️ Nella versione precedente il ciclo dei ritentativi partiva subito e
+       scattava gia' al secondo secondo: il pannello si apriva quasi
+       immediatamente, ignorando RITARDO. Ora il ciclo nasce DENTRO il
+       setTimeout, cioe' solo dopo che il ritardo e' trascorso.
+       Se in quel momento l'utente sta usando menu o ricerca, o la scheda non
+       e' in primo piano, si riprova ogni 2 secondi per un minuto al massimo. */
     setTimeout(function(){
-      if (chiuso || open || giaVisto() || occupato() || document.hidden) return;
-      clearInterval(timer);
-      segna();
-      set(true);
+      if (chiuso || open || giaVisto()) return;
+
+      if (!occupato() && !document.hidden) { apriAuto(); return; }
+
+      var tentativi = 0;
+      var timer = setInterval(function(){
+        if (chiuso || open || giaVisto() || ++tentativi > 30) {
+          clearInterval(timer); return;
+        }
+        if (occupato() || document.hidden) return;
+        clearInterval(timer);
+        apriAuto();
+      }, 2000);
     }, RITARDO);
   }
+
+  /* ── Aiuti per il collaudo, da usare nella console del browser ────────
+     hctTest()  → apre subito il pannello come se fosse partito da solo,
+                  ignorando la memoria di sessione.
+     hctReset() → cancella la memoria: al ricaricamento il pannello torna a
+                  comportarsi come per un visitatore nuovo.
+     Servono perche' il flag 'hct_auto' resta in sessionStorage finche' la
+     SCHEDA non viene chiusa: ricaricare la pagina NON lo azzera, quindi in
+     fase di prova sembra che il pannello non si apra piu'. */
+  window.hctTest = function(){
+    try { sessionStorage.removeItem('hct_auto'); } catch(e){}
+    chiuso = false;
+    apriAuto();
+  };
+  window.hctReset = function(){
+    try { sessionStorage.removeItem('hct_auto'); } catch(e){}
+    try { localStorage.removeItem('hct_usato'); } catch(e){}
+    var _r = el('hct'); if (_r) _r.classList.remove('discreta');
+    chiuso = false;
+    return 'Memoria azzerata: ricarica la pagina e attendi ' + (RITARDO/1000) + ' secondi.';
+  };
 
   document.addEventListener('click', function(e){
     if(!open) return;
