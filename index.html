@@ -3881,6 +3881,139 @@ header.hide{transform:translateY(-100%);}
 .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(10,10,10,.96);border:1px solid var(--go);color:var(--gl);padding:14px 28px;font-family:"Outfit",sans-serif;font-size:10px;font-weight:400;letter-spacing:.3em;text-transform:uppercase;z-index:9000;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:680px){.meta-num{font-size:26px}.toolbar{padding-top:24px;padding-bottom:24px;gap:16px;flex-direction:column;align-items:flex-start}.toolbar.sticky{position:relative;top:0}.fl-list{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch}.fl-list::-webkit-scrollbar{display:none}.fl-btn{flex-shrink:0;padding:6px 10px;font-size:9px}.search-wrap{width:100%;min-width:0}.search-wrap input{width:100%}.cat-grid{grid-template-columns:1fr}.cat-head{flex-wrap:wrap;gap:12px}.cat-title{flex-basis:100%;order:2}.cat-num{order:1}.cat-count{order:1;margin-left:auto}.item-card{padding:20px 18px;gap:14px}.ph-ind{width:46px;height:46px}.it-desc{font-size:12px}.card-actions{flex-wrap:wrap;gap:10px 14px}}
+
+/* ── WIDGET CONTATTI HEADER ─────────────────────────────────────────────
+   Pulsante busta + pannellino con email, telefono e orari.
+   DESKTOP: dentro l'header, accanto alla lente.
+   MOBILE : position fixed SOTTO l'header. Uscendo dal flusso flex non
+            allarga l'header, che a schermo stretto e' gia' al limite.
+   ⚠ Queste regole DEVONO stare in questo blocco di stile, che il browser
+   incontra prima del pannello: in un blocco successivo il pannello si
+   vedrebbe per un istante non formattato (testo bianco, link blu). */
+.hct{
+  width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;padding:0;cursor:pointer;
+  color:rgba(248,246,241,.9);
+  transition:color .45s cubic-bezier(.16,.84,.28,1),transform .45s cubic-bezier(.16,.84,.28,1),opacity .45s,background .45s,border-color .45s;
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));
+}
+.hct svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}
+.hct:hover{color:var(--gl);transform:translateY(-1px)}
+.hct.on{color:var(--go)}
+
+#hctp{
+  position:fixed;top:calc(var(--hh) + 6px);right:22px;
+  width:292px;padding:26px 26px 22px;
+  background:rgba(12,12,12,.94);color:var(--wh);
+  -webkit-backdrop-filter:blur(14px) saturate(120%);
+  backdrop-filter:blur(14px) saturate(120%);
+  border:1px solid rgba(184,150,90,.34);
+  box-shadow:0 22px 60px rgba(0,0,0,.55);
+  opacity:0;visibility:hidden;
+  transform:translateY(-14px) scale(.975);
+  transform-origin:top right;
+  /* Curva morbida: parte lenta, non ha scatto iniziale.
+     La visibilita' si spegne in ritardo, cosi' la chiusura non taglia. */
+  transition:opacity .62s cubic-bezier(.16,.84,.28,1),
+             transform .68s cubic-bezier(.16,.84,.28,1),
+             visibility 0s linear .68s;
+  z-index:9400;
+}
+#hctp.on{
+  opacity:1;visibility:visible;
+  transform:translateY(0) scale(1);
+  transition:opacity .58s cubic-bezier(.16,.84,.28,1),
+             transform .64s cubic-bezier(.16,.84,.28,1),
+             visibility 0s linear 0s;
+}
+
+/* Le righe entrano appena dopo il pannello, una dopo l'altra: l'apertura
+   sembra distendersi invece di comparire tutta insieme. */
+#hctp .hctp-lbl,
+#hctp .hctp-lead,
+#hctp .hctp-row{
+  opacity:0;transform:translateY(6px);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.16,.84,.28,1);
+}
+#hctp.on .hctp-lbl {opacity:1;transform:none;transition-delay:.10s}
+#hctp.on .hctp-lead{opacity:1;transform:none;transition-delay:.16s}
+#hctp.on .hctp-row:nth-of-type(1){transition-delay:.22s}
+#hctp.on .hctp-row:nth-of-type(2){transition-delay:.28s}
+#hctp.on .hctp-row:nth-of-type(3){transition-delay:.34s}
+#hctp.on .hctp-row{opacity:1;transform:none}
+
+/* Rispetta chi ha ridotto le animazioni nelle impostazioni di sistema. */
+@media(prefers-reduced-motion:reduce){
+  #hctp,#hctp.on,
+  #hctp .hctp-lbl,#hctp .hctp-lead,#hctp .hctp-row{
+    transition-duration:.01s !important;transition-delay:0s !important;
+    transform:none !important;
+  }
+}
+#hctp .hctp-lbl{
+  display:block;font-family:'Outfit',sans-serif;font-size:9px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--go);margin-bottom:10px;
+}
+#hctp .hctp-lead{
+  font-family:'Cormorant Garamond',serif;font-size:19px;line-height:1.35;
+  font-style:italic;color:var(--wh);margin:0 0 18px;
+}
+#hctp .hctp-row{display:block;text-decoration:none;color:var(--wh);
+  padding:9px 0;border-top:1px solid rgba(248,246,241,.11)}
+#hctp .hctp-row:first-of-type{border-top:none}
+#hctp .hctp-k{
+  display:block;font-family:'Outfit',sans-serif;font-size:8.5px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(248,246,241,.42);
+  margin-bottom:3px;
+}
+#hctp .hctp-v{
+  display:block;font-family:'Outfit',sans-serif;font-size:14px;font-weight:300;
+  letter-spacing:.01em;line-height:1.45;color:var(--wh);transition:color .25s;
+}
+#hctp a.hctp-row, #hctp a.hctp-row .hctp-v{color:var(--wh)}
+#hctp a.hctp-row:hover .hctp-v{color:var(--gl)}
+
+/* ── MOBILE: pastiglia discreta sotto l'header ── */
+@media(max-width:768px){
+  .hct{
+    position:fixed;top:calc(var(--hh) + 12px);right:14px;
+    width:40px;height:40px;border-radius:50%;
+    background:rgba(10,10,10,.55);
+    border:1px solid rgba(184,150,90,.42);
+    -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+    /* Sotto il velo del menu (650), il menu (700) e la ricerca (900):
+       quando si aprono, la pastiglia resta coperta invece di galleggiarci sopra. */
+    z-index:640;
+  }
+  .hct svg{width:18px;height:18px}
+  .hct.on{background:rgba(10,10,10,.72);border-color:rgba(184,150,90,.8)}
+  #hctp{top:calc(var(--hh) + 62px);right:14px;left:14px;width:auto;
+        padding:22px 22px 18px}
+}
+/* Il pulsante resta disponibile OVUNQUE, anche sulle pagine interne
+   (prodotto, chi siamo, cataloghi: z-index 360-400, sotto la pastiglia).
+   E' proprio li' che un privato vuole chiedere un'informazione.
+   Con il menu o la ricerca aperti non serve nasconderlo: a z-index 640
+   finisce da solo sotto il velo (650), il menu (700) e la ricerca (900). */
+
+#hctp .hctp-x{
+  position:absolute;top:10px;right:10px;
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;
+  background:none;border:none;padding:0;cursor:pointer;
+  color:rgba(248,246,241,.45);
+  transition:color .35s cubic-bezier(.16,.84,.28,1),transform .35s cubic-bezier(.16,.84,.28,1);
+}
+#hctp .hctp-x svg{width:15px;height:15px;stroke:currentColor;fill:none;
+  stroke-width:1.5;stroke-linecap:round}
+#hctp .hctp-x:hover{color:var(--gl);transform:rotate(90deg)}
+@media(max-width:768px){
+  #hctp .hctp-x{top:8px;right:8px;width:38px;height:38px}
+  #hctp .hctp-x svg{width:17px;height:17px}
+}
+
+@media print{ .hct,#hctp{display:none !important} }
+
 </style>
 
 <style id="ab-magazine">
@@ -4620,12 +4753,35 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <button class="lang-btn" onclick="setLang('es')" id="lb-es">ES</button>
   </div>
   <div class="hdr-right">
-    <button class="hsr" id="hsr" onclick="srchOpen()" aria-label="Search">
+    <button class="hct" id="hct" onclick="hctToggle()" aria-label="Contact" aria-expanded="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="1.5"/><path d="M3 6.5 12 13l9-6.5"/></svg>
+  </button>
+  <button class="hsr" id="hsr" onclick="srchOpen()" aria-label="Search">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5 16.2 16.2"/></svg>
     </button>
     <button class="hbg" id="hbg" onclick="tm()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
+  </div>
+
+  <div id="hctp" role="dialog" aria-modal="false" aria-labelledby="hctp-lead">
+    <button class="hctp-x" onclick="hctClose()" aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <span class="hctp-lbl" data-i18n="hc_label">Get in touch</span>
+    <p class="hctp-lead" id="hctp-lead" data-i18n="hc_lead">Tell us what you need: we answer shipyards and private owners alike.</p>
+    <a class="hctp-row" href="mailto:info@marinecookers.com">
+      <span class="hctp-k" data-i18n="ct_email">Email</span>
+      <span class="hctp-v">info@marinecookers.com</span>
+    </a>
+    <a class="hctp-row" href="tel:+3904381840230">
+      <span class="hctp-k" data-i18n="ct_phone">Phone</span>
+      <span class="hctp-v">+39 0438 1840230</span>
+    </a>
+    <div class="hctp-row">
+      <span class="hctp-k" data-i18n="ct_hours_label">Hours</span>
+      <span class="hctp-v" data-i18n-html="ct_hours_val">Monday - Friday<br>08:30 - 17:30 CET</span>
+    </div>
   </div>
 </header>
 
@@ -4710,6 +4866,38 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   </div>
 
   <div class="rv-grid">
+
+    <div class="rv-card">
+      <p class="rv-text" data-i18n="rv11">"I was looking for spare parts for my twenty-year-old gas cooker. The exploded views were right there on the home page, and the advice I received was excellent. Five stars from me."</p>
+      <div class="rv-author">
+        <span class="rv-name">Joakim L.</span>
+        <span class="rv-detail">Ricambi · Svezia</span>
+      </div>
+    </div>
+
+    <div class="rv-card">
+      <p class="rv-text" data-i18n="rv12">"Never had I received such excellent service from an Italian company, and I say that as the owner of an Italian boat. It is in these small things, in the attention and the willingness to help, that you see the true face of a company."</p>
+      <div class="rv-author">
+        <span class="rv-name">Mario D.</span>
+        <span class="rv-detail">Ricambi · Malta</span>
+      </div>
+    </div>
+
+    <div class="rv-card">
+      <p class="rv-text" data-i18n="rv13">"I had already bought burners and other parts from you for my old cooker. When the time came for a new one, I chose a Techimpex again. Thank you for the speed and the seriousness you show."</p>
+      <div class="rv-author">
+        <span class="rv-name">Daniele F.</span>
+        <span class="rv-detail">Mariner · Italia</span>
+      </div>
+    </div>
+
+    <div class="rv-card">
+      <p class="rv-text" data-i18n="rv14">"This is the second time I have ordered spare parts for my cooker. What struck me most is the after-sales service: prompt assistance, support with the installation and real technical competence. It is rare to find something so complete."</p>
+      <div class="rv-author">
+        <span class="rv-name">Irina</span>
+        <span class="rv-detail">Ricambi · Italia</span>
+      </div>
+    </div>
 
     <div class="rv-card">
       <p class="rv-text" data-i18n="rv9">"The stove is now installed, and we have already prepared our first test meals. Everything works perfectly · and it looks absolutely beautiful too."</p>
@@ -4870,7 +5058,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
             <div class="ab-section-body">
               <p data-i18n="ab_p3_body1">The artisans who build our cookers, in the workshops of our district and at our own bench, are the latest link in a chain of know-how passed from one generation to the next, born in a small steel workshop and handed down ever since.</p>
               <p data-i18n="ab_p3_body2">That heritage lives on in the Inox Valley, home to legendary names such as Zoppas and Zanussi, and in the maritime culture of the Serenissima Republic of Venice, distilled into cookers refined down to the smallest detail.</p>
-              <p data-i18n="ab_p3_body3">Where others turn to plastic and thin sheet metal, ours are machined from solid stainless steel · heavy-gauge bodies, components turned and milled to outlast the boat itself. It is the culture of the professional kitchen, carried out to sea.</p>
+              <p data-i18n="ab_p3_body3">Our bodies are built from heavy-gauge stainless steel · components turned and milled from solid metal to outlast the boat itself. Oven doors carry hinges of the highest quality: on models such as Lux and Orizzonte they are solid stainless steel, made to our own design. And on Orizzonte, Tolomeo and Mega Grill the knobs too are solid steel, milled and turned from billet. It is the culture of the professional kitchen, carried out to sea.</p>
             </div>
           </div>
         </div>
@@ -5022,7 +5210,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="cat-intro-wrap">
       <div class="cat-intro-label" data-i18n="cat_edition">2025 Edition</div>
       <div class="cat-intro-text">
-        <p data-i18n="cat_desc1">Our catalogues bring together a selection of Marine Cookers' main models · from gimballed gas cookers to our innovative electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · with parts turned and milled where others rely on plastic and thin sheet metal.</p>
+        <p data-i18n="cat_desc1">Our catalogues bring together a selection of Marine Cookers' main models · from gimballed gas cookers to our innovative electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · with parts turned and milled from solid metal.</p>
         <p data-i18n="cat_desc2">Browse the catalogues to explore technical specifications, dimensions, and a selection of the products.</p>
         <div class="cat-dl-actions">
         <a class="cat-dl-btn" href="https://online.fliphtml5.com/jzkfe/cvcr/" target="_blank" rel="noopener">
@@ -5076,7 +5264,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n="eff_c1_title">Steel-grade robustness, impeccable hygiene</h2>
         <p class="ef-ch-body" data-i18n="eff_c1_b1">The first pillar of a true off-grid professional galley is solidity. Our appliances are built with a structural robustness comparable to a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.</p>
-        <p class="ef-ch-body" data-i18n="eff_c1_b2">This strength is paired with the highest standard of hygiene: for the oven muffles we use mirror-polished stainless steel. This finish makes surfaces exceptionally quick and easy to clean, while offering natural antibacterial properties that prevent dirt and microorganisms from settling.</p>
+        <p class="ef-ch-body" data-i18n="eff_c1_b2">This strength is paired with a rigorous approach to hygiene. Our oven muffles are built in polished stainless steel, not brushed: there is no abrasive grain in which residues can lodge, so surfaces are exceptionally quick and easy to clean.</p>
       </div>
     </div>
 
@@ -5821,7 +6009,7 @@ window.PROD_DATASHEET = {
   'COMPACTA': { label:'COMPACTA · Technical Datasheet',
     kickerKey:'ppd_compacta_k', name:'COMPACTA', taglineKey:'ppd_compacta_t',
     cat1:'Induction Electric Cooker', cat2:'2 Burners',
-    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786642665/COMPACTA_FOTO_hr2cnh.jpg',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786804881/COMPACTA_REV1_n4lgdh.jpg',
     drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786643420/COMPACTA_DISEGNO_Cucina_elettrica_450__yvtckl.jpg',
     specs:[['Dimensions (W×D×H)','47.5 x 42 x 48h cm'],['Technology','Electric Induction'],['Hob power','1,5-3,7 kW'],['Oven power','2,4 kW'],['Total max power','3,9-6,1 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
     specText:['Compact electric induction cooker with gimbal suspension.','Hob with 2 induction zones; Italian static oven over 30 litres.','Three-element multifunction oven (lower, upper, grill) with precision thermostat.','Dual supply for oven and hob on separate lines; integrated safety features.','Mirror-polished stainless steel oven interior; patented adjustable gimbals.','Total power adjustable from 3.9 to 6.1 kW.'],
@@ -5925,7 +6113,7 @@ window.PROD_DATASHEET = {
     cat1:'Electric Grill', cat2:'Minimal',
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657169/CARAVAGGIO_u5xslh.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023035/CARAVAGGIO_DISEGNO_Assieme_GRILL_VETRO_290X510_MOD_02_REV06_kzorn9.jpg',
     specs:[['Type','Electric grill · minimal'],['Power','1.3 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Sealed components · high IP · glass'],['Dimensions (W×D×H)','50.8 × 28.8 × 5h cm']],
-    specText:['Glass-ceramic grill.','Surface made entirely of glass-ceramic.','Sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind.','No bacterial retention, simplified cleaning.'],
+    specText:['Glass-ceramic grill.','Surface made entirely of glass-ceramic.','Sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind.','Glass that holds no residues, simplified cleaning.'],
     paras:['Caravaggio interprets the glass-ceramic grill in its purest, most essential form. The surface made entirely of glass, minimal and refined, is ideal for simple, quality cooking: grilled vegetables dressed with oil and lemon, prawns seared in a flash, slices of bread for a tomato-and-basil bruschetta to serve in the cockpit.','The glass cleans with a single wipe and has virtually no bacterial retention, a precious quality on board. The surface is sealable from the top for a high IP rating outdoors, and the element, protected by the glass, is unaffected by the open-sea wind that would cool a traditional grill. The essential, done well: perfect for the sunset aperitivo.','Its beauty lies in restraint: a continuous glass slab, no protrusions, lines reduced to the essential. Caravaggio is made for those who love minimal design and want a grill that blends cleanly and discreetly into the boat\'s outdoor spaces.'],
     specKeys:['ppd_caravaggio_s0','ppd_caravaggio_s1','ppd_caravaggio_s2','ppd_caravaggio_s3','ppd_caravaggio_s4'],
     paraKeys:['ppd_caravaggio_p0','ppd_caravaggio_p1','ppd_caravaggio_p2'] },
@@ -5962,7 +6150,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657222/FIRENZE_-_REEF_xhqayq.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582679/FIRENZE_pwe0nj.jpg',
     specs:[['Type','Compact LP gas built-in oven'],['Power','1.7 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','48.6 × 41 × 24h cm']],
     specText:['Ultra-compact built-in gas oven.','Full mirror-polished stainless steel cladding (inside and out).','Italian-style static burner optimised for performance and consumption.','Good capacity despite the compact size.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Door with double tempered safety glass.','Drip tray in steel, fire-enamelled at over 800°.','Full-width cooking grate.','Valve calibrated from minimum (simmering) to maximum.','Safety thermocouples as standard; automatic door lock.'],
-    paras:['Firenze is the ultra-compact gas oven entirely clad in mirror-polished stainless steel, inside and out: a choice that is not only aesthetic, because the mirror reflects the heat onto the food, hinders bacteria, resists salt air and cleans with a single wipe. Despite its minimal footprint, the capacity surprises and takes in a tall, soft olive focaccia or a pork fillet in a crust.','The burner, engineered for a true Italian static bake at low consumption, wraps the food in even heat, and the valve calibrated from simmering to full flame gives you the control needed for delicate vegetable timbales. The metal-sandwich insulation and the double tempered glass hold the heat, while the thermocouples and the automatic door lock ensure safety. With the optional soapstone, on Sunday, a tray of gratinated tortelli and a fruit tart come out as if from the oven at home.','The mirror cladding is also pure aesthetics: inside and out, the polished stainless steel gives Firenze a precious, luminous look that ennobles the galley, a built-in oven designed to blend elegantly into the most refined interior projects.'],
+    paras:['Firenze is the ultra-compact gas oven entirely clad in mirror-polished stainless steel, inside and out: a choice that is not only aesthetic, because the mirror reflects the heat onto the food, offers no grain in which residues can lodge, resists salt air and cleans with a single wipe. Despite its minimal footprint, the capacity surprises and takes in a tall, soft olive focaccia or a pork fillet in a crust.','The burner, engineered for a true Italian static bake at low consumption, wraps the food in even heat, and the valve calibrated from simmering to full flame gives you the control needed for delicate vegetable timbales. The metal-sandwich insulation and the double tempered glass hold the heat, while the thermocouples and the automatic door lock ensure safety. With the optional soapstone, on Sunday, a tray of gratinated tortelli and a fruit tart come out as if from the oven at home.','The mirror cladding is also pure aesthetics: inside and out, the polished stainless steel gives Firenze a precious, luminous look that ennobles the galley, a built-in oven designed to blend elegantly into the most refined interior projects.'],
     specKeys:['ppd_firenze_s0','ppd_firenze_s1','ppd_firenze_s2','ppd_firenze_s3','ppd_firenze_s4','ppd_firenze_s5','ppd_firenze_s6','ppd_firenze_s7','ppd_firenze_s8','ppd_firenze_s9'],
     paraKeys:['ppd_firenze_p0','ppd_firenze_p1','ppd_firenze_p2'] },
   'FORMA': { label:'FORMA · Technical Datasheet',
@@ -6088,7 +6276,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657256/MEDITERRANEO_-CRYSTAL1_DUPLEX_dq5gxq.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023019/MEDITERRANEO_DISEGNO_-_CLAV.076.A_1_q1yvol.jpg',
     specs:[['Technology','Radiant · Duplex'],['Burners','1'],['Power','0,6-1,2 kW'],['Power supply','220-240V · 50/60 Hz'],['Dimensions (W×D×H)','30 × 30 × 6h cm']],
     specText:['Patented dual-function DUPLEX radiant hob: cooktop + grill.','Grill directly on the glass-ceramic (fish, meat, vegetables, eggs).','Surface reaches up to 500°: grills even a thick fiorentina steak.','Perimeter frame contains fats and liquids; exclusive anti-vibration system.','Optional pot-holders mount on the stainless frame with no extra holes.','Also available in a 2-zone version.'],
-    paras:['Mediterraneo is born of a patent of ours, DUPLEX technology: in the space of a single hob you have two tools. You can cook with pots or grill directly on the glass-ceramic, with no need to choose. On a boat where space is precious it is a small revolution: fish, meat, vegetables, toast and even eggs cook directly on the glass, which, having no porosity, holds no bacteria and lets you cook different dishes in sequence.','When grilling, efficiency can exceed that of induction, and the surface reaches up to 500 degrees in moments: so Mediterraneo grills even a thick fiorentina steak, impossible for traditional grills. The perimeter frame contains fats and liquids, the exclusive anti-vibration system keeps everything stable, and the optional pot-holders mount directly on the stainless frame, with no extra holes in the worktop.','The design is the Italian one that sets us apart: glass and steel, clean lines, nothing superfluous. Mediterraneo packs two products into the smallest space, also available in a two-zone version, and blends elegantly into the galley, made for the interior project.'],
+    paras:['Mediterraneo is born of a patent of ours, DUPLEX technology: in the space of a single hob you have two tools. You can cook with pots or grill directly on the glass-ceramic, with no need to choose. On a boat where space is precious it is a small revolution: fish, meat, vegetables, toast and even eggs cook directly on the glass, which, having no porosity, holds no residues and lets you cook different dishes in sequence.','When grilling, efficiency can exceed that of induction, and the surface reaches up to 500 degrees in moments: so Mediterraneo grills even a thick fiorentina steak, impossible for traditional grills. The perimeter frame contains fats and liquids, the exclusive anti-vibration system keeps everything stable, and the optional pot-holders mount directly on the stainless frame, with no extra holes in the worktop.','The design is the Italian one that sets us apart: glass and steel, clean lines, nothing superfluous. Mediterraneo packs two products into the smallest space, also available in a two-zone version, and blends elegantly into the galley, made for the interior project.'],
     specKeys:['ppd_mediterraneo_s0','ppd_mediterraneo_s1','ppd_mediterraneo_s2','ppd_mediterraneo_s3','ppd_mediterraneo_s4','ppd_mediterraneo_s5'],
     paraKeys:['ppd_mediterraneo_p0','ppd_mediterraneo_p1','ppd_mediterraneo_p2'] },
   'MEGA GRILL': { label:'MEGA GRILL · Technical Datasheet',
@@ -6115,7 +6303,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784696003/NAPOLI_FORNO_INCASSO_ELETTRICO_aaacrp.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023029/NAPOLI_DISEGNO_-_Cucina_elettrica_450_incasso_R_qbucao.jpg',
     specs:[['Type','Electric built-in oven'],['Power','1.6 kW'],['Power supply','220/240V · 50/60 Hz'],['Oven','Grill · optional ventilation'],['Dimensions (W×D×H)','50.4 × 39 × 47h cm']],
     specText:['Built-in electric oven, body made entirely of stainless steel.','Triple-element system with a dedicated selector (lower only / upper only / lower+upper / boosted upper grill).','Lower armoured element engineered for performance and consumption (Italian-style static).','Capacity over 30 litres, very compact body.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Door with double tempered safety glass.','Automatic thermostat.','Drip tray in special steel, fire-enamelled at over 800°.','Full-width cooking grate; powerful upper grill.','Oven interior fire-enamelled at over 800° or mirror-polished stainless steel.'],
-    paras:['Napoli brings on board an electric oven with behaviour that is rare in the nautical world, thanks to its triple-element system governed by a dedicated selector. You can cook from below only to boost the base of a Neapolitan pizza laid on the soapstone, from above only to gratinate the top of a parmigiana, or below and above together for a roast browned evenly; and with the boosted upper grill the crust of a timballo becomes irresistible.','Over 30 litres of capacity in a very compact body leave room for large trays, while the metal-sandwich insulation and the double tempered glass keep the temperature stable. The interior and the mirror-polished stainless surfaces reflect the heat onto the food, hinder bacteria, resist salt air and clean in a moment. To finish, a fragrant apple cake baked with the lower element alone for a perfect base.','Built in and all in mirror-finish steel, Napoli combines technology and aesthetics: a complete electric oven that fits neatly and luminously into the galley cabinetry, designed to blend coherently into the onboard interior project.'],
+    paras:['Napoli brings on board an electric oven with behaviour that is rare in the nautical world, thanks to its triple-element system governed by a dedicated selector. You can cook from below only to boost the base of a Neapolitan pizza laid on the soapstone, from above only to gratinate the top of a parmigiana, or below and above together for a roast browned evenly; and with the boosted upper grill the crust of a timballo becomes irresistible.','Over 30 litres of capacity in a very compact body leave room for large trays, while the metal-sandwich insulation and the double tempered glass keep the temperature stable. The interior and the mirror-polished stainless surfaces reflect the heat onto the food, hold no residues, resist salt air and clean in a moment. To finish, a fragrant apple cake baked with the lower element alone for a perfect base.','Built in and all in mirror-finish steel, Napoli combines technology and aesthetics: a complete electric oven that fits neatly and luminously into the galley cabinetry, designed to blend coherently into the onboard interior project.'],
     specKeys:['ppd_napoli_s0','ppd_napoli_s1','ppd_napoli_s2','ppd_napoli_s3','ppd_napoli_s4','ppd_napoli_s5','ppd_napoli_s6','ppd_napoli_s7','ppd_napoli_s8','ppd_napoli_s9'],
     paraKeys:['ppd_napoli_p0','ppd_napoli_p1','ppd_napoli_p2'] },
   'NAUTA': { label:'NAUTA · Technical Datasheet',
@@ -6168,7 +6356,7 @@ window.PROD_DATASHEET = {
     cat1:'Electric Grill', cat2:'Duplex',
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657205/RAFFAELLO_ujagqg.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023037/RAFFAELLO_DISEGNO_Assieme_GRILL_VETRO_290X510_REV00_1_zaps2h.jpg',
     specs:[['Type','Electric grill · Duplex'],['Power','1.8 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Sealed components · high IP · glass'],['Dimensions (W×D×H)','50.8 × 28.8 × 7h cm']],
-    specText:['Patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Electronic control.','Surface made entirely of glass-ceramic, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind.','No bacterial retention, simplified cleaning.'],
+    specText:['Patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Electronic control.','Surface made entirely of glass-ceramic, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind.','Glass that holds no residues, simplified cleaning.'],
     paras:['Raffaello is much more than a grill: patented, with a two-stage element adjustable from 300 to 500°, it brings together two tools in a single appliance, because it cooks both directly on the glass and with pots. On the hot glass a citrus tuna tagliata sears in a few seconds; on its zones, using a saucepan, you finish a seafood risotto without changing station, a luxury on a boat, where every centimetre counts.','The two zones work independently, so you can grill vegetables on one side and cook a sauce on the other. The element, protected by the upper glass, is unaffected by the open-sea wind that would cool a traditional grill, and the surface is sealable from the top for a high IP rating outdoors. Minimal, all-glass-ceramic aesthetic, extremely easy to clean: even a caramelised pineapple, cooked directly on the glass, leaves no trace.','All in glass-ceramic, with no edges or visible parts, Raffaello is a design object before it is a cooking tool: a continuous, elegant surface that fits naturally into the cockpit and speaks to the lines of the interiors and exteriors signed by the designer.'],
     specKeys:['ppd_raffaello_s0','ppd_raffaello_s1','ppd_raffaello_s2','ppd_raffaello_s3','ppd_raffaello_s4','ppd_raffaello_s5','ppd_raffaello_s6','ppd_raffaello_s7'],
     paraKeys:['ppd_raffaello_p0','ppd_raffaello_p1','ppd_raffaello_p2'] },
@@ -6204,7 +6392,7 @@ window.PROD_DATASHEET = {
     cat1:'Electric Grill', cat2:'Duplex',
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657210/TIZIANO1_1_xw92vd.png', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023010/TIZIANO_DISEGNO_-_MC015-300_rev03_1_njf6pk.jpg',
     specs:[['Type','Electric grill · patented Duplex'],['Power','1.8 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Triple heater · removable drip tray'],['Dimensions (W×D×H)','51 × 29 × 10h cm']],
-    specText:['Patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Removable drip tray to collect cooking fats.','Electronic control.','Glass-ceramic surface, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind; no bacterial retention.'],
+    specText:['Patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Removable drip tray to collect cooking fats.','Electronic control.','Glass-ceramic surface, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind; the glass holds no residues.'],
     paras:['Tiziano combines the patented dual function with even more convenient cleaning. The two-stage element, adjustable from 300 to 500°, lets you grill sea bass fillets on the glass or cook with pots, for example a mussel soup alla marinara, on the two independent zones working at different temperatures.','The removable drip tray collects the cooking fats and pulls out for impeccable cleaning after roasting some crisp vegetables. The surface, made entirely of glass-ceramic, is sealable from the top for outdoor use with a high IP rating, and the element, protected by the glass, does not fear the wind under way. Electronic control and a clean aesthetic make it the ideal tool for healthy, light, refined cooking on board.','The technical heart is dressed in elegance: the continuous glass-ceramic surface, the flush electronic controls and the absence of superfluous details give Tiziano a clean, contemporary look, designed to blend refinedly into the outdoor spaces and to follow the designer\'s project.'],
     specKeys:['ppd_tiziano_s0','ppd_tiziano_s1','ppd_tiziano_s2','ppd_tiziano_s3','ppd_tiziano_s4','ppd_tiziano_s5','ppd_tiziano_s6','ppd_tiziano_s7'],
     paraKeys:['ppd_tiziano_p0','ppd_tiziano_p1','ppd_tiziano_p2'] },
@@ -6241,7 +6429,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786285792/VENTOTENE_-_59_juuzxx.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582596/VENTOTENE_APPOGGIO_dfoou9.jpg',
     specs:[['Type','Gas cooker with grill'],['Burners','2'],['Power','5.5 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','55.7 × 28 × 27.3h cm']],
     specText:['Twin burner with solid brass flame spreaders.','Mirror-polished stainless steel cooking top.','Lower grill compartment with an upper vent that acts as an extra burner.','One-piece cooking grate.','Dedicated grate for the grill compartment.','Drip tray in special steel, enamelled at over 800°.','Guide provision for front pot holders with heat-resistant knobs (optional).','Two types of gimbals (recessed in a compartment or on the top).'],
-    paras:['Ventotene puts two burners with solid brass flame spreaders at the chef\'s disposal, a material that stores and releases heat gently and evenly: the flame becomes enveloping, ideal for a crème pâtissière that must never split or for a velvety Parmesan fondue. The mirror-polished top is not only elegant: it reduces bacterial retention, resists the salt air and wipes clean in an instant after plating paccheri with lobster.','Below, the grill compartment is a precious resource: in the morning it toasts bread and warms the croissants, and thanks to its upper vent that works as an extra burner you can keep a braise warm while you finish the side dish, or start the slow cooking of a beef cheek in red wine. The one-piece grate ensures stability even with a heavy pot of Neapolitan ragù, and the drip tray, enamelled at over 800°, spreads the heat perfectly beneath a tray of vegetables.','The eye has its share too: the mirror-polished steel top, the balanced proportions and the care for detail give Ventotene an elegant, discreet presence, designed to blend naturally into the spaces on board in the finest tradition of Italian style.'],
+    paras:['Ventotene puts two burners with solid brass flame spreaders at the chef\'s disposal, a material that stores and releases heat gently and evenly: the flame becomes enveloping, ideal for a crème pâtissière that must never split or for a velvety Parmesan fondue. The mirror-polished top is not only elegant: it has no grain to trap residues, resists the salt air and wipes clean in an instant after plating paccheri with lobster.','Below, the grill compartment is a precious resource: in the morning it toasts bread and warms the croissants, and thanks to its upper vent that works as an extra burner you can keep a braise warm while you finish the side dish, or start the slow cooking of a beef cheek in red wine. The one-piece grate ensures stability even with a heavy pot of Neapolitan ragù, and the drip tray, enamelled at over 800°, spreads the heat perfectly beneath a tray of vegetables.','The eye has its share too: the mirror-polished steel top, the balanced proportions and the care for detail give Ventotene an elegant, discreet presence, designed to blend naturally into the spaces on board in the finest tradition of Italian style.'],
     specKeys:['ppd_vento_s0','ppd_vento_s1','ppd_vento_s2','ppd_vento_s3','ppd_vento_s4','ppd_vento_s5','ppd_vento_s6','ppd_vento_s7'],
     paraKeys:['ppd_vento_p0','ppd_vento_p1','ppd_vento_p2'] },
   'VENTUS': { label:'VENTUS · Technical Datasheet',
@@ -6267,7 +6455,7 @@ window.PROD_DATASHEET = {
     cat1:'Electric Grill', cat2:'XL Duplex',
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657221/VIRTUS_nbwrtn.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786023014/VIRTUS_-_MC008_050_ingombro_1_xiroxi.jpg',
     specs:[['Type','XL electric grill · Duplex'],['Power','2.5 kW'],['Power supply','220-240V · 50/60 Hz'],['Construction','Sealed components · high IP · glass'],['Dimensions (W×D×H)','70 × 42 × 7h cm']],
-    specText:['Large-format patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Electronic control.','Glass-ceramic surface, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind; no bacterial retention.'],
+    specText:['Large-format patented glass-ceramic grill.','Two-stage element, temperature adjustable from 300 to 500°.','Dual function: cook directly on the glass or with pots.','Two independent cooking zones.','Electronic control.','Glass-ceramic surface, sealable from the top (high IP rating for outdoor use).','Element insulated by the glass: unaffected by wind; the glass holds no residues.'],
     paras:['Virtus is the large-format version of the patented glass-ceramic grill, made for those who love to entertain. Its large surface, with a two-stage element from 300 to 500° and two independent zones, lets you turn grilling into a banquet: on one side prawns, squid and vegetables cooking on the glass, on the other a pan of spaghetti allo scoglio simmering in its sauce.','The zones work at different temperatures to handle delicate and livelier cooking together. The element, insulated by the upper glass, is unaffected by the open-sea wind, and the surface is sealable from the top for a high IP rating outdoors. Elegant, hygienic and extremely easy to clean, it ends on a high note with slices of grilled peach to serve with ice cream.','The large size is handled with elegance: a wide, continuous glass-ceramic slab, essential controls and no superfluous elements make Virtus a striking yet refined protagonist of the cockpit, designed to blend harmoniously into the outdoor spaces of the most generous yachts.'],
     specKeys:['ppd_virtus_s0','ppd_virtus_s1','ppd_virtus_s2','ppd_virtus_s3','ppd_virtus_s4','ppd_virtus_s5','ppd_virtus_s6'],
     paraKeys:['ppd_virtus_p0','ppd_virtus_p1','ppd_virtus_p2'] }
@@ -8023,7 +8211,7 @@ window.PROD_IMGS={
   'VERA':       'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784785096/VERA4_cucina03-25_tsmjxp.jpg',
   'MARINA E':   'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657257/MARINA_E_-_HORIZON2_MICRO_INDUCTION_l70g4a.jpg',
   'NAUTICA':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786627324/NAUTICA_FOTO2_tclwcv.jpg',
-  'COMPACTA':   'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786642665/COMPACTA_FOTO_hr2cnh.jpg',
+  'COMPACTA':   'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786804881/COMPACTA_REV1_n4lgdh.jpg',
   'GRANLUX':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784872558/GRANLUX1800_DSC_9578_wnqf8z.jpg',
   'MODULAR':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657238/MODULAR_-_CES4IND620576_-_FOTO_3_yodewp.jpg',
   // Gas Cookers with Oven · foto reali (documento SCHEMA PRODOTTI)
@@ -10219,7 +10407,7 @@ var DICT = {
     eff_c1_label: "Build & Hygiene",
     eff_c1_title: "Steel-grade robustness, impeccable hygiene",
     eff_c1_b1: "The first pillar of a true off-grid professional galley is solidity. Our appliances are built with a structural robustness comparable to a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.",
-    eff_c1_b2: "This strength is paired with the highest standard of hygiene: for the oven muffles we use mirror-polished stainless steel. This finish makes surfaces exceptionally quick and easy to clean, while offering natural antibacterial properties that prevent dirt and microorganisms from settling.",
+    eff_c1_b2: "This strength is paired with a rigorous approach to hygiene. Our oven muffles are built in polished stainless steel, not brushed: there is no abrasive grain in which residues can lodge, so surfaces are exceptionally quick and easy to clean.",
     eff_c2_label: "Thermal Insulation",
     eff_c2_title: "Advanced insulation, an <em>efficiency flag</em>",
     eff_c2_b1: "Energy efficiency is our true flag. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the stability of rock wool to special sandwich structures built with the most innovative and technologically advanced materials available on the global market.",
@@ -10347,7 +10535,7 @@ var DICT = {
     ab_p3_title: "Steel, <em>craft</em> and legacy",
     ab_p3_body1: "Here we are in the Inox Valley: not only Italy, home to the finest cuisine in the world, but the Conegliano district where the best cookers for the professional world are born · built by the many companies of this territory together with great chefs. It is the know-how we breathe every day.",
     ab_p3_body2: "The artisans who build our cookers are the latest link in a know-how passed from one generation to the next, born in a small steel workshop and handed down ever since · the same heritage as names like Zoppas and Zanussi. From here come turned solid steel, mirror-finished cavities and the patented gimbal system · details that hold up to a close look.",
-    ab_p3_body3: "Where others turn to plastic and thin sheet metal, ours are machined from solid stainless steel · heavy-gauge bodies, components turned and milled to outlast the boat itself. It is the culture of the professional kitchen, carried out to sea.",
+    ab_p3_body3: "Our bodies are built from heavy-gauge stainless steel · components turned and milled from solid metal to outlast the boat itself. Oven doors carry hinges of the highest quality: on models such as Lux and Orizzonte they are solid stainless steel, made to our own design. And on Orizzonte, Tolomeo and Mega Grill the knobs too are solid steel, milled and turned from billet. It is the culture of the professional kitchen, carried out to sea.",
     cat_dl_btn3: "Browse the Leonardo Collection",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, down to the last detail",
@@ -10378,7 +10566,7 @@ var DICT = {
     cat_page_label: "Library",
     cat_page_title: "Catalogues",
     cat_edition: "2025 Edition",
-    cat_desc1: "Our catalogues bring together a selection of Marine Cookers' main models · from gimballed gas cookers to our innovative electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · with parts turned and milled where others rely on plastic and thin sheet metal.",
+    cat_desc1: "Our catalogues bring together a selection of Marine Cookers' main models · from gimballed gas cookers to our innovative electric and induction series. Engineered for professional yachts, designed in the Inox Valley, Conegliano. Built from solid, heavy-gauge stainless steel · with parts turned and milled from solid metal.",
     cat_desc2: "Browse the catalogues to explore technical specifications, dimensions, and a selection of the products.",
     cat_dl_btn: "Download Catalogue",
     cat_dl_btn1: "Browse the catalogue with a selection of products",
@@ -10392,6 +10580,8 @@ var DICT = {
     ct_hours_label: "Hours",
     ct_hours_val: "Monday - Friday<br>08:30 - 17:30 CET",
     ct_open_maps: "Open in Google Maps",
+    hc_label: "Get in touch",
+    hc_lead: "Tell us what you need: we answer shipyards and private owners alike.",
     /* Electric Cookers */
     elec_hero_title: "Electric Cookers<br><em>for the Sea</em>",
     elec_hero_sub: "Precision engineering and artisanal craft · designed to perform at the highest level on the world's finest yachts.",
@@ -10568,7 +10758,7 @@ var DICT = {
     ppd_grande_s5: "Power 6.1 kW; butane/propane 30 mbar",
     ppd_mediterraneo_t: "Mediterraneo: the patented dual-function radiant hob, cooktop and grill in a single space.",
     ppd_mediterraneo_k: "The Mediterraneo story",
-    ppd_mediterraneo_p0: "Mediterraneo is born of a patent of ours, DUPLEX technology: in the space of a single hob you have two tools. You can cook with pots or grill directly on the glass-ceramic, with no need to choose. On a boat where space is precious it is a small revolution: fish, meat, vegetables, toast and even eggs cook directly on the glass, which, having no porosity, holds no bacteria and lets you cook different dishes in sequence.",
+    ppd_mediterraneo_p0: "Mediterraneo is born of a patent of ours, DUPLEX technology: in the space of a single hob you have two tools. You can cook with pots or grill directly on the glass-ceramic, with no need to choose. On a boat where space is precious it is a small revolution: fish, meat, vegetables, toast and even eggs cook directly on the glass, which, having no porosity, holds no residues and lets you cook different dishes in sequence.",
     ppd_mediterraneo_p1: "When grilling, efficiency can exceed that of induction, and the surface reaches up to 500 degrees in moments: so Mediterraneo grills even a thick fiorentina steak, impossible for traditional grills. The perimeter frame contains fats and liquids, the exclusive anti-vibration system keeps everything stable, and the optional pot-holders mount directly on the stainless frame, with no extra holes in the worktop.",
     ppd_mediterraneo_p2: "The design is the Italian one that sets us apart: glass and steel, clean lines, nothing superfluous. Mediterraneo packs two products into the smallest space, also available in a two-zone version, and blends elegantly into the galley, made for the interior project.",
     ppd_mediterraneo_s0: "Patented dual-function DUPLEX radiant hob: cooktop + grill.",
@@ -10635,13 +10825,13 @@ var DICT = {
     ppd_modular_t: "Modular: the made-to-measure cooking system, modular and gimballed, designed around your boat.",
     ppd_modular_k: "The Modular story",
     ppd_modular_p0: "Modular is the answer for those who want a one-of-a-kind galley: a modular, gimballed system, designed to measure around the spaces and needs of each boat. Induction or radiant hobs, grills, ovens and elements combine freely, so the owner and the designer draw the ideal galley together, with no catalogue constraints.",
-    ppd_modular_p1: "Behind the freedom of composition lies our craftsmanship: solid stainless steel, patented adjustable gimbals, hinges built in-house, knobs turned from billet and integrated safety features. What others call impossible, we deliver: it is the same mastery with which, since 2015, we were the first in the world to bring gimballed induction to sea.",
+    ppd_modular_p1: "Behind the freedom of composition lies our craftsmanship: solid stainless steel, patented adjustable gimbals, hinges built in-house and integrated safety features. What others call impossible, we deliver: it is the same mastery with which, since 2015, we were the first in the world to bring gimballed induction to sea.",
     ppd_modular_p2: "The design is entirely Italian and entirely made to measure: proportions, finishes and materials match the interior designer's project. Modular does not adapt to the space, it interprets it, for an onboard galley that is a unique piece, like the yacht that hosts it.",
     ppd_modular_s0: "Modular, gimballed cooking system, made to measure.",
     ppd_modular_s1: "Induction or radiant hobs, grills, ovens and elements freely combinable.",
     ppd_modular_s2: "Designed to measure around the spaces of each boat.",
     ppd_modular_s3: "Solid stainless steel; patented adjustable gimbals; hinges built in-house.",
-    ppd_modular_s4: "Knobs turned from billet; integrated safety features.",
+    ppd_modular_s4: "Integrated safety features.",
     ppd_modular_s5: "Custom build in collaboration with owner and designer.",
     ppd_forma_t: "Forma: two very powerful induction zones and a real multifunction oven, in a compact space.",
     ppd_forma_k: "The Forma story",
@@ -10783,7 +10973,7 @@ var DICT = {
     ppd_roma_s11: "Options: soapstone, side heat shields; brackets on several models.",
     ppd_firenze_t: "Firenze: an ultra-compact gas oven, all in mirror-finish stainless steel.",
     ppd_firenze_k: "The Firenze story",
-    ppd_firenze_p0: "Firenze is the ultra-compact gas oven entirely clad in mirror-polished stainless steel, inside and out: a choice that is not only aesthetic, because the mirror reflects the heat onto the food, hinders bacteria, resists salt air and cleans with a single wipe. Despite its minimal footprint, the capacity surprises and takes in a tall, soft olive focaccia or a pork fillet in a crust.",
+    ppd_firenze_p0: "Firenze is the ultra-compact gas oven entirely clad in mirror-polished stainless steel, inside and out: a choice that is not only aesthetic, because the mirror reflects the heat onto the food, offers no grain in which residues can lodge, resists salt air and cleans with a single wipe. Despite its minimal footprint, the capacity surprises and takes in a tall, soft olive focaccia or a pork fillet in a crust.",
     ppd_firenze_p1: "The burner, engineered for a true Italian static bake at low consumption, wraps the food in even heat, and the valve calibrated from simmering to full flame gives you the control needed for delicate vegetable timbales. The metal-sandwich insulation and the double tempered glass hold the heat, while the thermocouples and the automatic door lock ensure safety. With the optional soapstone, on Sunday, a tray of gratinated tortelli and a fruit tart come out as if from the oven at home.",
     ppd_firenze_p2: "The mirror cladding is also pure aesthetics: inside and out, the polished stainless steel gives Firenze a precious, luminous look that ennobles the galley, a built-in oven designed to blend elegantly into the most refined interior projects.",
     ppd_firenze_s0: "Ultra-compact built-in gas oven.",
@@ -10800,7 +10990,7 @@ var DICT = {
     ppd_napoli_t: "Napoli: a built-in electric oven with triple element, as versatile as the one at home.",
     ppd_napoli_k: "The Napoli story",
     ppd_napoli_p0: "Napoli brings on board an electric oven with behaviour that is rare in the nautical world, thanks to its triple-element system governed by a dedicated selector. You can cook from below only to boost the base of a Neapolitan pizza laid on the soapstone, from above only to gratinate the top of a parmigiana, or below and above together for a roast browned evenly; and with the boosted upper grill the crust of a timballo becomes irresistible.",
-    ppd_napoli_p1: "Over 30 litres of capacity in a very compact body leave room for large trays, while the metal-sandwich insulation and the double tempered glass keep the temperature stable. The interior and the mirror-polished stainless surfaces reflect the heat onto the food, hinder bacteria, resist salt air and clean in a moment. To finish, a fragrant apple cake baked with the lower element alone for a perfect base.",
+    ppd_napoli_p1: "Over 30 litres of capacity in a very compact body leave room for large trays, while the metal-sandwich insulation and the double tempered glass keep the temperature stable. The interior and the mirror-polished stainless surfaces reflect the heat onto the food, hold no residues, resist salt air and clean in a moment. To finish, a fragrant apple cake baked with the lower element alone for a perfect base.",
     ppd_napoli_p2: "Built in and all in mirror-finish steel, Napoli combines technology and aesthetics: a complete electric oven that fits neatly and luminously into the galley cabinetry, designed to blend coherently into the onboard interior project.",
     ppd_napoli_s0: "Built-in electric oven, body made entirely of stainless steel.",
     ppd_napoli_s1: "Triple-element system with a dedicated selector (lower only / upper only / lower+upper / boosted upper grill).",
@@ -10826,7 +11016,7 @@ var DICT = {
     ppd_tiziano_s4: "Removable drip tray to collect cooking fats.",
     ppd_tiziano_s5: "Electronic control.",
     ppd_tiziano_s6: "Glass-ceramic surface, sealable from the top (high IP rating for outdoor use).",
-    ppd_tiziano_s7: "Element insulated by the glass: unaffected by wind; no bacterial retention.",
+    ppd_tiziano_s7: "Element insulated by the glass: unaffected by wind; the glass holds no residues.",
     ppd_caravaggio_t: "Caravaggio: the essential glass-ceramic grill, minimal and effortless to clean.",
     ppd_caravaggio_k: "The Caravaggio story",
     ppd_caravaggio_p0: "Caravaggio interprets the glass-ceramic grill in its purest, most essential form. The surface made entirely of glass, minimal and refined, is ideal for simple, quality cooking: grilled vegetables dressed with oil and lemon, prawns seared in a flash, slices of bread for a tomato-and-basil bruschetta to serve in the cockpit.",
@@ -10836,7 +11026,7 @@ var DICT = {
     ppd_caravaggio_s1: "Surface made entirely of glass-ceramic.",
     ppd_caravaggio_s2: "Sealable from the top (high IP rating for outdoor use).",
     ppd_caravaggio_s3: "Element insulated by the glass: unaffected by wind.",
-    ppd_caravaggio_s4: "No bacterial retention, simplified cleaning.",
+    ppd_caravaggio_s4: "Glass that holds no residues, simplified cleaning.",
     ppd_raffaello_t: "Raffaello: grill and cooktop in one, patented and made entirely of glass-ceramic.",
     ppd_raffaello_k: "The Raffaello story",
     ppd_raffaello_p0: "Raffaello is much more than a grill: patented, with a two-stage element adjustable from 300 to 500°, it brings together two tools in a single appliance, because it cooks both directly on the glass and with pots. On the hot glass a citrus tuna tagliata sears in a few seconds; on its zones, using a saucepan, you finish a seafood risotto without changing station, a luxury on a boat, where every centimetre counts.",
@@ -10849,7 +11039,7 @@ var DICT = {
     ppd_raffaello_s4: "Electronic control.",
     ppd_raffaello_s5: "Surface made entirely of glass-ceramic, sealable from the top (high IP rating for outdoor use).",
     ppd_raffaello_s6: "Element insulated by the glass: unaffected by wind.",
-    ppd_raffaello_s7: "No bacterial retention, simplified cleaning.",
+    ppd_raffaello_s7: "Glass that holds no residues, simplified cleaning.",
     ppd_virtus_t: "Virtus: the large-format glass-ceramic grill for those who love to entertain.",
     ppd_virtus_k: "The Virtus story",
     ppd_virtus_p0: "Virtus is the large-format version of the patented glass-ceramic grill, made for those who love to entertain. Its large surface, with a two-stage element from 300 to 500° and two independent zones, lets you turn grilling into a banquet: on one side prawns, squid and vegetables cooking on the glass, on the other a pan of spaghetti allo scoglio simmering in its sauce.",
@@ -10861,7 +11051,7 @@ var DICT = {
     ppd_virtus_s3: "Two independent cooking zones.",
     ppd_virtus_s4: "Electronic control.",
     ppd_virtus_s5: "Glass-ceramic surface, sealable from the top (high IP rating for outdoor use).",
-    ppd_virtus_s6: "Element insulated by the glass: unaffected by wind; no bacterial retention.",
+    ppd_virtus_s6: "Element insulated by the glass: unaffected by wind; the glass holds no residues.",
     ppd_megag_t: "Mega Grill: the great protagonist of group grilling, dual power and a safety lid.",
     ppd_megag_k: "The Mega Grill story",
     ppd_megag_p0: "Mega Grill is the protagonist of great grilling, when there is a big crowd celebrating on board. Its ample size and the double element with differentiated power and independent dual control let you manage two different cooks together: on the more powerful zone fiorentine steaks and chops that call for intense heat, on the gentler one vegetables, scamorza and skewers of prawns and scallops not to be dried out.",
@@ -11128,7 +11318,7 @@ var DICT = {
     ppd_favi_s6: "Gimbals for recessed or top installation.",
     ppd_vento_t: "Ventotene: two brass flames and a grill always ready, in Italian style.",
     ppd_vento_k: "The Ventotene story",
-    ppd_vento_p0: "Ventotene puts two burners with solid brass flame spreaders at the chef's disposal, a material that stores and releases heat gently and evenly: the flame becomes enveloping, ideal for a crème pâtissière that must never split or for a velvety Parmesan fondue. The mirror-polished top is not only elegant: it reduces bacterial retention, resists the salt air and wipes clean in an instant after plating paccheri with lobster.",
+    ppd_vento_p0: "Ventotene puts two burners with solid brass flame spreaders at the chef's disposal, a material that stores and releases heat gently and evenly: the flame becomes enveloping, ideal for a crème pâtissière that must never split or for a velvety Parmesan fondue. The mirror-polished top is not only elegant: it has no grain to trap residues, resists the salt air and wipes clean in an instant after plating paccheri with lobster.",
     ppd_vento_p1: "Below, the grill compartment is a precious resource: in the morning it toasts bread and warms the croissants, and thanks to its upper vent that works as an extra burner you can keep a braise warm while you finish the side dish, or start the slow cooking of a beef cheek in red wine. The one-piece grate ensures stability even with a heavy pot of Neapolitan ragù, and the drip tray, enamelled at over 800°, spreads the heat perfectly beneath a tray of vegetables.",
     ppd_vento_p2: "The eye has its share too: the mirror-polished steel top, the balanced proportions and the care for detail give Ventotene an elegant, discreet presence, designed to blend naturally into the spaces on board in the finest tradition of Italian style.",
     ppd_vento_s0: "Twin burner with solid brass flame spreaders.",
@@ -11153,7 +11343,7 @@ var DICT = {
     ppd_oriz_l0: "In 2015 we were the first company in the world to launch gimballed electric induction cookers.",
     ppd_oriz_l1: "Back in the early 2000s we were the global pioneers of the very first line of electric cookers dedicated to the marine market.",
     ppd_oriz_l2: "This premium cooker is the logical evolution of the systems engineered over the last decades, fully upgraded with the latest technology and a wide array of unique, high-end features.",
-    ppd_oriz_l3: "Perfectly balanced solid stainless steel hinges, built in-house instead of cheap zinc-plated domestic hardware: oven doors withstand heavy, long-term use without sagging.",
+    ppd_oriz_l3: "Perfectly balanced solid stainless steel hinges, built in-house: oven doors withstand heavy, long-term use without sagging.",
     ppd_oriz_l4: "Cooktop controls designed independently from the oven, to greatly simplify component replacement or full cooktop servicing.",
     ppd_oriz_l5: "Mirror-polished stainless steel oven interior, engineered to minimize bacterial retention, simplify cleaning and deliver superior corrosion resistance.",
     ppd_oriz_l6: "Heavy-duty enameled baking pan, custom-made with our own molds and forged from specialized steel for optimal heat distribution.",
@@ -11242,7 +11432,7 @@ var DICT = {
     slr_p9_label: "Durability",
     slr_p9_l0: "Solid stainless steel throughout",
     slr_p9_l1: "built for salt air and constant use",
-    slr_p9_l2: "zero galvanized iron components",
+    slr_p9_l2: "oven-door hinges of the highest quality",
     slr_p10_label: "Interior",
     slr_p10_l0: "Mirror-polished stainless interior",
     slr_p10_l1: "no grain to trap residue",
@@ -11273,7 +11463,11 @@ var DICT = {
     rv7: "\"Extraordinary and swift service. I have always bought from them and have never felt let down, an excellent relationship with customers. What can I say, a highly recommended company.\"",
     rv8: "\"I rarely give five stars. But the service is good, from the start right through to after the purchase.\"",
     rv9: "\"The stove is now installed, and we have already prepared our first test meals. Everything works perfectly · and it looks absolutely beautiful too.\"",
-    rv10: "\"Very friendly, professional and reliable service. Quick responses, a smooth process and excellent advice. You feel well taken care of from start to finish.\""
+    rv10: "\"Very friendly, professional and reliable service. Quick responses, a smooth process and excellent advice. You feel well taken care of from start to finish.\"",
+    rv11: "\"I was looking for spare parts for my twenty-year-old gas cooker. The exploded views were right there on the home page, and the advice I received was excellent. Five stars from me.\"",
+    rv12: "\"Never had I received such excellent service from an Italian company, and I say that as the owner of an Italian boat. It is in these small things, in the attention and the willingness to help, that you see the true face of a company.\"",
+    rv13: "\"I had already bought burners and other parts from you for my old cooker. When the time came for a new one, I chose a Techimpex again. Thank you for the speed and the seriousness you show.\"",
+    rv14: "\"This is the second time I have ordered spare parts for my cooker. What struck me most is the after-sales service: prompt assistance, support with the installation and real technical competence. It is rare to find something so complete.\""
   },
 
   it: {
@@ -11459,7 +11653,7 @@ var DICT = {
     eff_c1_label: "Robustezza & Igiene",
     eff_c1_title: "Robustezza d'acciaio, igiene impeccabile",
     eff_c1_b1: "Il primo pilastro di una vera cucina professionale off-grid è la solidità. I nostri apparecchi vantano una robustezza strutturale paragonabile a quella di un carro armato, pensata per sfidare le sollecitazioni più estreme in mare aperto e sui terreni più accidentati.",
-    eff_c1_b2: "Questa forza si unisce alla massima igiene: per le muffole utilizziamo acciaio inox lucidato a specchio. Questa finitura rende le superfici eccezionalmente facili e rapide da pulire e garantisce proprietà antibatteriche naturali, impedendo a sporco e microrganismi di annidarsi.",
+    eff_c1_b2: "Questa forza si unisce a un approccio rigoroso all'igiene. Le muffole dei nostri forni sono in acciaio inox lucido, non satinato: non c'è grana abrasiva in cui i residui possano annidarsi, così le superfici si puliscono in modo eccezionalmente rapido e facile.",
     eff_c2_label: "Isolamento Termico",
     eff_c2_title: "Isolamento d'avanguardia, una <em>bandiera di efficienza</em>",
     eff_c2_b1: "L'efficienza energetica è la nostra vera bandiera. Non ci limitiamo a un isolamento standard: per i nostri forni e apparecchi impieghiamo molteplici sistemi di isolamento combinati, dalla stabilità della lana di roccia fino a speciali sistemi a sandwich che utilizzano i materiali più innovativi e tecnologicamente avanzati oggi esistenti sul mercato globale.",
@@ -11585,7 +11779,7 @@ var DICT = {
     ab_p3_title: "Acciaio, <em>artigianato</em> e tradizione",
     ab_p3_body1: "Qui siamo nell'Inox Valley: non solo l'Italia, patria della migliore cucina del mondo, ma la terra del Coneglianese dove nascono le migliori cucine per il mondo professionale · costruite dalle molte aziende del territorio insieme a grandi chef e cuochi. È il know-how che respiriamo ogni giorno.",
     ab_p3_body2: "Le maestranze che costruiscono le nostre cucine sono l'ultimo anello di un sapere tramandato di generazione in generazione, nato in una piccola bottega dell'acciaio e tramandato da allora · lo stesso patrimonio di nomi come Zoppas e Zanussi. Da qui vengono l'inox massiccio tornito, le muffole a specchio e il brevetto dei basculanti · dettagli che reggono lo sguardo ravvicinato.",
-    ab_p3_body3: "Dove altri ricorrono alla plastica e alla lamiera sottile, i nostri sono ricavati dal pieno acciaio inox · corpi di forte spessore, particolari torniti e fresati per durare più della barca stessa. È la cultura della cucina professionale, portata per mare.",
+    ab_p3_body3: "I nostri corpi sono costruiti in acciaio inox di forte spessore · particolari torniti e fresati dal pieno per durare più della barca stessa. Le porte dei forni montano cerniere di altissima qualità: su modelli come Lux e Orizzonte sono in acciaio inox massiccio, realizzate su nostro disegno. E su Orizzonte, Tolomeo e Mega Grill anche le manopole sono in acciaio massiccio, fresate e tornite dal pieno. È la cultura della cucina professionale, portata per mare.",
     cat_dl_btn3: "Sfoglia la Leonardo Collection",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, fin nei minimi dettagli",
@@ -11615,7 +11809,7 @@ var DICT = {
     cat_page_label: "Libreria",
     cat_page_title: "Cataloghi",
     cat_edition: "Edizione 2025",
-    cat_desc1: "I nostri cataloghi raccolgono una selezione dei principali modelli Marine Cookers · dalle cucine a gas orientabili alle nostre innovative serie elettriche e ad induzione. Progettate per yacht professionali, disegnate nell'Inox Valley, Conegliano. Costruite in pieno acciaio inox di forte spessore · con particolari torniti e fresati là dove altri si affidano a plastica e lamiere sottili.",
+    cat_desc1: "I nostri cataloghi raccolgono una selezione dei principali modelli Marine Cookers · dalle cucine a gas orientabili alle nostre innovative serie elettriche e ad induzione. Progettate per yacht professionali, disegnate nell'Inox Valley, Conegliano. Costruite in pieno acciaio inox di forte spessore · con particolari torniti e fresati dal pieno.",
     cat_desc2: "Sfoglia i cataloghi per esplorare le specifiche tecniche, le dimensioni e una selezione dei prodotti.",
     cat_dl_btn: "Scarica il Catalogo",
     cat_dl_btn1: "Sfoglia il catalogo con una selezione dei prodotti",
@@ -11628,6 +11822,8 @@ var DICT = {
     ct_hours_label: "Orari",
     ct_hours_val: "Lunedì - Venerdì<br>08:30 - 17:30 CET",
     ct_open_maps: "Apri in Google Maps",
+    hc_label: "Scrivici",
+    hc_lead: "Dicci di cosa hai bisogno: rispondiamo ai cantieri come ai singoli armatori.",
     elec_hero_title: "Cucine Elettriche<br><em>per il Mare</em>",
     elec_hero_sub: "Ingegneria di precisione e artigianato · progettate per le prestazioni più elevate sugli yacht più pregiati al mondo.",
     elec_es_tag: "La Collezione · Cucine Elettriche con Forno",
@@ -11802,7 +11998,7 @@ var DICT = {
     ppd_grande_s5: "Potenza 6,1 kW; butano/propano 30 mbar",
     ppd_mediterraneo_t: "Mediterraneo: il piano radiante brevettato a doppia funzione, piano cottura e grill in un solo spazio.",
     ppd_mediterraneo_k: "Il racconto di Mediterraneo",
-    ppd_mediterraneo_p0: "Mediterraneo nasce da un nostro brevetto, la tecnologia DUPLEX: nello spazio di un solo piano avete due strumenti. Potete cucinare con le pentole oppure grigliare direttamente sul cristallo vetroceramico, senza dover scegliere. Su una barca dove lo spazio è prezioso è una piccola rivoluzione: pesce, carne, verdure, toast e perfino le uova si cuociono direttamente sul vetro, che avendo porosità nulla non trattiene i batteri e permette di cuocere pietanze diverse in sequenza.",
+    ppd_mediterraneo_p0: "Mediterraneo nasce da un nostro brevetto, la tecnologia DUPLEX: nello spazio di un solo piano avete due strumenti. Potete cucinare con le pentole oppure grigliare direttamente sul cristallo vetroceramico, senza dover scegliere. Su una barca dove lo spazio è prezioso è una piccola rivoluzione: pesce, carne, verdure, toast e perfino le uova si cuociono direttamente sul vetro, che avendo porosità nulla non trattiene i residui e permette di cuocere pietanze diverse in sequenza.",
     ppd_mediterraneo_p1: "Quando si griglia, l'efficienza può superare quella dell'induzione, e la superficie raggiunge in pochi istanti anche 500 gradi: così Mediterraneo griglia perfino una fiorentina spessa, cosa impossibile per i grill tradizionali. La cornice perimetrale contiene grassi e liquidi, il sistema antivibrazione esclusivo tiene tutto stabile e i ferma-pentole opzionali si montano direttamente sulla cornice inox, senza altri fori sul top.",
     ppd_mediterraneo_p2: "Il design è quello italiano che ci contraddistingue: cristallo e acciaio, linee pulite, nessun elemento superfluo. Mediterraneo concentra due prodotti in pochissimo spazio, disponibile anche in versione a due fuochi, e si integra con eleganza nella cambusa, pensato per il progetto degli interni.",
     ppd_mediterraneo_s0: "Piano radiante brevettato a doppia funzione DUPLEX: piano cottura + grill.",
@@ -11869,13 +12065,13 @@ var DICT = {
     ppd_modular_t: "Modular: il sistema di cottura su misura, componibile e cardanico, disegnato attorno alla tua barca.",
     ppd_modular_k: "Il racconto di Modular",
     ppd_modular_p0: "Modular è la risposta a chi vuole una cucina di bordo unica: un sistema componibile e cardanico, progettato su misura attorno agli spazi e alle esigenze di ogni imbarcazione. Piani a induzione o radianti, grill, forni ed elementi si combinano liberamente, così l'armatore e il progettista disegnano insieme la cambusa ideale, senza vincoli di catalogo.",
-    ppd_modular_p1: "Dietro la libertà compositiva c'è la nostra artigianalità: acciaio inox massiccio, cardani regolabili brevettati, cerniere costruite in casa, manopole tornite dal pieno e sicurezze integrate. Ciò che altri dichiarano impossibile, noi lo consegniamo: è la stessa maestria con cui, dal 2015, siamo stati i primi al mondo a portare in mare l'induzione cardanica.",
+    ppd_modular_p1: "Dietro la libertà compositiva c'è la nostra artigianalità: acciaio inox massiccio, cardani regolabili brevettati, cerniere costruite in casa e sicurezze integrate. Ciò che altri dichiarano impossibile, noi lo consegniamo: è la stessa maestria con cui, dal 2015, siamo stati i primi al mondo a portare in mare l'induzione cardanica.",
     ppd_modular_p2: "Il design è interamente italiano e interamente su misura: proporzioni, finiture e materiali si accordano al progetto dell'interior designer. Modular non si adatta allo spazio, lo interpreta, per una cucina di bordo che è un pezzo unico come lo yacht che la ospita.",
     ppd_modular_s0: "Sistema di cottura componibile e cardanico, su misura.",
     ppd_modular_s1: "Piani a induzione o radianti, grill, forni ed elementi combinabili liberamente.",
     ppd_modular_s2: "Progettato su misura attorno agli spazi di ogni imbarcazione.",
     ppd_modular_s3: "Acciaio inox massiccio; cardani regolabili brevettati; cerniere costruite in casa.",
-    ppd_modular_s4: "Manopole tornite dal pieno; sicurezze integrate.",
+    ppd_modular_s4: "Sicurezze integrate.",
     ppd_modular_s5: "Realizzazione custom in collaborazione con armatore e progettista.",
     ppd_forma_t: "Forma: due zone a induzione potentissime e un vero forno multifunzione, in spazio contenuto.",
     ppd_forma_k: "Il racconto di Forma",
@@ -12017,7 +12213,7 @@ var DICT = {
     ppd_roma_s11: "Opzionali: pietra ollare, paracalore laterali; staffe in più modelli.",
     ppd_firenze_t: "Firenze: forno a gas ultracompatto, tutto in acciaio inox a specchio.",
     ppd_firenze_k: "Il racconto di Firenze",
-    ppd_firenze_p0: "Firenze è il forno a gas ultra-compatto interamente rivestito in acciaio inox lucidato a specchio, dentro e fuori: una scelta che non è solo estetica, perché lo specchio riflette il calore sui cibi, ostacola i batteri, resiste alla salsedine e si pulisce con un solo gesto. Nonostante l'ingombro minimo, la capienza sorprende e accoglie una focaccia alle olive alta e soffice o un filetto di maiale in crosta.",
+    ppd_firenze_p0: "Firenze è il forno a gas ultra-compatto interamente rivestito in acciaio inox lucidato a specchio, dentro e fuori: una scelta che non è solo estetica, perché lo specchio riflette il calore sui cibi, non offre grana in cui i residui possano annidarsi, resiste alla salsedine e si pulisce con un solo gesto. Nonostante l'ingombro minimo, la capienza sorprende e accoglie una focaccia alle olive alta e soffice o un filetto di maiale in crosta.",
     ppd_firenze_p1: "Il bruciatore, ingegnerizzato per una cottura da vero statico italiano a consumi ridotti, avvolge le pietanze in calore uniforme, e la valvola tarata dal simmering alla fiamma piena vi dà il controllo necessario per degli sformatini di verdure delicati. L'isolamento a sandwich metallico e il doppio vetro temperato trattengono il calore, mentre le termocoppie e il bloccaporta automatico garantiscono sicurezza. Con la pietra ollare opzionale, la domenica, una teglia di tortelli gratinati e una crostata di frutta escono come dal forno di casa.",
     ppd_firenze_p2: "Il rivestimento a specchio è anche pura estetica: dentro e fuori, l'inox lucidato dà a Firenze un aspetto prezioso e luminoso che nobilita la cambusa, un forno da incasso pensato per integrarsi con eleganza nel progetto degli interni più curati.",
     ppd_firenze_s0: "Forno a gas da incasso ultra-compatto.",
@@ -12034,7 +12230,7 @@ var DICT = {
     ppd_napoli_t: "Napoli: forno elettrico da incasso a tripla resistenza, versatile come quello di casa.",
     ppd_napoli_k: "Il racconto di Napoli",
     ppd_napoli_p0: "Napoli porta a bordo un forno elettrico dal comportamento raro nel mondo nautico, grazie al suo sistema a tripla resistenza governato da un selettore dedicato. Potete cuocere solo da sotto per dare spinta alla base di una pizza napoletana stesa sulla pietra ollare, solo da sopra per gratinare la superficie di una parmigiana, oppure sotto e sopra insieme per un arrosto dorato in modo uniforme; e con il grill potenziato superiore la crosta di un timballo diventa irresistibile.",
-    ppd_napoli_p1: "Oltre 30 litri di capienza in un corpo compattissimo lasciano spazio per teglie importanti, mentre l'isolamento a sandwich metallico e il doppio vetro temperato mantengono la temperatura stabile. Gli interni e le superfici in inox lucidato a specchio riflettono il calore sui cibi, ostacolano i batteri, resistono alla salsedine e si puliscono in un attimo. Per chiudere, una torta di mele profumata cotta con la sola resistenza inferiore per una base perfetta.",
+    ppd_napoli_p1: "Oltre 30 litri di capienza in un corpo compattissimo lasciano spazio per teglie importanti, mentre l'isolamento a sandwich metallico e il doppio vetro temperato mantengono la temperatura stabile. Gli interni e le superfici in inox lucidato a specchio riflettono il calore sui cibi, non trattengono i residui, resistono alla salsedine e si puliscono in un attimo. Per chiudere, una torta di mele profumata cotta con la sola resistenza inferiore per una base perfetta.",
     ppd_napoli_p2: "Da incasso e tutto in acciaio a specchio, Napoli unisce tecnica ed estetica: un forno elettrico completo che si inserisce con ordine e luminosità nel mobile della cambusa, pensato per integrarsi con coerenza nel progetto degli interni di bordo.",
     ppd_napoli_s0: "Forno elettrico da incasso, corpo interamente in acciaio inox.",
     ppd_napoli_s1: "Sistema a tripla resistenza con selettore dedicato (solo sotto / solo sopra / sotto+sopra / grill potenziato superiore).",
@@ -12060,7 +12256,7 @@ var DICT = {
     ppd_tiziano_s4: "Raccogligocce amovibile per la raccolta dei grassi di cottura.",
     ppd_tiziano_s5: "Regolazione elettronica.",
     ppd_tiziano_s6: "Superficie in cristallo vetroceramico, sigillabile dall'alto (elevato grado IP per l'esterna).",
-    ppd_tiziano_s7: "Resistenza isolata dal cristallo: non influenzata dal vento; ritentività batterica nulla.",
+    ppd_tiziano_s7: "Resistenza isolata dal cristallo: non influenzata dal vento; il cristallo non trattiene i residui.",
     ppd_caravaggio_t: "Caravaggio: il grill vetroceramico essenziale, minimale e facilissimo da pulire.",
     ppd_caravaggio_k: "Il racconto di Caravaggio",
     ppd_caravaggio_p0: "Caravaggio interpreta il grill vetroceramico nella sua forma più pura ed essenziale. La superficie interamente in cristallo, minimale e raffinata, è ideale per una cucina semplice e di qualità: verdure grigliate condite con olio e limone, gamberi scottati al volo, fette di pane per una bruschetta al pomodoro e basilico da servire in pozzetto.",
@@ -12070,7 +12266,7 @@ var DICT = {
     ppd_caravaggio_s1: "Superficie interamente in cristallo vetroceramico.",
     ppd_caravaggio_s2: "Sigillabile dall'alto (elevato grado IP per l'esterna).",
     ppd_caravaggio_s3: "Resistenza isolata dal cristallo: non influenzata dal vento.",
-    ppd_caravaggio_s4: "Ritentività batterica nulla, pulizia semplificata.",
+    ppd_caravaggio_s4: "Il cristallo non trattiene i residui, pulizia semplificata.",
     ppd_raffaello_t: "Raffaello: grill e piano cottura in uno, brevettato e tutto in vetroceramica.",
     ppd_raffaello_k: "Il racconto di Raffaello",
     ppd_raffaello_p0: "Raffaello è molto più di un grill: brevettato, con resistenza a doppio stadio regolabile da 300 a 500°, riunisce in un solo apparecchio due strumenti, perché cuoce sia direttamente sul cristallo sia con le pentole. Sul vetro rovente una tagliata di tonno agli agrumi si sigilla in pochi istanti; sulle sue zone, usando una casseruola, si manteca un risotto alla pescatora senza cambiare postazione, un lusso in barca, dove ogni centimetro conta.",
@@ -12083,7 +12279,7 @@ var DICT = {
     ppd_raffaello_s4: "Regolazione elettronica.",
     ppd_raffaello_s5: "Superficie interamente in cristallo vetroceramico, sigillabile dall'alto (elevato grado IP per l'esterna).",
     ppd_raffaello_s6: "Resistenza isolata dal cristallo: non influenzata dal vento.",
-    ppd_raffaello_s7: "Ritentività batterica nulla, pulizia semplificata.",
+    ppd_raffaello_s7: "Il cristallo non trattiene i residui, pulizia semplificata.",
     ppd_virtus_t: "Virtus: il grill vetroceramico di ampie dimensioni per chi ama ricevere.",
     ppd_virtus_k: "Il racconto di Virtus",
     ppd_virtus_p0: "Virtus è la versione di ampie dimensioni del grill vetroceramico brevettato, pensata per chi ama ricevere. La sua grande superficie, con resistenza a doppio stadio da 300 a 500° e due zone indipendenti, consente di trasformare la grigliata in un banchetto: da un lato gamberoni, calamari e verdure che cuociono sul vetro, dall'altro una padella di spaghetti allo scoglio che sobbolle nel suo sugo.",
@@ -12095,7 +12291,7 @@ var DICT = {
     ppd_virtus_s3: "Due zone di cottura indipendenti.",
     ppd_virtus_s4: "Regolazione elettronica.",
     ppd_virtus_s5: "Superficie in cristallo vetroceramico, sigillabile dall'alto (elevato grado IP per l'esterna).",
-    ppd_virtus_s6: "Resistenza isolata dal cristallo: non influenzata dal vento; ritentività batterica nulla.",
+    ppd_virtus_s6: "Resistenza isolata dal cristallo: non influenzata dal vento; il cristallo non trattiene i residui.",
     ppd_megag_t: "Mega Grill: il grande protagonista delle grigliate di gruppo, doppia potenza e coperchio di sicurezza.",
     ppd_megag_k: "Il racconto di Mega Grill",
     ppd_megag_p0: "Mega Grill è il protagonista delle grandi grigliate, quando a bordo si festeggia in tanti. Le sue ampie dimensioni e la doppia resistenza a potenze differenziate con doppio comando indipendente permettono di gestire due cotture diverse insieme: sulla zona più potente delle fiorentine e delle costolette che chiedono calore intenso, su quella più dolce verdure, scamorza e spiedini di gamberi e capesante da non far seccare.",
@@ -12362,7 +12558,7 @@ var DICT = {
     ppd_favi_s6: "Basculanti per installazione a incasso o a top.",
     ppd_vento_t: "Ventotene: due fiamme d'ottone e un grill sempre pronto, con lo stile italiano.",
     ppd_vento_k: "Il racconto di Ventotene",
-    ppd_vento_p0: "Ventotene mette a disposizione dello chef due bruciatori con spartifiamma in ottone massiccio, un materiale che accumula e cede il calore in modo dolce e uniforme: la fiamma diventa avvolgente, ideale per una crema pasticcera che non deve mai impazzire o per una fonduta di parmigiano vellutata. Il piano lucidato a specchio non è solo elegante: riduce la ritenzione batterica, resiste alla salsedine e si pulisce in un istante dopo aver impiattato dei paccheri all'astice.",
+    ppd_vento_p0: "Ventotene mette a disposizione dello chef due bruciatori con spartifiamma in ottone massiccio, un materiale che accumula e cede il calore in modo dolce e uniforme: la fiamma diventa avvolgente, ideale per una crema pasticcera che non deve mai impazzire o per una fonduta di parmigiano vellutata. Il piano lucidato a specchio non è solo elegante: non ha grana che trattenga i residui, resiste alla salsedine e si pulisce in un istante dopo aver impiattato dei paccheri all'astice.",
     ppd_vento_p1: "Sotto, il vano grill è una risorsa preziosa: al mattino tosta il pane e scalda i cornetti, e grazie allo sfiato superiore che funziona da bruciatore aggiuntivo potete tenere in caldo un brasato mentre completate il contorno, oppure avviare la cottura lenta di una guancia di manzo al vino rosso. La griglia monopezzo assicura stabilità perfino con una pentola pesante di ragù napoletano, e il raccogligocce smaltato a fuoco oltre 800° distribuisce il calore in modo ottimale sotto una teglia di verdure.",
     ppd_vento_p2: "Anche l'occhio ha la sua parte: il piano in acciaio lucidato a specchio, le proporzioni equilibrate e la cura dei dettagli danno a Ventotene una presenza elegante e discreta, disegnata per integrarsi con naturalezza negli ambienti di bordo secondo la migliore tradizione dello stile italiano.",
     ppd_vento_s0: "Doppio bruciatore con spartifiamma in ottone massiccio.",
@@ -12387,7 +12583,7 @@ var DICT = {
     ppd_oriz_l0: "Nel 2015 siamo stati i primi al mondo a presentare cucine elettriche a induzione con sospensione cardanica.",
     ppd_oriz_l1: "Già nei primi anni Duemila siamo stati i pionieri assoluti della prima linea di cucine elettriche dedicata al mercato nautico.",
     ppd_oriz_l2: "Questa cucina premium è l'evoluzione naturale dei sistemi sviluppati negli ultimi decenni, aggiornata con le tecnologie più recenti e con una lunga serie di soluzioni esclusive di alta gamma.",
-    ppd_oriz_l3: "Cerniere in acciaio inox massiccio, perfettamente bilanciate e costruite internamente al posto della minuteria domestica zincata: le porte del forno reggono un uso intenso e prolungato senza cedere.",
+    ppd_oriz_l3: "Cerniere in acciaio inox massiccio, perfettamente bilanciate e costruite internamente: le porte del forno reggono un uso intenso e prolungato senza cedere.",
     ppd_oriz_l4: "Comandi del piano cottura progettati in modo indipendente dal forno, per semplificare la sostituzione dei componenti o la manutenzione dell'intero piano.",
     ppd_oriz_l5: "Interno del forno in acciaio inox lucidato a specchio, studiato per ridurre al minimo la ritenzione batterica, semplificare la pulizia e offrire una resistenza alla corrosione superiore.",
     ppd_oriz_l6: "Leccarda smaltata di forte spessore, realizzata su stampi di nostra proprietà e in acciaio speciale per una distribuzione ottimale del calore.",
@@ -12476,7 +12672,7 @@ var DICT = {
     slr_p9_label: "Durata",
     slr_p9_l0: "Acciaio inox pieno ovunque",
     slr_p9_l1: "costruito per aria salmastra e uso continuo",
-    slr_p9_l2: "zero componenti in ferro zincato",
+    slr_p9_l2: "cerniere porta forno di altissima qualità",
     slr_p10_label: "Interno",
     slr_p10_l0: "Interno in acciaio inox lucidato a specchio",
     slr_p10_l1: "nessuna grana che trattiene i residui",
@@ -12507,7 +12703,11 @@ var DICT = {
     rv7: "\"Un servizio straordinario e celere, mi sono sempre servito da loro e non mi sono mai sentito tradito, ottima relazione con il pubblico. Che dire, azienda consigliatissima.\"",
     rv8: "\"Raramente do cinque stelle. Ma il servizio è buono, dall'inizio fino al dopo acquisto.\"",
     rv9: "\"La cucina è installata e abbiamo già preparato i primi pasti di prova. Funziona tutto alla perfezione · ed è anche bellissima.\"",
-    rv10: "\"Servizio cordiale, professionale e affidabile. Risposte rapide, tutto liscio e consigli eccellenti. Ci si sente seguiti dall’inizio alla fine.\""
+    rv10: "\"Servizio cordiale, professionale e affidabile. Risposte rapide, tutto liscio e consigli eccellenti. Ci si sente seguiti dall’inizio alla fine.\"",
+    rv11: "\"Cercavo ricambi per la mia cucina a gas di vent'anni. Gli esplosi erano già lì, sulla home page, e la consulenza che ho ricevuto è stata eccellente. Cinque stelle.\"",
+    rv12: "\"Non mi era mai capitato di ricevere un servizio così eccellente da un'azienda italiana, e lo dico da proprietario di una barca italiana. È proprio in queste piccole cose, nell'attenzione e nella disponibilità, che si vede il vero volto di un'azienda.\"",
+    rv13: "\"Avevo già acquistato da voi bruciatori e altri articoli per la mia vecchia cucina. Dovendone comprare una nuova, ho voluto scegliere ancora una Techimpex. Grazie per la tempistica e la serietà che dimostrate.\"",
+    rv14: "\"È già la seconda volta che ordino ricambi per la mia cucina. Ciò che mi ha colpito di più è il servizio post-vendita: assistenza puntuale, supporto nell'installazione e una competenza tecnica elevata. È raro trovare un servizio così completo.\""
   },
 
   fr: {
@@ -12693,7 +12893,7 @@ var DICT = {
     eff_c1_label: "Robustesse & Hygiène",
     eff_c1_title: "Robustesse d'acier, hygiène impeccable",
     eff_c1_b1: "Le premier pilier d'une véritable cuisine professionnelle off-grid est la solidité. Nos appareils offrent une robustesse structurelle comparable à celle d'un char, pensée pour affronter les sollicitations les plus extrêmes en haute mer et sur les terrains les plus accidentés.",
-    eff_c1_b2: "Cette force s'allie à la plus grande hygiène : pour les moufles des fours, nous utilisons de l'acier inoxydable poli miroir. Cette finition rend les surfaces exceptionnellement faciles et rapides à nettoyer, tout en offrant des propriétés antibactériennes naturelles qui empêchent la saleté et les micro-organismes de se loger.",
+    eff_c1_b2: "Cette robustesse s'accompagne d'une approche rigoureuse de l'hygiène. Les moufles de nos fours sont en acier inoxydable poli, non brossé : aucun grain abrasif dans lequel des résidus puissent se loger, si bien que les surfaces se nettoient avec une rapidité et une facilité exceptionnelles.",
     eff_c2_label: "Isolation Thermique",
     eff_c2_title: "Isolation d'avant-garde, un <em>étendard d'efficacité</em>",
     eff_c2_b1: "L'efficacité énergétique est notre véritable étendard. Nous ne nous limitons pas à une isolation standard : pour nos fours et appareils, nous employons de multiples systèmes d'isolation combinés, de la stabilité de la laine de roche à des structures sandwich spéciales utilisant les matériaux les plus innovants et technologiquement avancés existant aujourd'hui sur le marché mondial.",
@@ -12819,7 +13019,7 @@ var DICT = {
     ab_p3_title: "Acier, <em>savoir-faire</em> et héritage",
     ab_p3_body1: "Ici, nous sommes dans l'Inox Valley : non seulement l'Italie, patrie de la meilleure cuisine du monde, mais la région de Conegliano où naissent les meilleures cuisinières pour le monde professionnel · construites par les nombreuses entreprises du territoire avec de grands chefs. C'est le savoir-faire que nous respirons chaque jour.",
     ab_p3_body2: "Les artisans qui fabriquent nos cuisinières sont le dernier maillon d'un savoir-faire transmis de génération en génération, né dans un petit atelier de l'acier et transmis depuis lors · le même héritage que des noms comme Zoppas et Zanussi. D'ici viennent l'inox massif tourné, les moufles miroir et le brevet des cardans · des détails qui soutiennent le regard rapproché.",
-    ab_p3_body3: "Là où d'autres recourent au plastique et à la tôle fine, les nôtres sont usinées dans l'inox massif · des corps de forte épaisseur, des pièces tournées et fraisées pour durer plus longtemps que le bateau lui-même. C'est la culture de la cuisine professionnelle, portée en mer.",
+    ab_p3_body3: "Nos corps sont construits en acier inoxydable de forte épaisseur · des pièces tournées et fraisées dans la masse pour durer plus longtemps que le bateau lui-même. Les portes de four reçoivent des charnières de très haute qualité : sur des modèles comme Lux et Orizzonte, elles sont en inox massif, réalisées sur notre propre dessin. Et sur Orizzonte, Tolomeo et Mega Grill, les boutons aussi sont en inox massif, fraisés et tournés dans la masse. C'est la culture de la cuisine professionnelle, portée en mer.",
     cat_dl_btn3: "Feuilleter la Leonardo Collection",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, jusque dans le moindre détail",
@@ -12849,7 +13049,7 @@ var DICT = {
     cat_page_label: "Bibliothèque",
     cat_page_title: "Catalogues",
     cat_edition: "Édition 2025",
-    cat_desc1: "Nos catalogues rassemblent une sélection des principaux modèles Marine Cookers · des cuisinières à gaz à cardan à nos innovantes séries électriques et à induction. Conçues pour les yachts professionnels, dessinées dans l'Inox Valley, Conegliano. Construites en inox massif de forte épaisseur · avec des pièces tournées et fraisées là où d'autres se fient au plastique et à la tôle fine.",
+    cat_desc1: "Nos catalogues rassemblent une sélection des principaux modèles Marine Cookers · des cuisinières à gaz à cardan à nos innovantes séries électriques et à induction. Conçues pour les yachts professionnels, dessinées dans l'Inox Valley, Conegliano. Construites en inox massif de forte épaisseur · avec des pièces tournées et fraisées dans la masse.",
     cat_desc2: "Parcourez les catalogues pour explorer les spécifications techniques, les dimensions et une sélection des produits.",
     cat_dl_btn: "Télécharger le Catalogue",
     cat_dl_btn1: "Feuilleter le catalogue avec une sélection de produits",
@@ -12862,6 +13062,8 @@ var DICT = {
     ct_hours_label: "Horaires",
     ct_hours_val: "Lundi - Vendredi<br>08h30 - 17h30 CET",
     ct_open_maps: "Ouvrir dans Google Maps",
+    hc_label: "Nous contacter",
+    hc_lead: "Dites-nous ce dont vous avez besoin : nous répondons aux chantiers comme aux propriétaires privés.",
     elec_hero_title: "Cuisinières Électriques<br><em>pour la Mer</em>",
     elec_hero_sub: "Ingénierie de précision et artisanat · conçues pour performer au plus haut niveau sur les plus beaux yachts du monde.",
     elec_es_tag: "La Collection · Cuisinières Électriques avec Four",
@@ -13036,7 +13238,7 @@ var DICT = {
     ppd_grande_s5: "Puissance 6,1 kW ; butane/propane 30 mbar",
     ppd_mediterraneo_t: "Mediterraneo : la table radiante brevetée à double fonction, table de cuisson et gril dans un seul espace.",
     ppd_mediterraneo_k: "Le récit de Mediterraneo",
-    ppd_mediterraneo_p0: "Mediterraneo naît d'un de nos brevets, la technologie DUPLEX : dans l'espace d'une seule table, vous avez deux outils. Vous pouvez cuisiner avec des casseroles ou griller directement sur la vitrocéramique, sans devoir choisir. Sur un bateau où l'espace est précieux, c'est une petite révolution : poisson, viande, légumes, toasts et même les œufs cuisent directement sur le verre qui, sans porosité, ne retient pas les bactéries et permet de cuire des plats différents à la suite.",
+    ppd_mediterraneo_p0: "Mediterraneo naît d'un de nos brevets, la technologie DUPLEX : dans l'espace d'une seule table, vous avez deux outils. Vous pouvez cuisiner avec des casseroles ou griller directement sur la vitrocéramique, sans devoir choisir. Sur un bateau où l'espace est précieux, c'est une petite révolution : poisson, viande, légumes, toasts et même les œufs cuisent directement sur le verre qui, sans porosité, ne retient pas les résidus et permet de cuire des plats différents à la suite.",
     ppd_mediterraneo_p1: "En mode gril, l'efficacité peut dépasser celle de l'induction, et la surface atteint jusqu'à 500 degrés en quelques instants : Mediterraneo grille ainsi même une fiorentina épaisse, impossible pour les grils traditionnels. Le cadre périmétral contient graisses et liquides, le système anti-vibration exclusif maintient tout stable, et les bras porte-casseroles en option se montent directement sur le cadre inox, sans autres trous sur le plan.",
     ppd_mediterraneo_p2: "Le design est celui, italien, qui nous distingue : verre et acier, lignes épurées, rien de superflu. Mediterraneo réunit deux produits dans un minimum d'espace, également disponible en version à deux feux, et s'intègre avec élégance à la cambuse, pensé pour le projet des intérieurs.",
     ppd_mediterraneo_s0: "Table radiante brevetée à double fonction DUPLEX : table de cuisson + gril.",
@@ -13103,13 +13305,13 @@ var DICT = {
     ppd_modular_t: "Modular : le système de cuisson sur mesure, modulable et cardanique, dessiné autour de votre bateau.",
     ppd_modular_k: "Le récit de Modular",
     ppd_modular_p0: "Modular est la réponse pour qui veut une cambuse unique : un système modulable et cardanique, conçu sur mesure autour des espaces et des besoins de chaque embarcation. Tables à induction ou radiantes, grils, fours et éléments se combinent librement, si bien que l'armateur et le concepteur dessinent ensemble la cambuse idéale, sans contraintes de catalogue.",
-    ppd_modular_p1: "Derrière la liberté de composition, il y a notre savoir-faire : acier inoxydable massif, cardans réglables brevetés, charnières fabriquées en interne, manettes tournées dans la masse et sécurités intégrées. Ce que d'autres déclarent impossible, nous le livrons : c'est la même maîtrise avec laquelle, depuis 2015, nous avons été les premiers au monde à porter en mer l'induction cardanique.",
+    ppd_modular_p1: "Derrière la liberté de composition, il y a notre savoir-faire : acier inoxydable massif, cardans réglables brevetés, charnières fabriquées en interne et sécurités intégrées. Ce que d'autres déclarent impossible, nous le livrons : c'est la même maîtrise avec laquelle, depuis 2015, nous avons été les premiers au monde à porter en mer l'induction cardanique.",
     ppd_modular_p2: "Le design est entièrement italien et entièrement sur mesure : proportions, finitions et matériaux s'accordent au projet de l'architecte d'intérieur. Modular ne s'adapte pas à l'espace, il l'interprète, pour une cambuse qui est une pièce unique, comme le yacht qui l'accueille.",
     ppd_modular_s0: "Système de cuisson modulable et cardanique, sur mesure.",
     ppd_modular_s1: "Tables à induction ou radiantes, grils, fours et éléments librement combinables.",
     ppd_modular_s2: "Conçu sur mesure autour des espaces de chaque embarcation.",
     ppd_modular_s3: "Acier inoxydable massif ; cardans réglables brevetés ; charnières fabriquées en interne.",
-    ppd_modular_s4: "Manettes tournées dans la masse ; sécurités intégrées.",
+    ppd_modular_s4: "Sécurités intégrées.",
     ppd_modular_s5: "Réalisation sur mesure en collaboration avec l'armateur et le concepteur.",
     ppd_forma_t: "Forma : deux zones à induction très puissantes et un vrai four multifonction, dans un espace compact.",
     ppd_forma_k: "Le récit de Forma",
@@ -13251,7 +13453,7 @@ var DICT = {
     ppd_roma_s11: "En option : pierre ollaire, pare-chaleur latéraux ; étriers sur plusieurs modèles.",
     ppd_firenze_t: "Firenze : un four à gaz ultra-compact, tout en acier inoxydable miroir.",
     ppd_firenze_k: "Le récit de Firenze",
-    ppd_firenze_p0: "Firenze est le four à gaz ultra-compact entièrement revêtu d'acier inoxydable poli miroir, dedans et dehors : un choix qui n'est pas seulement esthétique, car le miroir réfléchit la chaleur sur les aliments, freine les bactéries, résiste aux embruns et se nettoie d'un seul geste. Malgré son encombrement minimal, la capacité surprend et accueille une focaccia aux olives haute et moelleuse ou un filet de porc en croûte.",
+    ppd_firenze_p0: "Firenze est le four à gaz ultra-compact entièrement revêtu d'acier inoxydable poli miroir, dedans et dehors : un choix qui n'est pas seulement esthétique, car le miroir réfléchit la chaleur sur les aliments, n'offre aucun grain où des résidus puissent se loger, résiste aux embruns et se nettoie d'un seul geste. Malgré son encombrement minimal, la capacité surprend et accueille une focaccia aux olives haute et moelleuse ou un filet de porc en croûte.",
     ppd_firenze_p1: "Le brûleur, conçu pour une cuisson de vrai statique italien à faible consommation, enveloppe les plats d'une chaleur uniforme, et la vanne réglée du mijotage à la pleine flamme vous donne le contrôle nécessaire pour de délicats flans de légumes. L'isolation en sandwich métallique et le double vitrage trempé retiennent la chaleur, tandis que les thermocouples et le verrou de porte automatique garantissent la sécurité. Avec la pierre ollaire en option, le dimanche, un plat de tortelli gratinés et une tarte aux fruits sortent comme du four de la maison.",
     ppd_firenze_p2: "Le revêtement miroir est aussi une pure esthétique : dedans et dehors, l'inox poli donne à Firenze une allure précieuse et lumineuse qui anoblit la cambuse, un four encastrable pensé pour s'intégrer avec élégance aux projets d'intérieur les plus soignés.",
     ppd_firenze_s0: "Four à gaz encastrable ultra-compact.",
@@ -13268,7 +13470,7 @@ var DICT = {
     ppd_napoli_t: "Napoli : un four électrique encastrable à triple résistance, aussi polyvalent que celui de la maison.",
     ppd_napoli_k: "Le récit de Napoli",
     ppd_napoli_p0: "Napoli amène à bord un four électrique au comportement rare dans le monde nautique, grâce à son système à triple résistance commandé par un sélecteur dédié. Vous pouvez cuire par le bas uniquement pour donner de l'élan à la base d'une pizza napolitaine étalée sur la pierre ollaire, par le haut uniquement pour gratiner la surface d'une parmigiana, ou par le bas et le haut ensemble pour un rôti doré de façon uniforme ; et avec le gril supérieur renforcé, la croûte d'un timballo devient irrésistible.",
-    ppd_napoli_p1: "Plus de 30 litres de capacité dans un corps très compact laissent de la place pour de grands plats, tandis que l'isolation en sandwich métallique et le double vitrage trempé maintiennent la température stable. L'intérieur et les surfaces en inox poli miroir réfléchissent la chaleur sur les aliments, freinent les bactéries, résistent aux embruns et se nettoient en un instant. Pour finir, un gâteau aux pommes parfumé cuit avec la seule résistance inférieure pour une base parfaite.",
+    ppd_napoli_p1: "Plus de 30 litres de capacité dans un corps très compact laissent de la place pour de grands plats, tandis que l'isolation en sandwich métallique et le double vitrage trempé maintiennent la température stable. L'intérieur et les surfaces en inox poli miroir réfléchissent la chaleur sur les aliments, ne retiennent pas les résidus, résistent aux embruns et se nettoient en un instant. Pour finir, un gâteau aux pommes parfumé cuit avec la seule résistance inférieure pour une base parfaite.",
     ppd_napoli_p2: "Encastré et tout en acier miroir, Napoli allie technique et esthétique : un four électrique complet qui s'insère avec ordre et luminosité dans le meuble de la cambuse, pensé pour s'intégrer avec cohérence au projet des intérieurs de bord.",
     ppd_napoli_s0: "Four électrique encastrable, corps entièrement en acier inoxydable.",
     ppd_napoli_s1: "Système à triple résistance avec sélecteur dédié (sole seule / voûte seule / sole+voûte / gril supérieur renforcé).",
@@ -13294,7 +13496,7 @@ var DICT = {
     ppd_tiziano_s4: "Bac récupérateur amovible pour recueillir les graisses de cuisson.",
     ppd_tiziano_s5: "Réglage électronique.",
     ppd_tiziano_s6: "Surface en vitrocéramique, scellable par le haut (indice IP élevé pour l'extérieur).",
-    ppd_tiziano_s7: "Résistance isolée par le verre : insensible au vent ; rétention bactérienne nulle.",
+    ppd_tiziano_s7: "Résistance isolée par le verre : insensible au vent ; le verre ne retient pas les résidus.",
     ppd_caravaggio_t: "Caravaggio : le gril vitrocéramique essentiel, minimal et très facile à nettoyer.",
     ppd_caravaggio_k: "Le récit de Caravaggio",
     ppd_caravaggio_p0: "Caravaggio interprète le gril vitrocéramique dans sa forme la plus pure et essentielle. La surface entièrement en verre, minimale et raffinée, est idéale pour une cuisine simple et de qualité : légumes grillés assaisonnés d'huile et de citron, crevettes saisies à la volée, tranches de pain pour une bruschetta à la tomate et au basilic à servir dans le cockpit.",
@@ -13304,7 +13506,7 @@ var DICT = {
     ppd_caravaggio_s1: "Surface entièrement en vitrocéramique.",
     ppd_caravaggio_s2: "Scellable par le haut (indice IP élevé pour l'extérieur).",
     ppd_caravaggio_s3: "Résistance isolée par le verre : insensible au vent.",
-    ppd_caravaggio_s4: "Rétention bactérienne nulle, nettoyage simplifié.",
+    ppd_caravaggio_s4: "Le verre ne retient pas les résidus, nettoyage simplifié.",
     ppd_raffaello_t: "Raffaello : gril et plan de cuisson en un, breveté et tout en vitrocéramique.",
     ppd_raffaello_k: "Le récit de Raffaello",
     ppd_raffaello_p0: "Raffaello est bien plus qu'un gril : breveté, avec une résistance à deux étages réglable de 300 à 500°, il réunit deux outils dans un seul appareil, car il cuit aussi bien directement sur le verre qu'avec des casseroles. Sur le verre brûlant, une tagliata de thon aux agrumes se saisit en quelques instants ; sur ses zones, à l'aide d'une casserole, on lie un risotto alla pescatora sans changer de poste, un luxe en bateau, où chaque centimètre compte.",
@@ -13317,7 +13519,7 @@ var DICT = {
     ppd_raffaello_s4: "Réglage électronique.",
     ppd_raffaello_s5: "Surface entièrement en vitrocéramique, scellable par le haut (indice IP élevé pour l'extérieur).",
     ppd_raffaello_s6: "Résistance isolée par le verre : insensible au vent.",
-    ppd_raffaello_s7: "Rétention bactérienne nulle, nettoyage simplifié.",
+    ppd_raffaello_s7: "Le verre ne retient pas les résidus, nettoyage simplifié.",
     ppd_virtus_t: "Virtus : le gril vitrocéramique de grandes dimensions pour qui aime recevoir.",
     ppd_virtus_k: "Le récit de Virtus",
     ppd_virtus_p0: "Virtus est la version de grandes dimensions du gril vitrocéramique breveté, pensée pour qui aime recevoir. Sa grande surface, avec une résistance à deux étages de 300 à 500° et deux zones indépendantes, permet de transformer la grillade en banquet : d'un côté des gambas, des calamars et des légumes qui cuisent sur le verre, de l'autre une poêlée de spaghetti allo scoglio qui mijote dans sa sauce.",
@@ -13329,7 +13531,7 @@ var DICT = {
     ppd_virtus_s3: "Deux zones de cuisson indépendantes.",
     ppd_virtus_s4: "Réglage électronique.",
     ppd_virtus_s5: "Surface en vitrocéramique, scellable par le haut (indice IP élevé pour l'extérieur).",
-    ppd_virtus_s6: "Résistance isolée par le verre : insensible au vent ; rétention bactérienne nulle.",
+    ppd_virtus_s6: "Résistance isolée par le verre : insensible au vent ; le verre ne retient pas les résidus.",
     ppd_megag_t: "Mega Grill : le grand protagoniste des grillades en groupe, double puissance et couvercle de sécurité.",
     ppd_megag_k: "Le récit de Mega Grill",
     ppd_megag_p0: "Mega Grill est le protagoniste des grandes grillades, quand on fait la fête à plusieurs à bord. Ses grandes dimensions et la double résistance à puissances différenciées avec double commande indépendante permettent de gérer deux cuissons différentes ensemble : sur la zone la plus puissante des côtes de bœuf et des travers qui demandent une chaleur intense, sur la plus douce des légumes, de la scamorza et des brochettes de crevettes et de Saint-Jacques à ne pas dessécher.",
@@ -13596,7 +13798,7 @@ var DICT = {
     ppd_favi_s6: "Berceaux pour installation encastrée ou sur plan.",
     ppd_vento_t: "Ventotene : deux flammes de laiton et un gril toujours prêt, dans le style italien.",
     ppd_vento_k: "Le récit de Ventotene",
-    ppd_vento_p0: "Ventotene met à la disposition du chef deux brûleurs à répartiteurs de flamme en laiton massif, un matériau qui accumule et restitue la chaleur avec douceur et régularité : la flamme devient enveloppante, idéale pour une crème pâtissière qui ne doit jamais trancher ou pour une fondue de parmesan veloutée. Le plan poli miroir n'est pas seulement élégant : il réduit la rétention bactérienne, résiste à l'air salin et se nettoie en un instant après avoir dressé des paccheri au homard.",
+    ppd_vento_p0: "Ventotene met à la disposition du chef deux brûleurs à répartiteurs de flamme en laiton massif, un matériau qui accumule et restitue la chaleur avec douceur et régularité : la flamme devient enveloppante, idéale pour une crème pâtissière qui ne doit jamais trancher ou pour une fondue de parmesan veloutée. Le plan poli miroir n'est pas seulement élégant : il n'a aucun grain où des résidus puissent se loger, résiste à l'air salin et se nettoie en un instant après avoir dressé des paccheri au homard.",
     ppd_vento_p1: "En dessous, le compartiment gril est une ressource précieuse : le matin il grille le pain et réchauffe les croissants, et grâce à son évent supérieur qui fait office de brûleur supplémentaire vous pouvez garder un braisé au chaud pendant que vous terminez la garniture, ou lancer la cuisson lente d'une joue de bœuf au vin rouge. La grille monobloc assure la stabilité même avec une lourde marmite de ragù napolitain, et le lèchefrite émaillé à plus de 800° répartit la chaleur de façon optimale sous un plat de légumes.",
     ppd_vento_p2: "L'œil a lui aussi sa part : le plan en acier poli miroir, les proportions équilibrées et le soin du détail donnent à Ventotene une présence élégante et discrète, dessinée pour s'intégrer avec naturel dans les espaces de bord, dans la plus belle tradition du style italien.",
     ppd_vento_s0: "Double brûleur à répartiteurs de flamme en laiton massif.",
@@ -13621,7 +13823,7 @@ var DICT = {
     ppd_oriz_l0: "En 2015, nous avons été les premiers au monde à lancer des cuisinières électriques à induction sur cardans.",
     ppd_oriz_l1: "Dès le début des années 2000, nous étions déjà les pionniers de la toute première gamme de cuisinières électriques dédiée au marché nautique.",
     ppd_oriz_l2: "Cette cuisinière haut de gamme est l'évolution naturelle des systèmes développés au fil des dernières décennies, mise à jour avec les technologies les plus récentes et une longue série de solutions exclusives.",
-    ppd_oriz_l3: "Charnières en acier inoxydable massif, parfaitement équilibrées et fabriquées en interne à la place de la quincaillerie domestique zinguée : les portes du four supportent un usage intensif et prolongé sans s'affaisser.",
+    ppd_oriz_l3: "Charnières en acier inoxydable massif, parfaitement équilibrées et fabriquées en interne : les portes du four supportent un usage intensif et prolongé sans s'affaisser.",
     ppd_oriz_l4: "Commandes de la table de cuisson conçues indépendamment du four, pour simplifier le remplacement des composants ou l'entretien complet de la table.",
     ppd_oriz_l5: "Intérieur du four en acier inoxydable poli miroir, étudié pour limiter la rétention bactérienne, simplifier le nettoyage et offrir une résistance à la corrosion supérieure.",
     ppd_oriz_l6: "Lèchefrite émaillée de forte épaisseur, réalisée sur nos propres moules et dans un acier spécial pour une répartition optimale de la chaleur.",
@@ -13710,7 +13912,7 @@ var DICT = {
     slr_p9_label: "Durabilité",
     slr_p9_l0: "Acier inoxydable massif partout",
     slr_p9_l1: "conçu pour l'air salin et l'usage constant",
-    slr_p9_l2: "zéro composant en fer galvanisé",
+    slr_p9_l2: "charnières de porte de four de très haute qualité",
     slr_p10_label: "Intérieur",
     slr_p10_l0: "Intérieur en inox poli miroir",
     slr_p10_l1: "aucun grain qui retient les résidus",
@@ -13741,7 +13943,11 @@ var DICT = {
     rv7: "\"Un service extraordinaire et rapide, je me suis toujours fourni chez eux et je ne me suis jamais senti trompé, une excellente relation avec le public. Que dire, une entreprise vivement recommandée.\"",
     rv8: "\"Rarement je donne les cinq étoiles. Mais le service est bon, du début jusqu'à après l'achat.\"",
     rv9: "\"La cuisinière est installée et nous avons déjà préparé nos premiers repas d’essai. Tout fonctionne parfaitement · et elle est superbe.\"",
-    rv10: "\"Service aimable, professionnel et fiable. Réponses rapides, démarche fluide et excellents conseils. On se sent accompagné du début à la fin.\""
+    rv10: "\"Service aimable, professionnel et fiable. Réponses rapides, démarche fluide et excellents conseils. On se sent accompagné du début à la fin.\"",
+    rv11: "\"Je cherchais des pièces détachées pour ma cuisinière à gaz de vingt ans. Les vues éclatées étaient déjà là, sur la page d'accueil, et les conseils reçus ont été excellents. Cinq étoiles.\"",
+    rv12: "\"Je n'avais jamais reçu un service aussi excellent de la part d'une entreprise italienne, et je le dis en tant que propriétaire d'un bateau italien. C'est dans ces petites choses, dans l'attention et la disponibilité, que l'on voit le vrai visage d'une entreprise.\"",
+    rv13: "\"J'avais déjà acheté chez vous des brûleurs et d'autres pièces pour mon ancienne cuisinière. Au moment d'en acheter une neuve, j'ai de nouveau choisi une Techimpex. Merci pour la rapidité et le sérieux dont vous faites preuve.\"",
+    rv14: "\"C'est déjà la deuxième fois que je commande des pièces détachées pour ma cuisinière. Ce qui m'a le plus frappée, c'est le service après-vente : une assistance ponctuelle, un accompagnement pour l'installation et une vraie compétence technique. Il est rare de trouver un service aussi complet.\""
   },
 
   de: {
@@ -13927,7 +14133,7 @@ var DICT = {
     eff_c1_label: "Robustheit & Hygiene",
     eff_c1_title: "Stahlharte Robustheit, tadellose Hygiene",
     eff_c1_b1: "Die erste Säule einer echten professionellen Off-grid-Küche ist die Solidität. Unsere Geräte bieten eine strukturelle Robustheit vergleichbar mit einem Panzer, konzipiert für die extremsten Belastungen auf hoher See und in unwegsamstem Gelände.",
-    eff_c1_b2: "Diese Stärke verbindet sich mit höchster Hygiene: Für die Ofenmuffeln verwenden wir spiegelpolierten Edelstahl. Dieses Finish macht die Oberflächen außergewöhnlich schnell und leicht zu reinigen und bietet natürliche antibakterielle Eigenschaften, die verhindern, dass sich Schmutz und Mikroorganismen festsetzen.",
+    eff_c1_b2: "Diese Stärke geht mit einem konsequenten Hygienekonzept einher. Die Muffeln unserer Öfen bestehen aus poliertem, nicht gebürstetem Edelstahl: Es gibt keine Schleifstruktur, in der sich Rückstände festsetzen können, sodass sich die Oberflächen außergewöhnlich schnell und leicht reinigen lassen.",
     eff_c2_label: "Wärmedämmung",
     eff_c2_title: "Wegweisende Dämmung, ein <em>Effizienz-Banner</em>",
     eff_c2_b1: "Energieeffizienz ist unser wahres Banner. Wir beschränken uns nicht auf eine Standarddämmung: Für unsere Öfen und Geräte setzen wir mehrere kombinierte Dämmsysteme ein — von der Stabilität der Steinwolle bis zu speziellen Sandwich-Systemen mit den innovativsten und technologisch fortschrittlichsten Materialien, die es heute auf dem Weltmarkt gibt.",
@@ -14053,7 +14259,7 @@ var DICT = {
     ab_p3_title: "Stahl, <em>Handwerk</em> und Vermächtnis",
     ab_p3_body1: "Hier sind wir im Inox Valley: nicht nur Italien, Heimat der besten Küche der Welt, sondern die Region Conegliano, in der die besten Herde für die Profiwelt entstehen · gebaut von den vielen Unternehmen dieses Gebiets gemeinsam mit großen Köchen. Es ist das Können, das wir jeden Tag atmen.",
     ab_p3_body2: "Die Handwerker, die unsere Herde bauen, sind das jüngste Glied eines von Generation zu Generation weitergegebenen Könnens, entstanden in einer kleinen Stahlwerkstatt und seither weitergegeben · dasselbe Erbe wie Namen wie Zoppas und Zanussi. Von hier kommen gedrehter massiver Edelstahl, spiegelnde Garräume und das patentierte Kardansystem · Details, die dem nahen Blick standhalten.",
-    ab_p3_body3: "Wo andere zu Kunststoff und dünnem Blech greifen, werden unsere aus massivem Edelstahl gefertigt · Korpusse aus starkem Material, gedrehte und gefräste Teile, die das Boot selbst überdauern. Es ist die Kultur der Profiküche, hinaus aufs Meer getragen.",
+    ab_p3_body3: "Unsere Korpusse sind aus starkem Edelstahl gebaut · Teile aus dem Vollen gedreht und gefräst, um das Boot selbst zu überdauern. Die Ofentüren tragen Scharniere höchster Qualität: bei Modellen wie Lux und Orizzonte aus massivem Edelstahl, nach eigener Zeichnung gefertigt. Und bei Orizzonte, Tolomeo und Mega Grill sind auch die Drehknöpfe aus massivem Edelstahl, aus dem Vollen gefräst und gedreht. Es ist die Kultur der Profiküche, hinaus aufs Meer getragen.",
     cat_dl_btn3: "Die Leonardo Collection durchblättern",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, bis ins letzte Detail",
@@ -14083,7 +14289,7 @@ var DICT = {
     cat_page_label: "Bibliothek",
     cat_page_title: "Kataloge",
     cat_edition: "Ausgabe 2025",
-    cat_desc1: "Unsere Kataloge vereinen eine Auswahl der wichtigsten Marine Cookers Modelle · von kardanisch aufgehängten Gasherden bis zu unseren innovativen Elektro- und Induktionsserien. Für professionelle Yachten konzipiert, im Inox Valley Conegliano entworfen. Gefertigt aus massivem Edelstahl großer Materialstärke · mit gedrehten und gefrästen Teilen, wo andere auf Kunststoff und dünnes Blech setzen.",
+    cat_desc1: "Unsere Kataloge vereinen eine Auswahl der wichtigsten Marine Cookers Modelle · von kardanisch aufgehängten Gasherden bis zu unseren innovativen Elektro- und Induktionsserien. Für professionelle Yachten konzipiert, im Inox Valley Conegliano entworfen. Gefertigt aus massivem Edelstahl großer Materialstärke · mit aus dem Vollen gedrehten und gefrästen Teilen.",
     cat_desc2: "Blättern Sie durch die Kataloge, um technische Daten, Abmessungen und eine Auswahl der Produkte zu entdecken.",
     cat_dl_btn: "Katalog Herunterladen",
     cat_dl_btn1: "Katalog mit einer Produktauswahl durchblättern",
@@ -14096,6 +14302,8 @@ var DICT = {
     ct_hours_label: "Öffnungszeiten",
     ct_hours_val: "Montag - Freitag<br>08:30 - 17:30 Uhr MEZ",
     ct_open_maps: "In Google Maps öffnen",
+    hc_label: "Kontakt",
+    hc_lead: "Sagen Sie uns, was Sie brauchen: Wir antworten Werften ebenso wie privaten Eignern.",
     elec_hero_title: "Elektroherde<br><em>für das Meer</em>",
     elec_hero_sub: "Präzisionstechnik und handwerkliche Kunst · entwickelt für höchste Leistungen auf den feinsten Yachten der Welt.",
     elec_es_tag: "Die Kollektion · Elektroherde mit Backofen",
@@ -14270,7 +14478,7 @@ var DICT = {
     ppd_grande_s5: "Leistung 6,1 kW; Butan/Propan 30 mbar",
     ppd_mediterraneo_t: "Mediterraneo: das patentierte Strahlungskochfeld mit Doppelfunktion, Kochfeld und Grill auf einem Platz.",
     ppd_mediterraneo_k: "Die Geschichte von Mediterraneo",
-    ppd_mediterraneo_p0: "Mediterraneo entspringt einem unserer Patente, der DUPLEX-Technologie: Auf dem Platz eines einzigen Kochfelds haben Sie zwei Werkzeuge. Sie können mit Töpfen kochen oder direkt auf der Glaskeramik grillen, ohne wählen zu müssen. Auf einem Boot, wo der Platz kostbar ist, ist das eine kleine Revolution: Fisch, Fleisch, Gemüse, Toast und sogar Eier garen direkt auf dem Glas, das ohne Porosität keine Bakterien hält und es erlaubt, verschiedene Speisen nacheinander zuzubereiten.",
+    ppd_mediterraneo_p0: "Mediterraneo entspringt einem unserer Patente, der DUPLEX-Technologie: Auf dem Platz eines einzigen Kochfelds haben Sie zwei Werkzeuge. Sie können mit Töpfen kochen oder direkt auf der Glaskeramik grillen, ohne wählen zu müssen. Auf einem Boot, wo der Platz kostbar ist, ist das eine kleine Revolution: Fisch, Fleisch, Gemüse, Toast und sogar Eier garen direkt auf dem Glas, das ohne Porosität keine Rückstände hält und es erlaubt, verschiedene Speisen nacheinander zuzubereiten.",
     ppd_mediterraneo_p1: "Beim Grillen kann die Effizienz die der Induktion übertreffen, und die Oberfläche erreicht in Augenblicken bis zu 500 Grad: So grillt Mediterraneo sogar ein dickes Fiorentina-Steak, für herkömmliche Grills unmöglich. Der umlaufende Rahmen fängt Fette und Flüssigkeiten auf, das exklusive Anti-Vibrations-System hält alles stabil, und die optionalen Topfhalter werden direkt am Edelstahlrahmen montiert, ohne weitere Löcher in der Arbeitsfläche.",
     ppd_mediterraneo_p2: "Das Design ist das italienische, das uns auszeichnet: Glas und Stahl, klare Linien, nichts Überflüssiges. Mediterraneo vereint zwei Produkte auf kleinstem Raum, auch in einer Zwei-Zonen-Version erhältlich, und fügt sich elegant in die Kombüse ein, gemacht für das Innenraumprojekt.",
     ppd_mediterraneo_s0: "Patentiertes DUPLEX-Strahlungskochfeld mit Doppelfunktion: Kochfeld + Grill.",
@@ -14337,13 +14545,13 @@ var DICT = {
     ppd_modular_t: "Modular: das maßgefertigte Kochsystem, modular und kardanisch, um Ihr Boot herum entworfen.",
     ppd_modular_k: "Die Geschichte von Modular",
     ppd_modular_p0: "Modular ist die Antwort für alle, die eine einzigartige Bordküche wollen: ein modulares, kardanisches System, maßgeschneidert um die Räume und Bedürfnisse jedes Bootes herum entworfen. Induktions- oder Strahlungskochfelder, Grills, Öfen und Elemente lassen sich frei kombinieren, sodass Eigner und Gestalter gemeinsam die ideale Kombüse zeichnen, ohne Katalogzwänge.",
-    ppd_modular_p1: "Hinter der kompositorischen Freiheit steht unser Handwerk: massiver Edelstahl, patentierte verstellbare Kardangelenke, im Haus gefertigte Scharniere, aus dem Vollen gedrehte Drehknöpfe und integrierte Sicherheitsvorkehrungen. Was andere für unmöglich erklären, liefern wir: Es ist dieselbe Meisterschaft, mit der wir seit 2015 die Ersten der Welt waren, die kardanische Induktion aufs Meer brachten.",
+    ppd_modular_p1: "Hinter der kompositorischen Freiheit steht unser Handwerk: massiver Edelstahl, patentierte verstellbare Kardangelenke, im Haus gefertigte Scharniere und integrierte Sicherheitsvorkehrungen. Was andere für unmöglich erklären, liefern wir: Es ist dieselbe Meisterschaft, mit der wir seit 2015 die Ersten der Welt waren, die kardanische Induktion aufs Meer brachten.",
     ppd_modular_p2: "Das Design ist vollständig italienisch und vollständig maßgefertigt: Proportionen, Oberflächen und Materialien fügen sich dem Entwurf des Innenarchitekten. Modular passt sich dem Raum nicht an, es interpretiert ihn, für eine Bordküche, die ein Einzelstück ist, wie die Yacht, die sie beherbergt.",
     ppd_modular_s0: "Modulares, kardanisches Kochsystem, maßgefertigt.",
     ppd_modular_s1: "Induktions- oder Strahlungskochfelder, Grills, Öfen und Elemente frei kombinierbar.",
     ppd_modular_s2: "Maßgeschneidert um die Räume jedes Bootes herum entworfen.",
     ppd_modular_s3: "Massiver Edelstahl; patentierte verstellbare Kardangelenke; im Haus gefertigte Scharniere.",
-    ppd_modular_s4: "Aus dem Vollen gedrehte Drehknöpfe; integrierte Sicherheitsvorkehrungen.",
+    ppd_modular_s4: "Integrierte Sicherheitsvorkehrungen.",
     ppd_modular_s5: "Maßanfertigung in Zusammenarbeit mit Eigner und Gestalter.",
     ppd_forma_t: "Forma: zwei sehr kräftige Induktionszonen und ein echter Multifunktionsofen, auf kompaktem Raum.",
     ppd_forma_k: "Die Geschichte von Forma",
@@ -14485,7 +14693,7 @@ var DICT = {
     ppd_roma_s11: "Optional: Speckstein, seitliche Hitzeschutzblenden; Halterungen bei mehreren Modellen.",
     ppd_firenze_t: "Firenze: ein ultrakompakter Gasofen, ganz aus spiegelndem Edelstahl.",
     ppd_firenze_k: "Die Geschichte von Firenze",
-    ppd_firenze_p0: "Firenze ist der ultrakompakte Gasofen, vollständig mit spiegelpoliertem Edelstahl verkleidet, innen und außen: eine Wahl, die nicht nur ästhetisch ist, denn der Spiegel wirft die Wärme auf die Speisen zurück, hemmt Bakterien, widersteht der Salzluft und lässt sich mit einem einzigen Wisch reinigen. Trotz seines minimalen Platzbedarfs überrascht das Fassungsvermögen und nimmt eine hohe, weiche Oliven-Focaccia oder ein Schweinefilet in der Kruste auf.",
+    ppd_firenze_p0: "Firenze ist der ultrakompakte Gasofen, vollständig mit spiegelpoliertem Edelstahl verkleidet, innen und außen: eine Wahl, die nicht nur ästhetisch ist, denn der Spiegel wirft die Wärme auf die Speisen zurück, bietet keine Schleifstruktur, in der sich Rückstände festsetzen können, widersteht der Salzluft und lässt sich mit einem einzigen Wisch reinigen. Trotz seines minimalen Platzbedarfs überrascht das Fassungsvermögen und nimmt eine hohe, weiche Oliven-Focaccia oder ein Schweinefilet in der Kruste auf.",
     ppd_firenze_p1: "Der Brenner, für ein echtes italienisches statisches Garen bei geringem Verbrauch konstruiert, umhüllt die Speisen mit gleichmäßiger Wärme, und das vom Simmern bis zur vollen Flamme geeichte Ventil gibt Ihnen die nötige Kontrolle für zarte Gemüse-Timbale. Die Metall-Sandwich-Isolierung und das doppelte Sicherheitsglas halten die Wärme, während die Thermoelemente und die automatische Türverriegelung für Sicherheit sorgen. Mit dem optionalen Speckstein kommen sonntags ein Blech gratinierter Tortelli und eine Obsttarte heraus wie aus dem Ofen zu Hause.",
     ppd_firenze_p2: "Die Spiegelverkleidung ist auch pure Ästhetik: innen und außen verleiht der polierte Edelstahl Firenze ein edles, leuchtendes Aussehen, das die Kombüse veredelt, ein Einbauofen, gestaltet, um sich elegant in die anspruchsvollsten Innenraumprojekte einzufügen.",
     ppd_firenze_s0: "Ultrakompakter Einbau-Gasofen.",
@@ -14502,7 +14710,7 @@ var DICT = {
     ppd_napoli_t: "Napoli: ein Einbau-Elektroofen mit Dreifach-Heizelement, so vielseitig wie der zu Hause.",
     ppd_napoli_k: "Die Geschichte von Napoli",
     ppd_napoli_p0: "Napoli bringt einen Elektroofen mit einem in der Welt der Nautik seltenen Verhalten an Bord, dank seines Dreifach-Heizelement-Systems, das von einem eigenen Wählschalter gesteuert wird. Sie können nur von unten garen, um dem Boden einer auf dem Speckstein ausgebreiteten neapolitanischen Pizza Schwung zu geben, nur von oben, um die Oberfläche einer Parmigiana zu gratinieren, oder unten und oben zugleich für einen gleichmäßig gebräunten Braten; und mit dem verstärkten Obergrill wird die Kruste eines Timballo unwiderstehlich.",
-    ppd_napoli_p1: "Über 30 Liter Fassungsvermögen in einem sehr kompakten Korpus lassen Raum für große Bleche, während die Metall-Sandwich-Isolierung und das doppelte Sicherheitsglas die Temperatur stabil halten. Der Innenraum und die spiegelpolierten Edelstahlflächen werfen die Wärme auf die Speisen zurück, hemmen Bakterien, widerstehen der Salzluft und lassen sich im Nu reinigen. Zum Abschluss ein duftender Apfelkuchen, allein mit dem unteren Heizelement für einen perfekten Boden gebacken.",
+    ppd_napoli_p1: "Über 30 Liter Fassungsvermögen in einem sehr kompakten Korpus lassen Raum für große Bleche, während die Metall-Sandwich-Isolierung und das doppelte Sicherheitsglas die Temperatur stabil halten. Der Innenraum und die spiegelpolierten Edelstahlflächen werfen die Wärme auf die Speisen zurück, halten keine Rückstände fest, widerstehen der Salzluft und lassen sich im Nu reinigen. Zum Abschluss ein duftender Apfelkuchen, allein mit dem unteren Heizelement für einen perfekten Boden gebacken.",
     ppd_napoli_p2: "Eingebaut und ganz aus spiegelndem Stahl verbindet Napoli Technik und Ästhetik: ein vollwertiger Elektroofen, der sich ordentlich und leuchtend in das Kombüsenmöbel einfügt, gestaltet, um sich stimmig in das Innenraumprojekt an Bord einzufügen.",
     ppd_napoli_s0: "Einbau-Elektroofen, Korpus vollständig aus Edelstahl.",
     ppd_napoli_s1: "Dreifach-Heizelement-System mit eigenem Wählschalter (nur Unterhitze / nur Oberhitze / Unter+Oberhitze / verstärkter Obergrill).",
@@ -14528,7 +14736,7 @@ var DICT = {
     ppd_tiziano_s4: "Herausnehmbare Auffangwanne zum Sammeln des Bratfetts.",
     ppd_tiziano_s5: "Elektronische Regelung.",
     ppd_tiziano_s6: "Glaskeramik-Oberfläche, von oben abdichtbar (hohe IP-Schutzart für den Außenbereich).",
-    ppd_tiziano_s7: "Durch das Glas isoliertes Heizelement: windunabhängig; keine Bakterienhaftung.",
+    ppd_tiziano_s7: "Durch das Glas isoliertes Heizelement: windunabhängig; das Glas hält keine Rückstände.",
     ppd_caravaggio_t: "Caravaggio: der essenzielle Glaskeramik-Grill, minimalistisch und mühelos zu reinigen.",
     ppd_caravaggio_k: "Die Geschichte von Caravaggio",
     ppd_caravaggio_p0: "Caravaggio interpretiert den Glaskeramik-Grill in seiner reinsten, essenziellsten Form. Die vollständig aus Glas bestehende Oberfläche, minimalistisch und edel, ist ideal für eine einfache, hochwertige Küche: gegrilltes Gemüse mit Öl und Zitrone, im Nu angebratene Garnelen, Brotscheiben für eine Bruschetta mit Tomate und Basilikum zum Servieren im Cockpit.",
@@ -14538,7 +14746,7 @@ var DICT = {
     ppd_caravaggio_s1: "Oberfläche vollständig aus Glaskeramik.",
     ppd_caravaggio_s2: "Von oben abdichtbar (hohe IP-Schutzart für den Außenbereich).",
     ppd_caravaggio_s3: "Durch das Glas isoliertes Heizelement: windunabhängig.",
-    ppd_caravaggio_s4: "Keine Bakterienhaftung, vereinfachte Reinigung.",
+    ppd_caravaggio_s4: "Das Glas hält keine Rückstände, vereinfachte Reinigung.",
     ppd_raffaello_t: "Raffaello: Grill und Kochfläche in einem, patentiert und vollständig aus Glaskeramik.",
     ppd_raffaello_k: "Die Geschichte von Raffaello",
     ppd_raffaello_p0: "Raffaello ist weit mehr als ein Grill: patentiert, mit einem zweistufigen, von 300 bis 500° regelbaren Heizelement, vereint er zwei Werkzeuge in einem einzigen Gerät, denn er gart sowohl direkt auf dem Glas als auch mit Töpfen. Auf dem heißen Glas versiegelt sich eine Thunfisch-Tagliata mit Zitrusnote in wenigen Augenblicken; auf seinen Zonen bindet man mit einem Topf ein Risotto alla pescatora, ohne die Station zu wechseln, ein Luxus auf einem Boot, wo jeder Zentimeter zählt.",
@@ -14551,7 +14759,7 @@ var DICT = {
     ppd_raffaello_s4: "Elektronische Regelung.",
     ppd_raffaello_s5: "Oberfläche vollständig aus Glaskeramik, von oben abdichtbar (hohe IP-Schutzart für den Außenbereich).",
     ppd_raffaello_s6: "Durch das Glas isoliertes Heizelement: windunabhängig.",
-    ppd_raffaello_s7: "Keine Bakterienhaftung, vereinfachte Reinigung.",
+    ppd_raffaello_s7: "Das Glas hält keine Rückstände, vereinfachte Reinigung.",
     ppd_virtus_t: "Virtus: der großformatige Glaskeramik-Grill für alle, die gern Gäste empfangen.",
     ppd_virtus_k: "Die Geschichte von Virtus",
     ppd_virtus_p0: "Virtus ist die großformatige Version des patentierten Glaskeramik-Grills, gedacht für alle, die gern Gäste empfangen. Seine große Oberfläche, mit einem zweistufigen Heizelement von 300 bis 500° und zwei unabhängigen Zonen, macht aus dem Grillen ein Bankett: auf der einen Seite Garnelen, Tintenfisch und Gemüse, die auf dem Glas garen, auf der anderen eine Pfanne Spaghetti allo scoglio, die in ihrer Sauce köchelt.",
@@ -14563,7 +14771,7 @@ var DICT = {
     ppd_virtus_s3: "Zwei unabhängige Kochzonen.",
     ppd_virtus_s4: "Elektronische Regelung.",
     ppd_virtus_s5: "Glaskeramik-Oberfläche, von oben abdichtbar (hohe IP-Schutzart für den Außenbereich).",
-    ppd_virtus_s6: "Durch das Glas isoliertes Heizelement: windunabhängig; keine Bakterienhaftung.",
+    ppd_virtus_s6: "Durch das Glas isoliertes Heizelement: windunabhängig; das Glas hält keine Rückstände.",
     ppd_megag_t: "Mega Grill: der große Protagonist des Grillens in der Gruppe, Doppelleistung und Sicherheitsdeckel.",
     ppd_megag_k: "Die Geschichte von Mega Grill",
     ppd_megag_p0: "Mega Grill ist der Protagonist der großen Grillfeste, wenn man an Bord in großer Runde feiert. Seine großzügigen Maße und das doppelte Heizelement mit abgestufter Leistung und unabhängiger Doppelsteuerung erlauben es, zwei unterschiedliche Garvorgänge zugleich zu steuern: auf der stärkeren Zone Fiorentina-Steaks und Koteletts, die intensive Hitze verlangen, auf der sanfteren Gemüse, Scamorza und Spieße von Garnelen und Jakobsmuscheln, die nicht austrocknen sollen.",
@@ -14830,7 +15038,7 @@ var DICT = {
     ppd_favi_s6: "Kardanrahmen für Einbau oder Aufsatzmontage.",
     ppd_vento_t: "Ventotene: zwei Messingflammen und ein stets bereiter Grill, im italienischen Stil.",
     ppd_vento_k: "Die Geschichte von Ventotene",
-    ppd_vento_p0: "Ventotene stellt dem Küchenchef zwei Brenner mit Flammenverteilern aus massivem Messing zur Verfügung, ein Material, das die Wärme sanft und gleichmäßig speichert und abgibt: Die Flamme wird umhüllend, ideal für eine Crème pâtissière, die niemals gerinnen darf, oder für ein samtiges Parmesan-Fondue. Die spiegelpolierte Fläche ist nicht nur elegant: Sie verringert die Anhaftung von Bakterien, widersteht der salzigen Luft und lässt sich im Nu reinigen, nachdem Paccheri mit Hummer angerichtet wurden.",
+    ppd_vento_p0: "Ventotene stellt dem Küchenchef zwei Brenner mit Flammenverteilern aus massivem Messing zur Verfügung, ein Material, das die Wärme sanft und gleichmäßig speichert und abgibt: Die Flamme wird umhüllend, ideal für eine Crème pâtissière, die niemals gerinnen darf, oder für ein samtiges Parmesan-Fondue. Die spiegelpolierte Fläche ist nicht nur elegant: Sie hat keine Schleifstruktur, in der sich Rückstände festsetzen, widersteht der salzigen Luft und lässt sich im Nu reinigen, nachdem Paccheri mit Hummer angerichtet wurden.",
     ppd_vento_p1: "Darunter ist das Grillfach eine wertvolle Ressource: Am Morgen röstet es Brot und wärmt die Hörnchen, und dank seiner oberen Öffnung, die als zusätzlicher Brenner dient, können Sie einen Schmorbraten warmhalten, während Sie die Beilage vollenden, oder das langsame Garen einer Rinderbacke in Rotwein starten. Der einteilige Rost sorgt für Stabilität selbst mit einem schweren Topf neapolitanischen Ragùs, und die bei über 800° emaillierte Auffangschale verteilt die Wärme optimal unter einem Blech Gemüse.",
     ppd_vento_p2: "Auch das Auge kommt zu seinem Recht: die spiegelpolierte Stahlfläche, die ausgewogenen Proportionen und die Liebe zum Detail verleihen Ventotene eine elegante, zurückhaltende Präsenz, gestaltet, um sich in bester Tradition des italienischen Stils natürlich in die Räume an Bord einzufügen.",
     ppd_vento_s0: "Doppelbrenner mit Flammenverteilern aus massivem Messing.",
@@ -14855,7 +15063,7 @@ var DICT = {
     ppd_oriz_l0: "2015 waren wir weltweit die Ersten, die kardanisch aufgehängte Elektro-Induktionsherde auf den Markt gebracht haben.",
     ppd_oriz_l1: "Bereits Anfang der 2000er Jahre waren wir die Pioniere der allerersten Elektroherd-Linie für den Yachtmarkt.",
     ppd_oriz_l2: "Dieser Premium-Herd ist die logische Weiterentwicklung der über Jahrzehnte gereiften Systeme, aktualisiert mit den neuesten Technologien und einer langen Reihe exklusiver Lösungen der Spitzenklasse.",
-    ppd_oriz_l3: "Perfekt ausbalancierte Scharniere aus massivem Edelstahl, im eigenen Haus gefertigt statt zugekaufter verzinkter Haushaltsware: die Backofentüren halten schwerem Dauereinsatz stand, ohne abzusacken.",
+    ppd_oriz_l3: "Perfekt ausbalancierte Scharniere aus massivem Edelstahl, im eigenen Haus gefertigt: die Backofentüren halten schwerem Dauereinsatz stand, ohne abzusacken.",
     ppd_oriz_l4: "Bedienung des Kochfelds unabhängig vom Backofen ausgelegt, damit sich einzelne Bauteile oder das gesamte Kochfeld einfach austauschen und warten lassen.",
     ppd_oriz_l5: "Backofeninnenraum aus spiegelpoliertem Edelstahl, ausgelegt auf minimale Keimanhaftung, einfache Reinigung und höhere Korrosionsbeständigkeit.",
     ppd_oriz_l6: "Emaillierte Fettpfanne in kräftiger Materialstärke, auf eigenen Formen und aus Spezialstahl gefertigt, für eine gleichmässige Wärmeverteilung.",
@@ -14944,7 +15152,7 @@ var DICT = {
     slr_p9_label: "Haltbarkeit",
     slr_p9_l0: "Massiver Edelstahl durchgehend",
     slr_p9_l1: "gebaut für Salzluft und dauerhaften Einsatz",
-    slr_p9_l2: "null verzinkte Eisenkomponenten",
+    slr_p9_l2: "Ofentürscharniere höchster Qualität",
     slr_p10_label: "Innenraum",
     slr_p10_l0: "Spiegelpolierter Edelstahl-Innenraum",
     slr_p10_l1: "keine Struktur, die Rückstände festhält",
@@ -14975,7 +15183,11 @@ var DICT = {
     rv7: "\"Ein außergewöhnlicher und schneller Service. Ich habe immer bei ihnen gekauft und mich nie im Stich gelassen gefühlt, ein ausgezeichneter Umgang mit den Kunden. Was soll man sagen, ein sehr empfehlenswertes Unternehmen.\"",
     rv8: "\"Ich vergebe selten fünf Sterne. Aber der Service ist gut, vom Anfang bis nach dem Kauf.\"",
     rv9: "\"Der Herd ist eingebaut, und wir haben bereits die ersten Probemahlzeiten gekocht. Alles funktioniert einwandfrei · und er sieht auch wunderbar aus.\"",
-    rv10: "\"Sehr freundlicher, professioneller und zuverlässiger Service. Schnelle Antworten, ein reibungsloser Ablauf und hervorragende Beratung. Man fühlt sich von Anfang bis Ende gut aufgehoben.\""
+    rv10: "\"Sehr freundlicher, professioneller und zuverlässiger Service. Schnelle Antworten, ein reibungsloser Ablauf und hervorragende Beratung. Man fühlt sich von Anfang bis Ende gut aufgehoben.\"",
+    rv11: "\"Ich suchte Ersatzteile für meinen zwanzig Jahre alten Gasherd. Die Explosionszeichnungen waren gleich auf der Startseite, und die Beratung war ausgezeichnet. Fünf Sterne von mir.\"",
+    rv12: "\"Noch nie hatte ich von einem italienischen Unternehmen einen so hervorragenden Service erhalten, und das sage ich als Eigner eines italienischen Bootes. Gerade in diesen Kleinigkeiten, in der Aufmerksamkeit und der Hilfsbereitschaft, zeigt sich das wahre Gesicht eines Unternehmens.\"",
+    rv13: "\"Ich hatte bei Ihnen bereits Brenner und andere Teile für meinen alten Herd gekauft. Als ein neuer fällig war, habe ich mich wieder für einen Techimpex entschieden. Danke für Ihre Schnelligkeit und Ihre Zuverlässigkeit.\"",
+    rv14: "\"Es ist bereits das zweite Mal, dass ich Ersatzteile für meinen Herd bestelle. Am meisten beeindruckt hat mich der Kundendienst: pünktliche Betreuung, Unterstützung beim Einbau und echte technische Kompetenz. Ein so umfassender Service ist selten.\""
   },
 
   es: {
@@ -15161,7 +15373,7 @@ var DICT = {
     eff_c1_label: "Robustez e Higiene",
     eff_c1_title: "Robustez de acero, higiene impecable",
     eff_c1_b1: "El primer pilar de una verdadera cocina profesional off-grid es la solidez. Nuestros aparatos presentan una robustez estructural comparable a la de un tanque, pensada para afrontar las solicitaciones más extremas en mar abierto y en los terrenos más accidentados.",
-    eff_c1_b2: "Esta fuerza se une a la máxima higiene: para las muflas utilizamos acero inoxidable pulido a espejo. Este acabado hace que las superficies sean excepcionalmente fáciles y rápidas de limpiar, además de ofrecer propiedades antibacterianas naturales que impiden que la suciedad y los microorganismos aniden.",
+    eff_c1_b2: "Esta fortaleza se une a un enfoque riguroso de la higiene. Las muflas de nuestros hornos son de acero inoxidable pulido, no satinado: no hay grano abrasivo en el que puedan alojarse los residuos, por lo que las superficies se limpian con una rapidez y una facilidad excepcionales.",
     eff_c2_label: "Aislamiento Térmico",
     eff_c2_title: "Aislamiento de vanguardia, una <em>bandera de eficiencia</em>",
     eff_c2_b1: "La eficiencia energética es nuestra verdadera bandera. No nos limitamos a un aislamiento estándar: para nuestros hornos y aparatos empleamos múltiples sistemas de aislamiento combinados, desde la estabilidad de la lana de roca hasta especiales sistemas sándwich que utilizan los materiales más innovadores y tecnológicamente avanzados que existen hoy en el mercado global.",
@@ -15287,7 +15499,7 @@ var DICT = {
     ab_p3_title: "Acero, <em>artesanía</em> y legado",
     ab_p3_body1: "Aquí estamos en el Inox Valley: no solo Italia, patria de la mejor cocina del mundo, sino la comarca de Conegliano donde nacen las mejores cocinas para el mundo profesional · construidas por las muchas empresas del territorio junto a grandes chefs. Es el saber hacer que respiramos cada día.",
     ab_p3_body2: "Los artesanos que construyen nuestras cocinas son el último eslabón de un saber transmitido de generación en generación, nacido en un pequeño taller del acero y transmitido desde entonces · el mismo legado que nombres como Zoppas y Zanussi. De aquí vienen el inox macizo torneado, las muflas de espejo y la patente de los basculantes · detalles que resisten la mirada cercana.",
-    ab_p3_body3: "Donde otros recurren al plástico y a la chapa fina, los nuestros se mecanizan en acero inoxidable macizo · cuerpos de gran espesor, piezas torneadas y fresadas para durar más que la propia embarcación. Es la cultura de la cocina profesional, llevada al mar.",
+    ab_p3_body3: "Nuestros cuerpos están construidos en acero inoxidable de gran espesor · piezas torneadas y fresadas en macizo para durar más que la propia embarcación. Las puertas de horno montan bisagras de altísima calidad: en modelos como Lux y Orizzonte son de acero inoxidable macizo, realizadas según nuestro propio diseño. Y en Orizzonte, Tolomeo y Mega Grill también los mandos son de acero macizo, fresados y torneados en macizo. Es la cultura de la cocina profesional, llevada al mar.",
     cat_dl_btn3: "Hojear la Leonardo Collection",
     ab_hd_tag: "Heavy duty",
     ab_hd_title: "<em>Heavy duty</em>, hasta el último detalle",
@@ -15317,7 +15529,7 @@ var DICT = {
     cat_page_label: "Biblioteca",
     cat_page_title: "Catálogos",
     cat_edition: "Edición 2025",
-    cat_desc1: "Nuestros catálogos reúnen una selección de los principales modelos de Marine Cookers · desde cocinas de gas cardánicas hasta nuestras innovadoras series eléctricas y de inducción. Diseñadas para yates profesionales, concebidas en el Inox Valley, Conegliano. Construidas en acero inoxidable macizo de gran espesor · con piezas torneadas y fresadas donde otros recurren al plástico y a la chapa fina.",
+    cat_desc1: "Nuestros catálogos reúnen una selección de los principales modelos de Marine Cookers · desde cocinas de gas cardánicas hasta nuestras innovadoras series eléctricas y de inducción. Diseñadas para yates profesionales, concebidas en el Inox Valley, Conegliano. Construidas en acero inoxidable macizo de gran espesor · con piezas torneadas y fresadas en macizo.",
     cat_desc2: "Explore los catálogos para descubrir las especificaciones técnicas, las dimensiones y una selección de los productos.",
     cat_dl_btn: "Descargar Catálogo",
     cat_dl_btn1: "Hojear el catálogo con una selección de productos",
@@ -15330,6 +15542,8 @@ var DICT = {
     ct_hours_label: "Horario",
     ct_hours_val: "Lunes - Viernes<br>08:30 - 17:30 CET",
     ct_open_maps: "Abrir en Google Maps",
+    hc_label: "Escríbenos",
+    hc_lead: "Díganos qué necesita: respondemos tanto a los astilleros como a los armadores particulares.",
     elec_hero_title: "Cocinas Eléctricas<br><em>para el Mar</em>",
     elec_hero_sub: "Ingeniería de precisión y artesanía · diseñadas para el máximo rendimiento en los yates más selectos del mundo.",
     elec_es_tag: "La Colección · Cocinas Eléctricas con Horno",
@@ -15504,7 +15718,7 @@ var DICT = {
     ppd_grande_s5: "Potencia 6,1 kW; butano/propano 30 mbar",
     ppd_mediterraneo_t: "Mediterraneo: la placa radiante patentada de doble función, encimera y grill en un solo espacio.",
     ppd_mediterraneo_k: "El relato de Mediterraneo",
-    ppd_mediterraneo_p0: "Mediterraneo nace de una patente nuestra, la tecnología DUPLEX: en el espacio de una sola placa tiene dos herramientas. Puede cocinar con ollas o asar directamente sobre el cristal vitrocerámico, sin tener que elegir. En un barco donde el espacio es precioso es una pequeña revolución: pescado, carne, verduras, tostadas e incluso los huevos se cocinan directamente sobre el vidrio que, al no tener porosidad, no retiene bacterias y permite cocinar platos distintos en secuencia.",
+    ppd_mediterraneo_p0: "Mediterraneo nace de una patente nuestra, la tecnología DUPLEX: en el espacio de una sola placa tiene dos herramientas. Puede cocinar con ollas o asar directamente sobre el cristal vitrocerámico, sin tener que elegir. En un barco donde el espacio es precioso es una pequeña revolución: pescado, carne, verduras, tostadas e incluso los huevos se cocinan directamente sobre el vidrio que, al no tener porosidad, no retiene residuos y permite cocinar platos distintos en secuencia.",
     ppd_mediterraneo_p1: "Al asar, la eficiencia puede superar la de la inducción, y la superficie alcanza hasta 500 grados en pocos instantes: así Mediterraneo asa incluso un chuletón grueso, algo imposible para los grills tradicionales. El marco perimetral contiene grasas y líquidos, el exclusivo sistema antivibración lo mantiene todo estable, y los sujeta-ollas opcionales se montan directamente en el marco de inox, sin más orificios en la encimera.",
     ppd_mediterraneo_p2: "El diseño es el italiano que nos distingue: cristal y acero, líneas limpias, nada superfluo. Mediterraneo reúne dos productos en el mínimo espacio, disponible también en versión de dos fuegos, y se integra con elegancia en la cambusa, pensado para el proyecto de los interiores.",
     ppd_mediterraneo_s0: "Placa radiante patentada de doble función DUPLEX: encimera + grill.",
@@ -15571,13 +15785,13 @@ var DICT = {
     ppd_modular_t: "Modular: el sistema de cocción a medida, modular y cardánico, diseñado en torno a tu barco.",
     ppd_modular_k: "El relato de Modular",
     ppd_modular_p0: "Modular es la respuesta para quien quiere una cambusa única: un sistema modular y cardánico, diseñado a medida en torno a los espacios y las necesidades de cada embarcación. Placas de inducción o radiantes, grills, hornos y elementos se combinan libremente, así el armador y el proyectista dibujan juntos la cambusa ideal, sin límites de catálogo.",
-    ppd_modular_p1: "Detrás de la libertad compositiva está nuestra artesanía: acero inoxidable macizo, cardanes regulables patentados, bisagras fabricadas internamente, mandos torneados de una pieza y seguridades integradas. Lo que otros declaran imposible, nosotros lo entregamos: es la misma maestría con la que, desde 2015, fuimos los primeros del mundo en llevar al mar la inducción cardánica.",
+    ppd_modular_p1: "Detrás de la libertad compositiva está nuestra artesanía: acero inoxidable macizo, cardanes regulables patentados, bisagras fabricadas internamente y seguridades integradas. Lo que otros declaran imposible, nosotros lo entregamos: es la misma maestría con la que, desde 2015, fuimos los primeros del mundo en llevar al mar la inducción cardánica.",
     ppd_modular_p2: "El diseño es enteramente italiano y enteramente a medida: proporciones, acabados y materiales se acuerdan con el proyecto del interiorista. Modular no se adapta al espacio, lo interpreta, para una cambusa que es una pieza única, como el yate que la acoge.",
     ppd_modular_s0: "Sistema de cocción modular y cardánico, a medida.",
     ppd_modular_s1: "Placas de inducción o radiantes, grills, hornos y elementos combinables libremente.",
     ppd_modular_s2: "Diseñado a medida en torno a los espacios de cada embarcación.",
     ppd_modular_s3: "Acero inoxidable macizo; cardanes regulables patentados; bisagras fabricadas internamente.",
-    ppd_modular_s4: "Mandos torneados de una pieza; seguridades integradas.",
+    ppd_modular_s4: "Seguridades integradas.",
     ppd_modular_s5: "Realización a medida en colaboración con armador y proyectista.",
     ppd_forma_t: "Forma: dos zonas de inducción potentísimas y un verdadero horno multifunción, en espacio contenido.",
     ppd_forma_k: "El relato de Forma",
@@ -15719,7 +15933,7 @@ var DICT = {
     ppd_roma_s11: "Opcionales: piedra ollar, paracalores laterales; soportes en varios modelos.",
     ppd_firenze_t: "Firenze: un horno de gas ultracompacto, todo en acero inoxidable de espejo.",
     ppd_firenze_k: "El relato de Firenze",
-    ppd_firenze_p0: "Firenze es el horno de gas ultracompacto revestido por completo de acero inoxidable pulido a espejo, por dentro y por fuera: una elección que no es solo estética, porque el espejo refleja el calor sobre los alimentos, dificulta las bacterias, resiste la salinidad y se limpia con un solo gesto. A pesar de su tamaño mínimo, la capacidad sorprende y acoge una focaccia de aceitunas alta y esponjosa o un solomillo de cerdo en costra.",
+    ppd_firenze_p0: "Firenze es el horno de gas ultracompacto revestido por completo de acero inoxidable pulido a espejo, por dentro y por fuera: una elección que no es solo estética, porque el espejo refleja el calor sobre los alimentos, no ofrece grano en el que puedan alojarse los residuos, resiste la salinidad y se limpia con un solo gesto. A pesar de su tamaño mínimo, la capacidad sorprende y acoge una focaccia de aceitunas alta y esponjosa o un solomillo de cerdo en costra.",
     ppd_firenze_p1: "El quemador, diseñado para una cocción de verdadero estático italiano con bajo consumo, envuelve los platos en calor uniforme, y la válvula calibrada desde la cocción suave hasta la llama plena le da el control necesario para unos delicados flanes de verduras. El aislamiento de sándwich metálico y el doble vidrio templado retienen el calor, mientras que los termopares y el bloqueo automático de la puerta garantizan la seguridad. Con la piedra ollar opcional, el domingo, una bandeja de tortelli gratinados y una tarta de fruta salen como del horno de casa.",
     ppd_firenze_p2: "El revestimiento de espejo es también pura estética: por dentro y por fuera, el inox pulido da a Firenze un aspecto precioso y luminoso que ennoblece la cambusa, un horno empotrable pensado para integrarse con elegancia en los proyectos de interior más cuidados.",
     ppd_firenze_s0: "Horno de gas empotrable ultracompacto.",
@@ -15736,7 +15950,7 @@ var DICT = {
     ppd_napoli_t: "Napoli: un horno eléctrico empotrable de triple resistencia, tan versátil como el de casa.",
     ppd_napoli_k: "El relato de Napoli",
     ppd_napoli_p0: "Napoli lleva a bordo un horno eléctrico con un comportamiento poco común en el mundo náutico, gracias a su sistema de triple resistencia gobernado por un selector dedicado. Puede cocinar solo desde abajo para dar empuje a la base de una pizza napolitana extendida sobre la piedra ollar, solo desde arriba para gratinar la superficie de una parmigiana, o abajo y arriba a la vez para un asado dorado de forma uniforme; y con el grill superior potenciado la costra de un timballo se vuelve irresistible.",
-    ppd_napoli_p1: "Más de 30 litros de capacidad en un cuerpo muy compacto dejan espacio para bandejas grandes, mientras que el aislamiento de sándwich metálico y el doble vidrio templado mantienen estable la temperatura. El interior y las superficies de inox pulido a espejo reflejan el calor sobre los alimentos, dificultan las bacterias, resisten la salinidad y se limpian en un instante. Para terminar, un pastel de manzana perfumado cocido solo con la resistencia inferior para una base perfecta.",
+    ppd_napoli_p1: "Más de 30 litros de capacidad en un cuerpo muy compacto dejan espacio para bandejas grandes, mientras que el aislamiento de sándwich metálico y el doble vidrio templado mantienen estable la temperatura. El interior y las superficies de inox pulido a espejo reflejan el calor sobre los alimentos, no retienen los residuos, resisten la salinidad y se limpian en un instante. Para terminar, un pastel de manzana perfumado cocido solo con la resistencia inferior para una base perfecta.",
     ppd_napoli_p2: "Empotrado y todo en acero de espejo, Napoli une técnica y estética: un horno eléctrico completo que se inserta con orden y luminosidad en el mueble de la cambusa, pensado para integrarse con coherencia en el proyecto de los interiores de a bordo.",
     ppd_napoli_s0: "Horno eléctrico empotrable, cuerpo totalmente de acero inoxidable.",
     ppd_napoli_s1: "Sistema de triple resistencia con selector dedicado (solo inferior / solo superior / inferior+superior / grill superior potenciado).",
@@ -15762,7 +15976,7 @@ var DICT = {
     ppd_tiziano_s4: "Bandeja recogegotas extraíble para recoger las grasas de cocción.",
     ppd_tiziano_s5: "Regulación electrónica.",
     ppd_tiziano_s6: "Superficie de cristal vitrocerámico, sellable desde arriba (elevado grado IP para exterior).",
-    ppd_tiziano_s7: "Resistencia aislada por el cristal: no afectada por el viento; retención bacteriana nula.",
+    ppd_tiziano_s7: "Resistencia aislada por el cristal: no afectada por el viento; el cristal no retiene residuos.",
     ppd_caravaggio_t: "Caravaggio: el grill vitrocerámico esencial, minimalista y facilísimo de limpiar.",
     ppd_caravaggio_k: "El relato de Caravaggio",
     ppd_caravaggio_p0: "Caravaggio interpreta el grill vitrocerámico en su forma más pura y esencial. La superficie totalmente de cristal, minimalista y refinada, es ideal para una cocina sencilla y de calidad: verduras a la parrilla aliñadas con aceite y limón, gambas selladas al vuelo, rebanadas de pan para una bruschetta de tomate y albahaca para servir en la bañera.",
@@ -15772,7 +15986,7 @@ var DICT = {
     ppd_caravaggio_s1: "Superficie totalmente de cristal vitrocerámico.",
     ppd_caravaggio_s2: "Sellable desde arriba (elevado grado IP para exterior).",
     ppd_caravaggio_s3: "Resistencia aislada por el cristal: no afectada por el viento.",
-    ppd_caravaggio_s4: "Retención bacteriana nula, limpieza simplificada.",
+    ppd_caravaggio_s4: "El cristal no retiene residuos, limpieza simplificada.",
     ppd_raffaello_t: "Raffaello: grill y encimera en uno, patentado y todo de vitrocerámica.",
     ppd_raffaello_k: "El relato de Raffaello",
     ppd_raffaello_p0: "Raffaello es mucho más que un grill: patentado, con resistencia de doble etapa regulable de 300 a 500°, reúne en un solo aparato dos herramientas, porque cocina tanto directamente sobre el cristal como con ollas. Sobre el vidrio ardiente una tagliata de atún a los cítricos se sella en pocos instantes; en sus zonas, usando una cazuela, se liga un risotto alla pescatora sin cambiar de puesto, un lujo en un barco, donde cada centímetro cuenta.",
@@ -15785,7 +15999,7 @@ var DICT = {
     ppd_raffaello_s4: "Regulación electrónica.",
     ppd_raffaello_s5: "Superficie totalmente de cristal vitrocerámico, sellable desde arriba (elevado grado IP para exterior).",
     ppd_raffaello_s6: "Resistencia aislada por el cristal: no afectada por el viento.",
-    ppd_raffaello_s7: "Retención bacteriana nula, limpieza simplificada.",
+    ppd_raffaello_s7: "El cristal no retiene residuos, limpieza simplificada.",
     ppd_virtus_t: "Virtus: el grill vitrocerámico de amplias dimensiones para quien ama recibir.",
     ppd_virtus_k: "El relato de Virtus",
     ppd_virtus_p0: "Virtus es la versión de amplias dimensiones del grill vitrocerámico patentado, pensada para quien ama recibir. Su gran superficie, con resistencia de doble etapa de 300 a 500° y dos zonas independientes, permite transformar la parrillada en un banquete: por un lado langostinos, calamares y verduras que se cuecen sobre el vidrio, por el otro una sartén de spaghetti allo scoglio que hierve a fuego lento en su salsa.",
@@ -15797,7 +16011,7 @@ var DICT = {
     ppd_virtus_s3: "Dos zonas de cocción independientes.",
     ppd_virtus_s4: "Regulación electrónica.",
     ppd_virtus_s5: "Superficie de cristal vitrocerámico, sellable desde arriba (elevado grado IP para exterior).",
-    ppd_virtus_s6: "Resistencia aislada por el cristal: no afectada por el viento; retención bacteriana nula.",
+    ppd_virtus_s6: "Resistencia aislada por el cristal: no afectada por el viento; el cristal no retiene residuos.",
     ppd_megag_t: "Mega Grill: el gran protagonista de las parrilladas en grupo, doble potencia y tapa de seguridad.",
     ppd_megag_k: "El relato de Mega Grill",
     ppd_megag_p0: "Mega Grill es el protagonista de las grandes parrilladas, cuando a bordo se celebra en grupo. Sus amplias dimensiones y la doble resistencia de potencias diferenciadas con doble mando independiente permiten gestionar dos cocciones distintas a la vez: en la zona más potente unos chuletones y unas costillas que piden calor intenso, en la más suave verduras, scamorza y brochetas de gambas y vieiras que no deben secarse.",
@@ -16064,7 +16278,7 @@ var DICT = {
     ppd_favi_s6: "Basculantes para instalación empotrada o sobre encimera.",
     ppd_vento_t: "Ventotene: dos llamas de latón y un grill siempre listo, con estilo italiano.",
     ppd_vento_k: "El relato de Ventotene",
-    ppd_vento_p0: "Ventotene pone a disposición del chef dos quemadores con difusores de llama de latón macizo, un material que acumula y cede el calor de forma suave y uniforme: la llama se vuelve envolvente, ideal para una crema pastelera que nunca debe cortarse o para una fondue de parmesano aterciopelada. La superficie pulida a espejo no es solo elegante: reduce la retención bacteriana, resiste el aire salino y se limpia en un instante tras emplatar unos paccheri al bogavante.",
+    ppd_vento_p0: "Ventotene pone a disposición del chef dos quemadores con difusores de llama de latón macizo, un material que acumula y cede el calor de forma suave y uniforme: la llama se vuelve envolvente, ideal para una crema pastelera que nunca debe cortarse o para una fondue de parmesano aterciopelada. La superficie pulida a espejo no es solo elegante: no tiene grano que retenga los residuos, resiste el aire salino y se limpia en un instante tras emplatar unos paccheri al bogavante.",
     ppd_vento_p1: "Debajo, el compartimento grill es un recurso valioso: por la mañana tuesta el pan y calienta los cruasanes, y gracias a su salida superior que funciona como quemador adicional puede mantener caliente un estofado mientras termina la guarnición, o iniciar la cocción lenta de una carrillera de ternera al vino tinto. La parrilla de una sola pieza asegura estabilidad incluso con una olla pesada de ragù napolitano, y la bandeja recogegotas esmaltada a más de 800° distribuye el calor de forma óptima bajo una bandeja de verduras.",
     ppd_vento_p2: "También la vista tiene su parte: la superficie de acero pulido a espejo, las proporciones equilibradas y el cuidado del detalle dan a Ventotene una presencia elegante y discreta, diseñada para integrarse con naturalidad en los espacios de a bordo según la mejor tradición del estilo italiano.",
     ppd_vento_s0: "Doble quemador con difusores de llama de latón macizo.",
@@ -16089,7 +16303,7 @@ var DICT = {
     ppd_oriz_l0: "En 2015 fuimos la primera empresa del mundo en presentar cocinas eléctricas de inducción con suspensión cardánica.",
     ppd_oriz_l1: "Ya a principios de los años dos mil fuimos los pioneros de la primera línea de cocinas eléctricas dedicada al mercado náutico.",
     ppd_oriz_l2: "Esta cocina premium es la evolución natural de los sistemas desarrollados durante las últimas décadas, actualizada con las tecnologías más recientes y con una larga serie de soluciones exclusivas de alta gama.",
-    ppd_oriz_l3: "Bisagras en acero inoxidable macizo, perfectamente equilibradas y fabricadas internamente en lugar de herrajes domésticos cincados: las puertas del horno resisten un uso intenso y prolongado sin ceder.",
+    ppd_oriz_l3: "Bisagras en acero inoxidable macizo, perfectamente equilibradas y fabricadas internamente: las puertas del horno resisten un uso intenso y prolongado sin ceder.",
     ppd_oriz_l4: "Mandos de la placa diseñados de forma independiente del horno, para simplificar la sustitución de componentes o el mantenimiento completo de la placa.",
     ppd_oriz_l5: "Interior del horno en acero inoxidable pulido a espejo, estudiado para reducir al mínimo la retención bacteriana, simplificar la limpieza y ofrecer una resistencia a la corrosión superior.",
     ppd_oriz_l6: "Bandeja esmaltada de gran espesor, realizada con moldes propios y en acero especial para una distribución óptima del calor.",
@@ -16178,7 +16392,7 @@ var DICT = {
     slr_p9_label: "Durabilidad",
     slr_p9_l0: "Acero inoxidable macizo en todo el conjunto",
     slr_p9_l1: "construido para el aire salino y el uso constante",
-    slr_p9_l2: "cero componentes de hierro galvanizado",
+    slr_p9_l2: "bisagras de puerta de horno de altísima calidad",
     slr_p10_label: "Interior",
     slr_p10_l0: "Interior de acero inox pulido espejo",
     slr_p10_l1: "sin grano que retenga residuos",
@@ -16209,7 +16423,11 @@ var DICT = {
     rv7: "\"Un servicio extraordinario y rápido; siempre he comprado con ellos y nunca me he sentido defraudado, una relación excelente con el público. Qué decir, una empresa muy recomendable.\"",
     rv8: "\"Rara vez doy cinco estrellas. Pero el servicio es bueno, desde el principio hasta después de la compra.\"",
     rv9: "\"La cocina ya está instalada y hemos preparado las primeras comidas de prueba. Todo funciona a la perfección · y además es preciosa.\"",
-    rv10: "\"Servicio amable, profesional y fiable. Respuestas rápidas, un proceso sencillo y excelentes consejos. Te sientes bien atendido de principio a fin.\""
+    rv10: "\"Servicio amable, profesional y fiable. Respuestas rápidas, un proceso sencillo y excelentes consejos. Te sientes bien atendido de principio a fin.\"",
+    rv11: "\"Buscaba recambios para mi cocina de gas de veinte años. Los despieces estaban allí mismo, en la página de inicio, y el asesoramiento fue excelente. Cinco estrellas.\"",
+    rv12: "\"Nunca había recibido un servicio tan excelente por parte de una empresa italiana, y lo digo como propietario de un barco italiano. Es precisamente en estas pequeñas cosas, en la atención y la disponibilidad, donde se ve el verdadero rostro de una empresa.\"",
+    rv13: "\"Ya había comprado en su empresa quemadores y otras piezas para mi vieja cocina. Cuando tuve que comprar una nueva, volví a elegir una Techimpex. Gracias por la rapidez y la seriedad que demuestran.\"",
+    rv14: "\"Es ya la segunda vez que pido recambios para mi cocina. Lo que más me ha impresionado es el servicio posventa: asistencia puntual, apoyo en la instalación y una gran competencia técnica. Es raro encontrar un servicio tan completo.\""
   }
 };
 
@@ -16968,6 +17186,7 @@ body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; point
   #backtotop svg{ width:18px; height:18px; }
 }
 @media print{ #backtotop{ display:none !important; } }
+
 </style>
 <script>
 (function(){
@@ -17153,5 +17372,93 @@ body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; point
 })();
 </script>
 
+
+<script>
+/* ── WIDGET CONTATTI HEADER ────────────────────────────────────────────
+   Apertura/chiusura del pannellino. Nessuna dipendenza esterna.
+   Si chiude con Esc, con un clic fuori e quando si aprono ricerca o menu. */
+(function(){
+  var open = false;
+  function el(id){ return document.getElementById(id); }
+  function set(v){
+    var b = el('hct'), p = el('hctp');
+    if(!b || !p) return;
+    open = v;
+    p.classList.toggle('on', open);
+    b.classList.toggle('on', open);
+    b.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  window.hctToggle = function(){ chiuso = true; set(!open); };
+  window.hctClose  = function(){ chiuso = true; if(open) set(false); };
+
+  /* ── Apertura automatica dopo 10 secondi ──────────────────────────
+     Cautele volute:
+      · una volta sola per sessione (sessionStorage), non a ogni pagina;
+      · niente se l'utente ha gia' usato il pannello o l'ha chiuso;
+      · niente se sono aperti menu, ricerca o una pagina overlay;
+      · niente se la scheda del browser non e' in primo piano;
+      · niente per chi ha ridotto le animazioni di sistema.
+     Se poi si preferisce disattivarla, basta cambiare AUTO in false. */
+  var AUTO = true, RITARDO = 10000, chiuso = false;
+
+  function occupato(){
+    /* Attenzione: tm() NON applica mai body.nav-open, segnala l'apertura del
+       menu solo con #np.on. Vanno guardati gli elementi, non le classi body.
+       NON si guarda body.page-open: sulle pagine interne il pannello deve
+       poter comparire, e' li' che serve di piu'. */
+    return document.querySelector('#np.on')   !== null ||
+           document.querySelector('#bd.on')   !== null ||
+           document.querySelector('#srch.on') !== null;
+  }
+  function giaVisto(){
+    try { return sessionStorage.getItem('hct_auto') === '1'; } catch(e){ return false; }
+  }
+  function segna(){
+    try { sessionStorage.setItem('hct_auto','1'); } catch(e){}
+  }
+
+  if (AUTO && !giaVisto() &&
+      !(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches)) {
+    /* Al decimo secondo si prova. Se in quel momento l'utente sta usando
+       menu o ricerca, o la scheda non e' in primo piano, non si insiste:
+       si riprova ogni 2 secondi finche' il momento e' buono, per un minuto
+       al massimo. Cosi' il pannello appare ovunque, ma mai a sproposito. */
+    var tentativi = 0;
+    var timer = setInterval(function(){
+      if (chiuso || giaVisto() || ++tentativi > 30) { clearInterval(timer); return; }
+      if (open || occupato() || document.hidden) return;
+      clearInterval(timer);
+      segna();
+      set(true);
+    }, 2000);
+    setTimeout(function(){
+      if (chiuso || open || giaVisto() || occupato() || document.hidden) return;
+      clearInterval(timer);
+      segna();
+      set(true);
+    }, RITARDO);
+  }
+
+  document.addEventListener('click', function(e){
+    if(!open) return;
+    var b = el('hct'), p = el('hctp');
+    if(b && b.contains(e.target)) return;
+    if(p && p.contains(e.target)) return;
+    set(false);
+  }, true);
+
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') window.hctClose();
+  });
+
+  /* Se si apre la ricerca o il menu, il pannellino si toglie di mezzo. */
+  ['srchOpen','tm'].forEach(function(fn){
+    var orig = window[fn];
+    if(typeof orig === 'function'){
+      window[fn] = function(){ window.hctClose(); return orig.apply(this, arguments); };
+    }
+  });
+})();
+</script>
 </body>
 </html>
