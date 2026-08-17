@@ -15,6 +15,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://res.cloudinary.com">
+<!-- FERMO IMMAGINE HERO: e' l'elemento LCP, quello su cui Google misura.
+     Il preload lo mette in coda di scaricamento prima che il body venga
+     letto. media= fa scaricare UNA sola delle due immagini, mai due. -->
+<link rel="preload" as="image" href="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786954512/FOTO_HERO_DESKTOP_HOME_wzjtw7.jpg" media="(min-width:769px)" fetchpriority="high">
+<link rel="preload" as="image" href="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_900/v1786954508/FOTO_HERO_MOBILE_HOME_ctbcmg.jpg" media="(max-width:768px)" fetchpriority="high">
 <!-- Font non-render-blocking: carica come print, poi passa a all -->
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Outfit:wght@200;300;400;500;600&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Outfit:wght@200;300;400;500;600&display=swap" media="print" onload="this.media='all'">
@@ -25,6 +30,7 @@
 :root{--bl:#0a0a0a;--wh:#f8f6f1;--go:#b8965a;--gl:#d4b07a;--hh:72px}
 html{scroll-behavior:auto}
 body{background:var(--bl);color:var(--wh);font-family:"Outfit",sans-serif;font-weight:300;overflow-x:hidden;padding-bottom:44px}
+@media(min-width:601px){body{padding-bottom:69px}}
 header{position:fixed;top:0;left:0;right:0;height:var(--hh);display:flex;align-items:center;justify-content:space-between;padding:0 40px;z-index:800;transition:background .5s;background:rgba(10,10,10,.35)}
 header.sc{background:rgba(10,10,10,.94);border-bottom:1px solid rgba(184,150,90,.15)}
 header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,90,.18);}
@@ -257,9 +263,9 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .nfootl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:rgba(184,150,90,.35);margin-bottom:10px;display:block}
 .nfoot a{display:block;font-size:11px;letter-spacing:.08em;color:rgba(248,246,241,.35);text-decoration:none;transition:color .3s;margin-bottom:4px}
 .nfoot a:hover{color:var(--gl)}
-#ai-note{position:fixed;right:40px;bottom:104px;z-index:801;pointer-events:none;font-family:"Outfit",sans-serif;font-size:9px;font-weight:300;letter-spacing:.07em;line-height:1.45;color:rgba(248,246,241,.62);max-width:300px;text-align:right;transition:bottom .2s ease;background:rgba(10,10,10,.30);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);padding:8px 11px;border-radius:2px}
-@media(max-width:600px){#ai-note{font-size:7px;max-width:220px;right:14px;letter-spacing:.05em;padding:6px 8px}}
-#ai-note .ai-note-link{pointer-events:auto;cursor:pointer;text-decoration:underline;color:inherit;white-space:nowrap} body.nav-open #ai-note{opacity:0;pointer-events:none}
+#ai-note{position:fixed;left:0;right:0;bottom:0;width:100%;z-index:801;pointer-events:none;font-family:"Outfit",sans-serif;font-size:8px;font-weight:300;letter-spacing:.045em;line-height:1.45;color:rgba(248,246,241,.34);text-align:right;padding:6px 40px;background:#151515;border-top:1px solid rgba(184,150,90,.10)}
+@media(max-width:600px){#ai-note{font-size:5.5px;letter-spacing:.03em;line-height:1.5;padding:5px 14px;color:rgba(248,246,241,.46)}}
+#ai-note .ai-note-link{pointer-events:auto;cursor:pointer;text-decoration:underline;color:inherit;white-space:nowrap}
 /* HERO */
 .hero{height:100vh;min-height:640px;position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:0 60px min(100px,8vh);overflow:hidden}
 
@@ -355,7 +361,7 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 @keyframes fid{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fi{to{opacity:1}}
 /* TICKER */
-.twrap{width:100%;background:#0a0a0a;border-top:1px solid rgba(184,150,90,.12);overflow:hidden;position:fixed;bottom:0;left:0;right:0;z-index:800}
+.twrap{width:100%;background:#0a0a0a;border-top:1px solid rgba(184,150,90,.12);overflow:hidden;position:fixed;bottom:25px;left:0;right:0;z-index:800}
 .twrap::before,.twrap::after{content:"";position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
 .twrap::before{left:0;background:linear-gradient(to right,#0a0a0a,transparent)}
 .twrap::after{right:0;background:linear-gradient(to left,#0a0a0a,transparent)}
@@ -365,6 +371,12 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .tbr{display:flex;align-items:center;padding:0 44px;border-right:1px solid rgba(184,150,90,.07);white-space:nowrap}
 .tbr span{font-size:10px;font-weight:300;letter-spacing:.3em;text-transform:uppercase;color:rgba(248,246,241,.45);transition:color .4s;cursor:default;user-select:none;font-family:"Outfit",sans-serif}
 .tbr:hover span{color:rgba(184,150,90,.9)}
+/* ⚠️ Override mobile IN CODA al blocco, non prima: le media query non
+   aggiungono specificita', quindi un .tinn dichiarato piu' avanti nel file
+   vincerebbe comunque. Il ticker si assottiglia (52px di padding -> 34) cosi'
+   fascetta + ticker restano dentro i ~68px su cui sono tarati #prodpage,
+   #np, .ef-close e la hero mobile. */
+@media(max-width:600px){.twrap{bottom:20px}.tinn{padding:17px 0}}
 /* CATPAGE */
 #cp{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0a0a;z-index:400;flex-direction:column;overflow-y:auto;opacity:0;pointer-events:none;transition:opacity .55s ease;display:flex}
 #cp.show{opacity:1;pointer-events:all}
@@ -500,7 +512,7 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
   /* ── HERO MOBILE: video a tutta altezza (cover) ──
      Il video riempie tutto lo schermo come su desktop. object-fit:cover taglia
      leggermente i lati ma il video resta grande e d'impatto. */
-  #heroVid{
+  #heroVid,#heroVid2,#heroPoster{
     object-fit:cover !important;
     object-position:center center !important;
   }
@@ -1022,6 +1034,20 @@ header.hide{transform:translateY(-100%);}
   color: #0a0a0a;
   letter-spacing: -.01em;
 }
+/* Conversione in pollici: seconda riga, non affiancata. In linea non ci
+   starebbe - "52.5 × 48.5 × 51h cm (20.7 × 19.1 × 20.1 in)" raddoppia la
+   lunghezza e su mobile la colonna valore e' meta' tabella. */
+.pct-in {
+  display: block;
+  font-family: "Outfit", sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: .07em;
+  color: rgba(0,0,0,.34);
+  margin-top: 5px;
+  white-space: normal;
+}
+@media(max-width:768px){ .pct-in { font-size: 9px; margin-top: 4px; } }
 .pct-val-unit {
   font-family: "Outfit", sans-serif;
   font-size: .52em;
@@ -2053,15 +2079,16 @@ header.hide{transform:translateY(-100%);}
 #legalpage{position:fixed;inset:0;z-index:900;background:var(--bl);overflow-y:auto;-webkit-overflow-scrolling:touch;display:none}
 #legalpage.show{display:block}
 #legalpage.show{position:fixed;inset:0;height:100vh;height:100dvh;max-height:100vh;max-height:100dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;transform:translateZ(0);z-index:950}
-.legal-close{position:fixed;top:22px;right:26px;z-index:5;background:rgba(10,10,10,.6);border:1px solid rgba(184,150,90,.4);color:var(--wh);font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:9px 18px;cursor:pointer;font-family:"Outfit",sans-serif;transition:background .3s,color .3s}
-.legal-close:hover{background:var(--go);color:var(--bl)}
-.legal-wrap{max-width:760px;margin:0 auto;padding:90px 32px 100px}
+.legal-close{position:sticky;top:0;left:0;right:0;width:100%;min-height:54px;display:flex;align-items:center;justify-content:center;z-index:30;background:rgba(8,8,8,.97);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:none;border-bottom:1px solid rgba(184,150,90,.3);border-radius:0;color:var(--gl);padding:14px 20px;cursor:pointer;font-family:"Outfit",sans-serif;transition:color .3s,background .3s}
+.legal-close svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.4;stroke-linecap:round}
+.legal-close:hover{background:rgba(184,150,90,.14);color:var(--wh)}
+.legal-wrap{max-width:760px;margin:0 auto;padding:48px 32px 100px}
 .legal-wrap .eyebrow{font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--go);margin-bottom:18px}
 .legal-wrap h1{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:clamp(38px,7vw,58px);line-height:1.05;margin-bottom:14px;color:var(--wh)}
 .legal-toc{display:flex;flex-wrap:wrap;gap:10px 22px;margin:0 0 8px}
 .legal-toc a{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(184,150,90,.75);cursor:pointer;text-decoration:none;transition:color .3s;border-bottom:1px solid rgba(184,150,90,.25);padding-bottom:2px}
 .legal-toc a:hover{color:var(--gl)}
-.legal-chap{scroll-margin-top:90px}
+.legal-chap{scroll-margin-top:70px}
 .legal-sep{width:100%;height:1px;background:rgba(184,150,90,.16);margin:64px 0}
 .legal-wrap .rule{width:56px;height:1px;background:var(--go);margin:26px 0 40px;opacity:.7}
 .legal-wrap h2{font-family:"Cormorant Garamond",serif;font-weight:400;font-size:clamp(22px,3.4vw,28px);color:var(--wh);margin:44px 0 14px}
@@ -2384,12 +2411,15 @@ header.hide{transform:translateY(-100%);}
 #effpage{
   position:fixed;
   inset:0;
-  z-index:500;
+  /* Sopra l'header (800): la barra di chiusura sta in cima al modale e
+     l'header la coprirebbe. Sotto #legalpage (950). */
+  z-index:940;
   display:flex;
   align-items:center;
   justify-content:center;
   padding:40px 20px;
   overflow-y:auto;
+  overscroll-behavior:contain;
   -webkit-overflow-scrolling:touch;
   background:rgba(5,5,5,.72);
   -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
@@ -2416,21 +2446,24 @@ header.hide{transform:translateY(-100%);}
 .ef-modal::-webkit-scrollbar-thumb{ background:rgba(184,150,90,.25); border-radius:4px; }
 
 /* Pulsante di chiusura (X) · fisso rispetto al viewport, sopra il modale */
+/* Barra di chiusura: sticky in cima all'area scorrevole del modale, X al
+   centro. Sticky e non fixed perche' .ef-modal ha un transform d'ingresso,
+   e un antenato trasformato si prende i figli position:fixed. */
 .ef-x{
-  position:fixed;
-  top:calc(50% - 45vh + 14px);
-  right:max(24px,calc(50% - 520px + 14px));
+  position:sticky; top:0; left:0; right:0;
+  width:100%; min-height:54px;
   display:flex; align-items:center; justify-content:center;
-  width:46px; height:46px;
-  background:rgba(10,10,10,.9);
-  border:1px solid rgba(184,150,90,.3);
-  border-radius:50%;
+  background:rgba(8,8,8,.97);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+  border:none; border-bottom:1px solid rgba(184,150,90,.3);
+  border-radius:0;
+  padding:14px 20px;
   cursor:pointer;
-  color:rgba(248,246,241,.75);
-  z-index:6;
-  transition:color .3s ease, background .3s ease, border-color .3s ease;
+  color:var(--gl);
+  z-index:30;
+  transition:color .3s ease, background .3s ease;
 }
-.ef-x:hover{ color:#0a0a0a; background:#b8965a; border-color:#b8965a; }
+.ef-x:hover{ color:var(--wh); background:rgba(184,150,90,.14); }
 .ef-x svg{ width:18px; height:18px; }
 .ef-x-lbl{ display:none; }
 
@@ -2597,31 +2630,13 @@ header.hide{transform:translateY(-100%);}
      viewport e non al modale. Senza questo la X non compariva su iOS. */
   #effpage .ef-modal{ transform:none; }
   #effpage.show .ef-modal{ transform:none; }
-  /* Su mobile la X diventa una barra di chiusura fissa in cima allo schermo:
-     sempre visibile, ben contrastata e facile da toccare. Uso position:fixed
-     (non sticky) perche' sticky dentro un contenitore scrollabile e'
-     inaffidabile su Safari iOS. */
-  .ef-x{
-    /* FIX: ancorata SOTTO l'header (fixed, top:0, height:var(--hh), z-index:800).
-       Prima era a top:0 e finiva esattamente sotto l'header, che la copriva. */
-    position:fixed; top:var(--hh); left:0; right:0;
-    width:100%; height:auto; min-height:54px;
-    border-radius:0;
-    border:none; border-bottom:1px solid rgba(184,150,90,.3);
-    background:rgba(8,8,8,.97);
-    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-    color:var(--gl);
-    gap:10px;
-    padding:16px 20px;
-    letter-spacing:.22em; text-transform:uppercase; font-size:11px;
-    font-family:"Outfit",sans-serif;
-    z-index:30;
-  }
-  .ef-x:hover{ color:var(--gl); background:rgba(8,8,8,.97); border-color:rgba(184,150,90,.3); }
-  .ef-x-lbl{ display:inline; }
-  .ef-x svg{ width:16px; height:16px; }
-  /* La hero parte sotto header (72px) + barra di chiusura (54px) + respiro */
-  .ef-hero{ padding:150px 24px 48px; }
+  /* La barra vale gia' per tutte le larghezze (regola base): qui resta solo
+     il tocco piu' generoso per il dito. Il modale ora copre l'header, quindi
+     non serve piu' agganciarla a var(--hh). */
+  .ef-x{ min-height:58px; }
+  .ef-x svg{ width:17px; height:17px; }
+  /* La hero parte subito sotto la barra, che ora e' nel flusso del modale. */
+  .ef-hero{ padding:48px 24px 48px; }
   .ef-body{ padding:48px 24px 12px; }
   .ef-chapter{ grid-template-columns:1fr; gap:18px; padding:40px 0; }
   .ef-milestones{ grid-template-columns:1fr; gap:30px; padding:44px 24px; }
@@ -3979,46 +3994,59 @@ header.hide{transform:translateY(-100%);}
 #hctp a.hctp-row, #hctp a.hctp-row .hctp-v{color:var(--wh)}
 #hctp a.hctp-row:hover .hctp-v{color:var(--gl)}
 
-/* ── MOBILE: pastiglia discreta sotto l'header ── */
+/* ── MOBILE: la busta sta DENTRO L'HEADER, accanto alla lente ──
+   Prima era una pastiglia fissa 12px sotto l'header, sovrapposta alla hero:
+   e' la fascia dove il pollice appoggia per scorrere, quindi si apriva per
+   sbaglio. Ora resta nel flusso del gruppo destro, come su desktop.
+   Lo spazio c'e': il gruppo destro passa da 68 a ~102px su 358 utili a 390px.
+   Sotto i 360px si recuperano una ventina di pixel nel blocco successivo. */
 @media(max-width:768px){
   .hct{
-    position:fixed;top:calc(var(--hh) + 12px);right:14px;
-    width:40px;height:40px;border-radius:50%;
-    background:rgba(10,10,10,.55);
-    border:1px solid rgba(184,150,90,.42);
-    -webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
-    /* Sotto il velo del menu (650), il menu (700) e la ricerca (900):
-       quando si aprono, la pastiglia resta coperta invece di galleggiarci sopra. */
-    z-index:640;
+    width:30px;height:30px;
+    color:rgba(248,246,241,.95);
+    filter:drop-shadow(0 1px 2.5px rgba(0,0,0,.7));
   }
-  .hct svg{width:18px;height:18px}
-  .hct.on{background:rgba(10,10,10,.72);border-color:rgba(184,150,90,.8)}
-
-  /* Dopo il primo contatto la pastiglia ha fatto il suo lavoro: resta solo
-     la bustina, senza cerchio ne' bordo, appena percettibile sopra la foto.
-     L'ombra si rinforza perche' senza fondo scuro l'icona deve restare
-     leggibile su immagini chiare. Al tocco torna piena, cosi' si capisce
-     che e' viva. */
+  .hct svg{width:16px;height:16px}
+  /* La classe .discreta continua ad arrivare dal JS dopo il primo contatto,
+     ma qui non deve piu' sbiadire nulla: nell'header un'icona al 50% accanto
+     alla lente piena sembrerebbe disattivata. Nessuna modifica al JS. */
   .hct.discreta{
-    background:none;border-color:transparent;
+    opacity:1;background:none;border:none;
     -webkit-backdrop-filter:none;backdrop-filter:none;
-    opacity:.5;
-    filter:drop-shadow(0 1px 3px rgba(0,0,0,.85));
+    filter:drop-shadow(0 1px 2.5px rgba(0,0,0,.7));
   }
-  .hct.discreta:active,
-  .hct.discreta.on{
-    opacity:1;
-    background:rgba(10,10,10,.62);
-    border-color:rgba(184,150,90,.55);
-  }
-  #hctp{top:calc(var(--hh) + 62px);right:14px;left:14px;width:auto;
-        padding:22px 22px 18px}
+  /* Il pannello scende ora da sotto l'header, non piu' da 62px in giu'. */
+  #hctp{top:calc(var(--hh) + 8px);right:14px;left:14px;width:auto;
+        padding:0 22px 18px;
+        max-height:calc(100dvh - var(--hh) - 26px);
+        overflow-y:auto; overscroll-behavior:contain;
+        -webkit-overflow-scrolling:touch}
+}
+/* ── SCHERMI STRETTISSIMI (<=360px) ──
+   Con un terzo pulsante nel gruppo destro il conto a 320px non tornava:
+   logo 87 + lingue 122 + gruppo destro 102 = 311 su 288 utili. Qui si
+   recuperano ~30px su logo, spaziature lingue e dimensioni icone. */
+@media(max-width:360px){
+  header{padding:0 12px;gap:6px}
+  header > a img{height:26px !important}
+  .lang-sel{margin-right:6px}
+  .lang-btn{padding:4px 2.5px;letter-spacing:.1em}
+  .hdr-right{gap:2px}
+  .hct{width:28px;height:28px}
+  .hct svg{width:15px;height:15px}
+  .hsr{width:28px;height:28px}
+  .hsr svg{width:15px;height:15px}
+  .hbg{width:30px}
 }
 /* Il pulsante resta disponibile OVUNQUE, anche sulle pagine interne
-   (prodotto, chi siamo, cataloghi: z-index 360-400, sotto la pastiglia).
+   (prodotto, chi siamo, cataloghi: z-index 360-400, sotto l'header 800).
    E' proprio li' che un privato vuole chiedere un'informazione.
-   Con il menu o la ricerca aperti non serve nasconderlo: a z-index 640
-   finisce da solo sotto il velo (650), il menu (700) e la ricerca (900). */
+   ⚠️ Dalla sess. 99 su mobile non e' piu' una pastiglia fissa a z-index 640,
+   ma un figlio dell'header: eredita il comportamento dell'header, quindi
+   scorre via con lui allo scroll in giu' e torna allo scroll in su. Sulle
+   pagine interne l'header non si nasconde mai (anyPageOpen), quindi li'
+   resta sempre a schermo. La ricerca (900) lo copre, il menu (700) no:
+   esattamente come la lente e l'hamburger, che stanno nello stesso gruppo. */
 
 #hctp .hctp-x{
   position:absolute;top:10px;right:10px;
@@ -4030,10 +4058,34 @@ header.hide{transform:translateY(-100%);}
 #hctp .hctp-x svg{width:15px;height:15px;stroke:currentColor;fill:none;
   stroke-width:1.5;stroke-linecap:round}
 #hctp .hctp-x:hover{color:var(--gl);transform:rotate(90deg)}
+#hctp .hctp-x-lbl{display:none}
 @media(max-width:768px){
-  #hctp .hctp-x{top:8px;right:8px;width:38px;height:38px}
-  #hctp .hctp-x svg{width:17px;height:17px}
+  /* ── FASCETTA DI CHIUSURA (come il modale Energy Efficiency) ──
+     Il pannello su schermo stretto puo' superare l'altezza utile: prima
+     bisognava risalire in cima per trovare la X. Ora il pannello ha una
+     sua area scorrevole e la barra resta incollata al suo bordo alto
+     (position:sticky), cosi' si chiude da qualsiasi punto.
+     I margini negativi servono a farla arrivare ai bordi del pannello,
+     scavalcando i 22px di padding laterale. */
+  #hctp .hctp-x{
+    position:sticky; top:0; margin:0 -22px 16px;
+    width:auto; height:auto; min-height:50px;
+    justify-content:flex-end; gap:10px; padding:14px 20px;
+    background:rgba(8,8,8,.97);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(184,150,90,.3);
+    color:var(--gl);
+    font-family:"Outfit",sans-serif; font-size:11px;
+    letter-spacing:.22em; text-transform:uppercase;
+    z-index:3;
+  }
+  /* La rotazione al passaggio del mouse farebbe girare tutta la barra. */
+  #hctp .hctp-x:hover{transform:none; color:var(--gl)}
+  #hctp .hctp-x-lbl{display:inline}
+  #hctp .hctp-x svg{width:16px;height:16px}
 }
+
+body.hct-open header.hide{transform:none}
 
 @media print{ .hct,#hctp{display:none !important} }
 
@@ -4789,6 +4841,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 
   <div id="hctp" role="dialog" aria-modal="false" aria-labelledby="hctp-lead">
     <button class="hctp-x" onclick="hctClose()" aria-label="Close">
+      <span class="hctp-x-lbl" data-i18n="ppd_hint_close">Close</span>
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     <span class="hctp-lbl" data-i18n="hc_label">Get in touch</span>
@@ -4849,27 +4902,71 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 <div id="home-scroll">
 <!-- HERO -->
 <section class="hero">
-  <!-- Video di sfondo hero - desaturato e scuro come in About Us -->
+  <!-- Video di sfondo hero - desaturato e scuro come in About Us.
+       Sess. 99: sorgenti sostituite, desktop e mobile sono montaggi DIVERSI.
+         desktop  v1786958125/VIDEO_HERO_DESKTOP_HOME_2_rxkq0x.mp4
+         mobile   v1786958099/VIDEO_HERO_MOBILE_HOME_2_etcjft.mp4
+       ⚠️ URL GREZZE, senza f_auto/q_auto: sui video quelle trasformazioni
+       obbligano Cloudinary a generare una derivata che alla prima richiesta
+       puo' non essere pronta, e il video non parte. Sulle immagini invece
+       sono sicure e si usano. Non aggiungerle qui.
+       Le precedenti, per un eventuale ritorno:
+         desktop  v1786947113/202608162005_gebn9a.mp4
+         mobile   v1786951834/202608061229_moskta.mp4
+         desktop  v1786296917/siamoabordonewcompact_h8q7eh.mp4
+         mobile   v1786012610/VIDEO_HERO_HOME_MOBILE_q3cmbc.mp4
+       ⚠️ Il POSTER e' uno solo, e si genera dal video MOBILE. E' una scelta:
+       il poster e' l'elemento LCP e Google misura le Core Web Vitals sul
+       mobile, dove per giunta resta a schermo 5 secondi prima del video. Su
+       desktop il video parte subito e il poster si vede un istante.
+       Cambiarlo via JS costerebbe un secondo scaricamento proprio nel
+       momento peggiore. -->
   <video id="heroVid" loop muted playsinline preload="none"
-    data-src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1786296917/siamoabordonewcompact_h8q7eh.mp4"
-    data-src-mobile="https://res.cloudinary.com/dseiw9ndw/video/upload/v1786012610/VIDEO_HERO_HOME_MOBILE_q3cmbc.mp4"
-    poster="https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,w_1200,h_1600,c_fill,g_auto,f_auto,q_auto/v1786296917/siamoabordonewcompact_h8q7eh.jpg"
-    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85);transition:opacity .8s ease">
+    data-src="https://res.cloudinary.com/dseiw9ndw/video/upload/v1786958125/VIDEO_HERO_DESKTOP_HOME_2_rxkq0x.mp4"
+    data-src-mobile="https://res.cloudinary.com/dseiw9ndw/video/upload/v1786958099/VIDEO_HERO_MOBILE_HOME_2_etcjft.mp4"
+    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85);transition:opacity 2s linear">
     <track kind="captions" src="" label="No captions">
   </video>
+  <!-- Secondo livello: serve solo alla dissolvenza incrociata del ciclo.
+       Un elemento video non puo' dissolversi su se stesso, quindi negli ultimi
+       2 secondi questo riparte da zero e i due si scambiano l'opacita'.
+       Nessun poster qui: lo dipingerebbe due volte al primo disegno. -->
+  <video id="heroVid2" muted playsinline preload="none" aria-hidden="true"
+    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85);opacity:0;transition:opacity 2s linear">
+    <track kind="captions" src="" label="No captions">
+  </video>
+  <!-- FERMO IMMAGINE - non e' piu' l'attributo poster del video: finche' lo
+       era apparteneva al <video>, e sfumando il video sfumava anche lei
+       lasciando il nero sotto. Da elemento a se' si dissolve sopra il video,
+       che intanto e' gia' dipinto: nessun istante di nero possibile.
+       <picture> serve a dare due ritagli diversi, verticale al telefono e
+       orizzontale al desktop, con UNA sola immagine scaricata: il browser
+       sceglie in base a media= e ignora l'altra. Con il vecchio attributo
+       poster non era possibile, era per forza una sola per entrambi.
+       Sta SOPRA i due video (viene dopo, stesso z-index) e SOTTO i veli
+       (.hovl z-1, .hci z-2), quindi riceve gradiente e cerchio dorato.
+       ATTENZIONE: il filtro grayscale/brightness va ripetuto qui, prima lo
+       ereditava dal <video> che la conteneva. Senza, la dissolvenza andrebbe
+       da una foto a colori a un video desaturato e si vedrebbe eccome. -->
+  <picture style="display:contents">
+    <source media="(max-width:768px)" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_900/v1786954508/FOTO_HERO_MOBILE_HOME_ctbcmg.jpg">
+    <img id="heroPoster" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786954512/FOTO_HERO_DESKTOP_HOME_wzjtw7.jpg" alt="" aria-hidden="true"
+      loading="eager" decoding="sync" fetchpriority="high"
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85);opacity:1;transition:opacity 2s ease">
+  </picture>
   <div class="hovl" style="background:linear-gradient(to bottom,rgba(5,5,5,.65) 0%,rgba(0,0,0,.25) 40%,rgba(5,5,5,.82) 100%)"></div>
   <div class="hci"></div>
   <div class="hyr"><span data-i18n="ab_hero_sub">Venezia · Italy · Three Generations of Italian Steel Craft</span></div>
   <div class="hco">
     <p class="hey" data-i18n="hero_tag">Artisan Marine Cooking Equipment</p>
     <h1 class="hti" data-i18n-html="hero_title">Alta cucina italiana,<br><em>anywhere</em></h1>
-    <p class="hde" data-i18n="hero_desc">Handcrafted in the Inox Valley, Conegliano · turned and milled from solid stainless steel. Gimballed cookers, ovens and grills for professional yachts · gas, electric, induction.</p>
+    <p class="hde" data-i18n="hero_desc">Professional gimballed cookers, cooktops, ovens and grills · from dayboats to vintage yachts, from charter to ocean passages. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.</p>
     <div class="hac">
       <a href="#" class="btp" onclick="tm();setTimeout(tDrop,400);return false;" data-i18n="hero_btn_explore">Explore Products</a>
       <a href="#" class="btm" onclick="openMatrix();return false;" data-i18n="matrix_btn">Product Overview</a>
       <a href="#" class="btg" onclick="openAbout();return false;"><span data-i18n="hero_btn_story">Our Story</span><svg viewBox="0 0 16 16" fill="none"><path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
-    <a href="#" class="bte" onclick="openEff();return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 13.5H11L10 22L18.5 10.5H12L13 2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span data-i18n="eff_btn">Energy Efficiency, a flag of ours</span></a>
+    <a href="#" class="bte" onclick="openEff();return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 13.5H11L10 22L18.5 10.5H12L13 2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span data-i18n="eff_btn">Energy Efficiency</span></a>
   </div>
   <div class="hsb">
     <div class="hsi"><span class="hsn">1st</span><span class="hsl" data-i18n="stat_craft">Complete electric marine range</span></div>
@@ -5192,12 +5289,28 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     </div>
 
     <!-- ── PANNELLO 8: OUR CLIENTS ── -->
-    <div class="ab-panel ab-panel-light ab-full" style="z-index:9;">
+    <!-- ── PANNELLO: MOLTE ANIME ── -->
+    <div class="ab-panel ab-panel-light" style="z-index:9;">
+      <div class="ab-panel-inner">
+        <div class="ab-section-grid layout-left">
+          <div class="ab-section-meta">
+            <span class="ab-tag">05 · <span data-i18n="ab_p9_tag">Many Souls</span></span>
+            <h2 class="ab-section-title" data-i18n-html="ab_p9_title">Many souls, <em>one workshop</em></h2>
+            <div class="ab-section-body">
+              <p data-i18n="ab_p9_body1">An electric barbecue for a motor superyacht and a gas cooker for a charter boat have nothing in common: different constraints, different materials, a different way of cooking on board altogether. We build both. Alongside them: electric grills for dayboats, our most advanced models for Mediterranean cruising and our most heavily reinforced for bluewater ocean passages, the classic finishes of vintage yachts, galleys drawn from scratch for a single hull.</p>
+              <p data-i18n="ab_p9_body2">This is not a range assembled to fill a catalogue. It is what happens when you have never told a shipyard that something cannot be done.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ab-panel ab-panel-light ab-full" style="z-index:10;">
       <div class="ab-panel-inner">
         <div class="ab-section-grid layout-left photo-wide">
           <figure class="ab-figure is-wide"><img class="ab-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785510855/ORIZZONTE_1_cucina01-1_cqszhy_REV2_bmfbdl.jpg" alt="Our Clients · Orizzonte" width="1000" height="750" loading="lazy" decoding="async"><figcaption class="ab-cap">Orizzonte</figcaption></figure>
           <div class="ab-section-meta">
-            <span class="ab-tag">05 · <span data-i18n="ab_p8_tag">Our Clients</span></span>
+            <span class="ab-tag">06 · <span data-i18n="ab_p8_tag">Our Clients</span></span>
             <h2 class="ab-section-title" data-i18n-html="ab_p8_title">Trusted by the <em>world's finest</em> yards</h2>
             <div class="ab-section-body">
               <p data-i18n="ab_p8_body1">Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to the yachts of celebrated artists, Formula One champions, internationally renowned statesmen, and leading figures from the worlds of business and finance.</p>
@@ -5209,7 +5322,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     </div>
 
     <!-- ── PANNELLO FINALE: VIDEO BREAK (chiusura) ── -->
-    <div class="ab-panel ab-panel-dark ab-vfit" style="z-index:10;">
+    <div class="ab-panel ab-panel-dark ab-vfit" style="z-index:11;">
       <video class="ab-panel-video" id="abv4" loop muted playsinline preload="none">
         <source src="https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1785316393/202607291109_uzihgr.mp4" type="video/mp4">
         <track kind="captions" src="" label="No captions">
@@ -5272,8 +5385,8 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="ef-hero-ovl"></div>
     <div class="ef-hero-inner">
       <span class="ef-hero-tag" data-i18n="eff_hero_tag">Off-grid Cooking · Research & Development</span>
-      <h1 class="ef-hero-title" data-i18n-html="eff_hero_title">Energy efficiency<br>is our <em>flag</em></h1>
-      <p class="ef-hero-lead" data-i18n="eff_hero_lead">Whether at sea or on expedition, a galley demands dedicated engineering that eliminates energy stress and guarantees constant performance and safety. Our appliances are designed to redefine the standards of the sector — built around absolute efficiency and structural excellence.</p>
+      <h1 class="ef-hero-title" data-i18n-html="eff_hero_title">Energy efficiency<br>is our <em>signature</em></h1>
+      <p class="ef-hero-lead" data-i18n="eff_hero_lead">Whether at sea or on expedition, a galley demands dedicated engineering that removes the strain on the electrical system and guarantees constant performance and safety. Our appliances are designed to redefine industry standards — built around absolute efficiency and structural excellence.</p>
     </div>
   </div>
 
@@ -5286,8 +5399,8 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </div>
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n="eff_c1_title">Steel-grade robustness, impeccable hygiene</h2>
-        <p class="ef-ch-body" data-i18n="eff_c1_b1">The first pillar of a true off-grid professional galley is solidity. Our appliances are built with a structural robustness comparable to a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.</p>
-        <p class="ef-ch-body" data-i18n="eff_c1_b2">This strength is paired with a rigorous approach to hygiene. Our oven muffles are built in polished stainless steel, not brushed: there is no abrasive grain in which residues can lodge, so surfaces are exceptionally quick and easy to clean.</p>
+        <p class="ef-ch-body" data-i18n="eff_c1_b1">The first pillar of a true off-grid professional galley is solidity. Our appliances are built like a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.</p>
+        <p class="ef-ch-body" data-i18n="eff_c1_b2">This strength is paired with a rigorous approach to hygiene. Our oven cavities are built in polished stainless steel, not brushed: there is no abrasive grain in which residues can lodge, so surfaces are exceptionally quick and easy to clean.</p>
       </div>
     </div>
 
@@ -5297,8 +5410,8 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
         <span class="ef-ch-label" data-i18n="eff_c2_label">Thermal Insulation</span>
       </div>
       <div class="ef-ch-main">
-        <h2 class="ef-ch-title" data-i18n-html="eff_c2_title">Advanced insulation, an <em>efficiency flag</em></h2>
-        <p class="ef-ch-body" data-i18n="eff_c2_b1">Energy efficiency is our true flag. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the stability of rock wool to special sandwich structures built with the most innovative and technologically advanced materials available on the global market.</p>
+        <h2 class="ef-ch-title" data-i18n-html="eff_c2_title">Advanced insulation, <em>efficiency by design</em></h2>
+        <p class="ef-ch-body" data-i18n="eff_c2_b1">Energy efficiency is where we refuse to compromise. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the thermal stability of rock wool to engineered sandwich panels built with the most innovative and technologically advanced materials available on the global market.</p>
         <p class="ef-ch-body" data-i18n="eff_c2_b2">The result keeps thermal dispersion to a minimum, retains heat optimally and delivers a drastic energy saving that relieves the onboard batteries from continuous recharge cycles.</p>
       </div>
     </div>
@@ -5309,8 +5422,8 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
         <span class="ef-ch-label" data-i18n="eff_c3_label">Gas & Electric</span>
       </div>
       <div class="ef-ch-main">
-        <h2 class="ef-ch-title" data-i18n="eff_c3_title">Professional performance, at the top</h2>
-        <p class="ef-ch-body" data-i18n="eff_c3_b1">We don't just contain consumption — we maximise culinary output to achieve the gastronomic results that made Italian cooking famous worldwide.</p>
+        <h2 class="ef-ch-title" data-i18n="eff_c3_title">Professional performance, at its peak</h2>
+        <p class="ef-ch-body" data-i18n="eff_c3_b1">We don't just contain consumption — we maximise cooking performance to achieve the gastronomic results that made Italian cooking famous worldwide.</p>
         <ul class="ef-list">
           <li data-i18n-html="eff_c3_l1"><strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.</li>
           <li data-i18n-html="eff_c3_l2"><strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.</li>
@@ -5343,7 +5456,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n-html="eff_c5_title">The Italian art of <em>intelligent cooking</em></h2>
         <p class="ef-ch-body" data-i18n="eff_c5_b1">True energy efficiency is not limited to electronics — it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.</p>
-        <p class="ef-ch-body" data-i18n="eff_c5_b2">We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, our research reached as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.</p>
+        <p class="ef-ch-body" data-i18n="eff_c5_b2">We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, we took the research as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.</p>
       </div>
     </div>
 
@@ -5365,7 +5478,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   </div>
 
   <div class="ef-close">
-    <p class="ef-quote" data-i18n="eff_quote">A well-sized electrical system is an excellent starting point. Relying on those who design instruments that optimise energy, resist every stress and elevate the cooking method — that is the choice of professionals.</p>
+    <p class="ef-quote" data-i18n="eff_quote">A well-sized electrical system is an excellent starting point. Relying on those who design equipment that optimises energy, resists every stress and elevates the cooking method — that is the choice of professionals.</p>
     <a class="ef-cta" onclick="closeEff();openContact();" data-i18n="eff_cta">Talk to our engineers</a>
   </div>
  </div><!-- /ef-modal -->
@@ -8962,34 +9075,161 @@ function openAbout(){
 /* ── HERO: foto subito, video dopo 6s (alleggerisce il caricamento mobile) ── */
 (function(){
   var isMobile = window.matchMedia('(max-width:768px)').matches;
-  function startHeroVideo(){
+  /* ── DUE MOMENTI DISTINTI, non uno solo ──
+     PREPARA: inserisce la sorgente e bufferizza, senza far partire nulla.
+     PARTE:   riproduce e dissolve il fermo immagine.
+     Separarli e' quello che toglie l'attesa: al settimo secondo il video ha
+     gia' dei fotogrammi pronti e attacca subito, invece di cominciare in quel
+     momento a scaricare. */
+  function heroSrc(v){
+    return (isMobile && v.getAttribute('data-src-mobile')) || v.getAttribute('data-src');
+  }
+  function prepareHeroVideo(){
     var v=document.getElementById('heroVid');
-    if(!v||v.dataset.loaded) return;
-    // MOBILE: video hero dedicato; DESKTOP: video originale.
-    var src=(isMobile && v.getAttribute('data-src-mobile')) || v.getAttribute('data-src');
+    if(!v || v.dataset.prep) return;
+    var src=heroSrc(v);
     if(!src) return;
-    v.dataset.loaded='1';
-    /* ⚠️ NON si azzera l'opacita' del video.
-       Il poster e' un attributo del <video> stesso: portando l'elemento a
-       opacity:0 sparisce anche la foto, e finche' il video non ha bufferizzato
-       abbastanza da emettere 'playing' si vede il NERO del fondo. Era lo
-       stacco nero fra la foto e il video. Lasciando l'elemento visibile, il
-       browser mostra il poster e lo sostituisce da solo con il primo
-       fotogramma appena e' pronto: nessun buco. */
-    v.style.opacity='1';
+    v.dataset.prep='1';
+    v.__src=src;
+    /* Rete di sicurezza: se questa sorgente non carica si prova l'altra, e se
+       fallisce anche quella resta il fermo immagine, mai lo schermo nero. */
+    v.addEventListener('error', function(){
+      if(v.dataset.fb) return;
+      var alt=(src===v.getAttribute('data-src')) ? v.getAttribute('data-src-mobile')
+                                                 : v.getAttribute('data-src');
+      if(!alt || alt===src) return;
+      v.dataset.fb='1'; v.__src=alt;
+      var s2=document.createElement('source'); s2.src=alt; s2.type='video/mp4';
+      v.insertBefore(s2, v.firstChild);
+      v.load(); v.play().catch(function(){});
+    }, true);
     var srcEl=document.createElement('source');
     srcEl.src=src; srcEl.type='video/mp4';
     v.insertBefore(srcEl, v.firstChild);
+    v.preload='auto';
     v.load();
-    var reveal=function(){ v.style.opacity='1'; };
-    v.addEventListener('playing', reveal, {once:true});
-    v.play().then(function(){ reveal(); }).catch(function(){ reveal(); });
   }
-  // DESKTOP: video subito (comportamento originale, punteggio gia' ottimo).
-  // MOBILE (<=768px): foto (poster) per ~5s, poi entra il video in dissolvenza.
-  var delay = isMobile ? 5000 : 0;
-  if(document.readyState==='complete'){ setTimeout(startHeroVideo,delay); }
-  else { window.addEventListener('load', function(){ setTimeout(startHeroVideo,delay); }); }
+  function startHeroVideo(){
+    var v=document.getElementById('heroVid');
+    if(!v || v.dataset.loaded) return;
+    prepareHeroVideo();
+    var src=v.__src;
+    if(!src) return;
+    v.dataset.loaded='1';
+    v.style.opacity='1';
+    var done=false;
+    var reveal=function(){
+      if(done) return; done=true;
+      /* La foto esce solo ora, cioe' quando il video sta gia' dipingendo. */
+      var ph=document.getElementById('heroPoster');
+      if(ph) ph.style.opacity='0';
+      crossfade(v, src);
+    };
+    /* ⚠️ La dissolvenza si aggancia SOLO a 'playing'. Prima partiva anche dal
+       ramo .catch() di play(): con l'autoplay negato la foto spariva lo stesso
+       e restava il video fermo al primo fotogramma. Sembrava "il video non
+       parte" ed era invece la foto che se ne andava troppo presto. */
+    v.addEventListener('playing', reveal);
+    var armed=false;
+    function userStart(){
+      if(armed) return; armed=true;
+      /* iOS in risparmio energetico, e la modalita' dati ridotti, rifiutano
+         l'autoplay anche se il video e' muto. Non c'e' modo di aggirarlo: si
+         riprova al primo gesto dell'utente, che e' sufficiente a sbloccarlo. */
+      ['touchstart','pointerdown','click','scroll'].forEach(function(ev){
+        window.addEventListener(ev, function(){ v.play().catch(function(){}); },
+                                {once:true, passive:true});
+      });
+    }
+    function tryPlay(){
+      var pr=v.play();
+      if(pr && pr.catch) pr.catch(userStart);
+    }
+    v.addEventListener('canplay', tryPlay, {once:true});
+    tryPlay();
+  }
+
+  /* ── CICLO CON DISSOLVENZA INCROCIATA (2 s) ──
+     Il tag <video loop> riavvolge con uno stacco netto. Per dissolvere serve
+     un secondo elemento: quando al primo mancano 2 s, il secondo riparte da
+     zero e i due si scambiano l'opacita' con una transizione CSS di 2 s.
+     Poi i ruoli si invertono, all'infinito.
+     ⚠️ Fallback silenzioso: se il secondo elemento manca, se la durata non e'
+     nota, o se il video e' troppo corto perche' una dissolvenza di 2 s abbia
+     senso, si rimette il loop nativo e non succede nulla di strano. */
+  var FADE = 2.0;                 /* secondi · deve combaciare con il CSS */
+  var MIN_DUR = 3 * FADE;         /* sotto i 6 s la dissolvenza mangia il video */
+  function crossfade(first, src){
+    var b = document.getElementById('heroVid2');
+    if(!b || b.dataset.ready) return;
+    var d = first.duration;
+    /* ⚠️ La durata puo' non essere ancora nota: reveal() scatta anche dal ramo
+       .catch() di play() (autoplay bloccato), che puo' arrivare PRIMA dei
+       metadati. Rinunciando qui, la dissolvenza non sarebbe piu' ritentata e
+       il video resterebbe con lo stacco netto. Si riprova ai metadati. */
+    if(!d || !isFinite(d)){
+      first.addEventListener('loadedmetadata', function(){ crossfade(first, src); }, {once:true});
+      return;
+    }
+    if(d < MIN_DUR) return;                        /* loop nativo, gia' attivo */
+    b.dataset.ready = '1';
+    /* ⚠️ Il loop nativo NON si toglie, e non e' una dimenticanza: e' la rete.
+       Se il secondo elemento non partisse (alcuni browser mobili rifiutano la
+       riproduzione simultanea di due video) togliendolo la hero si
+       inchioderebbe sull'ultimo fotogramma. Tenendolo, nel caso peggiore si
+       torna allo stacco netto di prima: si perde la dissolvenza, non il video.
+       Durante l'incrocio il riavvolgimento avviene a opacita' 0, invisibile,
+       e 200 ms dopo l'elemento viene comunque messo in pausa e azzerato. */
+    b.loop = true;
+    var s2 = document.createElement('source');
+    s2.src = src; s2.type = 'video/mp4';
+    b.insertBefore(s2, b.firstChild);
+    b.preload = 'auto';
+    b.load();                                       /* stessa URL: arriva dalla cache */
+    arm(first, b); arm(b, first);
+  }
+  function arm(a, b){
+    a.addEventListener('timeupdate', function(){
+      var d = a.duration;
+      if(!d || !isFinite(d)) return;
+      if(d - a.currentTime > FADE){ a.__go = false; return; }
+      if(a.__go) return;                            /* una sola volta per giro */
+      a.__go = true;
+      try{ b.currentTime = 0; }catch(e){}
+      var pr = b.play();
+      if(pr && pr.catch) pr.catch(function(){});
+      b.style.opacity = '1';
+      a.style.opacity = '0';
+      setTimeout(function(){
+        a.pause();
+        try{ a.currentTime = 0; }catch(e){}
+        a.__go = false;
+      }, FADE*1000 + 200);
+    });
+  }
+  /* ⚠️ I 7 secondi si contano dall'APERTURA DELLA PAGINA, non dall'evento
+     load. Era questo il ritardo su desktop: 'load' aspetta font, immagini e
+     ogni altra risorsa, quindi poteva scattare al quarto secondo e i 7 si
+     sommavano ai 4, arrivando a undici. Con performance.now() si sottrae il
+     tempo gia' trascorso e il fermo immagine dura 7 secondi veri.
+     La bufferizzazione comincia 3 secondi prima della partenza: l'LCP a quel
+     punto e' gia' misurato, e il video arriva pronto. */
+  var STILL = 5000,   /* quanto resta visibile il fermo immagine */
+      LEAD  = 2000,   /* quanto prima si comincia a bufferizzare */
+      MIN   = 1500;   /* buffer minimo garantito prima di far partire */
+  function scheduleHero(){
+    var now = (window.performance && performance.now) ? performance.now() : STILL;
+    var toPrep = Math.max(0, STILL - LEAD - now);
+    /* ⚠️ Se la pagina e' lenta e 'load' arriva tardi, i due momenti si
+       schiacciano e il video partirebbe senza aver bufferizzato: si vedrebbe
+       uno scatto. Qui si garantisce comunque MIN ms fra preparazione e
+       partenza, anche a costo di allungare un po' il fermo immagine. */
+    var toGo   = Math.max(STILL - now, toPrep + MIN);
+    setTimeout(prepareHeroVideo, toPrep);
+    setTimeout(startHeroVideo,   toGo);
+  }
+  if(document.readyState==='complete'){ scheduleHero(); }
+  else { window.addEventListener('load', scheduleHero); }
 })();
 
 function closeAbout(){
@@ -9002,15 +9242,18 @@ function closeAbout(){
 /* ═══ ENERGY EFFICIENCY · pop-up modale scrollabile ═══
    Aperto dal pulsante nella hero. Overlay centrato che si sovrappone: non
    chiude né sostituisce le altre pagine. Blocca lo scroll di fondo. */
+var _efLock=false;
 function openEff(){
   var ef=document.getElementById('effpage');
   if(!ef) return;
   if(typeof cm==='function'){ try{ cm(); }catch(e){} } // chiude il menu se aperto
-  // Su mobile la barra di chiusura e' ancorata a top:var(--hh): se l'header
-  // fosse nascosto dallo scroll resterebbe un vuoto sopra di essa.
+  // La barra di chiusura e' ora sticky in cima al modale, che copre l'header
+  // (z-index 940 contro 800): l'aggancio a var(--hh) non serve piu'. L'header
+  // si riporta giu' lo stesso, cosi' alla chiusura non riappare di scatto.
   var _efHdr=document.getElementById('hdr'); if(_efHdr) _efHdr.classList.remove('hide');
   var modal=ef.querySelector('.ef-modal'); if(modal) modal.scrollTop=0;
   document.body.style.overflow='hidden';
+  if(!document.body.classList.contains('page-open')){ document.body.classList.add('page-open'); _efLock=true; }
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){ ef.classList.add('show'); if(window.__efScrollReset) window.__efScrollReset(); });
   });
@@ -9019,6 +9262,7 @@ function closeEff(){
   var ef=document.getElementById('effpage');
   if(!ef) return;
   ef.classList.remove('show');
+  if(_efLock){ document.body.classList.remove('page-open'); _efLock=false; }
   if(!document.body.classList.contains('page-open')){ document.body.style.overflow=''; }
 }
 window.openEff=openEff; window.closeEff=closeEff;
@@ -10412,7 +10656,7 @@ var DICT = {
     /* Hero */
     hero_tag: "Marine Cooking, Crafted in Italy",
     hero_title: "Alta cucina italiana,<br><em>anywhere</em>",
-    hero_desc: "Professional gimballed cookers, cooktops, ovens and grills for yachts · gas, electric and induction. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.",
+    hero_desc: "Professional gimballed cookers, cooktops, ovens and grills · from dayboats to vintage yachts, from charter to ocean passages. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.",
     hero_btn_explore: "Explore Products",
     hero_btn_story: "Our Story",
     stat_craft: "Complete electric marine range",
@@ -10430,21 +10674,21 @@ var DICT = {
     nav_home: "The Residential Collections",
     nav_about: "About Us",
     nav_efficiency: "Energy Efficiency",
-    eff_btn: "Energy Efficiency, a flag of ours",
+    eff_btn: "Energy Efficiency",
     eff_hero_tag: "Off-grid Cooking · Research & Development",
-    eff_hero_title: "Energy efficiency<br>is our <em>flag</em>",
-    eff_hero_lead: "Whether at sea or on expedition, a galley demands dedicated engineering that eliminates energy stress and guarantees constant performance and safety. Our appliances are designed to redefine the standards of the sector — built around absolute efficiency and structural excellence.",
+    eff_hero_title: "Energy efficiency<br>is our <em>signature</em>",
+    eff_hero_lead: "Whether at sea or on expedition, a galley demands dedicated engineering that removes the strain on the electrical system and guarantees constant performance and safety. Our appliances are designed to redefine industry standards — built around absolute efficiency and structural excellence.",
     eff_c1_label: "Build & Hygiene",
     eff_c1_title: "Steel-grade robustness, impeccable hygiene",
-    eff_c1_b1: "The first pillar of a true off-grid professional galley is solidity. Our appliances are built with a structural robustness comparable to a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.",
-    eff_c1_b2: "This strength is paired with a rigorous approach to hygiene. Our oven muffles are built in polished stainless steel, not brushed: there is no abrasive grain in which residues can lodge, so surfaces are exceptionally quick and easy to clean.",
+    eff_c1_b1: "The first pillar of a true off-grid professional galley is solidity. Our appliances are built like a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.",
+    eff_c1_b2: "This strength is paired with a rigorous approach to hygiene. Our oven cavities are built in polished stainless steel, not brushed: there is no abrasive grain in which residues can lodge, so surfaces are exceptionally quick and easy to clean.",
     eff_c2_label: "Thermal Insulation",
-    eff_c2_title: "Advanced insulation, an <em>efficiency flag</em>",
-    eff_c2_b1: "Energy efficiency is our true flag. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the stability of rock wool to special sandwich structures built with the most innovative and technologically advanced materials available on the global market.",
+    eff_c2_title: "Advanced insulation, <em>efficiency by design</em>",
+    eff_c2_b1: "Energy efficiency is where we refuse to compromise. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the thermal stability of rock wool to engineered sandwich panels built with the most innovative and technologically advanced materials available on the global market.",
     eff_c2_b2: "The result keeps thermal dispersion to a minimum, retains heat optimally and delivers a drastic energy saving that relieves the onboard batteries from continuous recharge cycles.",
     eff_c3_label: "Gas & Electric",
-    eff_c3_title: "Professional performance, at the top",
-    eff_c3_b1: "We don't just contain consumption — we maximise culinary output to achieve the gastronomic results that made Italian cooking famous worldwide.",
+    eff_c3_title: "Professional performance, at its peak",
+    eff_c3_b1: "We don't just contain consumption — we maximise cooking performance to achieve the gastronomic results that made Italian cooking famous worldwide.",
     eff_c3_l1: "<strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.",
     eff_c3_l2: "<strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.",
     eff_c3_l3: "<strong>Induction first (2015).</strong> In 2015 we were the very first to develop a line of cookers with tilting induction hobs for sailing and motor yachts.",
@@ -10457,11 +10701,11 @@ var DICT = {
     eff_c5_label: "The Italian Method",
     eff_c5_title: "The Italian art of <em>intelligent cooking</em>",
     eff_c5_b1: "True energy efficiency is not limited to electronics — it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.",
-    eff_c5_b2: "We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, our research reached as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.",
+    eff_c5_b2: "We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, we took the research as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.",
     eff_ms1: "First in the world with a complete electric marine range",
     eff_ms2: "First tilting induction hobs for yachts",
     eff_ms3: "An entire hob within one kilowatt",
-    eff_quote: "A well-sized electrical system is an excellent starting point. Relying on those who design instruments that optimise energy, resist every stress and elevate the cooking method — that is the choice of professionals.",
+    eff_quote: "A well-sized electrical system is an excellent starting point. Relying on those who design equipment that optimises energy, resists every stress and elevates the cooking method — that is the choice of professionals.",
     eff_cta: "Talk to our engineers",
     nav_catalogues: "Catalogues",
     nav_contact: "Contact Us",
@@ -10588,6 +10832,10 @@ var DICT = {
     ab_p6_title: "Firsts that <em>defined</em> the sector",
     ab_p6_body1: "A meeting with Luca Bassani, founder of Wally, inspired the first electric designer nautical cooker for sailing yachts · created at a time when modern design had not yet touched the aesthetics of contemporary sailing vessels. This became HORIZON4, still an icon of the sector.",
     ab_p6_body2: "Always for Wally, we developed the first fully aluminium lightweight cooker. And for Perini Navi, we engineered a special cooker with a unique reverse-gimballing system · a world first.",
+    ab_p9_tag: "Many Souls",
+    ab_p9_title: "Many souls, <em>one workshop</em>",
+    ab_p9_body1: "An electric barbecue for a motor superyacht and a gas cooker for a charter boat have nothing in common: different constraints, different materials, a different way of cooking on board altogether. We build both. Alongside them: electric grills for dayboats, our most advanced models for Mediterranean cruising and our most heavily reinforced for bluewater ocean passages, the classic finishes of vintage yachts, galleys drawn from scratch for a single hull.",
+    ab_p9_body2: "This is not a range assembled to fill a catalogue. It is what happens when you have never told a shipyard that something cannot be done.",
     ab_p8_tag: "Our Clients",
     ab_p8_title: "Trusted by the <em>world's finest</em> yards",
     ab_p8_body1: "Our cookers have been trusted for decades by the world's most important shipyards, renowned distributors, and private owners. From modern Solaris yachts to classic vessels like William Fife III's Latifa (1936), from Giovanni Soldini's Elmo's Fire to the yachts of celebrated artists, Formula One champions, internationally renowned statesmen, and leading figures from the worlds of business and finance.",
@@ -11376,7 +11624,7 @@ var DICT = {
     ppd_oriz_l3: "Perfectly balanced solid stainless steel hinges, built in-house: oven doors withstand heavy, long-term use without sagging.",
     ppd_oriz_l4: "Cooktop controls designed independently from the oven, to greatly simplify component replacement or full cooktop servicing.",
     ppd_oriz_l5: "Mirror-polished stainless steel oven interior, engineered to minimize bacterial retention, simplify cleaning and deliver superior corrosion resistance.",
-    ppd_oriz_l6: "Heavy-duty enameled baking pan, custom-made with our own molds and forged from specialized steel for optimal heat distribution.",
+    ppd_oriz_l6: "Heavy-duty enamelled baking pan, custom-made with our own moulds and forged from specialised steel for optimal heat distribution.",
     ppd_oriz_l7: "Easy-to-clean oven racks, with a seamless design stamped from our own molds: no dirt traps.",
     ppd_oriz_l8: "Dual power supplies: oven and cooktop run on separate feeds and support up to 400 Vac.",
     ppd_oriz_l9: "Triple-element multifunction system, unique in the marine industry: lower element, upper element and an ultra-powerful grill element, working simultaneously.",
@@ -11660,7 +11908,7 @@ var DICT = {
     cs2_eoven_points: "<li>Resistenze corazzate potenti e di alta qualità.</li><li>Termostati precisi, per un controllo fine della temperatura.</li><li>Griglie forno capienti e porte con vetri doppi di sicurezza, per una facciata più fresca.</li><li>Leccarde smaltate, per una diffusione del calore uniforme ed efficiente.</li><li>Interni in smalto ad alto spessore o acciaio inox lucidato a specchio, per igiene e resistenza alla corrosione.</li><li>Ogni pezzo realizzato a mano a Conegliano.</li>",
     hero_tag: "Cucine Marine d'Autore",
     hero_title: "Alta cucina italiana,<br><em>ovunque</em>",
-    hero_desc: "Cucine basculanti, piani cottura, forni e grill professionali per yacht · a gas, elettrici e ad induzione. Fatti a mano nell'Inox Valley, Conegliano - Venezia · costruiti con elementi torniti e fresati dal pieno acciaio inox.",
+    hero_desc: "Cucine basculanti, piani cottura, forni e grill professionali · dai day cruiser agli yacht d'epoca, dal charter alle traversate oceaniche. Fatti a mano nell'Inox Valley, Conegliano - Venezia · costruiti con elementi torniti e fresati dal pieno acciaio inox.",
     hero_btn_explore: "Esplora i Prodotti",
     hero_btn_story: "La Nostra Storia",
     stat_craft: "Gamma elettrica marina completa",
@@ -11832,6 +12080,10 @@ var DICT = {
     ab_p6_title: "Primati che hanno <em>definito</em> il settore",
     ab_p6_body1: "Un incontro con Luca Bassani, fondatore di Wally, ispirò la prima cucina nautica elettrica di design per yacht a vela · realizzata in un'epoca in cui il design moderno non aveva ancora toccato l'estetica delle imbarcazioni contemporanee. Nacque così HORIZON4, ancora un'icona del settore.",
     ab_p6_body2: "Sempre per Wally, sviluppammo la prima cucina completamente in alluminio ultraleggera. E per Perini Navi, progettammo una cucina speciale con un sistema di bilanciamento inverso unico · un primato mondiale.",
+    ab_p9_tag: "Molte Anime",
+    ab_p9_title: "Molte anime, <em>una sola officina</em>",
+    ab_p9_body1: "Un barbecue elettrico per un superyacht a motore e una cucina a gas per una barca da charter non si somigliano in nulla: cambiano i vincoli, i materiali, il modo stesso di cucinare a bordo. Noi li costruiamo entrambi. E accanto a loro i grill elettrici per i day cruiser, i modelli più tecnologici per la navigazione mediterranea e quelli irrobustiti per le traversate oceaniche senza scalo, le finiture classiche degli yacht d'epoca, le cucine disegnate da zero per una sola barca.",
+    ab_p9_body2: "Non è una collezione messa insieme per ampliare il catalogo. È quello che succede quando, da sempre, a un cantiere non si dice che una cosa non si può fare.",
     ab_p8_tag: "I Nostri Clienti",
     ab_p8_title: "La fiducia dei <em>migliori</em> cantieri al mondo",
     ab_p8_body1: "Le nostre cucine sono state scelte per decenni dai più importanti cantieri navali del mondo, dai più rinomati distributori e da armatori privati. Dai moderni yacht Solaris alle imbarcazioni classiche come la Latifa di William Fife III (1936), dall'Elmo's Fire di Giovanni Soldini agli yacht di grandi artisti, campioni della Formula 1, statisti di fama internazionale e figure di primo piano dell'imprenditoria e della finanza.",
@@ -12900,7 +13152,7 @@ var DICT = {
     cs2_eoven_points: "<li>Résistances blindées puissantes et de haute qualité.</li><li>Thermostats précis, pour un contrôle fin de la température.</li><li>Grilles de four spacieuses et portes à double vitrage de sécurité, pour une façade plus fraîche.</li><li>Lèchefrites émaillées, pour une diffusion de la chaleur uniforme et efficace.</li><li>Intérieurs en émail épais ou acier inox poli miroir, pour l'hygiène et la résistance à la corrosion.</li><li>Chaque pièce fabriquée à la main à Conegliano.</li>",
     hero_tag: "Cuisines Marines d'Exception",
     hero_title: "Alta cucina italiana,<br><em>partout</em>",
-    hero_desc: "Cuisinières à cardan, plans de cuisson, fours et grils professionnels pour yachts · gaz, électrique et induction. Fabriqués à la main dans l'Inox Valley, Conegliano - Venezia · construits avec des pièces tournées et fraisées dans l'inox massif.",
+    hero_desc: "Cuisinières à cardan, plans de cuisson, fours et grils professionnels · des day cruisers aux yachts d'époque, du charter aux traversées océaniques. Fabriqués à la main dans l'Inox Valley, Conegliano - Venezia · construits avec des pièces tournées et fraisées dans l'inox massif.",
     hero_btn_explore: "Découvrir les Produits",
     hero_btn_story: "Notre Histoire",
     stat_craft: "Gamme électrique marine complète",
@@ -12916,21 +13168,21 @@ var DICT = {
     nav_home: "Collections Résidentielles",
     nav_about: "À Propos",
     nav_efficiency: "Efficacité Énergétique",
-    eff_btn: "Efficacité énergétique, un étendard qui est le nôtre",
+    eff_btn: "Efficacité énergétique",
     eff_hero_tag: "Cuisine Off-grid · Recherche & Développement",
-    eff_hero_title: "L'efficacité énergétique<br>est notre <em>étendard</em>",
-    eff_hero_lead: "En mer comme en expédition, la cuisine de bord exige des solutions d'ingénierie dédiées, capables d'éliminer le stress énergétique et de garantir des performances et une sécurité constantes. Nos appareils sont conçus pour redéfinir les standards du secteur, autour d'une efficacité absolue et d'une excellence structurelle.",
+    eff_hero_title: "L'efficacité énergétique<br>est notre <em>signature</em>",
+    eff_hero_lead: "En mer comme en expédition, la cuisine de bord exige des solutions d'ingénierie dédiées, capables de supprimer les contraintes sur l'installation électrique et de garantir des performances et une sécurité constantes. Nos appareils sont conçus pour redéfinir les standards du secteur, autour d'une efficacité absolue et d'une excellence structurelle.",
     eff_c1_label: "Robustesse & Hygiène",
     eff_c1_title: "Robustesse d'acier, hygiène impeccable",
-    eff_c1_b1: "Le premier pilier d'une véritable cuisine professionnelle off-grid est la solidité. Nos appareils offrent une robustesse structurelle comparable à celle d'un char, pensée pour affronter les sollicitations les plus extrêmes en haute mer et sur les terrains les plus accidentés.",
-    eff_c1_b2: "Cette robustesse s'accompagne d'une approche rigoureuse de l'hygiène. Les moufles de nos fours sont en acier inoxydable poli, non brossé : aucun grain abrasif dans lequel des résidus puissent se loger, si bien que les surfaces se nettoient avec une rapidité et une facilité exceptionnelles.",
+    eff_c1_b1: "Le premier pilier d'une véritable cuisine professionnelle off-grid est la solidité. Nos appareils sont construits comme un char, pensés pour affronter les sollicitations les plus extrêmes en haute mer et sur les terrains les plus accidentés.",
+    eff_c1_b2: "Cette robustesse s'accompagne d'une approche rigoureuse de l'hygiène. Les enceintes de nos fours sont en acier inoxydable poli, non brossé : aucun grain abrasif dans lequel des résidus puissent se loger, si bien que les surfaces se nettoient avec une rapidité et une facilité exceptionnelles.",
     eff_c2_label: "Isolation Thermique",
-    eff_c2_title: "Isolation d'avant-garde, un <em>étendard d'efficacité</em>",
-    eff_c2_b1: "L'efficacité énergétique est notre véritable étendard. Nous ne nous limitons pas à une isolation standard : pour nos fours et appareils, nous employons de multiples systèmes d'isolation combinés, de la stabilité de la laine de roche à des structures sandwich spéciales utilisant les matériaux les plus innovants et technologiquement avancés existant aujourd'hui sur le marché mondial.",
+    eff_c2_title: "Isolation d'avant-garde, <em>l'efficacité dès la conception</em>",
+    eff_c2_b1: "Sur l'efficacité énergétique, nous ne transigeons pas. Nous ne nous limitons pas à une isolation standard : pour nos fours et appareils, nous employons de multiples systèmes d'isolation combinés, de la stabilité thermique de la laine de roche à des panneaux sandwich élaborés utilisant les matériaux les plus innovants et technologiquement avancés existant aujourd'hui sur le marché mondial.",
     eff_c2_b2: "Le résultat réduit au minimum les déperditions thermiques, maintient la chaleur de façon optimale et procure une économie d'énergie drastique qui soulage les batteries de bord des cycles de recharge continus.",
     eff_c3_label: "Gaz & Électrique",
-    eff_c3_title: "Des performances professionnelles, au sommet",
-    eff_c3_b1: "Nous ne nous contentons pas de contenir la consommation : nous maximisons le rendement culinaire pour obtenir ces résultats gastronomiques qui ont rendu la cuisine italienne célèbre dans le monde.",
+    eff_c3_title: "Des performances professionnelles, au plus haut niveau",
+    eff_c3_b1: "Nous ne nous contentons pas de contenir la consommation : nous maximisons les performances de cuisson pour obtenir ces résultats gastronomiques qui ont rendu la cuisine italienne célèbre dans le monde.",
     eff_c3_l1: "<strong>Systèmes à gaz.</strong> Nos modèles sont dotés de brûleurs à haute efficacité développés avec les grands noms de la restauration professionnelle.",
     eff_c3_l2: "<strong>Pionniers de l'électrique.</strong> Nous avons été la première entreprise au monde du secteur nautique à réaliser une gamme complète de cuisinières marines électriques.",
     eff_c3_l3: "<strong>Première dans l'induction (2015).</strong> En 2015, nous avons été les tout premiers à développer une ligne de cuisinières à plaques à induction basculantes pour voiliers et bateaux à moteur.",
@@ -12943,11 +13195,11 @@ var DICT = {
     eff_c5_label: "La Méthode Italienne",
     eff_c5_title: "L'art italien de la <em>cuisson intelligente</em>",
     eff_c5_b1: "La véritable efficacité énergétique ne se limite pas à l'électronique : elle s'étend à la manière même d'aborder la préparation des aliments dans des contextes exigeants. Notre département Recherche & Développement a approfondi la culture de la cuisine hors du foyer, allant au-delà de la simple performance technique.",
-    eff_c5_b2: "Nous avons étudié et mis au point tout un ensemble de techniques de cuisson optimisées pour le bateau et les véhicules off-grid, capables de réduire drastiquement l'usage des ressources et de l'énergie pendant la préparation. Étant italiens, notre recherche est allée jusqu'à la sélection et la combinaison de matières premières particulières, choisies spécifiquement pour rendre les processus thermiques plus rapides et efficaces. Cette union entre méthode gastronomique et ingrédients stratégiques réduit la consommation réelle tout en rehaussant la qualité finale.",
+    eff_c5_b2: "Nous avons étudié et mis au point tout un ensemble de techniques de cuisson optimisées pour le bateau et les véhicules off-grid, capables de réduire drastiquement l'usage des ressources et de l'énergie pendant la préparation. Étant italiens, nous avons poussé la recherche jusqu'à la sélection et la combinaison de matières premières particulières, choisies spécifiquement pour rendre les processus thermiques plus rapides et efficaces. Cette union entre méthode gastronomique et ingrédients stratégiques réduit la consommation réelle tout en rehaussant la qualité finale.",
     eff_ms1: "Premiers au monde avec une gamme marine électrique complète",
     eff_ms2: "Premières plaques à induction basculantes pour yachts",
     eff_ms3: "Une plaque entière en un seul kilowatt",
-    eff_quote: "Disposer à bord d'une installation électrique bien dimensionnée est un excellent point de départ. S'en remettre à ceux qui conçoivent des instruments capables d'optimiser l'énergie, de résister à toute sollicitation et de valoriser la méthode de cuisson, c'est le choix des professionnels.",
+    eff_quote: "Disposer à bord d'une installation électrique bien dimensionnée est un excellent point de départ. S'en remettre à ceux qui conçoivent des équipements capables d'optimiser l'énergie, de résister à toute sollicitation et de valoriser la méthode de cuisson, c'est le choix des professionnels.",
     eff_cta: "Parlez à nos ingénieurs",
     nav_catalogues: "Catalogues",
     nav_contact: "Nous Contacter",
@@ -13048,7 +13300,7 @@ var DICT = {
     ab_p3_tag: "Inox Valley",
     ab_p3_title: "Acier, <em>savoir-faire</em> et héritage",
     ab_p3_body1: "Ici, nous sommes dans l'Inox Valley : non seulement l'Italie, patrie de la meilleure cuisine du monde, mais la région de Conegliano où naissent les meilleures cuisinières pour le monde professionnel · construites par les nombreuses entreprises du territoire avec de grands chefs. C'est le savoir-faire que nous respirons chaque jour.",
-    ab_p3_body2: "Les artisans qui fabriquent nos cuisinières sont le dernier maillon d'un savoir-faire transmis de génération en génération, né dans un petit atelier de l'acier et transmis depuis lors · le même héritage que des noms comme Zoppas et Zanussi. D'ici viennent l'inox massif tourné, les moufles miroir et le brevet des cardans · des détails qui soutiennent le regard rapproché.",
+    ab_p3_body2: "Les artisans qui fabriquent nos cuisinières sont le dernier maillon d'un savoir-faire transmis de génération en génération, né dans un petit atelier de l'acier et transmis depuis lors · le même héritage que des noms comme Zoppas et Zanussi. D'ici viennent l'inox massif tourné, les enceintes polies miroir et le brevet des cardans · des détails qui soutiennent le regard rapproché.",
     ab_p3_body3: "Nos corps sont construits en acier inoxydable de forte épaisseur · des pièces tournées et fraisées dans la masse pour durer plus longtemps que le bateau lui-même. Les portes de four reçoivent des charnières de très haute qualité : sur des modèles comme Lux et Orizzonte, elles sont en inox massif, réalisées sur notre propre dessin. Et sur Orizzonte, Tolomeo et Mega Grill, les boutons aussi sont en inox massif, fraisés et tournés dans la masse. C'est la culture de la cuisine professionnelle, portée en mer.",
     cat_dl_btn3: "Feuilleter la Leonardo Collection",
     ab_hd_tag: "Heavy duty",
@@ -13072,6 +13324,10 @@ var DICT = {
     ab_p6_title: "Les premières qui ont <em>défini</em> le secteur",
     ab_p6_body1: "Une rencontre avec Luca Bassani, fondateur de Wally, a inspiré la première cuisinière électrique de design pour yachts à voile · créée à une époque où le design moderne n'avait pas encore touché l'esthétique des voiliers contemporains. C'est ainsi que naquit HORIZON4, encore une icône du secteur.",
     ab_p6_body2: "Toujours pour Wally, nous avons développé la première cuisinière entièrement en aluminium ultra-légère. Et pour Perini Navi, nous avons conçu une cuisinière spéciale avec un système de cardan inversé unique · une première mondiale.",
+    ab_p9_tag: "Nos Multiples Âmes",
+    ab_p9_title: "Plusieurs âmes, <em>un seul atelier</em>",
+    ab_p9_body1: "Un barbecue électrique pour un superyacht à moteur et une cuisinière à gaz pour un bateau de charter n'ont rien en commun : contraintes différentes, matériaux différents, autre façon même de cuisiner à bord. Nous construisons les deux. Et à côté : les grils électriques des day cruisers, nos modèles les plus technologiques pour la navigation en Méditerranée et les plus renforcés pour les traversées océaniques, les finitions classiques des yachts d'époque, les cuisines dessinées de zéro pour une seule coque.",
+    ab_p9_body2: "Ce n'est pas une gamme assemblée pour étoffer un catalogue. C'est ce qui arrive quand on n'a jamais dit à un chantier qu'une chose était impossible.",
     ab_p8_tag: "Nos Clients",
     ab_p8_title: "La confiance des <em>meilleurs</em> chantiers du monde",
     ab_p8_body1: "Nos cuisinières sont la référence depuis des décennies des plus grands chantiers navals du monde, des distributeurs les plus réputés et des propriétaires privés. Des yachts Solaris modernes aux bateaux classiques comme le Latifa de William Fife III (1936), de l'Elmo's Fire de Giovanni Soldini aux yachts de grands artistes, de champions de Formule 1, d'hommes d'État de renommée internationale et de personnalités de premier plan de l'entrepreneuriat et de la finance.",
@@ -13471,7 +13727,7 @@ var DICT = {
     ppd_roma_p2: "Encastré, Roma s'efface dans le meuble de la cambuse en ne laissant à la vue que la façade épurée en acier : un four qui s'intègre avec ordre au projet des intérieurs, pensé pour dialoguer avec le mobilier de bord sans s'imposer.",
     ppd_roma_s0: "Four à gaz encastrable, brûleur statique à l'italienne optimisé pour le rendement et la consommation.",
     ppd_roma_s1: "Capacité de plus de 30 litres.",
-    ppd_roma_s2: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_roma_s2: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_roma_s3: "Porte à double vitrage trempé ; thermomètre sur la porte ou thermostat automatique (selon la variante).",
     ppd_roma_s4: "Lèchefrite en acier spécial émaillé au feu à plus de 800°.",
     ppd_roma_s5: "Grille de cuisson pleine largeur.",
@@ -13490,7 +13746,7 @@ var DICT = {
     ppd_firenze_s1: "Revêtement intégral en acier inoxydable poli miroir (intérieur et extérieur).",
     ppd_firenze_s2: "Brûleur statique à l'italienne optimisé pour le rendement et la consommation.",
     ppd_firenze_s3: "Bonne capacité malgré l'encombrement réduit.",
-    ppd_firenze_s4: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_firenze_s4: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_firenze_s5: "Porte à double vitrage trempé de sécurité.",
     ppd_firenze_s6: "Lèchefrite en acier émaillé au feu à plus de 800°.",
     ppd_firenze_s7: "Grille de cuisson pleine largeur.",
@@ -13506,7 +13762,7 @@ var DICT = {
     ppd_napoli_s1: "Système à triple résistance avec sélecteur dédié (sole seule / voûte seule / sole+voûte / gril supérieur renforcé).",
     ppd_napoli_s2: "Résistance blindée inférieure conçue pour le rendement et la consommation (type statique à l'italienne).",
     ppd_napoli_s3: "Capacité de plus de 30 litres, corps très compact.",
-    ppd_napoli_s4: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_napoli_s4: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_napoli_s5: "Porte à double vitrage trempé de sécurité.",
     ppd_napoli_s6: "Thermostat automatique.",
     ppd_napoli_s7: "Lèchefrite en acier spécial émaillé au feu à plus de 800°.",
@@ -13624,13 +13880,13 @@ var DICT = {
     ppd_ventus_t: "Ventus : la grande table de cuisson pour cuisiner en grand chef quand les convives sont nombreux.",
     ppd_ventus_k: "Le récit de Ventus",
     ppd_ventus_p0: "Ventus donne au chef ce qu'il faut quand les convives sont nombreux : une table de cuisson large et généreuse, capable d'accueillir en même temps la grande marmite des paccheri, la large poêle d'une friture de petits poissons et la casserole d'un guazzetto de moules et de palourdes. En dessous, le four statique à l'italienne travaille comme celui de la maison : le brûleur optimisé et la lèchefrite émaillée au feu à plus de 800° enveloppent d'une chaleur uniforme un plat de dorade aux pommes de terre et aux olives, ou une parmigiana qui gratine lentement.",
-    ppd_ventus_p1: "Le moufle isolé en sandwich métallique et la porte à double vitrage trempé retiennent la chaleur là où il le faut, tandis que le plan deep drawn recueille les débordements éventuels quand l'eau des pâtes bout vigoureusement. La grille monobloc à barre frontale et bras à manettes anti-chaleur maintient fermement les plus grandes casseroles même en navigation : vous portez ainsi à table un repas abondant, de l'entrée au dessert (peut-être une torta caprese), sans renoncer à rien.",
+    ppd_ventus_p1: "L'enceinte isolée en sandwich métallique et la porte à double vitrage trempé retiennent la chaleur là où il le faut, tandis que le plan deep drawn recueille les débordements éventuels quand l'eau des pâtes bout vigoureusement. La grille monobloc à barre frontale et bras à manettes anti-chaleur maintient fermement les plus grandes casseroles même en navigation : vous portez ainsi à table un repas abondant, de l'entrée au dessert (peut-être une torta caprese), sans renoncer à rien.",
     ppd_ventus_p2: "Le plan généreux ne renonce pas à l'élégance : les lignes larges et épurées, l'acier miroir et les finitions soignées font de Ventus une cuisine imposante mais harmonieuse, dessinée pour s'intégrer à la cambuse des yachts les plus spacieux et dialoguer avec le projet des intérieurs.",
     ppd_ventus_s0: "Table de cuisson large et généreuse.",
     ppd_ventus_s1: "Four statique à gaz de plus de 30 litres.",
     ppd_ventus_s2: "Brûleur de four statique à l'italienne, optimisé pour le rendement et la consommation.",
     ppd_ventus_s3: "Brûleurs de table à puissances différenciées, chapeaux émaillés à 800°.",
-    ppd_ventus_s4: "Isolation du moufle en laine de roche ou fibre de verre, système sandwich métallique.",
+    ppd_ventus_s4: "Isolation de l'enceinte en laine de roche ou fibre de verre, système sandwich métallique.",
     ppd_ventus_s5: "Porte à double vitrage trempé de sécurité.",
     ppd_ventus_s6: "Thermomètre sur la porte ou thermostat automatique (selon la variante).",
     ppd_ventus_s7: "Lèchefrite du four en acier spécial émaillé au feu à plus de 800°.",
@@ -13651,7 +13907,7 @@ var DICT = {
     ppd_maxima_s3: "Bras porte-casseroles réglables dans le sens longitudinal et en hauteur.",
     ppd_maxima_s4: "Four statique à gaz très spacieux, brûleur statique à l'italienne.",
     ppd_maxima_s5: "Brûleurs de table à puissances différenciées, chapeaux émaillés à 800°.",
-    ppd_maxima_s6: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_maxima_s6: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_maxima_s7: "Porte à double vitrage trempé ; thermomètre ou thermostat automatique (selon la variante).",
     ppd_maxima_s8: "Lèchefrite du four en acier émaillé à plus de 800° ; plan deep drawn.",
     ppd_maxima_s9: "Vannes réglées du minimum (mijotage) au maximum ; allumage sur pile AA.",
@@ -13661,13 +13917,13 @@ var DICT = {
     ppd_marea_t: "Marea : la grande cuisine en seulement 45 cm, avec un vrai four sur plusieurs niveaux.",
     ppd_marea_k: "Le récit de Marea",
     ppd_marea_p0: "Marea prouve qu'on peut faire de la grande cuisine même en seulement 45 cm de largeur. Le secret, c'est le four à brûleur en position reculée, qui libère de l'espace intérieur et permet de cuire sur plusieurs niveaux à la fois : sur la grille du bas un plat de légumes gratinés, sur celle du haut une tarte à la ricotta et aux poires qui cuit avec le même soin.",
-    ppd_marea_p1: "Les brûleurs à répartiteurs de flamme en laiton massif offrent une flamme stable, idéale pour faire mijoter une sauce pour des trofie al pesto ou pour mener à cuisson douce une fricassée de poulet. Le moufle isolé en sandwich métallique et la porte à double vitrage trempé retiennent la chaleur, si bien que même dans un espace compact la cuisson reste uniforme. Et quand l'espace est compté, pouvoir compter sur un four complet signifie ne renoncer ni à l'entrée, ni au plat, ni au dessert.",
+    ppd_marea_p1: "Les brûleurs à répartiteurs de flamme en laiton massif offrent une flamme stable, idéale pour faire mijoter une sauce pour des trofie al pesto ou pour mener à cuisson douce une fricassée de poulet. L'enceinte isolée en sandwich métallique et la porte à double vitrage trempé retiennent la chaleur, si bien que même dans un espace compact la cuisson reste uniforme. Et quand l'espace est compté, pouvoir compter sur un four complet signifie ne renoncer ni à l'entrée, ni au plat, ni au dessert.",
     ppd_marea_p2: "Compacité et design vont de pair : en seulement 45 cm, Marea offre des lignes épurées, de l'acier miroir et des finitions soignées qui lui permettent de s'intégrer avec élégance même dans les plus petites cambuses, en valorisant chaque centimètre du projet de bord.",
     ppd_marea_s0: "Châssis ultra-compact, largeur 45 cm.",
     ppd_marea_s1: "Four à brûleur en position reculée : cuisson des aliments sur plusieurs niveaux.",
     ppd_marea_s2: "Four statique à gaz de plus de 30 litres.",
     ppd_marea_s3: "Brûleurs de table avec répartiteurs de flamme en laiton massif forgés à chaud, à puissances différenciées.",
-    ppd_marea_s4: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_marea_s4: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_marea_s5: "Porte à double vitrage trempé ; thermomètre ou thermostat automatique (selon la variante).",
     ppd_marea_s6: "Lèchefrite du four en acier émaillé à plus de 800° ; plan deep drawn.",
     ppd_marea_s7: "Grille de table monobloc avec barre frontale et bras à manettes anti-chaleur.",
@@ -13686,7 +13942,7 @@ var DICT = {
     ppd_lux_s3: "Bras porte-casseroles réglables dans le sens longitudinal et en hauteur.",
     ppd_lux_s4: "Four statique à gaz de plus de 30 litres, brûleur statique à l'italienne.",
     ppd_lux_s5: "Brûleurs de table à puissances différenciées, chapeaux émaillés à 800°.",
-    ppd_lux_s6: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_lux_s6: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_lux_s7: "Porte à double vitrage trempé ; thermomètre ou thermostat automatique (selon la variante).",
     ppd_lux_s8: "Lèchefrite du four en acier émaillé à plus de 800° ; plan deep drawn.",
     ppd_lux_s9: "Vannes réglées du minimum (mijotage) au maximum ; allumage sur pile AA.",
@@ -13703,7 +13959,7 @@ var DICT = {
     ppd_altamarea_s2: "Four à brûleur en position reculée : cuisson sur plusieurs niveaux.",
     ppd_altamarea_s3: "Four statique à gaz de plus de 30 litres.",
     ppd_altamarea_s4: "Brûleurs de table avec répartiteurs de flamme en laiton massif forgés à chaud, à puissances différenciées.",
-    ppd_altamarea_s5: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_altamarea_s5: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_altamarea_s6: "Porte à double vitrage trempé ; thermomètre ou thermostat automatique (selon la variante).",
     ppd_altamarea_s7: "Lèchefrite du four en acier émaillé à plus de 800° ; plan deep drawn.",
     ppd_altamarea_s8: "Grille de table monobloc avec barre frontale et bras à manettes anti-chaleur.",
@@ -13714,12 +13970,12 @@ var DICT = {
     ppd_maris_t: "Maris : la flamme de laiton de la grande cuisine italienne, avec l'élégance du design de bord.",
     ppd_maris_k: "Le récit de Maris",
     ppd_maris_p0: "Maris fait de la qualité de sa flamme son point fort : les brûleurs à répartiteurs de flamme en laiton massif forgés à chaud emmagasinent la chaleur et la restituent de façon douce et régulière, la condition parfaite pour les cuissons qui demandent de la délicatesse. Sur cette flamme un risotto aux fruits de mer se lie à la perfection, une béchamel n'attache pas et une crème anglaise reste soyeuse.",
-    ppd_maris_p1: "Le four statique à l'italienne, avec brûleur optimisé et lèchefrite émaillée au feu à plus de 800°, enveloppe de sa chaleur uniforme une dorade all'acqua pazza parfumée aux tomates cerises et aux câpres, ou un plat de poivrons farcis. Le moufle isolé en sandwich métallique et la porte à double vitrage trempé maintiennent la température stable, tandis que les sécurités, thermocouples et verrou de porte automatique, vous laissent cuisiner l'esprit tranquille. Pour finir, une panna cotta aux fruits des bois, cuite doucement sur la flamme de laiton.",
+    ppd_maris_p1: "Le four statique à l'italienne, avec brûleur optimisé et lèchefrite émaillée au feu à plus de 800°, enveloppe de sa chaleur uniforme une dorade all'acqua pazza parfumée aux tomates cerises et aux câpres, ou un plat de poivrons farcis. L'enceinte isolée en sandwich métallique et la porte à double vitrage trempé maintiennent la température stable, tandis que les sécurités, thermocouples et verrou de porte automatique, vous laissent cuisiner l'esprit tranquille. Pour finir, une panna cotta aux fruits des bois, cuite doucement sur la flamme de laiton.",
     ppd_maris_p2: "Derrière les performances, il y a le soin du design italien : panneaux extérieurs en acier miroir, proportions épurées et finitions soignées jusque dans le moindre détail font de Maris une cuisine qui s'intègre avec élégance aux espaces de bord, pensée pour dialoguer avec le projet de l'architecte d'intérieur plutôt que de s'imposer à lui.",
     ppd_maris_s0: "Brûleurs de table avec répartiteurs de flamme en laiton massif forgés à chaud.",
     ppd_maris_s1: "Brûleurs à puissances différenciées.",
     ppd_maris_s2: "Four statique à gaz de plus de 30 litres, brûleur statique à l'italienne.",
-    ppd_maris_s3: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_maris_s3: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_maris_s4: "Porte à double vitrage trempé ; thermomètre ou thermostat automatique (selon la variante).",
     ppd_maris_s5: "Lèchefrite du four en acier émaillé à plus de 800° ; plan deep drawn.",
     ppd_maris_s6: "Grille de table monobloc avec barre frontale et bras à manettes anti-chaleur.",
@@ -13735,7 +13991,7 @@ var DICT = {
     ppd_nauta_s0: "Brûleurs de table avec répartiteurs de flamme en laiton massif forgés à chaud.",
     ppd_nauta_s1: "Brûleurs à puissances différenciées.",
     ppd_nauta_s2: "Four statique à gaz de plus de 30 litres, brûleur statique à l'italienne.",
-    ppd_nauta_s3: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_nauta_s3: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_nauta_s4: "Porte à double vitrage trempé ; thermomètre ou thermostat automatique (selon la variante).",
     ppd_nauta_s5: "Lèchefrite du four en acier émaillé à plus de 800° ; plan deep drawn.",
     ppd_nauta_s6: "Grille de table monobloc avec barre frontale et bras à manettes anti-chaleur.",
@@ -13745,12 +14001,12 @@ var DICT = {
     ppd_nauta_s10: "En option : pierre ollaire, pare-chaleur latéraux, panneaux extérieurs miroir, réglage cardanique breveté.",
     ppd_marina_t: "Marina : un vrai four statique italien, intégré avec style dans la cambuse.",
     ppd_marina_k: "Le récit de Marina",
-    ppd_marina_p0: "Marina amène à bord le cœur de la cuisine italienne : un vrai four statique. Son brûleur, conçu pour un rendement optimal à faible consommation, enveloppe les plats d'une chaleur uniforme qui est le secret des lasagnes alla bolognese avec la bonne croûte, ou d'un rôti de porc au lait tendre à l'intérieur. Le moufle isolé à la laine de roche en système sandwich métallique et la porte à double vitrage trempé maintiennent la température constante, indispensable pour faire lever un pan brioche moelleux ou pour gratiner à point un plat de cannelloni.",
+    ppd_marina_p0: "Marina amène à bord le cœur de la cuisine italienne : un vrai four statique. Son brûleur, conçu pour un rendement optimal à faible consommation, enveloppe les plats d'une chaleur uniforme qui est le secret des lasagnes alla bolognese avec la bonne croûte, ou d'un rôti de porc au lait tendre à l'intérieur. L'enceinte isolée à la laine de roche en système sandwich métallique et la porte à double vitrage trempé maintiennent la température constante, indispensable pour faire lever un pan brioche moelleux ou pour gratiner à point un plat de cannelloni.",
     ppd_marina_p1: "La lèchefrite en acier émaillé au feu à plus de 800° rayonne la chaleur vers le bas, parfaite pour dorer les pommes de terre sous un bar au four. Pendant ce temps, sur la table de cuisson, les brûleurs à puissances différenciées et les vannes réglables du mijotage à la pleine flamme vous laissent lier un risotto aux asperges tandis que le four travaille ; et avec la pierre ollaire en option, le pain maison et la pizza sortent avec une base croustillante de vraie pizzeria.",
     ppd_marina_p2: "Tout cela dans une cuisine dessinée avec le goût italien : surfaces en acier miroir, lignes essentielles et finitions soignées qui lui permettent de s'intégrer avec élégance au projet de la cambuse, comme un élément pensé avec l'architecte d'intérieur.",
     ppd_marina_s0: "Four statique à gaz de plus de 30 litres, corps compact.",
     ppd_marina_s1: "Brûleur de four statique à l'italienne, optimisé pour le rendement et la consommation.",
-    ppd_marina_s2: "Isolation du moufle en laine de roche ou fibre de verre, système sandwich métallique.",
+    ppd_marina_s2: "Isolation de l'enceinte en laine de roche ou fibre de verre, système sandwich métallique.",
     ppd_marina_s3: "Porte à double vitrage trempé de sécurité.",
     ppd_marina_s4: "Thermomètre sur la porte ou thermostat automatique (selon la variante).",
     ppd_marina_s5: "Lèchefrite du four en acier spécial émaillé au feu à plus de 800°.",
@@ -13771,7 +14027,7 @@ var DICT = {
     ppd_gusto_p2: "Et elle le fait avec la sobriété du design italien : proportions équilibrées, acier miroir et détails soignés font de Gusto une cuisine belle à regarder, pensée pour s'intégrer avec discrétion aux intérieurs du bateau et suivre les choix du concepteur.",
     ppd_gusto_s0: "Four statique à gaz de plus de 30 litres, corps compact.",
     ppd_gusto_s1: "Brûleur de four statique à l'italienne, optimisé pour le rendement et la consommation.",
-    ppd_gusto_s2: "Isolation du moufle en laine de roche ou fibre de verre, système sandwich métallique.",
+    ppd_gusto_s2: "Isolation de l'enceinte en laine de roche ou fibre de verre, système sandwich métallique.",
     ppd_gusto_s3: "Porte à double vitrage trempé de sécurité.",
     ppd_gusto_s4: "Thermomètre sur la porte ou thermostat automatique (selon la variante).",
     ppd_gusto_s5: "Lèchefrite du four en acier spécial émaillé au feu à plus de 800°.",
@@ -13796,7 +14052,7 @@ var DICT = {
     ppd_altura_s3: "Bras porte-casseroles réglables dans le sens longitudinal et en hauteur.",
     ppd_altura_s4: "Four statique à gaz de plus de 30 litres, brûleur statique à l'italienne.",
     ppd_altura_s5: "Brûleurs de table à puissances différenciées, chapeaux émaillés à 800°.",
-    ppd_altura_s6: "Isolation du moufle en laine de roche/fibre de verre, système sandwich métallique.",
+    ppd_altura_s6: "Isolation de l'enceinte en laine de roche/fibre de verre, système sandwich métallique.",
     ppd_altura_s7: "Porte à double vitrage trempé ; thermomètre ou thermostat automatique (selon la variante).",
     ppd_altura_s8: "Lèchefrite du four en acier émaillé au feu à plus de 800° ; plan deep drawn.",
     ppd_altura_s9: "Vannes réglées du minimum (mijotage) au maximum ; allumage sur pile AA.",
@@ -14140,7 +14396,7 @@ var DICT = {
     cs2_eoven_points: "<li>Kräftige, hochwertige gepanzerte Heizelemente.</li><li>Präzise Thermostate für feine Temperaturkontrolle.</li><li>Geräumige Backroste und doppelt verglaste Sicherheitstüren, für eine kühlere Front.</li><li>Emaillierte Fettpfannen, für gleichmäßige, effiziente Wärmeverteilung.</li><li>Innenräume aus dickem Email oder spiegelpoliertem Edelstahl, für Hygiene und Korrosionsbeständigkeit.</li><li>Jedes Stück in Conegliano von Hand gefertigt.</li>",
     hero_tag: "Handgefertigte Marine-Küchen",
     hero_title: "Alta cucina italiana,<br><em>überall</em>",
-    hero_desc: "Kardanisch aufgehängte Kocher, Kochfelder, Backöfen und professionelle Grills für Yachten · Gas, Elektro und Induktion. Handgefertigt im Inox Valley, Conegliano - Venezia · gebaut mit gedrehten und gefrästen Teilen aus massivem Edelstahl.",
+    hero_desc: "Kardanisch aufgehängte Kocher, Kochfelder, Backöfen und professionelle Grills · vom Dayboat bis zur historischen Yacht, vom Charter bis zur Ozeanpassage. Handgefertigt im Inox Valley, Conegliano - Venezia · gebaut mit gedrehten und gefrästen Teilen aus massivem Edelstahl.",
     hero_btn_explore: "Produkte Entdecken",
     hero_btn_story: "Unsere Geschichte",
     stat_craft: "Komplette elektrische Marine-Baureihe",
@@ -14156,21 +14412,21 @@ var DICT = {
     nav_home: "Residential Kollektionen",
     nav_about: "Über Uns",
     nav_efficiency: "Energieeffizienz",
-    eff_btn: "Energieeffizienz, eine Fahne von uns",
+    eff_btn: "Energieeffizienz",
     eff_hero_tag: "Off-grid-Küche · Forschung & Entwicklung",
-    eff_hero_title: "Energieeffizienz<br>ist unser <em>Banner</em>",
-    eff_hero_lead: "Ob auf See oder auf Expedition — die Bordküche verlangt eigens entwickelte Ingenieurlösungen, die Energiestress ausschließen und beständige Leistung und Sicherheit gewährleisten. Unsere Geräte sind darauf ausgelegt, die Standards der Branche neu zu definieren, mit Fokus auf absolute Effizienz und strukturelle Exzellenz.",
+    eff_hero_title: "Energieeffizienz<br>ist unsere <em>Handschrift</em>",
+    eff_hero_lead: "Ob auf See oder auf Expedition — die Bordküche verlangt eigens entwickelte Ingenieurlösungen, die die Belastungen für das Bordnetz beseitigen und beständige Leistung und Sicherheit gewährleisten. Unsere Geräte sind darauf ausgelegt, die Standards der Branche neu zu definieren, mit Fokus auf absolute Effizienz und strukturelle Exzellenz.",
     eff_c1_label: "Robustheit & Hygiene",
     eff_c1_title: "Stahlharte Robustheit, tadellose Hygiene",
-    eff_c1_b1: "Die erste Säule einer echten professionellen Off-grid-Küche ist die Solidität. Unsere Geräte bieten eine strukturelle Robustheit vergleichbar mit einem Panzer, konzipiert für die extremsten Belastungen auf hoher See und in unwegsamstem Gelände.",
-    eff_c1_b2: "Diese Stärke geht mit einem konsequenten Hygienekonzept einher. Die Muffeln unserer Öfen bestehen aus poliertem, nicht gebürstetem Edelstahl: Es gibt keine Schleifstruktur, in der sich Rückstände festsetzen können, sodass sich die Oberflächen außergewöhnlich schnell und leicht reinigen lassen.",
+    eff_c1_b1: "Die erste Säule einer echten professionellen Off-grid-Küche ist die Solidität. Unsere Geräte sind gebaut wie ein Panzer, konzipiert für die extremsten Belastungen auf hoher See und in unwegsamstem Gelände.",
+    eff_c1_b2: "Diese Stärke geht mit einem konsequenten Hygienekonzept einher. Die Garräume unserer Öfen bestehen aus poliertem, nicht gebürstetem Edelstahl: Es gibt keine Schleifstruktur, in der sich Rückstände festsetzen können, sodass sich die Oberflächen außergewöhnlich schnell und leicht reinigen lassen.",
     eff_c2_label: "Wärmedämmung",
-    eff_c2_title: "Wegweisende Dämmung, ein <em>Effizienz-Banner</em>",
-    eff_c2_b1: "Energieeffizienz ist unser wahres Banner. Wir beschränken uns nicht auf eine Standarddämmung: Für unsere Öfen und Geräte setzen wir mehrere kombinierte Dämmsysteme ein — von der Stabilität der Steinwolle bis zu speziellen Sandwich-Systemen mit den innovativsten und technologisch fortschrittlichsten Materialien, die es heute auf dem Weltmarkt gibt.",
+    eff_c2_title: "Wegweisende Dämmung, <em>Effizienz von Grund auf</em>",
+    eff_c2_b1: "Bei der Energieeffizienz machen wir keine Kompromisse. Wir beschränken uns nicht auf eine Standarddämmung: Für unsere Öfen und Geräte setzen wir mehrere kombinierte Dämmsysteme ein — von der thermischen Stabilität der Steinwolle bis zu eigens entwickelten Sandwichaufbauten mit den innovativsten und technologisch fortschrittlichsten Materialien, die es heute auf dem Weltmarkt gibt.",
     eff_c2_b2: "Das Ergebnis hält Wärmeverluste auf ein Minimum, speichert die Wärme optimal und liefert eine drastische Energieeinsparung, die die Bordbatterien von ständigen Ladezyklen entlastet.",
     eff_c3_label: "Gas & Elektro",
-    eff_c3_title: "Professionelle Leistung, an der Spitze",
-    eff_c3_b1: "Wir begrenzen nicht nur den Verbrauch — wir maximieren die kulinarische Ausbeute, um jene gastronomischen Ergebnisse zu erzielen, die die italienische Küche weltberühmt gemacht haben.",
+    eff_c3_title: "Professionelle Leistung, auf höchstem Niveau",
+    eff_c3_b1: "Wir begrenzen nicht nur den Verbrauch — wir maximieren die Kochleistung, um jene gastronomischen Ergebnisse zu erzielen, die die italienische Küche weltberühmt gemacht haben.",
     eff_c3_l1: "<strong>Gassysteme.</strong> Unsere Modelle verfügen über Hochleistungsbrenner, die gemeinsam mit führenden Namen der professionellen Gastronomie entwickelt wurden.",
     eff_c3_l2: "<strong>Elektro-Pioniere.</strong> Wir waren das weltweit erste Unternehmen im Marinesektor, das eine komplette Serie elektrischer Bordküchen realisierte.",
     eff_c3_l3: "<strong>Erste bei der Induktion (2015).</strong> 2015 waren wir die allerersten, die eine Linie von Kochern mit schwenkbaren Induktionskochfeldern für Segel- und Motoryachten entwickelten.",
@@ -14183,11 +14439,11 @@ var DICT = {
     eff_c5_label: "Die Italienische Methode",
     eff_c5_title: "Die italienische Kunst des <em>intelligenten Kochens</em>",
     eff_c5_b1: "Wahre Energieeffizienz beschränkt sich nicht auf die Elektronik, sondern erstreckt sich auf die Art und Weise, wie die Zubereitung von Speisen in anspruchsvollen Kontexten angegangen wird. Unsere Forschungs- und Entwicklungsabteilung hat die Kultur des Kochens außer Haus vertieft und ist über die bloße technische Leistung hinausgegangen.",
-    eff_c5_b2: "Wir haben eine ganze Reihe von Kochtechniken erforscht und verfeinert, die für Boote und Off-grid-Fahrzeuge optimiert sind und den Einsatz von Ressourcen und Energie bei der Zubereitung drastisch senken. Als Italiener reichte unsere Forschung bis zur Auswahl und Kombination bestimmter Rohstoffe, die gezielt ausgewählt wurden, um thermische Prozesse schneller und effizienter zu machen. Diese Verbindung aus gastronomischer Methode und strategischen Zutaten senkt den realen Verbrauch und hebt zugleich die Endqualität.",
+    eff_c5_b2: "Wir haben eine ganze Reihe von Kochtechniken erforscht und verfeinert, die für Boote und Off-grid-Fahrzeuge optimiert sind und den Einsatz von Ressourcen und Energie bei der Zubereitung drastisch senken. Als Italiener haben wir die Forschung bis zur Auswahl und Kombination bestimmter Rohstoffe vorangetrieben, die gezielt ausgewählt wurden, um thermische Prozesse schneller und effizienter zu machen. Diese Verbindung aus gastronomischer Methode und strategischen Zutaten senkt den realen Verbrauch und hebt zugleich die Endqualität.",
     eff_ms1: "Weltweit Erste mit einer kompletten elektrischen Marine-Reihe",
     eff_ms2: "Erste schwenkbare Induktionskochfelder für Yachten",
     eff_ms3: "Ein ganzes Kochfeld innerhalb eines Kilowatts",
-    eff_quote: "Eine gut dimensionierte elektrische Anlage an Bord ist ein hervorragender Ausgangspunkt. Sich auf jene zu verlassen, die Instrumente entwerfen, die Energie optimieren, jeder Belastung standhalten und die Kochmethode aufwerten — das ist die Wahl der Profis.",
+    eff_quote: "Eine gut dimensionierte elektrische Anlage an Bord ist ein hervorragender Ausgangspunkt. Sich auf jene zu verlassen, die Geräte entwickeln, die Energie optimieren, jeder Belastung standhalten und die Kochmethode aufwerten — das ist die Wahl der Profis.",
     eff_cta: "Sprechen Sie mit unseren Technikern",
     nav_catalogues: "Kataloge",
     nav_contact: "Kontakt",
@@ -14312,6 +14568,10 @@ var DICT = {
     ab_p6_title: "Premieren die den Sektor <em>definierten</em>",
     ab_p6_body1: "Eine Begegnung mit Luca Bassani, Gründer von Wally, inspirierte den ersten elektrischen Design-Seekocher für Segelyachten · entwickelt zu einer Zeit, als modernes Design die Ästhetik zeitgenössischer Segelfahrzeuge noch nicht berührt hatte. So entstand HORIZON4, noch heute eine Ikone des Sektors.",
     ab_p6_body2: "Ebenfalls für Wally entwickelten wir den ersten vollständig aus Aluminium gefertigten Leichtherd. Und für Perini Navi konzipierten wir einen Spezialkocher mit einzigartigem umgekehrtem Karda-System · eine Weltpremiere.",
+    ab_p9_tag: "Viele Seelen",
+    ab_p9_title: "Viele Seelen, <em>eine Werkstatt</em>",
+    ab_p9_body1: "Ein Elektrogrill für eine Motoryacht und ein Gasherd für ein Charterboot haben nichts gemeinsam: andere Vorgaben, andere Materialien, eine ganz andere Art, an Bord zu kochen. Wir bauen beides. Und daneben: Elektrogrills für Dayboats, unsere technologisch weitesten Modelle für das Mittelmeer und unsere am stärksten verstärkten für Blauwasser-Passagen, die klassischen Ausführungen historischer Yachten, Kombüsen, die für einen einzigen Rumpf von Grund auf gezeichnet werden.",
+    ab_p9_body2: "Das ist kein Programm, das einen Katalog füllen soll. Es ist das, was entsteht, wenn man einer Werft noch nie gesagt hat, dass etwas nicht geht.",
     ab_p8_tag: "Unsere Kunden",
     ab_p8_title: "Vertraut von den <em>besten Werften</em> der Welt",
     ab_p8_body1: "Unsere Herde sind seit Jahrzehnten die erste Wahl der bedeutendsten Werften der Welt, renommiertester Händler und privater Eigner. Von modernen Solaris-Yachten bis zu klassischen Schiffen wie William Fife III's Latifa (1936), von Giovanni Soldinis Elmo's Fire bis zu den Yachten großer Künstler, Formel-1-Champions, international renommierter Staatsmänner und führender Persönlichkeiten aus Wirtschaft und Finanzwelt.",
@@ -15380,7 +15640,7 @@ var DICT = {
     cs2_eoven_points: "<li>Resistencias blindadas potentes y de alta calidad.</li><li>Termostatos precisos, para un control fino de la temperatura.</li><li>Parrillas de horno amplias y puertas con doble cristal de seguridad, para un frontal más fresco.</li><li>Bandejas esmaltadas, para una difusión del calor uniforme y eficiente.</li><li>Interiores en esmalte de alto espesor o acero inox pulido a espejo, para higiene y resistencia a la corrosión.</li><li>Cada pieza hecha a mano en Conegliano.</li>",
     hero_tag: "Cocinas Marinas de Autor",
     hero_title: "Alta cucina italiana,<br><em>donde sea</em>",
-    hero_desc: "Cocinas basculantes, encimeras, hornos y parrillas profesionales para yates · gas, eléctricos y de inducción. Hechos a mano en el Inox Valley, Conegliano - Venezia · construidos con elementos torneados y fresados en acero inoxidable macizo.",
+    hero_desc: "Cocinas basculantes, encimeras, hornos y parrillas profesionales · de los day cruisers a los yates de época, del charter a las travesías oceánicas. Hechos a mano en el Inox Valley, Conegliano - Venezia · construidos con elementos torneados y fresados en acero inoxidable macizo.",
     hero_btn_explore: "Explorar Productos",
     hero_btn_story: "Nuestra Historia",
     stat_craft: "Gama eléctrica marina completa",
@@ -15396,21 +15656,21 @@ var DICT = {
     nav_home: "Colecciones Residenciales",
     nav_about: "Quiénes Somos",
     nav_efficiency: "Eficiencia Energética",
-    eff_btn: "Eficiencia Energética, una bandera nuestra",
+    eff_btn: "Eficiencia Energética",
     eff_hero_tag: "Cocina Off-grid · Investigación y Desarrollo",
     eff_hero_title: "La eficiencia energética<br>es nuestra <em>bandera</em>",
-    eff_hero_lead: "Tanto en el mar como en expedición, la cocina de a bordo exige soluciones de ingeniería dedicadas, capaces de eliminar el estrés energético y garantizar prestaciones y seguridad constantes. Nuestros aparatos están diseñados para redefinir los estándares del sector, apostando por la eficiencia absoluta y la excelencia estructural.",
+    eff_hero_lead: "Tanto en el mar como en expedición, la cocina de a bordo exige soluciones de ingeniería dedicadas, capaces de eliminar las tensiones sobre la instalación eléctrica y garantizar prestaciones y seguridad constantes. Nuestros aparatos están diseñados para redefinir los estándares del sector, apostando por la eficiencia absoluta y la excelencia estructural.",
     eff_c1_label: "Robustez e Higiene",
     eff_c1_title: "Robustez de acero, higiene impecable",
-    eff_c1_b1: "El primer pilar de una verdadera cocina profesional off-grid es la solidez. Nuestros aparatos presentan una robustez estructural comparable a la de un tanque, pensada para afrontar las solicitaciones más extremas en mar abierto y en los terrenos más accidentados.",
-    eff_c1_b2: "Esta fortaleza se une a un enfoque riguroso de la higiene. Las muflas de nuestros hornos son de acero inoxidable pulido, no satinado: no hay grano abrasivo en el que puedan alojarse los residuos, por lo que las superficies se limpian con una rapidez y una facilidad excepcionales.",
+    eff_c1_b1: "El primer pilar de una verdadera cocina profesional off-grid es la solidez. Nuestros aparatos están construidos como un tanque, pensados para afrontar las solicitaciones más extremas en mar abierto y en los terrenos más accidentados.",
+    eff_c1_b2: "Esta fortaleza se une a un enfoque riguroso de la higiene. Las cavidades de nuestros hornos son de acero inoxidable pulido, no cepillado: no hay grano abrasivo en el que puedan alojarse los residuos, por lo que las superficies se limpian con una rapidez y una facilidad excepcionales.",
     eff_c2_label: "Aislamiento Térmico",
     eff_c2_title: "Aislamiento de vanguardia, una <em>bandera de eficiencia</em>",
-    eff_c2_b1: "La eficiencia energética es nuestra verdadera bandera. No nos limitamos a un aislamiento estándar: para nuestros hornos y aparatos empleamos múltiples sistemas de aislamiento combinados, desde la estabilidad de la lana de roca hasta especiales sistemas sándwich que utilizan los materiales más innovadores y tecnológicamente avanzados que existen hoy en el mercado global.",
+    eff_c2_b1: "La eficiencia energética es nuestra verdadera bandera. No nos limitamos a un aislamiento estándar: para nuestros hornos y aparatos empleamos múltiples sistemas de aislamiento combinados, desde la estabilidad térmica de la lana de roca hasta paneles sándwich de diseño propio que utilizan los materiales más innovadores y tecnológicamente avanzados que existen hoy en el mercado global.",
     eff_c2_b2: "El resultado reduce al mínimo las dispersiones térmicas, mantiene el calor de forma óptima y aporta un ahorro energético drástico que libera a las baterías de a bordo de ciclos de recarga continuos.",
     eff_c3_label: "Gas y Eléctrico",
-    eff_c3_title: "Prestaciones profesionales, en la cima",
-    eff_c3_b1: "No nos limitamos a contener el consumo: maximizamos el rendimiento culinario para obtener esos resultados gastronómicos que han hecho célebre la cocina italiana en el mundo.",
+    eff_c3_title: "Prestaciones profesionales, al más alto nivel",
+    eff_c3_b1: "No nos limitamos a contener el consumo: maximizamos el rendimiento de cocción para obtener esos resultados gastronómicos que han hecho célebre la cocina italiana en el mundo.",
     eff_c3_l1: "<strong>Sistemas de gas.</strong> Nuestros modelos cuentan con quemadores de alta eficiencia desarrollados junto a las principales empresas de la restauración profesional.",
     eff_c3_l2: "<strong>Pioneros de lo eléctrico.</strong> Fuimos la primera empresa del mundo en el sector náutico en realizar una serie completa de cocinas náuticas eléctricas.",
     eff_c3_l3: "<strong>Primacía en la inducción (2015).</strong> En 2015 fuimos los primeros en absoluto en desarrollar una línea de cocinas con placas de inducción basculantes para embarcaciones de vela y de motor.",
@@ -15423,11 +15683,11 @@ var DICT = {
     eff_c5_label: "El Método Italiano",
     eff_c5_title: "El arte italiano de la <em>cocción inteligente</em>",
     eff_c5_b1: "La verdadera eficiencia energética no se limita a la electrónica, sino que se extiende al modo mismo de afrontar la preparación de los alimentos en contextos exigentes. Nuestro departamento de Investigación y Desarrollo ha profundizado en la cultura de la cocina fuera de casa, yendo más allá de la simple prestación técnica.",
-    eff_c5_b2: "Hemos estudiado y puesto a punto toda una serie de técnicas de cocción optimizadas para el barco y los vehículos off-grid, capaces de reducir drásticamente el uso de recursos y energía durante la preparación. Al ser italianos, nuestra investigación ha llegado hasta la selección y combinación de determinadas materias primas, elegidas específicamente para hacer más rápidos y eficientes los procesos térmicos. Esta unión entre método gastronómico e ingredientes estratégicos recorta el consumo real y realza al mismo tiempo la calidad final.",
+    eff_c5_b2: "Hemos estudiado y puesto a punto toda una serie de técnicas de cocción optimizadas para el barco y los vehículos off-grid, capaces de reducir drásticamente el uso de recursos y energía durante la preparación. Al ser italianos, hemos llevado la investigación hasta la selección y combinación de determinadas materias primas, elegidas específicamente para hacer más rápidos y eficientes los procesos térmicos. Esta unión entre método gastronómico e ingredientes estratégicos recorta el consumo real y realza al mismo tiempo la calidad final.",
     eff_ms1: "Primeros en el mundo con una gama eléctrica náutica completa",
     eff_ms2: "Primeras placas de inducción basculantes para yates",
     eff_ms3: "Una placa entera dentro de un kilovatio",
-    eff_quote: "Tener a bordo una instalación eléctrica bien dimensionada es un excelente punto de partida. Confiar en quien diseña instrumentos capaces de optimizar la energía, resistir cualquier solicitación y valorizar el método de cocción es la elección de los profesionales.",
+    eff_quote: "Tener a bordo una instalación eléctrica bien dimensionada es un excelente punto de partida. Confiar en quien diseña equipos capaces de optimizar la energía, resistir cualquier solicitación y valorizar el método de cocción es la elección de los profesionales.",
     eff_cta: "Habla con nuestros técnicos",
     nav_catalogues: "Catálogos",
     nav_contact: "Contacto",
@@ -15528,7 +15788,7 @@ var DICT = {
     ab_p3_tag: "Inox Valley",
     ab_p3_title: "Acero, <em>artesanía</em> y legado",
     ab_p3_body1: "Aquí estamos en el Inox Valley: no solo Italia, patria de la mejor cocina del mundo, sino la comarca de Conegliano donde nacen las mejores cocinas para el mundo profesional · construidas por las muchas empresas del territorio junto a grandes chefs. Es el saber hacer que respiramos cada día.",
-    ab_p3_body2: "Los artesanos que construyen nuestras cocinas son el último eslabón de un saber transmitido de generación en generación, nacido en un pequeño taller del acero y transmitido desde entonces · el mismo legado que nombres como Zoppas y Zanussi. De aquí vienen el inox macizo torneado, las muflas de espejo y la patente de los basculantes · detalles que resisten la mirada cercana.",
+    ab_p3_body2: "Los artesanos que construyen nuestras cocinas son el último eslabón de un saber transmitido de generación en generación, nacido en un pequeño taller del acero y transmitido desde entonces · el mismo legado que nombres como Zoppas y Zanussi. De aquí vienen el inox macizo torneado, las cavidades pulidas a espejo y la patente de los basculantes · detalles que resisten la mirada cercana.",
     ab_p3_body3: "Nuestros cuerpos están construidos en acero inoxidable de gran espesor · piezas torneadas y fresadas en macizo para durar más que la propia embarcación. Las puertas de horno montan bisagras de altísima calidad: en modelos como Lux y Orizzonte son de acero inoxidable macizo, realizadas según nuestro propio diseño. Y en Orizzonte, Tolomeo y Mega Grill también los mandos son de acero macizo, fresados y torneados en macizo. Es la cultura de la cocina profesional, llevada al mar.",
     cat_dl_btn3: "Hojear la Leonardo Collection",
     ab_hd_tag: "Heavy duty",
@@ -15552,6 +15812,10 @@ var DICT = {
     ab_p6_title: "Primicias que <em>definieron</em> el sector",
     ab_p6_body1: "Un encuentro con Luca Bassani, fundador de Wally, inspiró la primera cocina náutica eléctrica de diseño para veleros · creada en una época en que el diseño moderno aún no había tocado la estética de las embarcaciones contemporáneas. Así nació HORIZON4, todavía un icono del sector.",
     ab_p6_body2: "También para Wally desarrollamos la primera cocina completamente de aluminio ultraligera. Y para Perini Navi, diseñamos una cocina especial con un sistema de cardán inverso único · una primicia mundial.",
+    ab_p9_tag: "Muchas Almas",
+    ab_p9_title: "Muchas almas, <em>un solo taller</em>",
+    ab_p9_body1: "Una barbacoa eléctrica para un superyate a motor y una cocina de gas para un barco de charter no se parecen en nada: otros condicionantes, otros materiales, otra manera de cocinar a bordo. Construimos las dos. Y junto a ellas: las parrillas eléctricas de los day cruisers, nuestros modelos más tecnológicos para navegar en el Mediterráneo y los más reforzados para las travesías oceánicas, los acabados clásicos de los yates de época, las cocinas dibujadas desde cero para un solo casco.",
+    ab_p9_body2: "No es una gama reunida para llenar un catálogo. Es lo que ocurre cuando nunca se le ha dicho a un astillero que algo no se puede hacer.",
     ab_p8_tag: "Nuestros Clientes",
     ab_p8_title: "La confianza de los <em>mejores astilleros</em> del mundo",
     ab_p8_body1: "Nuestras cocinas han sido elegidas durante décadas por los astilleros más importantes del mundo, los distribuidores más renombrados y propietarios privados. Desde los modernos yates Solaris hasta embarcaciones clásicas como el Latifa de William Fife III (1936), desde el Elmo's Fire de Giovanni Soldini hasta los yates de grandes artistas, campeones de Fórmula 1, estadistas de renombre internacional y figuras destacadas del mundo empresarial y de las finanzas.",
@@ -15951,7 +16215,7 @@ var DICT = {
     ppd_roma_p2: "Empotrado, Roma desaparece en el mueble de la cambusa dejando a la vista solo el frente limpio de acero: un horno que se integra con orden en el proyecto de los interiores, pensado para dialogar con el mobiliario de a bordo sin imponerse.",
     ppd_roma_s0: "Horno de gas empotrable, quemador estático a la italiana optimizado para el rendimiento y el consumo.",
     ppd_roma_s1: "Capacidad de más de 30 litros.",
-    ppd_roma_s2: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_roma_s2: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_roma_s3: "Puerta con doble vidrio templado; termómetro en la puerta o termostato automático (según la variante).",
     ppd_roma_s4: "Bandeja recogegotas en acero especial esmaltado a más de 800°.",
     ppd_roma_s5: "Parrilla de cocción a todo lo ancho.",
@@ -15970,7 +16234,7 @@ var DICT = {
     ppd_firenze_s1: "Revestimiento completo de acero inoxidable pulido a espejo (interior y exterior).",
     ppd_firenze_s2: "Quemador estático a la italiana optimizado para el rendimiento y el consumo.",
     ppd_firenze_s3: "Buena capacidad a pesar del reducido tamaño.",
-    ppd_firenze_s4: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_firenze_s4: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_firenze_s5: "Puerta con doble vidrio templado de seguridad.",
     ppd_firenze_s6: "Bandeja recogegotas en acero esmaltado a más de 800°.",
     ppd_firenze_s7: "Parrilla de cocción a todo lo ancho.",
@@ -15986,7 +16250,7 @@ var DICT = {
     ppd_napoli_s1: "Sistema de triple resistencia con selector dedicado (solo inferior / solo superior / inferior+superior / grill superior potenciado).",
     ppd_napoli_s2: "Resistencia blindada inferior diseñada para el rendimiento y el consumo (tipo estático a la italiana).",
     ppd_napoli_s3: "Capacidad de más de 30 litros, cuerpo muy compacto.",
-    ppd_napoli_s4: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_napoli_s4: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_napoli_s5: "Puerta con doble vidrio templado de seguridad.",
     ppd_napoli_s6: "Termostato automático.",
     ppd_napoli_s7: "Bandeja recogegotas en acero especial esmaltado a más de 800°.",
@@ -16104,13 +16368,13 @@ var DICT = {
     ppd_ventus_t: "Ventus: la amplia encimera para cocinar como un gran chef cuando los invitados son muchos.",
     ppd_ventus_k: "El relato de Ventus",
     ppd_ventus_p0: "Ventus da al chef lo que necesita cuando los invitados son muchos: una encimera amplia y generosa, capaz de acoger a la vez la olla alta de los paccheri, la sartén grande de una fritura mixta de pescado pequeño y la cazuela de un guazzetto de mejillones y almejas. Debajo, el horno estático a la italiana trabaja como el de casa: el quemador optimizado y la bandeja recogegotas esmaltada a fuego a más de 800° envuelven con calor uniforme una bandeja de dorada con patatas y aceitunas, o una parmigiana que gratina lentamente.",
-    ppd_ventus_p1: "La mufla aislada con sistema sándwich metálico y la puerta de doble vidrio templado retienen el calor donde hace falta, mientras que la encimera embutida recoge los posibles desbordes cuando el agua de la pasta hierve con fuerza. La parrilla de una sola pieza con barra frontal y brazos con mandos anticalor mantiene firmes las ollas más grandes incluso en navegación: así lleva a la mesa un almuerzo abundante, del primero al postre (quizá una torta caprese), sin renunciar a nada.",
+    ppd_ventus_p1: "La cavidad aislada con sistema sándwich metálico y la puerta de doble vidrio templado retienen el calor donde hace falta, mientras que la encimera embutida recoge los posibles desbordes cuando el agua de la pasta hierve con fuerza. La parrilla de una sola pieza con barra frontal y brazos con mandos anticalor mantiene firmes las ollas más grandes incluso en navegación: así lleva a la mesa un almuerzo abundante, del primero al postre (quizá una torta caprese), sin renunciar a nada.",
     ppd_ventus_p2: "La encimera generosa no renuncia a la elegancia: las líneas amplias y limpias, el acero de espejo y los acabados cuidados hacen de Ventus una cocina imponente pero armoniosa, diseñada para integrarse en la cambusa de los yates más espaciosos y dialogar con el proyecto de los interiores.",
     ppd_ventus_s0: "Encimera de cocción amplia y generosa.",
     ppd_ventus_s1: "Horno estático de gas de más de 30 litros.",
     ppd_ventus_s2: "Quemador de horno estático a la italiana, optimizado para el rendimiento y el consumo.",
     ppd_ventus_s3: "Quemadores de encimera de potencias diferenciadas, platillos esmaltados a 800°.",
-    ppd_ventus_s4: "Aislamiento de la mufla en lana de roca o fibra de vidrio, sistema sándwich metálico.",
+    ppd_ventus_s4: "Aislamiento de la cavidad en lana de roca o fibra de vidrio, sistema sándwich metálico.",
     ppd_ventus_s5: "Puerta con doble vidrio templado de seguridad.",
     ppd_ventus_s6: "Termómetro en la puerta o termostato automático (según la variante).",
     ppd_ventus_s7: "Bandeja recogegotas del horno en acero especial esmaltado a más de 800°.",
@@ -16131,7 +16395,7 @@ var DICT = {
     ppd_maxima_s3: "Brazos sujeta-ollas regulables en sentido longitudinal y en altura.",
     ppd_maxima_s4: "Horno estático de gas de gran capacidad, quemador estático a la italiana.",
     ppd_maxima_s5: "Quemadores de encimera de potencias diferenciadas, platillos esmaltados a 800°.",
-    ppd_maxima_s6: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_maxima_s6: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_maxima_s7: "Puerta con doble vidrio templado; termómetro o termostato automático (según la variante).",
     ppd_maxima_s8: "Bandeja recogegotas del horno en acero esmaltado a más de 800°; encimera embutida (deep drawn).",
     ppd_maxima_s9: "Válvulas calibradas de mínimo (cocción suave) a máximo; encendido con pila AA.",
@@ -16141,13 +16405,13 @@ var DICT = {
     ppd_marea_t: "Marea: gran cocina en solo 45 cm, con un verdadero horno de varios niveles.",
     ppd_marea_k: "El relato de Marea",
     ppd_marea_p0: "Marea demuestra que también en solo 45 cm de ancho se puede hacer gran cocina. El secreto es el horno con quemador en posición retrasada, que libera espacio interior y permite cocinar en varios niveles a la vez: en el estante bajo una bandeja de verduras gratinadas, en el alto una tarta de ricotta y peras que se hornea con el mismo cuidado.",
-    ppd_marea_p1: "Los quemadores con difusores de llama de latón macizo regalan una llama estable, ideal para hacer hervir a fuego lento una salsa para unas trofie al pesto o para llevar a cocción suave una fricasé de pollo. La mufla aislada con sistema sándwich metálico y la puerta de doble vidrio templado retienen el calor, de modo que incluso en un espacio compacto la cocción permanece uniforme. Y cuando el espacio lo es todo, poder contar con un horno completo significa no renunciar ni al primero, ni al segundo, ni al postre.",
+    ppd_marea_p1: "Los quemadores con difusores de llama de latón macizo regalan una llama estable, ideal para hacer hervir a fuego lento una salsa para unas trofie al pesto o para llevar a cocción suave una fricasé de pollo. La cavidad aislada con sistema sándwich metálico y la puerta de doble vidrio templado retienen el calor, de modo que incluso en un espacio compacto la cocción permanece uniforme. Y cuando el espacio lo es todo, poder contar con un horno completo significa no renunciar ni al primero, ni al segundo, ni al postre.",
     ppd_marea_p2: "Compacidad y diseño van de la mano: en solo 45 cm Marea ofrece líneas limpias, acero de espejo y acabados cuidados que le permiten integrarse con elegancia incluso en las cambusas más pequeñas, aprovechando cada centímetro del proyecto de a bordo.",
     ppd_marea_s0: "Chasis ultracompacto, 45 cm de ancho.",
     ppd_marea_s1: "Horno con quemador en posición retrasada: cocción de los alimentos en varios niveles.",
     ppd_marea_s2: "Horno estático de gas de más de 30 litros.",
     ppd_marea_s3: "Quemadores de encimera con difusores de llama de latón macizo forjados en caliente, de potencias diferenciadas.",
-    ppd_marea_s4: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_marea_s4: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_marea_s5: "Puerta con doble vidrio templado; termómetro o termostato automático (según la variante).",
     ppd_marea_s6: "Bandeja recogegotas del horno en acero esmaltado a más de 800°; encimera embutida (deep drawn).",
     ppd_marea_s7: "Parrilla de encimera de una sola pieza con barra frontal y brazos con mandos anticalor.",
@@ -16166,7 +16430,7 @@ var DICT = {
     ppd_lux_s3: "Brazos sujeta-ollas regulables en sentido longitudinal y en altura.",
     ppd_lux_s4: "Horno estático de gas de más de 30 litros, quemador estático a la italiana.",
     ppd_lux_s5: "Quemadores de encimera de potencias diferenciadas, platillos esmaltados a 800°.",
-    ppd_lux_s6: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_lux_s6: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_lux_s7: "Puerta con doble vidrio templado; termómetro o termostato automático (según la variante).",
     ppd_lux_s8: "Bandeja recogegotas del horno en acero esmaltado a más de 800°; encimera embutida (deep drawn).",
     ppd_lux_s9: "Válvulas calibradas de mínimo (cocción suave) a máximo; encendido con pila AA.",
@@ -16183,7 +16447,7 @@ var DICT = {
     ppd_altamarea_s2: "Horno con quemador en posición retrasada: cocción en varios niveles.",
     ppd_altamarea_s3: "Horno estático de gas de más de 30 litros.",
     ppd_altamarea_s4: "Quemadores de encimera con difusores de llama de latón macizo forjados en caliente, de potencias diferenciadas.",
-    ppd_altamarea_s5: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_altamarea_s5: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_altamarea_s6: "Puerta con doble vidrio templado; termómetro o termostato automático (según la variante).",
     ppd_altamarea_s7: "Bandeja recogegotas del horno en acero esmaltado a más de 800°; encimera embutida (deep drawn).",
     ppd_altamarea_s8: "Parrilla de encimera de una sola pieza con barra frontal y brazos con mandos anticalor.",
@@ -16194,12 +16458,12 @@ var DICT = {
     ppd_maris_t: "Maris: la llama de latón de la alta cocina italiana, con la elegancia del diseño de a bordo.",
     ppd_maris_k: "El relato de Maris",
     ppd_maris_p0: "Maris hace de la calidad de su llama su punto fuerte: los quemadores con difusores de llama de latón macizo forjados en caliente acumulan el calor y lo devuelven de forma suave y constante, la condición perfecta para las cocciones que exigen delicadeza. Sobre esta llama un risotto de marisco se liga a la perfección, una bechamel no se agarra y una crema inglesa queda sedosa.",
-    ppd_maris_p1: "El horno estático a la italiana, con quemador optimizado y bandeja recogegotas esmaltada a fuego a más de 800°, envuelve con su calor uniforme una dorada all'acqua pazza perfumada con tomatitos y alcaparras, o una bandeja de pimientos rellenos. La mufla aislada con sistema sándwich metálico y la puerta de doble vidrio templado mantienen estable la temperatura, mientras que las seguridades, termopares y bloqueo automático de la puerta, le dejan cocinar tranquilo. Para terminar, una panna cotta de frutos del bosque, cocida suavemente sobre la llama de latón.",
+    ppd_maris_p1: "El horno estático a la italiana, con quemador optimizado y bandeja recogegotas esmaltada a fuego a más de 800°, envuelve con su calor uniforme una dorada all'acqua pazza perfumada con tomatitos y alcaparras, o una bandeja de pimientos rellenos. La cavidad aislada con sistema sándwich metálico y la puerta de doble vidrio templado mantienen estable la temperatura, mientras que las seguridades, termopares y bloqueo automático de la puerta, le dejan cocinar tranquilo. Para terminar, una panna cotta de frutos del bosque, cocida suavemente sobre la llama de latón.",
     ppd_maris_p2: "Detrás de las prestaciones está el cuidado del diseño italiano: paneles exteriores de acero de espejo, proporciones limpias y acabados cuidados hasta el mínimo detalle hacen de Maris una cocina que se integra con elegancia en los espacios de a bordo, concebida para dialogar con el proyecto del interiorista en lugar de imponerse a él.",
     ppd_maris_s0: "Quemadores de encimera con difusores de llama de latón macizo forjados en caliente.",
     ppd_maris_s1: "Quemadores de potencias diferenciadas.",
     ppd_maris_s2: "Horno estático de gas de más de 30 litros, quemador estático a la italiana.",
-    ppd_maris_s3: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_maris_s3: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_maris_s4: "Puerta con doble vidrio templado; termómetro o termostato automático (según la variante).",
     ppd_maris_s5: "Bandeja recogegotas del horno en acero esmaltado a más de 800°; encimera embutida (deep drawn).",
     ppd_maris_s6: "Parrilla de encimera de una sola pieza con barra frontal y brazos con mandos anticalor.",
@@ -16215,7 +16479,7 @@ var DICT = {
     ppd_nauta_s0: "Quemadores de encimera con difusores de llama de latón macizo forjados en caliente.",
     ppd_nauta_s1: "Quemadores de potencias diferenciadas.",
     ppd_nauta_s2: "Horno estático de gas de más de 30 litros, quemador estático a la italiana.",
-    ppd_nauta_s3: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_nauta_s3: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_nauta_s4: "Puerta con doble vidrio templado; termómetro o termostato automático (según la variante).",
     ppd_nauta_s5: "Bandeja recogegotas del horno en acero esmaltado a más de 800°; encimera embutida (deep drawn).",
     ppd_nauta_s6: "Parrilla de encimera de una sola pieza con barra frontal y brazos con mandos anticalor.",
@@ -16225,12 +16489,12 @@ var DICT = {
     ppd_nauta_s10: "Opcionales: piedra ollar, paracalores laterales, paneles exteriores de espejo, regulación cardánica patentada.",
     ppd_marina_t: "Marina: un verdadero horno estático italiano, integrado con estilo en la cambusa.",
     ppd_marina_k: "El relato de Marina",
-    ppd_marina_p0: "Marina lleva a bordo el corazón de la cocina italiana: un verdadero horno estático. Su quemador, diseñado para un rendimiento óptimo con bajo consumo, envuelve los platos en un calor uniforme que es el secreto de las lasañas alla bolognese con la costra justa, o de un asado de cerdo a la leche tierno por dentro. La mufla aislada con lana de roca en sistema sándwich metálico y la puerta de doble vidrio templado mantienen la temperatura constante, indispensable para hacer crecer un pan brioche esponjoso o para gratinar en su punto una bandeja de cannelloni.",
+    ppd_marina_p0: "Marina lleva a bordo el corazón de la cocina italiana: un verdadero horno estático. Su quemador, diseñado para un rendimiento óptimo con bajo consumo, envuelve los platos en un calor uniforme que es el secreto de las lasañas alla bolognese con la costra justa, o de un asado de cerdo a la leche tierno por dentro. La cavidad aislada con lana de roca en sistema sándwich metálico y la puerta de doble vidrio templado mantienen la temperatura constante, indispensable para hacer crecer un pan brioche esponjoso o para gratinar en su punto una bandeja de cannelloni.",
     ppd_marina_p1: "La bandeja recogegotas de acero esmaltado a fuego a más de 800° irradia calor hacia abajo, perfecta para dorar las patatas bajo una lubina al horno. Mientras tanto, en la encimera, los quemadores de potencias diferenciadas y las válvulas regulables desde la cocción suave hasta la llama plena le dejan ligar un risotto de espárragos mientras el horno trabaja; y con la piedra ollar opcional, el pan casero y la pizza salen con una base crujiente de auténtica pizzería.",
     ppd_marina_p2: "Todo ello en una cocina diseñada con gusto italiano: superficies de acero de espejo, líneas esenciales y acabados cuidados que le permiten integrarse con elegancia en el proyecto de la cambusa, como un elemento pensado junto al arquitecto de interiores.",
     ppd_marina_s0: "Horno estático de gas de más de 30 litros, cuerpo compacto.",
     ppd_marina_s1: "Quemador de horno estático a la italiana, optimizado para el rendimiento y el consumo.",
-    ppd_marina_s2: "Aislamiento de la mufla en lana de roca o fibra de vidrio, sistema sándwich metálico.",
+    ppd_marina_s2: "Aislamiento de la cavidad en lana de roca o fibra de vidrio, sistema sándwich metálico.",
     ppd_marina_s3: "Puerta con doble vidrio templado de seguridad.",
     ppd_marina_s4: "Termómetro en la puerta o termostato automático (según la variante).",
     ppd_marina_s5: "Bandeja recogegotas del horno en acero especial esmaltado a más de 800°.",
@@ -16251,7 +16515,7 @@ var DICT = {
     ppd_gusto_p2: "Y lo hace con la sobriedad del diseño italiano: proporciones equilibradas, acero de espejo y detalles cuidados hacen de Gusto una cocina bonita de ver, diseñada para integrarse con discreción en los interiores del barco y acompañar las decisiones del proyectista.",
     ppd_gusto_s0: "Horno estático de gas de más de 30 litros, cuerpo compacto.",
     ppd_gusto_s1: "Quemador de horno estático a la italiana, optimizado para el rendimiento y el consumo.",
-    ppd_gusto_s2: "Aislamiento de la mufla en lana de roca o fibra de vidrio, sistema sándwich metálico.",
+    ppd_gusto_s2: "Aislamiento de la cavidad en lana de roca o fibra de vidrio, sistema sándwich metálico.",
     ppd_gusto_s3: "Puerta con doble vidrio templado de seguridad.",
     ppd_gusto_s4: "Termómetro en la puerta o termostato automático (según la variante).",
     ppd_gusto_s5: "Bandeja recogegotas del horno en acero especial esmaltado a más de 800°.",
@@ -16276,7 +16540,7 @@ var DICT = {
     ppd_altura_s3: "Brazos sujeta-ollas regulables en sentido longitudinal y en altura.",
     ppd_altura_s4: "Horno estático de gas de más de 30 litros, quemador estático a la italiana.",
     ppd_altura_s5: "Quemadores de encimera de potencias diferenciadas, platillos esmaltados a 800°.",
-    ppd_altura_s6: "Aislamiento de la mufla en lana de roca/fibra de vidrio, sistema sándwich metálico.",
+    ppd_altura_s6: "Aislamiento de la cavidad en lana de roca/fibra de vidrio, sistema sándwich metálico.",
     ppd_altura_s7: "Puerta con doble vidrio templado; termómetro o termostato automático (según la variante).",
     ppd_altura_s8: "Bandeja recogegotas del horno en acero esmaltado a más de 800°; encimera embutida (deep drawn).",
     ppd_altura_s9: "Válvulas calibradas de mínimo (cocción suave) a máximo; encendido con pila AA.",
@@ -17014,7 +17278,9 @@ window.setLang = setLang;
 
 <!-- COLLECTION GATE (password Leonardo/Galileo) -->
 <div id="legalpage">
-  <button class="legal-close" onclick="closeLegal()">&larr; Back to site</button>
+  <button class="legal-close" onclick="closeLegal()" aria-label="Close">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
   <div class="legal-wrap" id="legal-body"></div>
 </div>
 <template id="legal-all"><p class="eyebrow">Legal</p><h1>Legal &amp; Privacy</h1><div class="rule"></div><nav class="legal-toc"><a onclick="legalGo('privacy')">Privacy Policy</a><a onclick="legalGo('cookie')">Cookie Policy</a><a onclick="legalGo('legalnotice')">Legal Notice</a></nav><section id="chap-privacy" class="legal-chap"><p class="eyebrow">Legal</p><h1>Privacy Policy</h1><div class="rule"></div>
@@ -17027,7 +17293,7 @@ window.setLang = setLang;
 <h2>Your rights</h2><p>Under the GDPR you have the right to access, rectify, erase, restrict or object to the processing of your personal data, to data portability, and to withdraw your consent at any time. You also have the right to lodge a complaint with the Italian Data Protection Authority (Garante per la protezione dei dati personali, <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">garanteprivacy.it</a>). To exercise your rights, write to <a href="mailto:info@marinecookers.com">info@marinecookers.com</a>.</p>
 <h2>Cookies</h2><p>For information on the cookies used on this website, please see our <a onclick="openLegal('cookie')">Cookie Policy</a>.</p>
 <h2>Updates</h2><p>We may update this Privacy Policy from time to time. Please check this page periodically for changes.</p></section><div class="legal-sep"></div><section id="chap-cookie" class="legal-chap"><p class="eyebrow">Legal</p><h1>Cookie Policy</h1><div class="rule"></div>
-<h2>What is a cookie</h2><p>A cookie, also known as an HTTP cookie, web cookie, or browser cookie, is a small piece of data sent from a website and stored into your web browser so that they are recognized by the website in your next visit.</p>
+<h2>What is a cookie</h2><p>A cookie, also known as an HTTP cookie, web cookie, or browser cookie, is a small piece of data sent from a website and stored into your web browser so that they are recognised by the website in your next visit.</p>
 <h2>Scope of this policy</h2><p>This policy refers exclusively to the cookies sent to your computer during the visit of the website www.techimpex.tv. Please ask us for more information regarding our policy.</p><p>This policy does not refer to the cookies sent by other websites you may visit through links available in our webpages (for example when you select LIKE or SHARE on a specific item you are redirected to Facebook, same as when you select specific functional buttons and you are linked to other websites); to know more about their cookies we invite you to read the respective privacy and cookies policy.</p>
 <h2>How and why cookies are used</h2><p>The website www.techimpex.tv is privately owned and managed. Italian Data Protection Law does not require to obtain authorization from the user before sending analytics cookies or technical cookies, but we need your consent for tracking cookies that are used for profiling the user&rsquo;s behaviour.</p><p>Cookies (and similar technical tools) are used for different purposes: authentication of the user, monitoring of the session, storing of settings of configuration of the users accessing the server, etc. Third-party cookies are sent to your browser through our website while you are browsing, but from servers/operators other than our website.</p>
 <h2>Managing your consent</h2><p>When you first visit the website, a banner lets you accept all cookies or continue with only the essential ones. Essential (technical) cookies are always active because they are necessary for the site to work. You can change your choice at any time by clearing the cookies stored by your browser for this website.</p>
@@ -17039,7 +17305,7 @@ window.setLang = setLang;
 <h2>Images &amp; Transparency</h2><p>Marine Cookers &middot; Techimpex designs and finishes every appliance in Conegliano, Italy. Technical data, drawings, 3D models and specifications published on this site refer to real products and are verified by our technical office.</p><p>Some editorial and atmosphere images and video sequences on this site &middot; scenes, settings and contexts &middot; are created or enhanced with AI-assisted tools. Product photographs, technical drawings and datasheets are not.</p><p>All editorial texts on this site are reviewed and approved by Marine Cookers &middot; Techimpex, which assumes editorial responsibility for them.</p><p>Product images and technical data are indicative and non-contractual. Products, finishes, dimensions and specifications may vary. Please contact us before ordering to confirm the exact characteristics and any technical updates in force at the time of purchase.</p><p>For any clarification: <a href="mailto:info@marinecookers.com">info@marinecookers.com</a></p>
 <h2>Privacy &amp; Cookies</h2><p>For information on how we process personal data, see our <a onclick="openLegal('privacy')">Privacy Policy</a>. For information on cookies, see our <a onclick="openLegal('cookie')">Cookie Policy</a>.</p></section></template>
 <template id="legal-cookie"><p class="eyebrow">Legal</p><h1>Cookie Policy</h1><div class="rule"></div>
-<h2>What is a cookie</h2><p>A cookie, also known as an HTTP cookie, web cookie, or browser cookie, is a small piece of data sent from a website and stored into your web browser so that they are recognized by the website in your next visit.</p>
+<h2>What is a cookie</h2><p>A cookie, also known as an HTTP cookie, web cookie, or browser cookie, is a small piece of data sent from a website and stored into your web browser so that they are recognised by the website in your next visit.</p>
 <h2>Scope of this policy</h2><p>This policy refers exclusively to the cookies sent to your computer during the visit of the website www.techimpex.tv. Please ask us for more information regarding our policy.</p><p>This policy does not refer to the cookies sent by other websites you may visit through links available in our webpages (for example when you select LIKE or SHARE on a specific item you are redirected to Facebook, same as when you select specific functional buttons and you are linked to other websites); to know more about their cookies we invite you to read the respective privacy and cookies policy.</p>
 <h2>How and why cookies are used</h2><p>The website www.techimpex.tv is privately owned and managed. Italian Data Protection Law does not require to obtain authorization from the user before sending analytics cookies or technical cookies, but we need your consent for tracking cookies that are used for profiling the user&rsquo;s behaviour.</p><p>Cookies (and similar technical tools) are used for different purposes: authentication of the user, monitoring of the session, storing of settings of configuration of the users accessing the server, etc. Third-party cookies are sent to your browser through our website while you are browsing, but from servers/operators other than our website.</p>
 <h2>Managing your consent</h2><p>When you first visit the website, a banner lets you accept all cookies or continue with only the essential ones. Essential (technical) cookies are always active because they are necessary for the site to work. You can change your choice at any time by clearing the cookies stored by your browser for this website.</p>
@@ -17095,7 +17361,89 @@ window.setLang = setLang;
 })();
 </script>
 <div id="ai-note"><span data-i18n="ai_notice">Some images and video are AI-assisted.</span> <a class="ai-note-link" onclick="openLegal('legalnotice')">Info</a></div>
-<script>(function(){function place(){var t=document.querySelector(".twrap"),h=t?(t.offsetHeight+22):104;["ai-note"].forEach(function(id){var n=document.getElementById(id);if(n)n.style.bottom=h+"px";});}window.addEventListener("load",place);window.addEventListener("resize",place);setTimeout(place,400);})();</script>
+<script>(function(){function place(){var t=document.querySelector(".twrap"),n=document.getElementById("ai-note");if(!t||!n)return;t.style.bottom=n.offsetHeight+"px";}window.addEventListener("load",place);window.addEventListener("resize",place);setTimeout(place,400);})();</script>
+<!-- ═══ SPECS · POLLICI ACCANTO ALLE MISURE METRICHE ═══
+     Il mercato USA e' il terzo per impressioni e legge in pollici. Invece di
+     riscrivere a mano 106 valori (e sbagliare qualche conversione), la seconda
+     riga si calcola dal valore metrico gia' presente: vale anche per i modelli
+     che verranno aggiunti domani, senza altro lavoro.
+     Si aggancia SOLO ai valori che contengono cm o mm come parola intera:
+     kW, V, Hz, mbar e mm... attenzione, "mbar" non contiene \bmm\b, quindi
+     resta fuori. Idempotente: se la riga c'e' gia', non ne aggiunge un'altra. -->
+<script>
+(function(){
+  function conv(txt){
+    var u=/\b(cm|mm)\b/.exec(txt);
+    if(!u) return '';
+    var f=(u[1]==='mm')?25.4:2.54;
+    var body=txt.replace(/\b(cm|mm)\b/g,'').trim();
+    if(!/\d/.test(body)) return '';
+    var out=body.replace(/\d+(?:[.,]\d+)?/g,function(n){
+      var v=parseFloat(n.replace(',','.'))/f;
+      return (Math.round(v*10)/10).toFixed(1);
+    }).replace(/\s{2,}/g,' ').trim();
+    if(!out) return '';
+    /* L'unita' va dopo i numeri, non in fondo alla frase:
+       "15.7 x 15.7 x 3.1h in - each module", non "... each module in". */
+    var dot=out.indexOf('\u00b7');
+    if(dot>0) return out.slice(0,dot).trim()+' in \u00b7 '+out.slice(dot+1).trim();
+    return out+' in';
+  }
+  /* kW -> BTU/h. Solo sui modelli A GAS: per un'apparecchiatura elettrica il
+     mercato americano ragiona in kW/watt esattamente come noi, e un BTU sotto
+     una induzione sarebbe un errore tecnico, non un aiuto. Il modello e'
+     riconosciuto dalla presenza della riga 'Gas - pressione' nella tabella:
+     verificato, ce l'hanno tutti e 22 i modelli a gas e nessun altro. */
+  function btu(txt){
+    if(!/\bkW\b/.test(txt)) return '';
+    var body=txt.replace(/\bkW\b/g,'').trim();
+    if(!/\d/.test(body)) return '';
+    var out=body.replace(/\d+(?:[.,]\d+)?/g,function(n){
+      var v=parseFloat(n.replace(',','.'))*3412.14;
+      v=Math.round(v/100)*100;   /* al centinaio: 5.459 -> 5.500 */
+      return String(v).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+    }).replace(/\s{2,}/g,' ').trim();
+    return out ? out+' BTU/h' : '';
+  }
+  function add(el,txt){
+    var sp=document.createElement('span');
+    sp.className='pct-in';
+    sp.textContent=txt;
+    el.appendChild(sp);
+  }
+  function run(){
+    var body=document.getElementById('pp-specs-body');
+    var isGas=!!(body && body.querySelector('[data-i18n="spec_gas"]'));
+    var els=document.querySelectorAll('.pct-val');
+    for(var i=0;i<els.length;i++){
+      var el=els[i];
+      if(el.querySelector('.pct-in')) continue;      /* gia' fatto */
+      var t=(el.textContent||'').trim();
+      if(/\b(cm|mm)\b/.test(t)){                     /* misura -> pollici */
+        var imp=conv(t); if(imp) add(el,imp);
+        continue;
+      }
+      if(isGas && /\bkW\b/.test(t) && body.contains(el)){
+        var b=btu(t); if(b) add(el,b);
+      }
+    }
+  }
+  window.__addInches=run;
+  /* setLang riscrive il textContent dei valori con [data-spec-val] e cancella
+     la riga: va rimessa dopo ogni cambio lingua e dopo ogni render scheda. */
+  function hook(){
+    if(typeof window.setLang==='function' && !window.setLang.__inch){
+      var orig=window.setLang;
+      var wrapped=function(){ var r=orig.apply(this,arguments); run(); return r; };
+      wrapped.__inch=true;
+      window.setLang=wrapped;
+    }
+  }
+  if(document.readyState!=='loading'){ hook(); run(); }
+  else { document.addEventListener('DOMContentLoaded',function(){ hook(); run(); }); }
+  window.addEventListener('load',function(){ hook(); run(); });
+})();
+</script>
 <div id="ckbanner" role="dialog" aria-modal="true" aria-live="polite" aria-labelledby="ckb-title-h">
   <div class="ckb-box">
     <h3 class="ckb-title" id="ckb-title-h" data-i18n="cookie_title">Cookies &amp; Privacy</h3>
@@ -17326,23 +17674,23 @@ body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; point
   // usano il default generico di catSEO().
   var CAT_SEO_OVERRIDE = {
     'electric-cookers-with-oven':{
-      title:'Electric Cookers with Oven (Horizon / Orizzonte \u00b7 Tolomeo) \u00b7 '+BRAND,
-      desc:'Electric and induction cookers with oven for professional yachts \u2013 the Horizon (Orizzonte), Tolomeo and full Techimpex range, handcrafted in stainless steel in Conegliano, Italy.' },
+      title:'Electric Cookers with Oven \u00b7 Marine Electric Stoves (Horizon / Orizzonte \u00b7 Tolomeo) \u00b7 '+BRAND,
+      desc:'Electric and induction cookers with oven for professional yachts, also known as marine electric stoves \u2013 the Horizon (Orizzonte), Tolomeo and full Techimpex range, handcrafted in stainless steel in Conegliano, Italy.' },
     'gas-cookers-with-oven':{
-      title:'Gas Cookers with Oven (XL2 / Maris \u00b7 Mariner \u00b7 Top3) \u00b7 '+BRAND,
-      desc:'Gimballed gas cookers with oven for yachts \u2013 the Maris (XL2), Mariner, Top3, Gusto and Marea, plus optionals. Handcrafted in stainless steel by Techimpex, Conegliano, Italy.' },
+      title:'Gas Cookers with Oven \u00b7 Marine Gas Stoves (XL2 / Maris \u00b7 Mariner \u00b7 Top3) \u00b7 '+BRAND,
+      desc:'Gimballed gas cookers with oven for yachts, also known as marine gas stoves or galley stoves \u2013 the Maris (XL2), Mariner, Top3, Gusto and Marea, gimbaled for safe cooking under way. Handcrafted in stainless steel by Techimpex, Conegliano, Italy.' },
     'electric-grills':{
       title:'Electric Grills & Barbecues (Mega BBQ) \u00b7 '+BRAND,
       desc:'Electric grills and barbecues for yachts \u2013 the Mega BBQ and glass-ceramic grill range. Handcrafted stainless-steel galley equipment by Techimpex, Conegliano, Italy.' },
     'gas-cookers':{
-      title:'Gas Cookers (Marettimo \u00b7 Favignana) \u00b7 '+BRAND,
-      desc:'Compact gas cookers for yachts \u2013 Marettimo, Favignana, Ventotene and Lipari. Countertop and built-in, handcrafted in stainless steel by Techimpex, Conegliano, Italy.' },
+      title:'Gas Cookers \u00b7 Compact Marine Gas Stoves (Marettimo \u00b7 Favignana) \u00b7 '+BRAND,
+      desc:'Compact gas cookers and marine gas stoves for yachts and sailboats \u2013 Marettimo, Favignana, Ventotene and Lipari. Countertop and built-in, handcrafted in stainless steel by Techimpex, Conegliano, Italy.' },
     'built-in-electric-cooktops':{
       title:'Built-in Electric Cooktops & Glass Ceramic Hobs \u00b7 '+BRAND,
-      desc:'Built-in electric cooktops and glass ceramic hobs for yachts \u2013 the full Techimpex range, handcrafted in stainless steel in Conegliano, Italy.' },
+      desc:'Built-in electric cooktops, glass ceramic hobs and marine electric stove tops for yachts \u2013 the full Techimpex range, handcrafted in stainless steel in Conegliano, Italy.' },
     'built-in-gas-cooktops':{
       title:'Built-in Gas Cooktops & Gas Hobs \u00b7 '+BRAND,
-      desc:'Built-in gas cooktops and gas hobs for professional yachts \u2013 handcrafted in stainless steel by Techimpex, Conegliano, Italy.' },
+      desc:'Built-in gas cooktops, gas hobs and marine gas stove tops for professional yachts and sailboats \u2013 handcrafted in stainless steel by Techimpex, Conegliano, Italy.' },
     'manuali':{
       title:'Manuals & Instruction Booklets (Manuali) \u00b7 '+BRAND,
       desc:'Techimpex product manuals and instruction booklets (manuali) for marine cookers, ovens and grills. Contact us for the documentation you need.' }
@@ -17417,6 +17765,8 @@ body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; point
     p.classList.toggle('on', open);
     b.classList.toggle('on', open);
     b.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.classList.toggle('hct-open', open);
+    if(open){ var h=document.getElementById('hdr'); if(h) h.classList.remove('hide'); p.scrollTop=0; }
   }
   /* ── Primo contatto: da li' in poi la pastiglia mobile si fa discreta ──
      Si ricorda in localStorage, quindi vale anche alle visite successive:
