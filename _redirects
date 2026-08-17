@@ -29,6 +29,32 @@
 /blog                   /   301
 /shop                   /   301
 
+# --- VECCHI POST BLOG WIX -> schede prodotto / categorie (sess. 101, 17/08) ---
+# Il router legge SOLO il primo segmento del path: per /single-post/2013/... trova
+# "single-post", non riconosce la rotta e resta in home. Non e' aggiustabile in
+# ROUTES: serve qui, dove si lavora sull'indirizzo completo.
+# Il post su Soldini vale 357 impressioni in posizione 2,59 (miglior piazzamento
+# del sito) e oggi quel traffico si perde in home.
+# ATTENZIONE: i due post su Elmo's Fire vanno ENTRAMBI su /espresso12, non sulla
+# scheda della cucina. Chi cerca Soldini non vuole comprare un fornello: vuole
+# vedere cosa e' stato fatto con lui, e la pagina ESPRESSO12 e' l'unica dove ci
+# sono le foto con Soldini. Concentrare i due redirect su una sola destinazione
+# le trasferisce anche l'autorita' di entrambi i vecchi indirizzi.
+/single-post/2013/09/10/xxl3-cooker-installed-on-giovanni-soldini-oscar-farinettis-elmos-fire   /espresso12        301
+/single-post/2013/09/19/espresso12-cooker-installed-on-soldinis-elmos-fire                      /espresso12        301
+/single-post/2013/07/01/chopi-chopi                                                             /electric-grills   301
+/single-post/2010/08/10/top4-royal-installed-on-merrymaid-classic-yacht                         /antiche-cambuse   301
+/single-post/2012/02/12/top4-royal-installed-on-isabel                                          /antiche-cambuse   301
+/single-post/2014/05/16/techimpex-sponsor-of-la-cinquecento-regatta-in-caorle                   /                  301
+/single-post/2014/07/09/techimpex-supplies-custom-made-cooker-for-non-profit-organization-sailing-for-handicaps   /   301
+/single-post/2016/06/05/marine-cookers-techimpex-sponsor-della-storica-500-x                    /                  301
+
+# --- VECCHI PDF WIX -> pagina cataloghi ---
+# Oggi /_files/... risponde con la HOME IN HTML a una richiesta di PDF: chi ha
+# salvato il link di un catalogo si ritrova una pagina che non c'entra.
+# Verificato: la stringa "_files" non compare nel sito nuovo (i PDF stanno su R2).
+/_files/*   /catalogues   301
+
 # --- FALLBACK SPA — LA RIGA PIU' IMPORTANTE DEL FILE ---
 # Equivalente Netlify di "not_found_handling: single-page-application" (wrangler.jsonc,
 # che su Netlify NON viene letto). Senza questa riga TUTTI i path reali della sitemap
