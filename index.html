@@ -3994,6 +3994,47 @@ header.hide{transform:translateY(-100%);}
 #hctp a.hctp-row, #hctp a.hctp-row .hctp-v{color:var(--wh)}
 #hctp a.hctp-row:hover .hctp-v{color:var(--gl)}
 
+/* ── MODULO DELLA BUSTINA ──
+   Stessa grammatica delle righe sopra: etichette in Outfit maiuscoletto
+   dorato-spento, campi su fondo trasparente con il solo filetto sotto,
+   niente riquadri. Il pulsante e' l'unico elemento pieno. */
+#hctp .hctf{margin-top:16px;padding-top:14px;border-top:1px solid rgba(248,246,241,.11)}
+/* Trappola anti-spam: display:none e non posizionamento fuori schermo,
+   che dentro il pannello scorrevole allargherebbe l'area orizzontale. */
+#hctp .hctf-hp{display:none}
+#hctp .hctf-k{
+  display:block;font-family:'Outfit',sans-serif;font-size:8.5px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(248,246,241,.42);
+  margin:11px 0 4px;
+}
+#hctp .hctf-in{
+  width:100%;box-sizing:border-box;background:transparent;color:var(--wh);
+  border:none;border-bottom:1px solid rgba(248,246,241,.22);border-radius:0;
+  font-family:'Outfit',sans-serif;font-size:13px;font-weight:300;
+  padding:5px 0;transition:border-color .25s;
+}
+#hctp .hctf-in:focus{outline:none;border-bottom-color:var(--go)}
+#hctp .hctf-area{resize:vertical;min-height:52px;line-height:1.45}
+/* Le tendine native su fondo scuro restano bianche in molti browser:
+   il colore va forzato anche sulle option, non basta sul select. */
+#hctp .hctf-sel{appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:none;padding-right:2px}
+#hctp .hctf-sel option{background:#141414;color:var(--wh)}
+#hctp .hctf-go{
+  display:block;width:100%;margin-top:18px;padding:11px 0;cursor:pointer;
+  background:var(--go);color:#0a0a0a;border:none;border-radius:2px;
+  font-family:'Outfit',sans-serif;font-size:10px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;transition:background .25s;
+}
+#hctp .hctf-go:hover{background:var(--gl)}
+#hctp .hctf-go[disabled]{opacity:.5;cursor:default}
+#hctp .hctf-ok{
+  display:none;margin:12px 0 0;font-family:'Outfit',sans-serif;font-size:11px;
+  font-weight:300;letter-spacing:.04em;color:var(--gl);text-align:center;
+}
+#hctp .hctf.sent .hctf-ok{display:block}
+#hctp .hctf.sent .hctf-k,#hctp .hctf.sent .hctf-in,#hctp .hctf.sent .hctf-go{display:none}
+
 /* ── MOBILE: la busta sta DENTRO L'HEADER, accanto alla lente ──
    Prima era una pastiglia fissa 12px sotto l'header, sovrapposta alla hero:
    e' la fascia dove il pollice appoggia per scorrere, quindi si apriva per
@@ -4858,6 +4899,44 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <span class="hctp-k" data-i18n="ct_hours_label">Hours</span>
       <span class="hctp-v" data-i18n-html="ct_hours_val">Monday - Friday<br>08:30 - 17:30 CET</span>
     </div>
+
+    <!-- ── MODULO ──────────────────────────────────────────────────────
+         Sta in fondo alla bustina che c'era gia': chi vuole telefonare o
+         scrivere di suo usa le righe sopra, chi preferisce scrivere qui
+         trova il campo pronto senza uscire dal sito.
+         data-netlify: Netlify intercetta l'invio, manda la mail e archivia
+         la richiesta nel pannello Forms. Nessun servizio esterno, incluso
+         nel piano gia' attivo.
+         ATTENZIONE il campo nascosto form-name e' obbligatorio: senza,
+         Netlify non riconosce il modulo e l'invio finisce nel nulla.
+         Il campo bot-field e' una trappola per lo spam: e' invisibile
+         all'utente, se viene compilato l'invio e' di un robot. -->
+    <form class="hctf" name="contatti" method="POST" data-netlify="true"
+          netlify-honeypot="bot-field" onsubmit="return hctSend(this)">
+      <input type="hidden" name="form-name" value="contatti">
+      <p class="hctf-hp"><label>Non compilare <input name="bot-field"></label></p>
+
+      <label class="hctf-k" for="hctf-name" data-i18n="hcf_name">Name</label>
+      <input class="hctf-in" id="hctf-name" name="nome" type="text" required autocomplete="name">
+
+      <label class="hctf-k" for="hctf-mail" data-i18n="hcf_email">Email</label>
+      <input class="hctf-in" id="hctf-mail" name="email" type="email" required autocomplete="email">
+
+      <label class="hctf-k" for="hctf-int" data-i18n="hcf_interest">I am interested in</label>
+      <select class="hctf-in hctf-sel" id="hctf-int" name="interesse">
+        <option value="" data-i18n="hcf_int_0">Not specified</option>
+        <option value="cooker" data-i18n="hcf_int_1">A cooker or an oven</option>
+        <option value="spare" data-i18n="hcf_int_2">A spare part</option>
+        <option value="shipyard" data-i18n="hcf_int_3">A quotation for a shipyard</option>
+        <option value="other" data-i18n="hcf_int_4">Something else</option>
+      </select>
+
+      <label class="hctf-k" for="hctf-msg" data-i18n="hcf_msg">Message</label>
+      <textarea class="hctf-in hctf-area" id="hctf-msg" name="messaggio" rows="3" required></textarea>
+
+      <button class="hctf-go" type="submit" data-i18n="hcf_send">Send</button>
+      <p class="hctf-ok" id="hctf-ok" data-i18n="hcf_ok">Thank you, we will reply shortly.</p>
+    </form>
   </div>
 </header>
 
@@ -10859,6 +10938,17 @@ var DICT = {
     ct_address: "Address",
     ct_phone: "Phone",
     ct_email: "Email",
+    hcf_name: "Name",
+    hcf_email: "Email",
+    hcf_interest: "I am interested in",
+    hcf_int_0: "Not specified",
+    hcf_int_1: "A cooker or an oven",
+    hcf_int_2: "A spare part",
+    hcf_int_3: "A quotation for a shipyard",
+    hcf_int_4: "Something else",
+    hcf_msg: "Message",
+    hcf_send: "Send",
+    hcf_ok: "Thank you, we will reply shortly.",
     ct_hours_label: "Hours",
     ct_hours_val: "Monday - Friday<br>08:30 - 17:30 CET",
     ct_open_maps: "Open in Google Maps",
@@ -12105,6 +12195,17 @@ var DICT = {
     ct_address: "Indirizzo",
     ct_phone: "Telefono",
     ct_email: "Email",
+    hcf_name: "Nome",
+    hcf_email: "Email",
+    hcf_interest: "Sono interessato a",
+    hcf_int_0: "Non specificato",
+    hcf_int_1: "Una cucina o un forno",
+    hcf_int_2: "Un ricambio",
+    hcf_int_3: "Un preventivo per un cantiere",
+    hcf_int_4: "Altro",
+    hcf_msg: "Messaggio",
+    hcf_send: "Invia",
+    hcf_ok: "Grazie, le risponderemo a breve.",
     ct_hours_label: "Orari",
     ct_hours_val: "Lunedì - Venerdì<br>08:30 - 17:30 CET",
     ct_open_maps: "Apri in Google Maps",
@@ -13349,6 +13450,17 @@ var DICT = {
     ct_address: "Adresse",
     ct_phone: "Téléphone",
     ct_email: "E-mail",
+    hcf_name: "Nom",
+    hcf_email: "Email",
+    hcf_interest: "Je suis intéressé par",
+    hcf_int_0: "Non précisé",
+    hcf_int_1: "Une cuisinière ou un four",
+    hcf_int_2: "Une pièce détachée",
+    hcf_int_3: "Un devis pour un chantier",
+    hcf_int_4: "Autre chose",
+    hcf_msg: "Message",
+    hcf_send: "Envoyer",
+    hcf_ok: "Merci, nous vous répondrons sous peu.",
     ct_hours_label: "Horaires",
     ct_hours_val: "Lundi - Vendredi<br>08h30 - 17h30 CET",
     ct_open_maps: "Ouvrir dans Google Maps",
@@ -14593,6 +14705,17 @@ var DICT = {
     ct_address: "Adresse",
     ct_phone: "Telefon",
     ct_email: "E-Mail",
+    hcf_name: "Name",
+    hcf_email: "E-Mail",
+    hcf_interest: "Ich interessiere mich für",
+    hcf_int_0: "Keine Angabe",
+    hcf_int_1: "Einen Herd oder Backofen",
+    hcf_int_2: "Ein Ersatzteil",
+    hcf_int_3: "Ein Angebot für eine Werft",
+    hcf_int_4: "Etwas anderes",
+    hcf_msg: "Nachricht",
+    hcf_send: "Senden",
+    hcf_ok: "Vielen Dank, wir melden uns in Kürze.",
     ct_hours_label: "Öffnungszeiten",
     ct_hours_val: "Montag - Freitag<br>08:30 - 17:30 Uhr MEZ",
     ct_open_maps: "In Google Maps öffnen",
@@ -15837,6 +15960,17 @@ var DICT = {
     ct_address: "Dirección",
     ct_phone: "Teléfono",
     ct_email: "Correo electrónico",
+    hcf_name: "Nombre",
+    hcf_email: "Email",
+    hcf_interest: "Estoy interesado en",
+    hcf_int_0: "Sin especificar",
+    hcf_int_1: "Una cocina o un horno",
+    hcf_int_2: "Un recambio",
+    hcf_int_3: "Un presupuesto para un astillero",
+    hcf_int_4: "Otra cosa",
+    hcf_msg: "Mensaje",
+    hcf_send: "Enviar",
+    hcf_ok: "Gracias, le responderemos en breve.",
     ct_hours_label: "Horario",
     ct_hours_val: "Lunes - Viernes<br>08:30 - 17:30 CET",
     ct_open_maps: "Abrir en Google Maps",
@@ -17374,6 +17508,32 @@ window.setLang = setLang;
      Si aggancia SOLO ai valori che contengono cm o mm come parola intera:
      kW, V, Hz, mbar e mm... attenzione, "mbar" non contiene \bmm\b, quindi
      resta fuori. Idempotente: se la riga c'e' gia', non ne aggiunge un'altra. -->
+<script>
+/* ── INVIO DEL MODULO DELLA BUSTINA ──
+   Netlify intercetta la POST verso qualunque percorso del sito e, se
+   riconosce form-name, manda la mail e archivia la richiesta.
+   Si invia con fetch invece del comportamento nativo per non far
+   ricaricare la pagina: la bustina si chiuderebbe e il visitatore
+   perderebbe il punto in cui era.
+   ATTENZIONE In locale (file aperto da disco o anteprima) Netlify non
+   c'e' e la fetch fallisce: il messaggio di cortesia compare comunque,
+   perche' l'alternativa sarebbe un errore incomprensibile. Il collaudo
+   vero si fa sul sito pubblicato, controllando il pannello Forms. */
+function hctSend(f){
+  var btn=f.querySelector('.hctf-go');
+  if(btn){ btn.disabled=true; }
+  var data=new URLSearchParams(new FormData(f)).toString();
+  var done=function(){ f.classList.add('sent'); };
+  try{
+    fetch('/', {method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:data}).then(done).catch(done);
+  }catch(e){ done(); }
+  return false;   /* blocca l'invio nativo, che ricaricherebbe la pagina */
+}
+window.hctSend=hctSend;
+</script>
+
 <script>
 (function(){
   function conv(txt){
