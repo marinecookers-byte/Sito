@@ -289,6 +289,30 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .btm{display:inline-block;padding:13px 32px;background:transparent;color:var(--go);border:1px solid rgba(184,150,90,.55);font-size:9px;font-weight:500;letter-spacing:.3em;text-transform:uppercase;text-decoration:none;transition:background .3s,color .3s,border-color .3s,letter-spacing .3s;font-family:"Outfit",sans-serif}
 .btm:hover{background:rgba(184,150,90,.12);color:var(--gl);border-color:var(--gl);letter-spacing:.28em}
 
+/* ── HERO SU SCHERMI BASSI ──────────────────────────────────────────────
+   ⚠️ Il difetto: min-height:640px obbliga la hero a essere alta 640px anche
+   su un portatile con 560-600px di finestra utile. Il contenuto e' allineato
+   in basso (justify-content:flex-end), quindi titolo e pulsanti finivano
+   sotto il bordo dello schermo e dietro il ticker clienti, che e' fisso.
+   Il padding-bottom di min(100px,8vh) peggiorava le cose: su 570px di
+   viewport vale 45px, cioe' meno dell'arredo fisso in fondo.
+   Qui la hero smette di imporre un'altezza minima e il fondo tiene conto dei
+   ~93px sempre occupati da ticker + fascetta AI. Il cerchio dorato, che su
+   schermi bassi mangia spazio senza aggiungere nulla, si rimpicciolisce. */
+@media (max-height: 720px) and (min-width: 769px){
+  .hero{ min-height:0; padding-bottom:112px; }
+  .hti{ font-size:clamp(40px,4.6vw,58px); margin-bottom:16px; }
+  .hde{ margin-bottom:26px; line-height:1.75; }
+  .hey{ margin-bottom:14px; }
+  .hci{ width:34vw; max-width:420px; }
+}
+/* Sotto i 600px di finestra la descrizione toglie piu' spazio di quanto ne
+   valga: restano occhiello, titolo e pulsanti, che sono la parte utile. */
+@media (max-height: 600px) and (min-width: 769px){
+  .hde{ display:none; }
+  .hti{ font-size:clamp(34px,4vw,46px); }
+}
+
 /* ── PRODUCT MATRIX · pagina overlay dedicata ─────────────────── */
 #matrixpage{position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0a0a;color:var(--wh);z-index:362;opacity:0;pointer-events:none;transition:opacity .5s ease;display:block;overflow:hidden}
 #matrixpage.show{opacity:1;pointer-events:all;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
@@ -3920,6 +3944,21 @@ header.hide{transform:translateY(-100%);}
 #hctp{
   position:fixed;top:calc(var(--hh) + 6px);right:22px;
   width:292px;padding:26px 26px 22px;
+  /* ⚠️ Con il modulo in fondo il pannello supera l'altezza dello schermo sui
+     portatili bassi e finisce sotto il ticker. Area scorrevole propria, come
+     su mobile. overscroll-behavior evita che arrivati in fondo lo scorrimento
+     prosegua sulla pagina dietro. */
+  /* ⚠️ Il fondo dello schermo NON e' libero: fascetta AI (~25px) + ticker
+     clienti (~68px) = ~93px sempre occupati. Sottrarli, altrimenti la coda
+     del pannello finisce sotto la fascia clienti. */
+  max-height:calc(100vh - var(--hh) - 108px);
+  overflow-y:auto; overscroll-behavior:contain;
+  /* Barra sottile in tono: quella di sistema, larga e grigia, spezzerebbe il
+     pannello. -webkit- per Chrome e Safari, scrollbar-* per Firefox.
+     Niente scroll-behavior:smooth: agisce solo sugli scorrimenti comandati
+     dal codice, non sulla rotellina, e qui non servirebbe a nulla. */
+  scrollbar-width:thin;
+  scrollbar-color:rgba(184,150,90,.45) transparent;
   background:rgba(12,12,12,.94);color:var(--wh);
   /* ⚠️ La sfocatura dello sfondo NON va dichiarata qui: il pannello sta
      dentro <header> ed e' nel DOM fin dal primo disegno. Un elemento che
@@ -3941,8 +3980,11 @@ header.hide{transform:translateY(-100%);}
 #hctp.on{
   opacity:1;visibility:visible;
   transform:translateY(0) scale(1);
-  -webkit-backdrop-filter:blur(14px) saturate(120%);
-  backdrop-filter:blur(14px) saturate(120%);
+  /* ⚠️ La sfocatura dello sfondo e' stata TOLTA di proposito: da quando il
+     pannello contiene il modulo ed e' scorrevole, il browser doveva
+     ricalcolarla a ogni fotogramma dello scorrimento, e il risultato era
+     visibilmente a scatti. Il fondo e' gia' opaco al 94%: la sfocatura non
+     aggiungeva quasi nulla e costava tutto. Non rimetterla. */
   transition:opacity .58s cubic-bezier(.16,.84,.28,1),
              transform .64s cubic-bezier(.16,.84,.28,1),
              visibility 0s linear 0s;
@@ -4014,7 +4056,33 @@ header.hide{transform:translateY(-100%);}
   padding:5px 0;transition:border-color .25s;
 }
 #hctp .hctf-in:focus{outline:none;border-bottom-color:var(--go)}
+/* Segnalazione discreta: solo il filetto cambia colore, niente riquadri
+   rossi che sfonderebbero la palette del pannello. */
+#hctp .hctf-in.bad{border-bottom-color:#c2705a}
+#hctp .hctf-err{
+  display:none;margin:14px 0 0;font-family:'Outfit',sans-serif;font-size:11px;
+  font-weight:300;letter-spacing:.03em;color:#c2705a;
+}
+#hctp .hctf.err .hctf-err{display:block}
 #hctp .hctf-area{resize:vertical;min-height:52px;line-height:1.45}
+#hctp .hctf-opts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:6px}
+#hctp .hctf-opt{
+  display:flex;align-items:center;gap:7px;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:12px;font-weight:300;
+  color:rgba(248,246,241,.78);transition:color .25s;
+}
+#hctp .hctf-opt:hover{color:var(--wh)}
+#hctp .hctf-opt input{
+  appearance:none;-webkit-appearance:none;margin:0;flex:0 0 auto;
+  width:13px;height:13px;border-radius:50%;cursor:pointer;
+  border:1px solid rgba(248,246,241,.38);background:transparent;
+  transition:border-color .25s,box-shadow .25s;
+}
+/* Il pallino pieno si ottiene con un'ombra interna: niente pseudo-elementi,
+   che su alcuni browser non si disegnano dentro un input. */
+#hctp .hctf-opt input:checked{
+  border-color:var(--go);box-shadow:inset 0 0 0 3px var(--go);
+}
 /* Le tendine native su fondo scuro restano bianche in molti browser:
    il colore va forzato anche sulle option, non basta sul select. */
 #hctp .hctf-sel{appearance:none;-webkit-appearance:none;cursor:pointer;
@@ -4059,7 +4127,8 @@ header.hide{transform:translateY(-100%);}
   /* Il pannello scende ora da sotto l'header, non piu' da 62px in giu'. */
   #hctp{top:calc(var(--hh) + 8px);right:14px;left:14px;width:auto;
         padding:0 22px 18px;
-        max-height:calc(100dvh - var(--hh) - 26px);
+        /* 68px di ticker + fascetta AI, piu' 16 di respiro. */
+        max-height:calc(100dvh - var(--hh) - 84px);
         overflow-y:auto; overscroll-behavior:contain;
         -webkit-overflow-scrolling:touch}
 }
@@ -4090,7 +4159,10 @@ header.hide{transform:translateY(-100%);}
    esattamente come la lente e l'hamburger, che stanno nello stesso gruppo. */
 
 #hctp .hctp-x{
-  position:absolute;top:10px;right:10px;
+  /* ⚠️ sticky e non absolute: dentro un contenitore che scorre, un elemento
+     assoluto si ancora al contenuto e sparisce in alto appena si scorre.
+     float:right la tiene nell'angolo senza occupare una riga propria. */
+  position:sticky;top:-16px;float:right;margin:-16px -16px 0 8px;z-index:4;
   width:30px;height:30px;display:flex;align-items:center;justify-content:center;
   background:none;border:none;padding:0;cursor:pointer;
   color:rgba(248,246,241,.45);
@@ -4100,6 +4172,13 @@ header.hide{transform:translateY(-100%);}
   stroke-width:1.5;stroke-linecap:round}
 #hctp .hctp-x:hover{color:var(--gl);transform:rotate(90deg)}
 #hctp .hctp-x-lbl{display:none}
+#hctp::-webkit-scrollbar{width:5px}
+#hctp::-webkit-scrollbar-track{background:transparent}
+#hctp::-webkit-scrollbar-thumb{
+  background:rgba(184,150,90,.38);border-radius:3px;transition:background .3s;
+}
+#hctp:hover::-webkit-scrollbar-thumb{background:rgba(184,150,90,.62)}
+
 @media(max-width:768px){
   /* ── FASCETTA DI CHIUSURA (come il modale Energy Efficiency) ──
      Il pannello su schermo stretto puo' superare l'altezza utile: prima
@@ -4109,7 +4188,7 @@ header.hide{transform:translateY(-100%);}
      I margini negativi servono a farla arrivare ai bordi del pannello,
      scavalcando i 22px di padding laterale. */
   #hctp .hctp-x{
-    position:sticky; top:0; margin:0 -22px 16px;
+    position:sticky; top:0; float:none; margin:0 -22px 16px;
     width:auto; height:auto; min-height:50px;
     justify-content:flex-end; gap:10px; padding:14px 20px;
     background:rgba(8,8,8,.97);
@@ -4911,7 +4990,12 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
          Netlify non riconosce il modulo e l'invio finisce nel nulla.
          Il campo bot-field e' una trappola per lo spam: e' invisibile
          all'utente, se viene compilato l'invio e' di un robot. -->
-    <form class="hctf" name="contatti" method="POST" data-netlify="true"
+    <!-- ⚠️ novalidate: il fumetto di verifica del browser ("Compila questo
+         campo") non si puo' ne' vestire ne' tradurre, e segue la lingua del
+         BROWSER, non quella del sito: un tedesco con Chrome italiano lo
+         leggerebbe in italiano. La verifica la facciamo noi, in stile e
+         nella lingua giusta. -->
+    <form class="hctf" name="contatti" method="POST" data-netlify="true" novalidate
           netlify-honeypot="bot-field" onsubmit="return hctSend(this)">
       <input type="hidden" name="form-name" value="contatti">
       <p class="hctf-hp"><label>Non compilare <input name="bot-field"></label></p>
@@ -4922,18 +5006,51 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <label class="hctf-k" for="hctf-mail" data-i18n="hcf_email">Email</label>
       <input class="hctf-in" id="hctf-mail" name="email" type="email" required autocomplete="email">
 
+      <!-- Il privato e' la PRIMA voce, non un ripiego in fondo: chi possiede
+           una barca deve capire subito che puo' scrivere anche senza essere
+           un cantiere o un rivenditore. -->
+      <label class="hctf-k" for="hctf-who" data-i18n="hcf_who">I am</label>
+      <select class="hctf-in hctf-sel" id="hctf-who" name="profilo" required>
+        <!-- La prima voce ha valore vuoto: con required il browser la
+             considera non valida e blocca l'invio finche' non si sceglie. -->
+        <option value="" data-i18n="hcf_who_0">Please choose</option>
+        <option value="owner" data-i18n="hcf_who_1">A private owner</option>
+        <option value="yard" data-i18n="hcf_who_2">A shipyard</option>
+        <option value="dealer" data-i18n="hcf_who_3">A dealer or distributor</option>
+        <option value="designer" data-i18n="hcf_who_4">A designer or naval architect</option>
+      </select>
+
       <label class="hctf-k" for="hctf-int" data-i18n="hcf_interest">I am interested in</label>
       <select class="hctf-in hctf-sel" id="hctf-int" name="interesse">
         <option value="" data-i18n="hcf_int_0">Not specified</option>
-        <option value="cooker" data-i18n="hcf_int_1">A cooker or an oven</option>
-        <option value="spare" data-i18n="hcf_int_2">A spare part</option>
-        <option value="shipyard" data-i18n="hcf_int_3">A quotation for a shipyard</option>
-        <option value="other" data-i18n="hcf_int_4">Something else</option>
+        <option value="products" data-i18n="hcf_int_1">Products</option>
+        <option value="spare" data-i18n="hcf_int_2">Spare parts</option>
+        <option value="other" data-i18n="hcf_int_3">Something else</option>
       </select>
+
+      <!-- Due sole scelte, in linea invece che in una terza tendina: occupano
+           una riga e si spuntano con un tocco. Nessuna e' preselezionata:
+           chi non sceglie manda lo stesso. -->
+      <span class="hctf-k" data-i18n="hcf_req">Request</span>
+      <div class="hctf-opts">
+        <label class="hctf-opt">
+          <input type="radio" name="richiesta" value="quote">
+          <span data-i18n="hcf_req_1">Quotation</span>
+        </label>
+        <label class="hctf-opt">
+          <input type="radio" name="richiesta" value="info">
+          <span data-i18n="hcf_req_2">General information</span>
+        </label>
+        <label class="hctf-opt">
+          <input type="radio" name="richiesta" value="other">
+          <span data-i18n="hcf_req_3">Other</span>
+        </label>
+      </div>
 
       <label class="hctf-k" for="hctf-msg" data-i18n="hcf_msg">Message</label>
       <textarea class="hctf-in hctf-area" id="hctf-msg" name="messaggio" rows="3" required></textarea>
 
+      <p class="hctf-err" id="hctf-err" data-i18n="hcf_err">Please complete the highlighted fields.</p>
       <button class="hctf-go" type="submit" data-i18n="hcf_send">Send</button>
       <p class="hctf-ok" id="hctf-ok" data-i18n="hcf_ok">Thank you, we will reply shortly.</p>
     </form>
@@ -9710,6 +9827,18 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     function navOpen(){return np&&np.classList.contains('on');}
 
     document.addEventListener('wheel',function(e){
+      /* ⚠️ La bustina dei contatti ha una PROPRIA area scorrevole (max-height +
+         overflow-y:auto) e non usa gli scroller lerp del sito. Se non esce
+         subito da qui, la rotellina finisce a homeL.wheel(), che chiama
+         preventDefault e muove la home: il pannello sembra "non scorrevole" e
+         il pulsante Invia resta irraggiungibile. Uscendo senza toccare
+         l'evento, lo scorrimento nativo del browser fa il suo lavoro.
+         Nota: la classe della bustina e' 'on', non 'show'. */
+      var _hctp=document.getElementById('hctp');
+      if(_hctp && _hctp.classList.contains('on') && _hctp.contains(e.target)){
+        if(window.hctpWheel) window.hctpWheel(e);
+        return;
+      }
       if(isOpen(ef,'show')){ if(efModal&&efModal.contains(e.target)){ efL&&efL.wheel(e); } return; }
       if(navOpen()){ if(np&&np.contains(e.target)){ npL&&npL.wheel(e); } return; }
       if(isOpen(pp,'show')&&pp.contains(e.target)){ppL&&ppL.wheel(e);return;}
@@ -10940,13 +11069,23 @@ var DICT = {
     ct_email: "Email",
     hcf_name: "Name",
     hcf_email: "Email",
+    hcf_who: "I am",
+    hcf_who_0: "Please choose",
+    hcf_who_1: "A private owner",
+    hcf_who_2: "A shipyard",
+    hcf_who_3: "A dealer or distributor",
+    hcf_who_4: "A designer or naval architect",
     hcf_interest: "I am interested in",
     hcf_int_0: "Not specified",
-    hcf_int_1: "A cooker or an oven",
-    hcf_int_2: "A spare part",
-    hcf_int_3: "A quotation for a shipyard",
-    hcf_int_4: "Something else",
+    hcf_int_1: "Products",
+    hcf_int_2: "Spare parts",
+    hcf_int_3: "Something else",
+    hcf_req: "Request",
+    hcf_req_1: "Quotation",
+    hcf_req_2: "General information",
+    hcf_req_3: "Other",
     hcf_msg: "Message",
+    hcf_err: "Please complete the highlighted fields.",
     hcf_send: "Send",
     hcf_ok: "Thank you, we will reply shortly.",
     ct_hours_label: "Hours",
@@ -12197,13 +12336,23 @@ var DICT = {
     ct_email: "Email",
     hcf_name: "Nome",
     hcf_email: "Email",
+    hcf_who: "Sono",
+    hcf_who_0: "Seleziona",
+    hcf_who_1: "Un armatore privato",
+    hcf_who_2: "Un cantiere",
+    hcf_who_3: "Un rivenditore o distributore",
+    hcf_who_4: "Un progettista o studio navale",
     hcf_interest: "Sono interessato a",
     hcf_int_0: "Non specificato",
-    hcf_int_1: "Una cucina o un forno",
-    hcf_int_2: "Un ricambio",
-    hcf_int_3: "Un preventivo per un cantiere",
-    hcf_int_4: "Altro",
+    hcf_int_1: "Prodotti",
+    hcf_int_2: "Ricambi",
+    hcf_int_3: "Altro",
+    hcf_req: "Richiesta",
+    hcf_req_1: "Preventivo",
+    hcf_req_2: "Informazioni generali",
+    hcf_req_3: "Altro",
     hcf_msg: "Messaggio",
+    hcf_err: "Completi i campi evidenziati.",
     hcf_send: "Invia",
     hcf_ok: "Grazie, le risponderemo a breve.",
     ct_hours_label: "Orari",
@@ -13435,7 +13584,7 @@ var DICT = {
     ab_p9_body2: "Ce n'est pas une gamme assemblée pour étoffer un catalogue. C'est ce qui arrive quand on n'a jamais dit à un chantier qu'une chose était impossible.",
     ab_p8_tag: "Nos Clients",
     ab_p8_title: "La confiance des <em>meilleurs</em> chantiers du monde",
-    ab_p8_body1: "Nos cuisinières sont la référence depuis des décennies des plus grands chantiers navals du monde, des distributeurs les plus réputés et des propriétaires privés. Des yachts Solaris modernes aux bateaux classiques comme le Latifa de William Fife III (1936), de l'Elmo's Fire de Giovanni Soldini aux yachts de grands artistes, de champions de Formule 1, d'hommes d'État de renommée internationale et de personnalités de premier plan de l'entrepreneuriat et de la finance.",
+    ab_p8_body1: "Nos cuisinières sont la référence depuis des décennies des plus grands chantiers navals du monde, des distributeurs les plus réputés et des armateurs particuliers. Des yachts Solaris modernes aux bateaux classiques comme le Latifa de William Fife III (1936), de l'Elmo's Fire de Giovanni Soldini aux yachts de grands artistes, de champions de Formule 1, d'hommes d'État de renommée internationale et de personnalités de premier plan de l'entrepreneuriat et de la finance.",
     ab_p8_body2: "Une tradition qui se poursuit aujourd'hui avec Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo et bien d'autres · partout où l'excellence en mer exige l'excellence en cuisine.",
     cat_page_label: "Bibliothèque",
     cat_page_title: "Catalogues",
@@ -13452,20 +13601,30 @@ var DICT = {
     ct_email: "E-mail",
     hcf_name: "Nom",
     hcf_email: "Email",
+    hcf_who: "Je suis",
+    hcf_who_0: "Sélectionnez",
+    hcf_who_1: "Un armateur particulier",
+    hcf_who_2: "Un chantier naval",
+    hcf_who_3: "Un revendeur ou distributeur",
+    hcf_who_4: "Un architecte naval ou designer",
     hcf_interest: "Je suis intéressé par",
     hcf_int_0: "Non précisé",
-    hcf_int_1: "Une cuisinière ou un four",
-    hcf_int_2: "Une pièce détachée",
-    hcf_int_3: "Un devis pour un chantier",
-    hcf_int_4: "Autre chose",
+    hcf_int_1: "Produits",
+    hcf_int_2: "Pièces détachées",
+    hcf_int_3: "Autre",
+    hcf_req: "Demande",
+    hcf_req_1: "Devis",
+    hcf_req_2: "Informations générales",
+    hcf_req_3: "Autre",
     hcf_msg: "Message",
+    hcf_err: "Veuillez compléter les champs indiqués.",
     hcf_send: "Envoyer",
     hcf_ok: "Merci, nous vous répondrons sous peu.",
     ct_hours_label: "Horaires",
     ct_hours_val: "Lundi - Vendredi<br>08h30 - 17h30 CET",
     ct_open_maps: "Ouvrir dans Google Maps",
     hc_label: "Nous contacter",
-    hc_lead: "Dites-nous ce dont vous avez besoin : nous répondons aux chantiers comme aux propriétaires privés.",
+    hc_lead: "Dites-nous ce dont vous avez besoin : nous répondons aux chantiers comme aux armateurs particuliers.",
     elec_hero_title: "Cuisinières Électriques<br><em>pour la Mer</em>",
     elec_hero_sub: "Ingénierie de précision et artisanat · conçues pour performer au plus haut niveau sur les plus beaux yachts du monde.",
     elec_es_tag: "La Collection · Cuisinières Électriques avec Four",
@@ -14707,13 +14866,23 @@ var DICT = {
     ct_email: "E-Mail",
     hcf_name: "Name",
     hcf_email: "E-Mail",
+    hcf_who: "Ich bin",
+    hcf_who_0: "Bitte wählen",
+    hcf_who_1: "Ein Privateigner",
+    hcf_who_2: "Eine Werft",
+    hcf_who_3: "Ein Händler oder Distributor",
+    hcf_who_4: "Ein Konstrukteur oder Yachtdesigner",
     hcf_interest: "Ich interessiere mich für",
     hcf_int_0: "Keine Angabe",
-    hcf_int_1: "Einen Herd oder Backofen",
-    hcf_int_2: "Ein Ersatzteil",
-    hcf_int_3: "Ein Angebot für eine Werft",
-    hcf_int_4: "Etwas anderes",
+    hcf_int_1: "Produkte",
+    hcf_int_2: "Ersatzteile",
+    hcf_int_3: "Sonstiges",
+    hcf_req: "Anfrage",
+    hcf_req_1: "Angebot",
+    hcf_req_2: "Allgemeine Informationen",
+    hcf_req_3: "Sonstiges",
     hcf_msg: "Nachricht",
+    hcf_err: "Bitte füllen Sie die markierten Felder aus.",
     hcf_send: "Senden",
     hcf_ok: "Vielen Dank, wir melden uns in Kürze.",
     ct_hours_label: "Öffnungszeiten",
@@ -15962,13 +16131,23 @@ var DICT = {
     ct_email: "Correo electrónico",
     hcf_name: "Nombre",
     hcf_email: "Email",
+    hcf_who: "Soy",
+    hcf_who_0: "Seleccione",
+    hcf_who_1: "Un armador particular",
+    hcf_who_2: "Un astillero",
+    hcf_who_3: "Un distribuidor o revendedor",
+    hcf_who_4: "Un proyectista o arquitecto naval",
     hcf_interest: "Estoy interesado en",
     hcf_int_0: "Sin especificar",
-    hcf_int_1: "Una cocina o un horno",
-    hcf_int_2: "Un recambio",
-    hcf_int_3: "Un presupuesto para un astillero",
-    hcf_int_4: "Otra cosa",
+    hcf_int_1: "Productos",
+    hcf_int_2: "Recambios",
+    hcf_int_3: "Otro",
+    hcf_req: "Solicitud",
+    hcf_req_1: "Presupuesto",
+    hcf_req_2: "Información general",
+    hcf_req_3: "Otro",
     hcf_msg: "Mensaje",
+    hcf_err: "Complete los campos indicados.",
     hcf_send: "Enviar",
     hcf_ok: "Gracias, le responderemos en breve.",
     ct_hours_label: "Horario",
@@ -17519,7 +17698,56 @@ window.setLang = setLang;
    c'e' e la fetch fallisce: il messaggio di cortesia compare comunque,
    perche' l'alternativa sarebbe un errore incomprensibile. Il collaudo
    vero si fa sul sito pubblicato, controllando il pannello Forms. */
+/* ── SCORRIMENTO SMORZATO DELLA BUSTINA ──
+   Lo scorrimento nativo avanza a scatti di un centinaio di pixel per tacca
+   della rotellina: dentro un pannello alto poche centinaia di pixel si vede
+   moltissimo. Tutti gli altri contenitori scorrevoli del sito usano uno
+   smorzamento a inseguimento; qui ce n'era uno solo di mancante.
+   Si accumula la distanza richiesta e la si raggiunge per frazioni, con un
+   passo indipendente dal frame rate. Il dito su telefono non passa di qui:
+   li' lo scorrimento nativo e' gia' fluido. */
+(function(){
+  var el=null, tgt=0, cur=0, run=false, last=0;
+  function step(t){
+    if(!el){ run=false; return; }
+    var dt = last ? Math.min(48, t-last) : 16.7; last=t;
+    var k = 1-Math.exp(-dt/90);      /* ~90ms: morbido ma senza strascico */
+    cur += (tgt-cur)*k;
+    if(Math.abs(tgt-cur) < 0.5) cur = tgt;
+    el.scrollTop = cur;
+    if(cur === tgt){ run=false; return; }
+    requestAnimationFrame(step);
+  }
+  window.hctpWheel = function(e){
+    var p = document.getElementById('hctp');
+    if(!p) return;
+    var max = p.scrollHeight - p.clientHeight;
+    if(max <= 1) return;             /* niente da scorrere: non tocco l'evento */
+    e.preventDefault();
+    if(el !== p || !run){ el = p; cur = p.scrollTop; tgt = cur; }
+    tgt = Math.max(0, Math.min(max, tgt + e.deltaY));
+    if(!run){ run = true; last = 0; requestAnimationFrame(step); }
+  };
+})();
+
 function hctSend(f){
+  /* Verifica nostra al posto di quella nativa: segna i campi mancanti con il
+     filetto ambrato e mostra una riga tradotta. Nessun fumetto di sistema. */
+  var bad=null;
+  ['hctf-name','hctf-mail','hctf-who','hctf-msg'].forEach(function(id){
+    var el=document.getElementById(id); if(!el) return;
+    var v=(el.value||'').trim();
+    var ko=!v;
+    if(!ko && id==='hctf-mail') ko = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+    el.classList.toggle('bad', ko);
+    if(ko && !bad) bad=el;
+  });
+  if(bad){
+    f.classList.add('err');
+    try{ bad.focus(); }catch(e){}
+    return false;
+  }
+  f.classList.remove('err');
   var btn=f.querySelector('.hctf-go');
   if(btn){ btn.disabled=true; }
   var data=new URLSearchParams(new FormData(f)).toString();
@@ -17532,6 +17760,19 @@ function hctSend(f){
   return false;   /* blocca l'invio nativo, che ricaricherebbe la pagina */
 }
 window.hctSend=hctSend;
+/* La segnalazione si spegne appena il campo viene toccato: lasciarla accesa
+   mentre si scrive e' fastidioso e fa sembrare rotto un modulo che funziona. */
+(function(){
+  var f=document.querySelector('.hctf'); if(!f) return;
+  f.addEventListener('input', function(e){
+    if(e.target.classList) e.target.classList.remove('bad');
+    if(!f.querySelector('.bad')) f.classList.remove('err');
+  }, true);
+  f.addEventListener('change', function(e){
+    if(e.target.classList) e.target.classList.remove('bad');
+    if(!f.querySelector('.bad')) f.classList.remove('err');
+  }, true);
+})();
 </script>
 
 <script>
