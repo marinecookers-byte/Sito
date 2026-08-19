@@ -2753,6 +2753,73 @@ header.hide{transform:translateY(-100%);}
   .pp-oc-badge{ font-size:8px; letter-spacing:.16em; padding:5px 11px; }
 }
 
+/* Popup del bollino Bluewater. Volutamente piccolo: e' una nota, non una
+   pagina. Stesso velo e stessa scatola scura del modale grande, in scala. */
+#ocinfo{
+  position:fixed; inset:0;
+  z-index:960;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  background:rgba(6,6,6,.82);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
+}
+#ocinfo.show{ opacity:1; pointer-events:all; }
+.ocinfo-box{
+  position:relative;
+  width:min(440px,100%);
+  padding:38px 34px 32px;
+  background:#0f0f0f;
+  border:1px solid rgba(184,150,90,.28);
+  transform:translateY(14px);
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+}
+#ocinfo.show .ocinfo-box{ transform:translateY(0); }
+.ocinfo-x{
+  position:absolute; top:12px; right:12px;
+  width:30px; height:30px;
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:none; padding:0;
+  color:rgba(248,246,241,.45);
+  cursor:pointer;
+  transition:color .3s ease;
+}
+.ocinfo-x svg{ width:17px; height:17px; }
+.ocinfo-ttl{
+  display:block;
+  font-family:'Outfit',sans-serif;
+  font-size:9px; letter-spacing:.28em; text-transform:uppercase;
+  color:rgba(184,150,90,.9);
+  margin-bottom:14px;
+}
+.ocinfo-body{
+  margin:0;
+  font-family:'Outfit',sans-serif;
+  font-size:13px; font-weight:300; line-height:1.85;
+  color:rgba(248,246,241,.66);
+}
+.ocinfo-link{
+  display:none;
+  margin-top:22px;
+  font-family:'Outfit',sans-serif;
+  font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  color:#b8965a;
+  border-bottom:1px solid rgba(184,150,90,.35);
+  padding-bottom:3px;
+  cursor:pointer;
+  transition:color .3s ease, border-color .3s ease;
+}
+.ocinfo-link.on{ display:inline-block; }
+@media(hover:hover){
+  .ocinfo-x:hover{ color:#b8965a; }
+  .ocinfo-link:hover{ color:#d4b07a; border-color:rgba(184,150,90,.9); }
+}
+@media(max-width:768px){
+  .ocinfo-box{ padding:32px 22px 26px; }
+  .ocinfo-body{ font-size:12.5px; }
+}
+
 .ef-modal::-webkit-scrollbar{ width:8px; }
 .ef-modal::-webkit-scrollbar-thumb{ background:rgba(184,150,90,.25); border-radius:4px; }
 
@@ -4816,7 +4883,14 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 <!-- Back-to-top: pagine lunghe (home). Elegante, dorato, in basso a sinistra. -->
-<button id="backtotop" aria-label="Torna su" title="Torna su"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="7 14.5 12 9.5 17 14.5"></polyline></svg></button>
+<!-- ATTENZIONE lo stile in linea non e' decorativo, ripara un lampo:
+     il CSS di #backtotop sta in un blocco di stile in fondo al body, quasi
+     15.000 righe piu' avanti. Fino a li' questo era un <button> senza
+     stile, quindi nel flusso normale IN ALTO A SINISTRA e con lo sfondo
+     chiaro predefinito: si vedeva un rettangolino bianco comparire e
+     sparire al caricamento. Con lo stato finale gia' qui, l'elemento e'
+     invisibile dal primo istante e il CSS che arriva dopo lo conferma. -->
+<button id="backtotop" aria-label="Torna su" title="Torna su" style="position:fixed;left:34px;bottom:34px;opacity:0;pointer-events:none;border:0;padding:0;background:none"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="7 14.5 12 9.5 17 14.5"></polyline></svg></button>
 <div id="bd" onclick="cm()"></div>
 
 <div id="np">
@@ -4920,7 +4994,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <span class="pp-hero-name" id="pp-name"> · </span>
       <!-- Bollino "variante Oceano". Nascosto per difetto: goProd lo accende
            solo per i modelli dell'elenco OC_MODELS. -->
-      <span class="pp-oc-badge" id="pp-oc-badge" onclick="openOcean()" role="button" tabindex="0">
+      <span class="pp-oc-badge" id="pp-oc-badge" onclick="ocInfo(this.getAttribute('data-m')||'')" role="button" tabindex="0">
         <svg viewBox="0 0 24 24" fill="none"><path d="M2 16c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 10c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         <span data-i18n="oc_badge">Bluewater variant available</span>
       </span>
@@ -5411,13 +5485,14 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 <section class="hero">
   <!-- Video di sfondo hero - desaturato e scuro come in About Us.
        Sess. 99: sorgenti sostituite, desktop e mobile sono montaggi DIVERSI.
-         desktop  v1786958125/VIDEO_HERO_DESKTOP_HOME_2_rxkq0x.mp4
+         desktop  v1787150096/202608171042_2_qqphkc.mp4
          mobile   v1786958099/VIDEO_HERO_MOBILE_HOME_2_etcjft.mp4
        ⚠️ URL GREZZE, senza f_auto/q_auto: sui video quelle trasformazioni
        obbligano Cloudinary a generare una derivata che alla prima richiesta
        puo' non essere pronta, e il video non parte. Sulle immagini invece
        sono sicure e si usano. Non aggiungerle qui.
        Le precedenti, per un eventuale ritorno:
+         desktop  v1786958125/VIDEO_HERO_DESKTOP_HOME_2_rxkq0x.mp4
          desktop  v1786947113/202608162005_gebn9a.mp4
          mobile   v1786951834/202608061229_moskta.mp4
          desktop  v1786296917/siamoabordonewcompact_h8q7eh.mp4
@@ -5429,7 +5504,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
        Cambiarlo via JS costerebbe un secondo scaricamento proprio nel
        momento peggiore. -->
   <video id="heroVid" loop muted playsinline preload="none"
-    data-src="https://res.cloudinary.com/dseiw9ndw/video/upload/v1786958125/VIDEO_HERO_DESKTOP_HOME_2_rxkq0x.mp4"
+    data-src="https://res.cloudinary.com/dseiw9ndw/video/upload/v1787150096/202608171042_2_qqphkc.mp4"
     data-src-mobile="https://res.cloudinary.com/dseiw9ndw/video/upload/v1786958099/VIDEO_HERO_MOBILE_HOME_2_etcjft.mp4"
     style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85);transition:opacity 2s linear">
     <track kind="captions" src="" label="No captions">
@@ -5459,7 +5534,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <source media="(max-width:768px)" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_900/v1786954508/FOTO_HERO_MOBILE_HOME_ctbcmg.jpg">
     <img id="heroPoster" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786954512/FOTO_HERO_DESKTOP_HOME_wzjtw7.jpg" alt="" aria-hidden="true"
       loading="eager" decoding="sync" fetchpriority="high"
-      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85);opacity:1;transition:opacity 2s ease">
+      style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;filter:grayscale(0.55) brightness(0.85);opacity:1;transition:opacity 2.7s ease">
   </picture>
   <div class="hovl" style="background:linear-gradient(to bottom,rgba(5,5,5,.65) 0%,rgba(0,0,0,.25) 40%,rgba(5,5,5,.82) 100%)"></div>
   <div class="hci"></div>
@@ -6145,6 +6220,23 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   </div>
  </div><!-- /ef-modal -->
 </div><!-- /oceanpage -->
+
+<!-- Popup del bollino Bluewater. Piccolo, non e' una pagina: spiega cosa
+     comporta la variante e, per le cucine, rimanda alla pagina Oceano.
+     ATTENZIONE sulle griglie e sui barbecue il collegamento NON deve
+     comparire: la pagina Oceano parla di cucine e forni, e mandarci chi sta
+     guardando un barbecue elettrico sarebbe una promessa sbagliata.
+     L'elenco delle eccezioni e' window.OC_NOLINK. -->
+<div id="ocinfo" onclick="if(event.target===this)closeOcInfo()">
+  <div class="ocinfo-box">
+    <button class="ocinfo-x" onclick="closeOcInfo()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </button>
+    <span class="ocinfo-ttl" data-i18n="oc_pop_ttl">Bluewater variant</span>
+    <p class="ocinfo-body" data-i18n="oc_pop_body">This model can be built in a Bluewater variant. By way of example, this involves oversized grates, special door handles and door locks, top-of-the-range stainless steel finishes, reinforced structures, oversized gimbals and more.</p>
+    <a class="ocinfo-link" id="ocinfo-link" onclick="closeOcInfo();openOcean();" data-i18n="oc_pop_link">Discover Oceano Bluewater</a>
+  </div>
+</div>
 
 
 <!-- CONTACT PAGE -->
@@ -7613,7 +7705,7 @@ function openCat(name,models){
       var _ocOn=(window.OC_MODELS||[]).indexOf(m)!==-1;
       var _ocTip=window.__t?window.__t('oc_badge','Bluewater variant available'):'Bluewater variant available';
       var _ocB=_ocOn
-        ?'<span class="pcard-oc" onclick="event.stopPropagation();openOcean();">'
+        ?'<span class="pcard-oc" onclick="event.stopPropagation();ocInfo(\''+m.replace(/'/g,"")+'\');">'
           +'<span class="pcard-oc-short">Oceano<br>Bluewater</span>'
           +'<span class="pcard-oc-full">'+_ocTip+'</span>'
           +'</span>'
@@ -7726,9 +7818,12 @@ window.__initPgridHint=function(){
     if(Math.abs(t.clientX-x0)>10 || Math.abs(t.clientY-y0)>10) return;
     /* Il bollino OCEANO e' dentro la scheda: senza questa uscita, toccarlo
        aprirebbe il prodotto invece della pagina Oceano. */
-    if(t.target.closest('.pcard-oc')){
+    var _ocEl=t.target.closest('.pcard-oc');
+    if(_ocEl){
       e.preventDefault();
-      if(window.openOcean) window.openOcean();
+      var _card=_ocEl.closest('.pcard');
+      var _k=_card?(_card.getAttribute('data-model')||''):'';
+      if(window.ocInfo) window.ocInfo(_k);
       return;
     }
     var card=(t.target && t.target.closest) ? t.target.closest('.pcard') : null;
@@ -7844,7 +7939,10 @@ function goProd(m){
      prodotto e' un contenitore riusato, e senza il ramo else il bollino
      resterebbe acceso sul modello aperto dopo uno che lo prevede. */
   var _ocb=document.getElementById('pp-oc-badge');
-  if(_ocb){ _ocb.classList.toggle('on', (window.OC_MODELS||[]).indexOf(m)!==-1); }
+  if(_ocb){
+    _ocb.classList.toggle('on', (window.OC_MODELS||[]).indexOf(m)!==-1);
+    _ocb.setAttribute('data-m', m);
+  }
   // Hero prodotto: porta DENTRO la scheda l'hero della categoria, usando lo
   // stesso media (video o immagine) della categoria a cui il prodotto appartiene.
   var ppVid=document.getElementById('pp-herovid');
@@ -8927,6 +9025,8 @@ document.addEventListener('keydown',function(e){
   var _sp=document.getElementById('sparepage');
   if(_sp&&_sp.classList.contains('show')){closeSpare();return;}
   var _ef=document.getElementById('effpage');
+  var _oci=document.getElementById('ocinfo');
+  if(_oci&&_oci.classList.contains('show')){closeOcInfo();return;}
   if(_ef&&_ef.classList.contains('show')){closeEff();return;}
   var _oc=document.getElementById('oceanpage');
   if(_oc&&_oc.classList.contains('show')){closeOcean();return;}
@@ -9427,11 +9527,10 @@ window.CAT_INTRO = {
 };
 
 window.PROD_DISPLAY = {
-  'MARINA E':'MARINA',
-  'MARIS':'MARIS (XL2 Lux)',
-  'NAUTA':'NAUTA (XL3 Lux)',
-  'LUX':'LUX (Top3 Lux)',
-  'MAREA':'MAREA (Classic Lux)'
+  'MARINA E':'MARINA'
+  /* Tolte le diciture commerciali fra parentesi (XL2 Lux, XL3 Lux, Top3 Lux,
+     Classic Lux): restano nei testi SEO, dove servono come termine di ricerca,
+     ma non piu' sotto la foto. */
 };
 function prodDisp(m){ return (window.PROD_DISPLAY && window.PROD_DISPLAY[m]) ? window.PROD_DISPLAY[m] : m; }
 
@@ -10012,7 +10111,21 @@ function openAbout(){
      tempo gia' trascorso e il fermo immagine dura 7 secondi veri.
      La bufferizzazione comincia 3 secondi prima della partenza: l'LCP a quel
      punto e' gia' misurato, e il video arriva pronto. */
-  var STILL = 5000,   /* quanto resta visibile il fermo immagine */
+  /* ⚠️ STILL e' ESTETICA, LEAD e' PAGESPEED. Alzare STILL ritarda la partenza
+     del video e quindi non puo' peggiorare l'LCP: semmai lo protegge, perche'
+     il fermo immagine resta l'elemento misurato piu' a lungo. Il parametro da
+     non toccare e' LEAD, che decide quando comincia la bufferizzazione: e'
+     tarato perche' l'LCP sia gia' misurato quando la rete si muove.
+     Sotto i 4 secondi di STILL non scendere.
+     Taratura scelta: 4700 di permanenza + 2,7 s di dissolvenza (transition sul
+     #heroPoster nel markup della hero) = video pienamente in campo a 7,4 s.
+     ⚠️ 4000 e' il PAVIMENTO documentato, non un numero qualsiasi: sotto, il
+     video comincia a dipingere mentre l'LCP e' ancora in misura e il punteggio
+     mobile scende. Se servisse ancora piu' corto, si accorcia la DISSOLVENZA
+     (2,7 s nel markup), non questa attesa.
+     Storico delle prove: 7000 dava il video pieno a 9,7 s, troppo lungo;
+     5000 a 7,7 s, ancora lungo; 4000 a 6,7 s, troppo corto. Fermato a 4700. */
+  var STILL = 4700,   /* quanto resta visibile il fermo immagine */
       LEAD  = 2000,   /* quanto prima si comincia a bufferizzare */
       MIN   = 1500;   /* buffer minimo garantito prima di far partire */
   function scheduleHero(){
@@ -10096,6 +10209,21 @@ function closeOcean(){
   if(!document.body.classList.contains('page-open')){ document.body.style.overflow=''; }
 }
 window.openOcean=openOcean; window.closeOcean=closeOcean;
+
+/* Popup del bollino. Riceve il modello per decidere se mostrare o no il
+   collegamento alla pagina Oceano. */
+function ocInfo(model){
+  var box=document.getElementById('ocinfo');
+  if(!box) return;
+  var lnk=document.getElementById('ocinfo-link');
+  if(lnk){ lnk.classList.toggle('on', (window.OC_NOLINK||[]).indexOf(model)===-1); }
+  box.classList.add('show');
+}
+function closeOcInfo(){
+  var box=document.getElementById('ocinfo');
+  if(box) box.classList.remove('show');
+}
+window.ocInfo=ocInfo; window.closeOcInfo=closeOcInfo;
 
 /* Dissolvenza incrociata fine/inizio, 2 secondi.
    Un elemento video non puo' dissolversi su se stesso: negli ultimi 2 secondi
@@ -11838,6 +11966,9 @@ var DICT = {
     pcard_hint_desk: "Double click to open",
     pcard_hint_tap: "Tap to open",
     oc_hero_tag: "Ocean Passages · Since the Beginning",
+    oc_pop_body: "This model can be built in a Bluewater variant. By way of example, this involves oversized grates, special door handles and door locks, top-of-the-range stainless steel finishes, reinforced structures, oversized gimbals and more.",
+    oc_pop_link: "Discover Oceano Bluewater",
+    oc_pop_ttl: "Bluewater variant",
     oc_hero_title: "Cookers built<br>for the <em>ocean</em>",
     oc_hero_lead: "A cooker built for an ocean passage has almost nothing in common with one built for coastal cruising. Two different worlds, and in part incompatible ones.",
     oc_c1_label: "Why It Differs",
@@ -13145,6 +13276,9 @@ var DICT = {
     pcard_hint_desk: "Doppio clic per la scheda",
     pcard_hint_tap: "Tocca per la scheda",
     oc_hero_tag: "Traversate oceaniche · Da sempre",
+    oc_pop_body: "Questo modello può essere realizzato in variante Bluewater. A titolo di esempio questo comporta griglie maggiorate, maniglioni porta e bloccaporta speciali, finiture inox altissima gamma, strutture rinforzate, basculanti maggiorati e altro ancora.",
+    oc_pop_link: "Scopri Oceano Bluewater",
+    oc_pop_ttl: "Variante Bluewater",
     oc_hero_title: "Cucine costruite<br>per l'<em>oceano</em>",
     oc_hero_lead: "Una cucina costruita per una traversata oceanica non ha quasi nulla in comune con una pensata per la navigazione costiera. Sono due mondi diversi, e in parte incompatibili.",
     oc_c1_label: "Perché è diverso",
@@ -14450,6 +14584,9 @@ var DICT = {
     pcard_hint_desk: "Double clic pour la fiche",
     pcard_hint_tap: "Touchez pour la fiche",
     oc_hero_tag: "Traversées océaniques · Depuis toujours",
+    oc_pop_body: "Ce modèle peut être réalisé en variante Bluewater. À titre d'exemple, cela comporte des grilles surdimensionnées, des poignées de porte et des verrous spéciaux, des finitions inox de très haut de gamme, des structures renforcées, des cardans surdimensionnés et bien d'autres choses.",
+    oc_pop_link: "Découvrir Oceano Bluewater",
+    oc_pop_ttl: "Variante Bluewater",
     oc_hero_title: "Des cuisinières conçues<br>pour l'<em>océan</em>",
     oc_hero_lead: "Une cuisinière conçue pour une traversée océanique n'a presque rien de commun avec une cuisinière pensée pour la navigation côtière. Deux mondes différents, et en partie incompatibles.",
     oc_c1_label: "Pourquoi c'est différent",
@@ -15755,6 +15892,9 @@ var DICT = {
     pcard_hint_desk: "Doppelklick für das Datenblatt",
     pcard_hint_tap: "Tippen für das Datenblatt",
     oc_hero_tag: "Ozeanpassagen · Von Anfang an",
+    oc_pop_body: "Dieses Modell kann in einer Bluewater-Variante gebaut werden. Beispielhaft bedeutet das vergrößerte Roste, besondere Türgriffe und Türverriegelungen, Edelstahlausführungen der höchsten Güte, verstärkte Strukturen, vergrößerte Kardanaufhängungen und mehr.",
+    oc_pop_link: "Oceano Bluewater entdecken",
+    oc_pop_ttl: "Bluewater-Variante",
     oc_hero_title: "Herde, gebaut<br>für den <em>Ozean</em>",
     oc_hero_lead: "Ein Herd für eine Ozeanüberquerung hat mit einem Herd für die Küstenfahrt fast nichts gemein. Zwei verschiedene Welten, und zum Teil unvereinbare.",
     oc_c1_label: "Warum es anders ist",
@@ -17060,6 +17200,9 @@ var DICT = {
     pcard_hint_desk: "Doble clic para la ficha",
     pcard_hint_tap: "Toca para la ficha",
     oc_hero_tag: "Travesías oceánicas · Desde siempre",
+    oc_pop_body: "Este modelo puede realizarse en variante Bluewater. A título de ejemplo, esto conlleva parrillas sobredimensionadas, tiradores de puerta y bloqueos especiales, acabados inox de altísima gama, estructuras reforzadas, basculantes sobredimensionados y más.",
+    oc_pop_link: "Descubre Oceano Bluewater",
+    oc_pop_ttl: "Variante Bluewater",
     oc_hero_title: "Cocinas construidas<br>para el <em>océano</em>",
     oc_hero_lead: "Una cocina construida para una travesía oceánica no tiene casi nada en común con una pensada para la navegación costera. Dos mundos distintos, y en parte incompatibles.",
     oc_c1_label: "Por qué es distinto",
@@ -18114,8 +18257,13 @@ window.setLang = setLang;
    della scheda prodotto legge questo elenco e rimanda alla pagina Oceano.
    Elettriche con forno al completo, piu' i forni da incasso e i piani
    compatti richiesti dal committente. */
+/* Griglie e barbecue: il popup si apre, ma SENZA il collegamento alla pagina
+   Oceano, che parla di cucine e forni. */
+window.OC_NOLINK = ['GIORGIONE','RAFFAELLO','VIRTUS','TIZIANO','MAGNUS','CAPITANO','MEGA GRILL'];
+
 window.OC_MODELS = [
   'MARINA','GUSTO','MAREA','LUX','VENTUS','ALTURA','MAXIMA',
+  'GIORGIONE','RAFFAELLO','VIRTUS','TIZIANO','MAGNUS','CAPITANO','MEGA GRILL',
   'ORIZZONTE','TOLOMEO','NOBILIS','ALTALUX','FORMA','VERA',
   'MARINA E','NAUTICA','COMPACTA','GRANLUX','MODULAR',
   'ROMA','FIRENZE','NAPOLI','DUE','TRE'
