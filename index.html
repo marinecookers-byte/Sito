@@ -1820,6 +1820,8 @@ header.hide{transform:translateY(-100%);}
 }
 @media(prefers-reduced-motion:reduce){
   .pp-gallery-item.mag,.pp-gallery-item.mag.in{opacity:1;transform:none;transition:none}
+  /* L'invito resta visibile, ma fermo. */
+  .pgrid-arrow-next{ animation:none !important; }
 }
 
 /* ── DOWNLOADS ── */
@@ -1916,6 +1918,23 @@ header.hide{transform:translateY(-100%);}
   background: none;
 }
 
+/* Cornice del disegno tecnico. La larghezza si governa QUI, sul contenitore,
+   e non sull'immagine.
+   ATTENZIONE l'immagine resta volutamente a calc(100% + 4px) con margine
+   -2px: quel ritaglio di 2px per lato serve a mangiare il bordo chiaro del
+   file originale. Stringendo l'immagine il ritaglio si perderebbe e il bordo
+   ricomparirebbe. Per cambiare la dimensione del disegno si tocca solo il
+   max-width qui sotto. */
+#pp-draw-frame{
+  max-width: 68%;
+  margin: 0 auto;
+}
+@media(max-width:768px){
+  /* Su telefono lo spazio e' gia' poco: si stringe molto meno, altrimenti le
+     quote del disegno diventano illeggibili. */
+  #pp-draw-frame{ max-width: 88%; }
+}
+
 /* ── Lightbox (definizione autoritativa · sovrascrive il blocco precedente) ── */
 #pp-lightbox {
   position: fixed;
@@ -1964,10 +1983,68 @@ header.hide{transform:translateY(-100%);}
 #pp-lb-dots{position:absolute;left:0;right:0;bottom:22px;display:flex;justify-content:center;gap:8px;z-index:2}
 .pp-lb-dot{width:6px;height:6px;border-radius:50%;background:rgba(248,246,241,.28);cursor:pointer;transition:background .3s,transform .3s}
 .pp-lb-dot.active{background:rgba(184,150,90,.95);transform:scale(1.25)}
+/* Disegno tecnico nel lightbox · SOLO DESKTOP.
+   Nella pagina il disegno e' FORZATO alla larghezza della cornice
+   (width:calc(100% + 4px) dentro #pp-draw-frame), mentre qui c'erano solo dei
+   tetti: max-width:97vw e max-height:96vh. Un tetto non ingrandisce, limita.
+   Per un disegno alto e stretto comandava max-height, la larghezza scendeva
+   di conseguenza e il risultato era PIU' PICCOLO che nella pagina: cliccare
+   rimpiccioliva invece di ingrandire.
+   Togliendo il tetto in altezza il disegno si allarga davvero e, se supera lo
+   schermo, lo si esplora scorrendo.
+   ATTENZIONE margin:auto e non align-items:center, altrimenti la parte alta
+   di un disegno piu' alto dello schermo diventa irraggiungibile.
+   Su telefono NON serve: li' la regola generale porta gia' tutto a 175vw. */
+@media(min-width:769px){
+  #pp-lightbox.lb-draw{ align-items:flex-start; justify-content:flex-start; overflow:auto; }
+  #pp-lightbox.lb-draw img{
+    max-height:none;
+    max-width:none;
+    width:min(97vw,1700px);
+    height:auto;
+    margin:auto;
+  }
+}
+
 /* Mobile · immagine centrata e bilanciata nello schermo */
 @media(max-width:768px){
-  #pp-lightbox{align-items:center;padding:3vh 3vw 5vh;}
-  #pp-lightbox img{max-height:90vh;max-width:96vw;}
+  /* Su telefono la foto nella pagina e' GIA' larga quanto lo schermo: mostrarla
+     qui a 96vw non ingrandiva nulla, e le foto ritagliate in verticale
+     (object-fit:cover con --ar) sembravano addirittura rimpicciolirsi, perche'
+     la lightbox le mostra intere e quindi piu' basse del ritaglio.
+     Qui la foto si vede INTERA a 175vw: quasi il doppio della pagina, e la si
+     esplora scorrendo in orizzontale e in verticale.
+     ATTENZIONE il contenitore deve poter scorrere; con align-items:center le
+     foto piu' alte dello schermo verrebbero tagliate in cima e la parte
+     superiore risulterebbe irraggiungibile. */
+  #pp-lightbox{
+    align-items:flex-start;
+    justify-content:flex-start;
+    padding:0 0 5vh;
+    overflow:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  #pp-lightbox img{
+    max-width:none;
+    max-height:none;
+    width:175vw;
+    height:auto;
+    /* ATTENZIONE margin:auto e NON align-items:center sul contenitore.
+       I margini automatici centrano solo quando c'e' spazio libero e si
+       annullano quando l'immagine trabocca, quindi la parte in alto e a
+       sinistra resta raggiungibile scorrendo. Con align-items:center una
+       foto piu' grande dello schermo verrebbe tagliata in modo definitivo;
+       con flex-start e basta, una foto piu' PICCOLA dello schermo (le
+       panoramiche, a 175vw restano basse) resta incollata in alto senza
+       possibilita' di centrarla. */
+    margin:auto;
+  }
+  /* Chiudi e Scarica restano fermi a schermo mentre la foto scorre sotto:
+     dentro un contenitore scorrevole, position:absolute li porterebbe via
+     insieme all'immagine e diventerebbero irraggiungibili. */
+  #pp-lightbox-close, #pp-lightbox-download{ position:fixed; }
+  #pp-lightbox-close{ top:16px; right:18px; }
+  #pp-lightbox-download{ top:16px; left:18px; }
   .pp-lb-arrow{font-size:26px;padding:8px}
   #pp-lb-prev{left:0}
   #pp-lb-next{right:0}
@@ -2234,7 +2311,7 @@ header.hide{transform:translateY(-100%);}
 }
 .pgrid::-webkit-scrollbar { display: none; }
 
-/* Frecce dorate minimali "scorri in orizzontale" — una a sinistra, una a
+/* Frecce dorate minimali "scorri in orizzontale": una a sinistra, una a
    destra. Design essenziale: solo la punta di freccia sottile in oro, senza
    cerchi vistosi. Danno una piccola spinta al click; ognuna svanisce quando
    in quella direzione non c'è più nulla da scorrere (classe .at-end via JS).
@@ -2268,6 +2345,14 @@ header.hide{transform:translateY(-100%);}
 .pgrid-arrow.at-end{
   opacity:0;
   pointer-events:none;
+}
+
+/* Movimento dell'invito a scorrere su telefono: minimo, lento, senza rimbalzi.
+   ATTENZIONE deve ripetere translateY(-50%), altrimenti la freccia perde il
+   centraggio verticale che le dà la regola base. */
+@keyframes pgridNudge{
+  0%,100%{ transform:translateY(-50%) translateX(0); }
+  50%    { transform:translateY(-50%) translateX(5px); }
 }
 
 .pcard {
@@ -2381,12 +2466,36 @@ header.hide{transform:translateY(-100%);}
   .pcard {
     flex: 0 0 80vw;
   }
+  /* Senza mouse la regola :hover non scatta mai: qui l'invito sotto la foto
+     resta acceso in permanenza, ed e' l'unico modo che ha chi naviga col
+     dito di sapere che la scheda si apre. */
+  .pcard-hint {
+    color: rgba(184,150,90,.5);
+  }
   .pgallery-wrap {
     padding: 0 0 40px;
     cursor: auto;
   }
   #pg-cursor { display: none !important; }
-  .pgrid-arrow { display: none !important; }
+  /* Su telefono le frecce NON sono controlli da premere. La sinistra sparisce
+     del tutto; la destra resta come segnale che la striscia di modelli
+     continua oltre il bordo dello schermo.
+     ATTENZIONE pointer-events:none è obbligatorio: la freccia sta in
+     posizione assoluta sopra la scheda, e se restasse premibile ruberebbe
+     il tocco che deve aprire il prodotto.
+     Si spegne da sola al primo scorrimento (classe .pg-scrolled via JS):
+     l'invito serve una volta sola, poi diventa arredo. */
+  .pgrid-arrow-prev { display: none !important; }
+  .pgrid-arrow-next {
+    pointer-events: none;
+    right: 4px;
+    opacity: .7;
+    animation: pgridNudge 2.4s ease-in-out infinite;
+  }
+  .pgallery-wrap.pg-scrolled .pgrid-arrow-next {
+    opacity: 0;
+    animation: none;
+  }
 }
 
 
@@ -4101,7 +4210,7 @@ header.hide{transform:translateY(-100%);}
   font-weight:300;letter-spacing:.04em;color:var(--gl);text-align:center;
 }
 #hctp .hctf.sent .hctf-ok{display:block}
-#hctp .hctf.sent .hctf-k,#hctp .hctf.sent .hctf-in,#hctp .hctf.sent .hctf-go{display:none}
+#hctp .hctf.sent .hctf-k,#hctp .hctf.sent .hctf-in,#hctp .hctf.sent .hctf-go,#hctp .hctf.sent .hctf-opts{display:none}
 
 /* ── MOBILE: la busta sta DENTRO L'HEADER, accanto alla lente ──
    Prima era una pastiglia fissa 12px sotto l'header, sovrapposta alla hero:
@@ -4801,7 +4910,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
           <span class="pp-section-num">04</span>
           <span class="pp-section-title" data-i18n="pp_nav_drawing">Technical Drawing</span>
         </div>
-        <div style="overflow:hidden;margin:0 -2px;">
+        <div id="pp-draw-frame" style="overflow:hidden;">
           <div class="pp-draw-cap" id="pp-drawing-cap1" style="display:none"></div>
           <img class="pp-drawing-img" id="pp-drawing-img" onclick="ppLightbox(this)"
             src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/HORIZON2_drawing_dark_1_bdwnvd"
@@ -4998,6 +5107,12 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <form class="hctf" name="contatti" method="POST" data-netlify="true" novalidate
           netlify-honeypot="bot-field" onsubmit="return hctSend(this)">
       <input type="hidden" name="form-name" value="contatti">
+      <!-- Provenienza della visita, compilata dal sito: e' l'unico modo di
+           sapere se una richiesta arriva dalla campagna Ads. Vuota per chi
+           arriva da Google organico o digitando l'indirizzo.
+           ATTENZIONE non e' un cookie: e' un dato che il visitatore
+           spedisce insieme al messaggio. Nessun banner di consenso. -->
+      <input type="hidden" name="origine" id="hctf-src" value="">
       <p class="hctf-hp"><label>Non compilare <input name="bot-field"></label></p>
 
       <label class="hctf-k" for="hctf-name" data-i18n="hcf_name">Name</label>
@@ -5403,11 +5518,11 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
           <div class="ab-hd-hscroll" id="ab-hd-hscroll">
             <div class="ab-hd-hpin">
               <div class="ab-hd-htrack" id="ab-hd-htrack">
-                <figure class="ab-hd-hitem"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786288945/FOTO_MANOPOLA_INOX_MASSICCIO_DETTAGLIO_di1jyq.png" alt="Control knob in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,c_fill,g_center,ar_4:5,w_1500/v1786288945/FOTO_MANOPOLA_INOX_MASSICCIO_DETTAGLIO_di1jyq.png','Control knob in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_a">Control knob turned from solid stainless steel</figcaption></figure>
-                <figure class="ab-hd-hitem"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786289183/FOTO_DETTAGLIO_GRIGLIA_INOX_MASSICCIO_juebfo.png" alt="Grate in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786289183/FOTO_DETTAGLIO_GRIGLIA_INOX_MASSICCIO_juebfo.png','Grate in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_b">Grate in solid stainless steel · welded bars Ø 8-10 mm</figcaption></figure>
-                <figure class="ab-hd-hitem"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786288928/FOTO_DETTAGLIO_INOX_MASSICCIO_c8ooih.png" alt="Mirror-polished grill hinges in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288928/FOTO_DETTAGLIO_INOX_MASSICCIO_c8ooih.png','Mirror-polished grill hinges in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_c">Mirror-polished grill hinges · heavy-gauge solid stainless steel</figcaption></figure>
-                <figure class="ab-hd-hitem"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786288907/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_blkwcp.png" alt="Door hinges made to our specification in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288907/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_blkwcp.png','Door hinges made to our specification in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_d">Door hinges made to our specification · heavy-gauge solid stainless steel</figcaption></figure>
-                <figure class="ab-hd-hitem"><img class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786288894/DETTAGLIO_CUCINA_INOX_mcnldd.png" alt="Kitchen detail in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288894/DETTAGLIO_CUCINA_INOX_mcnldd.png','Kitchen detail in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_e">Grate support block · solid stainless steel, turned and milled</figcaption></figure>
+                <figure class="ab-hd-hitem"><img data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,c_fill,g_center,ar_4:5,w_1500/v1786288945/FOTO_MANOPOLA_INOX_MASSICCIO_DETTAGLIO_di1jyq.png" class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786288945/FOTO_MANOPOLA_INOX_MASSICCIO_DETTAGLIO_di1jyq.png" alt="Control knob in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,c_fill,g_center,ar_4:5,w_1500/v1786288945/FOTO_MANOPOLA_INOX_MASSICCIO_DETTAGLIO_di1jyq.png','Control knob in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_a">Control knob turned from solid stainless steel</figcaption></figure>
+                <figure class="ab-hd-hitem"><img data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786289183/FOTO_DETTAGLIO_GRIGLIA_INOX_MASSICCIO_juebfo.png" class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786289183/FOTO_DETTAGLIO_GRIGLIA_INOX_MASSICCIO_juebfo.png" alt="Grate in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786289183/FOTO_DETTAGLIO_GRIGLIA_INOX_MASSICCIO_juebfo.png','Grate in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_b">Grate in solid stainless steel · welded bars Ø 8-10 mm</figcaption></figure>
+                <figure class="ab-hd-hitem"><img data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288928/FOTO_DETTAGLIO_INOX_MASSICCIO_c8ooih.png" class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786288928/FOTO_DETTAGLIO_INOX_MASSICCIO_c8ooih.png" alt="Mirror-polished grill hinges in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288928/FOTO_DETTAGLIO_INOX_MASSICCIO_c8ooih.png','Mirror-polished grill hinges in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_c">Mirror-polished grill hinges · heavy-gauge solid stainless steel</figcaption></figure>
+                <figure class="ab-hd-hitem"><img data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288907/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_blkwcp.png" class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786288907/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_blkwcp.png" alt="Door hinges made to our specification in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288907/FOTO_DETTAGLIO_CERNIERE_PORTA_INOX_blkwcp.png','Door hinges made to our specification in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_d">Door hinges made to our specification · heavy-gauge solid stainless steel</figcaption></figure>
+                <figure class="ab-hd-hitem"><img data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288894/DETTAGLIO_CUCINA_INOX_mcnldd.png" class="ab-hd-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786288894/DETTAGLIO_CUCINA_INOX_mcnldd.png" alt="Kitchen detail in solid stainless steel" loading="lazy" decoding="async" onclick="hdZoom('https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786288894/DETTAGLIO_CUCINA_INOX_mcnldd.png','Kitchen detail in solid stainless steel')"><figcaption class="ab-hd-cap" data-i18n="ab_hd_cap_e">Grate support block · solid stainless steel, turned and milled</figcaption></figure>
               </div>
             </div>
           </div>
@@ -5582,7 +5697,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="ef-hero-inner">
       <span class="ef-hero-tag" data-i18n="eff_hero_tag">Off-grid Cooking · Research & Development</span>
       <h1 class="ef-hero-title" data-i18n-html="eff_hero_title">Energy efficiency<br>is our <em>signature</em></h1>
-      <p class="ef-hero-lead" data-i18n="eff_hero_lead">Whether at sea or on expedition, a galley demands dedicated engineering that removes the strain on the electrical system and guarantees constant performance and safety. Our appliances are designed to redefine industry standards — built around absolute efficiency and structural excellence.</p>
+      <p class="ef-hero-lead" data-i18n="eff_hero_lead">Whether at sea or on expedition, a galley demands dedicated engineering that removes the strain on the electrical system and guarantees constant performance and safety. Our appliances are designed to redefine industry standards, built around absolute efficiency and structural excellence.</p>
     </div>
   </div>
 
@@ -5607,7 +5722,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </div>
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n-html="eff_c2_title">Advanced insulation, <em>efficiency by design</em></h2>
-        <p class="ef-ch-body" data-i18n="eff_c2_b1">Energy efficiency is where we refuse to compromise. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the thermal stability of rock wool to engineered sandwich panels built with the most innovative and technologically advanced materials available on the global market.</p>
+        <p class="ef-ch-body" data-i18n="eff_c2_b1">Energy efficiency is where we refuse to compromise. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems, from the thermal stability of rock wool to engineered sandwich panels built with the most innovative and technologically advanced materials available on the global market.</p>
         <p class="ef-ch-body" data-i18n="eff_c2_b2">The result keeps thermal dispersion to a minimum, retains heat optimally and delivers a drastic energy saving that relieves the onboard batteries from continuous recharge cycles.</p>
       </div>
     </div>
@@ -5619,7 +5734,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </div>
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n="eff_c3_title">Professional performance, at its peak</h2>
-        <p class="ef-ch-body" data-i18n="eff_c3_b1">We don't just contain consumption — we maximise cooking performance to achieve the gastronomic results that made Italian cooking famous worldwide.</p>
+        <p class="ef-ch-body" data-i18n="eff_c3_b1">We don't just contain consumption: we maximise cooking performance to achieve the gastronomic results that made Italian cooking famous worldwide.</p>
         <ul class="ef-list">
           <li data-i18n-html="eff_c3_l1"><strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.</li>
           <li data-i18n-html="eff_c3_l2"><strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.</li>
@@ -5635,7 +5750,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </div>
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n="eff_c4_title">Marine induction is not home induction</h2>
-        <p class="ef-ch-body" data-i18n="eff_c4_b1">Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions — available in custom variants too.</p>
+        <p class="ef-ch-body" data-i18n="eff_c4_b1">Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions, available in custom variants too.</p>
         <ul class="ef-list">
           <li data-i18n-html="eff_c4_l1"><strong>Structural resistance.</strong> Electrical components engineered specifically to withstand constant vibration and mechanical shock.</li>
           <li data-i18n-html="eff_c4_l2"><strong>Intelligent generator management.</strong> Powerful inductors and bridge systems paired with electronic configurations that regulate and modulate power fluidly, drastically reducing stress on inverters and generators and preventing the sudden trips of onboard safety systems.</li>
@@ -5651,7 +5766,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </div>
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n-html="eff_c5_title">The Italian art of <em>intelligent cooking</em></h2>
-        <p class="ef-ch-body" data-i18n="eff_c5_b1">True energy efficiency is not limited to electronics — it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.</p>
+        <p class="ef-ch-body" data-i18n="eff_c5_b1">True energy efficiency is not limited to electronics: it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.</p>
         <p class="ef-ch-body" data-i18n="eff_c5_b2">We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, we took the research as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.</p>
       </div>
     </div>
@@ -5674,7 +5789,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   </div>
 
   <div class="ef-close">
-    <p class="ef-quote" data-i18n="eff_quote">A well-sized electrical system is an excellent starting point. Relying on those who design equipment that optimises energy, resists every stress and elevates the cooking method — that is the choice of professionals.</p>
+    <p class="ef-quote" data-i18n="eff_quote">A well-sized electrical system is an excellent starting point. Relying on those who design equipment that optimises energy, resists every stress and elevates the cooking method. That is the choice of professionals.</p>
     <a class="ef-cta" onclick="closeEff();openContact();" data-i18n="eff_cta">Talk to our engineers</a>
   </div>
  </div><!-- /ef-modal -->
@@ -6341,7 +6456,7 @@ window.PROD_DATASHEET = {
   'COMPACTA': { label:'COMPACTA · Technical Datasheet',
     kickerKey:'ppd_compacta_k', name:'COMPACTA', taglineKey:'ppd_compacta_t',
     cat1:'Induction Electric Cooker', cat2:'2 Burners',
-    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786804881/COMPACTA_REV1_n4lgdh.jpg',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787070740/COMPACTA_gg5qjj.jpg',
     drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786643420/COMPACTA_DISEGNO_Cucina_elettrica_450__yvtckl.jpg',
     specs:[['Dimensions (W×D×H)','47.5 x 42 x 48h cm'],['Technology','Electric Induction'],['Hob power','1,5-3,7 kW'],['Oven power','2,4 kW'],['Total max power','3,9-6,1 kW'],['Marine certified','Yes'],['Stainless steel','Standard'],['Safety shut-off','Integrated']],
     specText:['Compact electric induction cooker with gimbal suspension.','Hob with 2 induction zones; Italian static oven over 30 litres.','Three-element multifunction oven (lower, upper, grill) with precision thermostat.','Dual supply for oven and hob on separate lines; integrated safety features.','Mirror-polished stainless steel oven interior; patented adjustable gimbals.','Total power adjustable from 3.9 to 6.1 kW.'],
@@ -7144,7 +7259,18 @@ function openCat(name,models){
         ?'<div class="pimg"><img'+_za+' src="'+src+'" alt="'+dm+'"></div>'
         :'<div class="pimg"><div class="pph"><svg viewBox="0 0 40 40" fill="none"><rect x="6" y="10" width="28" height="22" rx="1" stroke="currentColor" stroke-width=".8"/><circle cx="20" cy="21" r="7" stroke="currentColor" stroke-width=".8"/></svg><span>Photo coming soon</span></div></div>';
       var desc=window.PROD_DESCS&&window.PROD_DESCS[m]?window.PROD_DESCS[m]:'';
-      card.innerHTML=imgBox+'<div class="pinf"><span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc">'+desc+'</span>':'')+'<span class="pcard-hint">Double click to open</span></div>';
+      /* L'invito sotto la foto cambia col dispositivo: col mouse si apre col
+         doppio clic, col dito con un tocco solo. Chiave diversa, cosi' il
+         cambio lingua continua a funzionare via data-i18n. */
+      /* Stesso criterio del CSS che accende la scritta (max-width:768px),
+         piu' il puntatore grosso: cosi' il testo non puo' dire "doppio clic"
+         su un telefono che si dichiara hover:hover. */
+      var _tap=(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)
+               || (window.innerWidth<=768) || ('ontouchstart' in window);
+      var _hk=_tap?'pcard_hint_tap':'pcard_hint_desk';
+      var _hf=_tap?'Tap to open':'Double click to open';
+      var _ht=window.__t?window.__t(_hk,_hf):_hf;
+      card.innerHTML=imgBox+'<div class="pinf"><span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc">'+desc+'</span>':'')+'<span class="pcard-hint" data-i18n="'+_hk+'">'+_ht+'</span></div>';
       g.appendChild(card);
     }
     
@@ -7173,6 +7299,9 @@ window.__initPgridHint=function(){
   var prev=document.getElementById('pgrid-arrow-prev');
   var next=document.getElementById('pgrid-arrow-next');
   if(!g||!prev||!next)return;
+  /* Si riarma a ogni apertura di categoria: chi entra in una griglia nuova
+     merita di nuovo l'invito. */
+  if(g.parentNode) g.parentNode.classList.remove('pg-scrolled');
   function refresh(){
     var max=g.scrollWidth-g.clientWidth;
     var noScroll=(max<=8);
@@ -7189,12 +7318,91 @@ window.__initPgridHint=function(){
   // Evita doppie registrazioni se openCat viene richiamata più volte.
   if(g.__hintBound){ refresh(); return; }
   g.__hintBound=true;
-  g.addEventListener('scroll', refresh, {passive:true});
+  g.addEventListener('scroll', function(){
+    refresh();
+    /* Soglia di 24px: un tocco storto non conta come "ho capito". */
+    if(g.scrollLeft>24 && g.parentNode) g.parentNode.classList.add('pg-scrolled');
+  }, {passive:true});
   window.addEventListener('resize', refresh);
   prev.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); push(-1); });
   next.addEventListener('click', function(ev){ ev.preventDefault(); ev.stopPropagation(); push(1); });
   refresh();
 };
+
+/* ── APERTURA CON UN TOCCO SOLO SU TELEFONO ──
+   Col mouse la scheda si apre col doppio clic e va bene cosi'. Col dito no:
+   il doppio tocco e' la gesture di zoom del browser, e il viewport della
+   riga 5 non la disattiva. Qui la scheda si apre al primo tocco, ma solo se
+   e' davvero un tocco:
+   - dito spostato oltre 10px  -> stava scorrendo la striscia, non aprire
+   - durata oltre mezzo secondo -> esitazione o pressione lunga, non aprire
+   - striscia ancora in movimento -> il tocco serve a FRENARE l'inerzia, e
+     aprire una scheda mentre l'utente stava fermando lo scorrimento sarebbe
+     il peggior falso positivo possibile.
+   ATTENZIONE touchend NON e' passivo: serve preventDefault per impedire il
+   click fantasma che il browser sintetizza dopo, altrimenti arriverebbe
+   sulla scheda prodotto gia' aperta e premerebbe quello che trova sotto. */
+(function(){
+  /* ATTENZIONE nessun controllo su hover:hover qui. Molti browser mobili
+     (Android Chrome, i browser dentro le app, la vista mobile simulata di
+     Chrome su PC) dichiarano hover:hover pur navigando col dito, e la
+     guardia impediva di registrare i gestori. Non serve: su un dispositivo
+     senza touchscreen gli eventi touch non partono mai. */
+  var g=document.getElementById('pgrid');
+  if(!g) return;
+  var x0=0, y0=0, t0=0, ultimoScroll=0;
+  g.addEventListener('scroll', function(){ ultimoScroll=Date.now(); }, {passive:true});
+  g.addEventListener('touchstart', function(e){
+    var t=e.touches[0]; if(!t) return;
+    x0=t.clientX; y0=t.clientY; t0=Date.now();
+  }, {passive:true});
+  g.addEventListener('touchend', function(e){
+    var t=e.changedTouches[0]; if(!t) return;
+    if(Date.now()-ultimoScroll<250) return;
+    if(Date.now()-t0>500) return;
+    if(Math.abs(t.clientX-x0)>10 || Math.abs(t.clientY-y0)>10) return;
+    var card=(t.target && t.target.closest) ? t.target.closest('.pcard') : null;
+    if(!card && document.elementFromPoint){
+      var el=document.elementFromPoint(t.clientX, t.clientY);
+      if(el && el.closest) card=el.closest('.pcard');
+    }
+    if(!card) return;
+    var key=card.getAttribute('data-model');
+    if(!key){ var nm=card.querySelector('.pnm'); key=nm?nm.textContent.trim():''; }
+    if(key && window.goProd){ e.preventDefault(); window.goProd(key); }
+  }, {passive:false});
+})();
+
+/* ── SECONDA VIA ALL'INGRANDIMENTO SU TELEFONO ──
+   Le foto di "Chi siamo" e i disegni tecnici si ingrandiscono con un
+   onclick in linea, che su desktop funziona. Su telefono no, e l'ispezione
+   del codice non ha trovato il colpevole: hdZoom c'e', la lightbox e' a
+   livello body con z-index 9500, nessuna regola mette pointer-events:none.
+   Invece di indovinare, qui si aggiunge una via che non passa dal click.
+   ATTENZIONE non e' un doppione: se la lightbox risulta gia' aperta il
+   gestore non fa nulla, quindi dove l'onclick funziona non cambia niente. */
+(function(){
+  var x0=0, y0=0, t0=0;
+  document.addEventListener('touchstart', function(e){
+    var t=e.touches[0]; if(!t) return;
+    x0=t.clientX; y0=t.clientY; t0=Date.now();
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    var t=e.changedTouches[0]; if(!t || !t.target || !t.target.closest) return;
+    if(Date.now()-t0>500) return;
+    if(Math.abs(t.clientX-x0)>10 || Math.abs(t.clientY-y0)>10) return;
+    var lb=document.getElementById('pp-lightbox');
+    if(lb && (lb.classList.contains('on')||lb.classList.contains('open'))) return;
+    var img=t.target.closest('.ab-hd-img, .ab-hd-feature-img, .pp-drawing-img');
+    if(!img) return;
+    if(img.classList.contains('pp-drawing-img')){
+      if(window.ppLightbox){ e.preventDefault(); window.ppLightbox(img); }
+      return;
+    }
+    var url=img.getAttribute('data-zoom')||img.getAttribute('src')||'';
+    if(url && window.hdZoom){ e.preventDefault(); window.hdZoom(url, img.getAttribute('alt')||''); }
+  }, {passive:false});
+})();
 
 function closeCat(){
   var hdr=document.getElementById('hdr');if(hdr)hdr.classList.remove('dark');
@@ -8367,6 +8575,17 @@ document.addEventListener('keydown',function(e){
     mx=e.clientX; my=e.clientY;
     dot.style.left=mx+'px'; dot.style.top=my+'px';
     dot.style.opacity='1'; ring.style.opacity='1';
+    /* ATTENZIONE lo stato di sorvolo va RICALCOLATO qui, non solo su
+       mouseover/mouseout. Se l'elemento sorvolato sparisce mentre il
+       puntatore ci sta sopra (si clicca un .nbtn del menu, il menu si chiude
+       e il pulsante non c'e' piu'), mouseout non parte mai: la classe
+       cur-hover resta incollata al body e nella pagina che si apre il
+       pallino dorato ha larghezza zero, cioe' il cursore sparisce.
+       Ricalcolandolo a ogni movimento lo stato si ripara da solo, qualunque
+       sia l'elemento che e' sparito. */
+    if(e.target && e.target.closest && hoverSel){
+      document.body.classList.toggle('cur-hover', !!e.target.closest(hoverSel));
+    }
     var cpOpen=document.getElementById('cp')&&document.getElementById('cp').classList.contains('show');
     var ppOpen=document.getElementById('prodpage')&&document.getElementById('prodpage').classList.contains('show');
     if(!cpOpen&&!ppOpen){
@@ -8547,7 +8766,7 @@ window.PROD_IMGS={
   'VERA':       'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784785096/VERA4_cucina03-25_tsmjxp.jpg',
   'MARINA E':   'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657257/MARINA_E_-_HORIZON2_MICRO_INDUCTION_l70g4a.jpg',
   'NAUTICA':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786627324/NAUTICA_FOTO2_tclwcv.jpg',
-  'COMPACTA':   'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786804881/COMPACTA_REV1_n4lgdh.jpg',
+  'COMPACTA':   'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787070740/COMPACTA_gg5qjj.jpg',
   'GRANLUX':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784872558/GRANLUX1800_DSC_9578_wnqf8z.jpg',
   'MODULAR':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657238/MODULAR_-_CES4IND620576_-_FOTO_3_yodewp.jpg',
   // Gas Cookers with Oven · foto reali (documento SCHEMA PRODOTTI)
@@ -10408,6 +10627,7 @@ window.SRCH_CATKEY = {
   window.ppGalleryOpen=function(items,startIdx){
     imgs=items;idx=startIdx||0;
     var lb=getLb();if(!lb)return;
+    lb.classList.remove('lb-draw');
     var el=getImg();if(!el)return;
     el.style.filter='';el.classList.remove('fading');
     buildDots();
@@ -10422,6 +10642,22 @@ window.SRCH_CATKEY = {
     document.body.style.overflow='hidden';
   };
   window.ppLbNav=function(dir){goTo(idx+dir);};
+  /* Arma la guardia anti ghost-click dall'esterno. Serve a chi apre la
+     lightbox senza passare da ppGalleryOpen/ppLightbox: senza questa
+     chiamata openedAt resta vecchio, la guardia dei 350ms non scatta e il
+     click sintetizzato dal tocco chiude la lightbox nell'istante in cui si
+     apre. Su desktop non si nota, su telefono e' la differenza fra
+     funzionare e non funzionare. */
+  window.ppLbArm=function(){
+    openedAt=Date.now();
+    /* Riapertura della stessa foto: il browser non rilancia l'evento load
+       perche' l'immagine e' gia' in memoria, quindi il centraggio va rifatto
+       qui o la foto ricompare appoggiata al bordo sinistro. */
+    var _lb=getLb();
+    if(_lb) requestAnimationFrame(function(){
+      try{ _lb.scrollLeft=Math.max(0,(_lb.scrollWidth-_lb.clientWidth)/2); }catch(e){}
+    });
+  };
   window.ppLightboxClose=function(){
     var lb=getLb();if(!lb)return;
     stopVideo();
@@ -10435,6 +10671,11 @@ window.SRCH_CATKEY = {
     stopVideo();
     imgs=[{src:drawingImg.src,alt:drawingImg.alt||'Technical Drawing'}];idx=0;
     var lb=getLb();if(!lb)return;
+    /* Marca l'apertura come DISEGNO: nel CSS questo toglie il tetto in
+       altezza, senza il quale i disegni alti si rimpicciolivano invece di
+       ingrandirsi. Le foto non devono ereditarlo, per questo le altre due
+       vie di apertura lo rimuovono. */
+    lb.classList.add('lb-draw');
     var el=getImg();if(!el)return;
     el.src=imgs[0].src;el.alt=imgs[0].alt;el.style.filter=(drawingImg.style&&drawingImg.style.filter)?drawingImg.style.filter:'';el.classList.remove('fading');
     // pulsante Download nel lightbox: usa lo stesso link fl_attachment del disegno
@@ -10463,7 +10704,20 @@ window.SRCH_CATKEY = {
     });
     var touchStartX=0;
     lb.addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;},{passive:true});
-    lb.addEventListener('touchend',function(e){var dx=e.changedTouches[0].clientX-touchStartX;if(Math.abs(dx)>50)ppLbNav(dx<0?1:-1);},{passive:true});
+    lb.addEventListener('touchend',function(e){
+      /* ATTENZIONE se la foto e' piu' larga dello schermo il gesto orizzontale
+         serve a SPOSTARSI dentro l'immagine, non a cambiare foto. Senza questa
+         guardia, esplorare un ingrandimento farebbe saltare alla foto dopo. */
+      if(lb.scrollWidth-lb.clientWidth>4) return;
+      var dx=e.changedTouches[0].clientX-touchStartX;
+      if(Math.abs(dx)>50)ppLbNav(dx<0?1:-1);
+    },{passive:true});
+    /* All'apertura la foto ingrandita va centrata: partendo dal bordo sinistro
+       sembrerebbe tagliata invece che ingrandita. */
+    var _im=document.getElementById('pp-lightbox-img');
+    if(_im) _im.addEventListener('load', function(){
+      try{ lb.scrollLeft=Math.max(0,(lb.scrollWidth-lb.clientWidth)/2); lb.scrollTop=0; }catch(e){}
+    });
   });
 })();
 
@@ -10889,35 +11143,35 @@ var DICT = {
     eff_btn: "Energy Efficiency",
     eff_hero_tag: "Off-grid Cooking · Research & Development",
     eff_hero_title: "Energy efficiency<br>is our <em>signature</em>",
-    eff_hero_lead: "Whether at sea or on expedition, a galley demands dedicated engineering that removes the strain on the electrical system and guarantees constant performance and safety. Our appliances are designed to redefine industry standards — built around absolute efficiency and structural excellence.",
+    eff_hero_lead: "Whether at sea or on expedition, a galley demands dedicated engineering that removes the strain on the electrical system and guarantees constant performance and safety. Our appliances are designed to redefine industry standards, built around absolute efficiency and structural excellence.",
     eff_c1_label: "Build & Hygiene",
     eff_c1_title: "Steel-grade robustness, impeccable hygiene",
     eff_c1_b1: "The first pillar of a true off-grid professional galley is solidity. Our appliances are built like a tank, engineered to withstand the most extreme stresses on the open sea and the roughest terrain.",
     eff_c1_b2: "This strength is paired with a rigorous approach to hygiene. Our oven cavities are built in polished stainless steel, not brushed: there is no abrasive grain in which residues can lodge, so surfaces are exceptionally quick and easy to clean.",
     eff_c2_label: "Thermal Insulation",
     eff_c2_title: "Advanced insulation, <em>efficiency by design</em>",
-    eff_c2_b1: "Energy efficiency is where we refuse to compromise. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems — from the thermal stability of rock wool to engineered sandwich panels built with the most innovative and technologically advanced materials available on the global market.",
+    eff_c2_b1: "Energy efficiency is where we refuse to compromise. We go beyond standard insulation: our ovens and appliances combine multiple insulation systems, from the thermal stability of rock wool to engineered sandwich panels built with the most innovative and technologically advanced materials available on the global market.",
     eff_c2_b2: "The result keeps thermal dispersion to a minimum, retains heat optimally and delivers a drastic energy saving that relieves the onboard batteries from continuous recharge cycles.",
     eff_c3_label: "Gas & Electric",
     eff_c3_title: "Professional performance, at its peak",
-    eff_c3_b1: "We don't just contain consumption — we maximise cooking performance to achieve the gastronomic results that made Italian cooking famous worldwide.",
+    eff_c3_b1: "We don't just contain consumption: we maximise cooking performance to achieve the gastronomic results that made Italian cooking famous worldwide.",
     eff_c3_l1: "<strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.",
     eff_c3_l2: "<strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.",
     eff_c3_l3: "<strong>Induction first (2015).</strong> In 2015 we were the very first to develop a line of cookers with tilting induction hobs for sailing and motor yachts.",
     eff_c4_label: "Marine Induction",
     eff_c4_title: "Marine induction is not home induction",
-    eff_c4_b1: "Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions — available in custom variants too.",
+    eff_c4_b1: "Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions, available in custom variants too.",
     eff_c4_l1: "<strong>Structural resistance.</strong> Electrical components engineered specifically to withstand constant vibration and mechanical shock.",
     eff_c4_l2: "<strong>Intelligent generator management.</strong> Powerful inductors and bridge systems paired with electronic configurations that regulate and modulate power fluidly, drastically reducing stress on inverters and generators and preventing the sudden trips of onboard safety systems.",
     eff_c4_l3: "<strong>Extreme optimisation (the 1 kW limit).</strong> Our R&D division reached an extraordinary milestone, creating optimised models capable of running an entire hob within an absolute limit of just 1 kW.",
     eff_c5_label: "The Italian Method",
     eff_c5_title: "The Italian art of <em>intelligent cooking</em>",
-    eff_c5_b1: "True energy efficiency is not limited to electronics — it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.",
+    eff_c5_b1: "True energy efficiency is not limited to electronics: it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.",
     eff_c5_b2: "We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, we took the research as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.",
     eff_ms1: "First in the world with a complete electric marine range",
     eff_ms2: "First tilting induction hobs for yachts",
     eff_ms3: "An entire hob within one kilowatt",
-    eff_quote: "A well-sized electrical system is an excellent starting point. Relying on those who design equipment that optimises energy, resists every stress and elevates the cooking method — that is the choice of professionals.",
+    eff_quote: "A well-sized electrical system is an excellent starting point. Relying on those who design equipment that optimises energy, resists every stress and elevates the cooking method. That is the choice of professionals.",
     eff_cta: "Talk to our engineers",
     nav_catalogues: "Catalogues",
     nav_contact: "Contact Us",
@@ -11088,6 +11342,8 @@ var DICT = {
     hcf_err: "Please complete the highlighted fields.",
     hcf_send: "Send",
     hcf_ok: "Thank you, we will reply shortly.",
+    pcard_hint_desk: "Double click to open",
+    pcard_hint_tap: "Tap to open",
     ct_hours_label: "Hours",
     ct_hours_val: "Monday - Friday<br>08:30 - 17:30 CET",
     ct_open_maps: "Open in Google Maps",
@@ -12355,6 +12611,8 @@ var DICT = {
     hcf_err: "Completi i campi evidenziati.",
     hcf_send: "Invia",
     hcf_ok: "Grazie, le risponderemo a breve.",
+    pcard_hint_desk: "Doppio clic per la scheda",
+    pcard_hint_tap: "Tocca per la scheda",
     ct_hours_label: "Orari",
     ct_hours_val: "Lunedì - Venerdì<br>08:30 - 17:30 CET",
     ct_open_maps: "Apri in Google Maps",
@@ -13620,6 +13878,8 @@ var DICT = {
     hcf_err: "Veuillez compléter les champs indiqués.",
     hcf_send: "Envoyer",
     hcf_ok: "Merci, nous vous répondrons sous peu.",
+    pcard_hint_desk: "Double clic pour la fiche",
+    pcard_hint_tap: "Touchez pour la fiche",
     ct_hours_label: "Horaires",
     ct_hours_val: "Lundi - Vendredi<br>08h30 - 17h30 CET",
     ct_open_maps: "Ouvrir dans Google Maps",
@@ -14690,24 +14950,24 @@ var DICT = {
     eff_btn: "Energieeffizienz",
     eff_hero_tag: "Off-grid-Küche · Forschung & Entwicklung",
     eff_hero_title: "Energieeffizienz<br>ist unsere <em>Handschrift</em>",
-    eff_hero_lead: "Ob auf See oder auf Expedition — die Bordküche verlangt eigens entwickelte Ingenieurlösungen, die die Belastungen für das Bordnetz beseitigen und beständige Leistung und Sicherheit gewährleisten. Unsere Geräte sind darauf ausgelegt, die Standards der Branche neu zu definieren, mit Fokus auf absolute Effizienz und strukturelle Exzellenz.",
+    eff_hero_lead: "Ob auf See oder auf Expedition, die Bordküche verlangt eigens entwickelte Ingenieurlösungen, die die Belastungen für das Bordnetz beseitigen und beständige Leistung und Sicherheit gewährleisten. Unsere Geräte sind darauf ausgelegt, die Standards der Branche neu zu definieren, mit Fokus auf absolute Effizienz und strukturelle Exzellenz.",
     eff_c1_label: "Robustheit & Hygiene",
     eff_c1_title: "Stahlharte Robustheit, tadellose Hygiene",
     eff_c1_b1: "Die erste Säule einer echten professionellen Off-grid-Küche ist die Solidität. Unsere Geräte sind gebaut wie ein Panzer, konzipiert für die extremsten Belastungen auf hoher See und in unwegsamstem Gelände.",
     eff_c1_b2: "Diese Stärke geht mit einem konsequenten Hygienekonzept einher. Die Garräume unserer Öfen bestehen aus poliertem, nicht gebürstetem Edelstahl: Es gibt keine Schleifstruktur, in der sich Rückstände festsetzen können, sodass sich die Oberflächen außergewöhnlich schnell und leicht reinigen lassen.",
     eff_c2_label: "Wärmedämmung",
     eff_c2_title: "Wegweisende Dämmung, <em>Effizienz von Grund auf</em>",
-    eff_c2_b1: "Bei der Energieeffizienz machen wir keine Kompromisse. Wir beschränken uns nicht auf eine Standarddämmung: Für unsere Öfen und Geräte setzen wir mehrere kombinierte Dämmsysteme ein — von der thermischen Stabilität der Steinwolle bis zu eigens entwickelten Sandwichaufbauten mit den innovativsten und technologisch fortschrittlichsten Materialien, die es heute auf dem Weltmarkt gibt.",
+    eff_c2_b1: "Bei der Energieeffizienz machen wir keine Kompromisse. Wir beschränken uns nicht auf eine Standarddämmung: Für unsere Öfen und Geräte setzen wir mehrere kombinierte Dämmsysteme ein, von der thermischen Stabilität der Steinwolle bis zu eigens entwickelten Sandwichaufbauten mit den innovativsten und technologisch fortschrittlichsten Materialien, die es heute auf dem Weltmarkt gibt.",
     eff_c2_b2: "Das Ergebnis hält Wärmeverluste auf ein Minimum, speichert die Wärme optimal und liefert eine drastische Energieeinsparung, die die Bordbatterien von ständigen Ladezyklen entlastet.",
     eff_c3_label: "Gas & Elektro",
     eff_c3_title: "Professionelle Leistung, auf höchstem Niveau",
-    eff_c3_b1: "Wir begrenzen nicht nur den Verbrauch — wir maximieren die Kochleistung, um jene gastronomischen Ergebnisse zu erzielen, die die italienische Küche weltberühmt gemacht haben.",
+    eff_c3_b1: "Wir begrenzen nicht nur den Verbrauch: Wir maximieren die Kochleistung, um jene gastronomischen Ergebnisse zu erzielen, die die italienische Küche weltberühmt gemacht haben.",
     eff_c3_l1: "<strong>Gassysteme.</strong> Unsere Modelle verfügen über Hochleistungsbrenner, die gemeinsam mit führenden Namen der professionellen Gastronomie entwickelt wurden.",
     eff_c3_l2: "<strong>Elektro-Pioniere.</strong> Wir waren das weltweit erste Unternehmen im Marinesektor, das eine komplette Serie elektrischer Bordküchen realisierte.",
     eff_c3_l3: "<strong>Erste bei der Induktion (2015).</strong> 2015 waren wir die allerersten, die eine Linie von Kochern mit schwenkbaren Induktionskochfeldern für Segel- und Motoryachten entwickelten.",
     eff_c4_label: "Marine-Induktion",
     eff_c4_title: "Marine-Induktion ist nicht die aus dem Haushalt",
-    eff_c4_b1: "Das Kochen mit Induktion mitten im Ozean oder in der Wüste erfordert besondere Vorkehrungen gegenüber dem häuslichen Umfeld. Gestützt auf jahrelange Erfahrung und Führung haben wir eine strategische Partnerschaft mit einem der führenden europäischen Hersteller von Induktionskomponenten geschlossen und flexible, einzigartige Lösungen entwickelt — auch in Sonderanfertigungen.",
+    eff_c4_b1: "Das Kochen mit Induktion mitten im Ozean oder in der Wüste erfordert besondere Vorkehrungen gegenüber dem häuslichen Umfeld. Gestützt auf jahrelange Erfahrung und Führung haben wir eine strategische Partnerschaft mit einem der führenden europäischen Hersteller von Induktionskomponenten geschlossen und flexible, einzigartige Lösungen entwickelt, auch in Sonderanfertigungen.",
     eff_c4_l1: "<strong>Strukturelle Widerstandsfähigkeit.</strong> Elektrische Komponenten, die speziell dafür ausgelegt sind, ständigen Vibrationen und mechanischen Stößen standzuhalten.",
     eff_c4_l2: "<strong>Intelligentes Generatormanagement.</strong> Leistungsstarke Induktoren und Bridge-Systeme in Verbindung mit elektronischen Konfigurationen, die die Leistung fließend regeln und modulieren, den Stress auf Wechselrichter und Generatoren drastisch reduzieren und das plötzliche Auslösen der Bordsicherheitssysteme verhindern.",
     eff_c4_l3: "<strong>Extreme Optimierung (das 1-kW-Limit).</strong> Unsere F&E-Abteilung hat einen außergewöhnlichen Meilenstein erreicht und optimierte Modelle geschaffen, die ein ganzes Kochfeld innerhalb einer absoluten Grenze von nur 1 kW betreiben können.",
@@ -14718,7 +14978,7 @@ var DICT = {
     eff_ms1: "Weltweit Erste mit einer kompletten elektrischen Marine-Reihe",
     eff_ms2: "Erste schwenkbare Induktionskochfelder für Yachten",
     eff_ms3: "Ein ganzes Kochfeld innerhalb eines Kilowatts",
-    eff_quote: "Eine gut dimensionierte elektrische Anlage an Bord ist ein hervorragender Ausgangspunkt. Sich auf jene zu verlassen, die Geräte entwickeln, die Energie optimieren, jeder Belastung standhalten und die Kochmethode aufwerten — das ist die Wahl der Profis.",
+    eff_quote: "Eine gut dimensionierte elektrische Anlage an Bord ist ein hervorragender Ausgangspunkt. Sich auf jene zu verlassen, die Geräte entwickeln, die Energie optimieren, jeder Belastung standhalten und die Kochmethode aufwerten. Das ist die Wahl der Profis.",
     eff_cta: "Sprechen Sie mit unseren Technikern",
     nav_catalogues: "Kataloge",
     nav_contact: "Kontakt",
@@ -14885,6 +15145,8 @@ var DICT = {
     hcf_err: "Bitte füllen Sie die markierten Felder aus.",
     hcf_send: "Senden",
     hcf_ok: "Vielen Dank, wir melden uns in Kürze.",
+    pcard_hint_desk: "Doppelklick für das Datenblatt",
+    pcard_hint_tap: "Tippen für das Datenblatt",
     ct_hours_label: "Öffnungszeiten",
     ct_hours_val: "Montag - Freitag<br>08:30 - 17:30 Uhr MEZ",
     ct_open_maps: "In Google Maps öffnen",
@@ -16150,6 +16412,8 @@ var DICT = {
     hcf_err: "Complete los campos indicados.",
     hcf_send: "Enviar",
     hcf_ok: "Gracias, le responderemos en breve.",
+    pcard_hint_desk: "Doble clic para la ficha",
+    pcard_hint_tap: "Toca para la ficha",
     ct_hours_label: "Horario",
     ct_hours_val: "Lunes - Viernes<br>08:30 - 17:30 CET",
     ct_open_maps: "Abrir en Google Maps",
@@ -17603,7 +17867,7 @@ window.setLang = setLang;
 <template id="legal-all"><p class="eyebrow">Legal</p><h1>Legal &amp; Privacy</h1><div class="rule"></div><nav class="legal-toc"><a onclick="legalGo('privacy')">Privacy Policy</a><a onclick="legalGo('cookie')">Cookie Policy</a><a onclick="legalGo('legalnotice')">Legal Notice</a></nav><section id="chap-privacy" class="legal-chap"><p class="eyebrow">Legal</p><h1>Privacy Policy</h1><div class="rule"></div>
 <p>This Privacy Policy explains how we process your personal data when you visit <strong>www.techimpex.tv</strong> or get in touch with us, in accordance with Regulation (EU) 2016/679 (GDPR) and applicable Italian data protection law.</p>
 <h2>Data controller</h2><p>The data controller is <strong>Techimpex</strong> &mdash; Via Cosmo 14, 31015 Conegliano (TV), Italy. For any privacy request you can contact us at <a href="mailto:info@marinecookers.com">info@marinecookers.com</a>.</p>
-<h2>What personal data we process</h2><ul><li><strong>Browsing data.</strong> When you visit the website, technical data (such as IP address, browser type and pages visited) may be processed by us and by our service providers as necessary to operate and secure the site. See our <a onclick="openLegal('cookie')">Cookie Policy</a> for details on cookies.</li><li><strong>Data you provide.</strong> If you contact us through the contact form or by email, we process the data you send us, such as your name, email address and the content of your message.</li></ul>
+<h2>What personal data we process</h2><ul><li><strong>Browsing data.</strong> When you visit the website, technical data (such as IP address, browser type and pages visited) may be processed by us and by our service providers as necessary to operate and secure the site. See our <a onclick="openLegal('cookie')">Cookie Policy</a> for details on cookies.</li><li><strong>Data you provide.</strong> If you contact us through the contact form or by email, we process the data you send us, such as your name, email address and the content of your message. We also record how you reached the website (for example whether you arrived from one of our advertisements), so that we can understand which channels our enquiries come from. This information is sent together with your message and is not obtained through cookies or profiling.</li></ul>
 <h2>Purposes and legal basis</h2><ul><li>To respond to your enquiries and provide information about our products &mdash; legal basis: your request and pre-contractual / legitimate interest.</li><li>To operate, maintain and secure the website &mdash; legal basis: our legitimate interest.</li><li>To comply with legal obligations &mdash; legal basis: compliance with the law.</li></ul><p>We do not use your data for automated profiling, and we do not sell it to third parties.</p>
 <h2>Retention</h2><p>We keep your personal data only for as long as necessary for the purposes described above and to comply with legal obligations, after which it is deleted or anonymised.</p>
 <h2>Recipients and international transfers</h2><p>Your data may be processed by trusted service providers acting as data processors on our behalf (for example hosting and email providers). Where a provider processes data outside the European Economic Area, the transfer is carried out with the appropriate safeguards required by the GDPR.</p>
@@ -17631,7 +17895,7 @@ window.setLang = setLang;
 <template id="legal-privacy"><p class="eyebrow">Legal</p><h1>Privacy Policy</h1><div class="rule"></div>
 <p>This Privacy Policy explains how we process your personal data when you visit <strong>www.techimpex.tv</strong> or get in touch with us, in accordance with Regulation (EU) 2016/679 (GDPR) and applicable Italian data protection law.</p>
 <h2>Data controller</h2><p>The data controller is <strong>Techimpex</strong> &mdash; Via Cosmo 14, 31015 Conegliano (TV), Italy. For any privacy request you can contact us at <a href="mailto:info@marinecookers.com">info@marinecookers.com</a>.</p>
-<h2>What personal data we process</h2><ul><li><strong>Browsing data.</strong> When you visit the website, technical data (such as IP address, browser type and pages visited) may be processed by us and by our service providers as necessary to operate and secure the site. See our <a onclick="openLegal('cookie')">Cookie Policy</a> for details on cookies.</li><li><strong>Data you provide.</strong> If you contact us through the contact form or by email, we process the data you send us, such as your name, email address and the content of your message.</li></ul>
+<h2>What personal data we process</h2><ul><li><strong>Browsing data.</strong> When you visit the website, technical data (such as IP address, browser type and pages visited) may be processed by us and by our service providers as necessary to operate and secure the site. See our <a onclick="openLegal('cookie')">Cookie Policy</a> for details on cookies.</li><li><strong>Data you provide.</strong> If you contact us through the contact form or by email, we process the data you send us, such as your name, email address and the content of your message. We also record how you reached the website (for example whether you arrived from one of our advertisements), so that we can understand which channels our enquiries come from. This information is sent together with your message and is not obtained through cookies or profiling.</li></ul>
 <h2>Purposes and legal basis</h2><ul><li>To respond to your enquiries and provide information about our products &mdash; legal basis: your request and pre-contractual / legitimate interest.</li><li>To operate, maintain and secure the website &mdash; legal basis: our legitimate interest.</li><li>To comply with legal obligations &mdash; legal basis: compliance with the law.</li></ul><p>We do not use your data for automated profiling, and we do not sell it to third parties.</p>
 <h2>Retention</h2><p>We keep your personal data only for as long as necessary for the purposes described above and to comply with legal obligations, after which it is deleted or anonymised.</p>
 <h2>Recipients and international transfers</h2><p>Your data may be processed by trusted service providers acting as data processors on our behalf (for example hosting and email providers). Where a provider processes data outside the European Economic Area, the transfer is carried out with the appropriate safeguards required by the GDPR.</p>
@@ -17730,6 +17994,42 @@ window.setLang = setLang;
   };
 })();
 
+/* ── PROVENIENZA DELLA RICHIESTA ──
+   Google Ads attacca all'indirizzo di atterraggio un'etichetta unica del
+   clic: gclid, che su iOS e nelle campagne app diventa wbraid o gbraid.
+   Chi arriva da Google organico, dai preferiti o digitando l'indirizzo non
+   ce l'ha: e' esattamente la differenza che si vuole misurare.
+   Il sito e' un file unico e non ricarica mai la pagina, quindi l'etichetta
+   resterebbe nell'indirizzo per tutta la visita; la si copia comunque in
+   sessionStorage perche' basta che il visitatore ripulisca l'indirizzo a
+   mano perche' vada persa.
+   ATTENZIONE non e' un cookie e non e' profilazione: e' un dato che parte
+   col modulo, spedito dal visitatore insieme al messaggio. Niente banner.
+   ATTENZIONE se un giorno si aggiunge il tag di conversione di Google
+   Ads, quello SI' usa cookie e il banner diventa obbligatorio: sono due
+   cose diverse, non confonderle. */
+(function(){
+  var CHIAVE='tx_origine', valore='';
+  try{
+    var q=new URLSearchParams(location.search);
+    var id=q.get('gclid')||q.get('wbraid')||q.get('gbraid');
+    if(id){
+      valore='Google Ads · '+id;
+    }else{
+      var s=q.get('utm_source');
+      if(s){
+        var c=q.get('utm_campaign');
+        valore=s+(c?' · '+c:'');
+      }
+    }
+  }catch(e){}
+  try{
+    if(valore) sessionStorage.setItem(CHIAVE,valore);
+    else valore=sessionStorage.getItem(CHIAVE)||'';
+  }catch(e){}
+  window.hctOrigine=function(){ return valore; };
+})();
+
 function hctSend(f){
   /* Verifica nostra al posto di quella nativa: segna i campi mancanti con il
      filetto ambrato e mostra una riga tradotta. Nessun fumetto di sistema. */
@@ -17750,6 +18050,10 @@ function hctSend(f){
   f.classList.remove('err');
   var btn=f.querySelector('.hctf-go');
   if(btn){ btn.disabled=true; }
+  /* La provenienza si scrive qui, non al caricamento: cosi' vale anche se
+     il campo viene ricreato o il modulo riaperto nella stessa visita. */
+  var src=document.getElementById('hctf-src');
+  if(src && window.hctOrigine) src.value=window.hctOrigine();
   var data=new URLSearchParams(new FormData(f)).toString();
   var done=function(){ f.classList.add('sent'); };
   try{
@@ -17930,7 +18234,11 @@ window.hctSend=hctSend;
     if(pv)pv.style.display='none'; if(nx)nx.style.display='none';
     var dt=document.getElementById('pp-lb-dots'); if(dt)dt.innerHTML='';
     var __lbDl=document.getElementById('pp-lightbox-download'); if(__lbDl)__lbDl.style.display='none';
+    lb.classList.remove('lb-draw');
     lb.classList.add('on'); document.body.style.overflow='hidden';
+    /* ATTENZIONE senza questa riga il tocco su telefono apre e richiude la
+       lightbox nello stesso gesto: vedi ppLbArm. */
+    if(window.ppLbArm) window.ppLbArm();
   };
   window.toggleMarcoPolo=function(){
     var el=document.getElementById('mx-acc-mp'); if(!el)return;
