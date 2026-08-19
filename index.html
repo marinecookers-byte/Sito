@@ -2369,6 +2369,7 @@ header.hide{transform:translateY(-100%);}
 /* card accesa su hover tramite brightness sull'immagine */
 
 .pimg {
+  position: relative;   /* aggancio del bollino OCEANO, vedi .pcard-oc */
   overflow: hidden;
   aspect-ratio: 4/3;
   background: #111;
@@ -2376,6 +2377,64 @@ header.hide{transform:translateY(-100%);}
   align-items: center;
   justify-content: center;
 }
+/* Bollino OCEANO. Sta SOTTO la foto, allineato a destra sulla riga del nome
+   del prodotto: la foto resta pulita e l'informazione si legge insieme al
+   titolo, dove l'occhio va comunque.
+   E' in posizione assoluta dentro .pinf invece che dentro un contenitore in
+   riga col nome: cosi' il nome mantiene la larghezza piena che gia' aveva e
+   non si va a toccare l'impaginazione delle schede esistenti.
+   A riposo e' un cerchio con OCEANO / BLUEWATER su due righe; col mouse sopra
+   si allunga in pastiglia verso SINISTRA e mostra la frase intera tradotta.
+   ATTENZIONE le larghezze sono fisse: con width:auto la transizione non parte,
+   perche' il browser non sa da dove a dove animare.
+   ATTENZIONE su telefono non si espande: non esiste il passaggio del mouse. */
+.pinf{ position:relative; }
+.pcard-oc{
+  position:absolute;
+  right:16px; top:8px;
+  z-index:3;
+  width:54px; height:54px;
+  border-radius:999px;
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(184,150,90,.55);
+  background:rgba(184,150,90,.06);
+  cursor:pointer;
+  transition:width .5s cubic-bezier(.16,1,.3,1),
+             border-color .35s ease, background .35s ease;
+}
+.pcard-oc-short,.pcard-oc-full{
+  font-family:'Outfit',sans-serif;
+  text-transform:uppercase;
+  color:rgba(184,150,90,.95);
+  white-space:nowrap;
+  transition:opacity .3s ease;
+}
+.pcard-oc-short{
+  text-align:center; line-height:1.5;
+  font-size:7px; letter-spacing:.14em;
+}
+.pcard-oc-full{
+  position:absolute;
+  font-size:8.5px; letter-spacing:.2em;
+  opacity:0;
+}
+@media(hover:hover){
+  .pcard-oc:hover{
+    width:236px;
+    border-color:rgba(184,150,90,1);
+    background:rgba(184,150,90,.16);
+  }
+  .pcard-oc:hover .pcard-oc-short{ opacity:0; }
+  .pcard-oc:hover .pcard-oc-full{ opacity:1; color:#d4b07a; }
+}
+@media(max-width:768px){
+  .pcard-oc{ right:12px; top:8px; width:48px; height:48px; }
+  .pcard-oc-short{ font-size:6.4px; letter-spacing:.1em; }
+}
+/* Il nome non deve finirci sotto quando e' lungo. */
+.pcard-oc ~ .pnm, .pinf .pnm{ padding-right:64px; }
+
 .pimg img {
   width: 100%;
   height: 100%;
@@ -2541,7 +2600,12 @@ header.hide{transform:translateY(-100%);}
    Non è una pagina full-screen né una voce di menu: è un capitolo cliccabile
    dalla hero che apre un modale centrato, con backdrop scuro e pannello
    scrollabile. Stile luxury marine: nero #0a0a0a, dorato #b8965a. */
-#effpage{
+/* La pagina Oceano condivide TUTTO l'impianto di Energy Efficiency: modale,
+   capitoli, elenchi, milestone, chiusura. Le classi ef-* sono le stesse.
+   Vanno replicate solo le regole legate all'ID, che non si ereditano.
+   ATTENZIONE se si tocca l'aspetto del modale qui sotto, cambia per
+   entrambe le pagine: e' voluto, sono gemelle. */
+#effpage,#oceanpage{
   position:fixed;
   inset:0;
   /* Sopra l'header (800): la barra di chiusura sta in cima al modale e
@@ -2560,7 +2624,7 @@ header.hide{transform:translateY(-100%);}
   pointer-events:none;
   transition:opacity .45s ease;
 }
-#effpage.show{ opacity:1; pointer-events:all; }
+#effpage.show,#oceanpage.show{ opacity:1; pointer-events:all; }
 .ef-modal{
   position:relative;
   width:min(1040px,100%);
@@ -2574,7 +2638,110 @@ header.hide{transform:translateY(-100%);}
   transform:translateY(24px) scale(.985);
   transition:transform .45s cubic-bezier(.16,1,.3,1);
 }
-#effpage.show .ef-modal{ transform:translateY(0) scale(1); }
+#effpage.show .ef-modal,#oceanpage.show .ef-modal{ transform:translateY(0) scale(1); }
+/* Video di sfondo della hero Oceano. Stessa resa dell'immagine ef-hero-media,
+   ma servono DUE elementi sovrapposti: un video non puo' dissolversi su se
+   stesso, quindi negli ultimi 2 secondi il secondo riparte da zero e i due si
+   scambiano l'opacita'. Stesso meccanismo della hero di casa.
+   ATTENZIONE il filtro grayscale/brightness va ripetuto su ENTRAMBI: se manca
+   sul secondo, a ogni giro la hero torna a colori per due secondi. */
+.oc-hero-vid{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  pointer-events:none;
+  filter:grayscale(0.55) brightness(0.85);
+  transition:opacity 2s linear;
+}
+/* Quanto video si vede dipende SOLO da quanto e' alta la hero: object-fit:cover
+   riempie la scatola e taglia il resto. Senza altezza minima la scatola prendeva
+   la misura del testo (circa 350px su un modale largo 1040), cioe' un rapporto
+   di quasi 3:1 contro il 16:9 del video: veniva tagliato sopra e sotto di circa
+   il 40%.
+   ATTENZIONE selettore con l'ID di proposito: batte per specificita' il
+   .ef-hero della media query piu' sotto in qualunque ordine (trappola 3.1) e
+   non tocca Energy Efficiency, che ha un'immagine e sta bene com'e'. */
+#oceanpage .ef-hero{
+  min-height:540px;            /* su 1040px il 16/9 chiederebbe 585: taglio ~8% */
+  display:flex;
+  flex-direction:column;       /* colonna, non riga: cosi' il testo resta a */
+  justify-content:flex-end;    /* tutta larghezza e scende in fondo alla hero */
+}
+@media(max-width:768px){
+  /* Il file mobile e' verticale 9:16: qui a comandare e' l'altezza, non la
+     larghezza. Con 72vh si vede quasi tutto il fotogramma e resta spazio al
+     testo, senza mangiarsi lo schermo intero. */
+  #oceanpage .ef-hero{ min-height:72vh; }
+}
+
+/* Fascia del nome linea, in cima al modale sopra la hero: e' il nome
+   commerciale della gamma e deve leggersi prima di tutto il resto. */
+.oc-brand{
+  position:relative; z-index:3;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding:34px 24px 26px;
+  background:#0a0a0a;
+  border-bottom:1px solid rgba(184,150,90,.18);
+}
+.oc-brand-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(38px,6vw,68px);
+  line-height:1;
+  letter-spacing:.14em;
+  color:#b8965a;
+}
+.oc-brand-sub{
+  font-family:'Outfit',sans-serif;
+  font-size:10px; letter-spacing:.34em; text-transform:uppercase;
+  color:rgba(248,246,241,.5);
+}
+@media(max-width:768px){
+  .oc-brand{ padding:24px 18px 18px; }
+  .oc-brand-name{ letter-spacing:.1em; }
+}
+
+/* Foto dentro un capitolo. Non usa la cornice dei disegni: qui l'immagine
+   e' il contenuto, non un allegato tecnico. */
+.oc-fig{ margin:34px 0 0; }
+.oc-fig-img{
+  width:100%; height:auto; display:block;
+  cursor:zoom-in;
+  filter:grayscale(.12);
+  transition:filter .5s ease;
+}
+.oc-fig-img:hover{ filter:grayscale(0); }
+.oc-fig-cap{
+  margin-top:10px;
+  font-family:'Outfit',sans-serif;
+  font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(248,246,241,.45);
+}
+
+/* Bollino "variante Oceano" accanto al nome del prodotto. Discreto: filetto
+   dorato, nessun riempimento, si accende al passaggio. */
+.pp-oc-badge{
+  display:none;
+  align-items:center; gap:7px;
+  margin-top:12px;
+  padding:6px 13px;
+  border:1px solid rgba(184,150,90,.5);
+  border-radius:999px;
+  background:rgba(10,10,10,.35);
+  font-family:'Outfit',sans-serif;
+  font-size:9px; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(184,150,90,.95);
+  cursor:pointer;
+  transition:border-color .35s ease, background .35s ease, color .35s ease;
+}
+.pp-oc-badge.on{ display:inline-flex; }
+.pp-oc-badge svg{ width:13px; height:13px; flex-shrink:0; }
+@media(hover:hover){
+  .pp-oc-badge:hover{ border-color:rgba(184,150,90,.95); background:rgba(184,150,90,.12); color:#d4b07a; }
+}
+@media(max-width:768px){
+  .pp-oc-badge{ font-size:8px; letter-spacing:.16em; padding:5px 11px; }
+}
+
 .ef-modal::-webkit-scrollbar{ width:8px; }
 .ef-modal::-webkit-scrollbar-thumb{ background:rgba(184,150,90,.25); border-radius:4px; }
 
@@ -2756,13 +2923,13 @@ header.hide{transform:translateY(-100%);}
 .bte:hover{ color:#b8965a; }
 
 @media(max-width:768px){
-  #effpage{ padding:0; }
+  #effpage,#oceanpage{ padding:0; }
   .ef-modal{ max-height:100dvh; height:100dvh; width:100%; border:none; }
   /* Il modale a tutto schermo non ha bisogno del transform d'ingresso: lo
      azzero cosi' che la barra di chiusura (position:fixed) si ancori al
      viewport e non al modale. Senza questo la X non compariva su iOS. */
-  #effpage .ef-modal{ transform:none; }
-  #effpage.show .ef-modal{ transform:none; }
+  #effpage .ef-modal,#oceanpage .ef-modal{ transform:none; }
+  #effpage.show .ef-modal,#oceanpage.show .ef-modal{ transform:none; }
   /* La barra vale gia' per tutte le larghezze (regola base): qui resta solo
      il tocco piu' generoso per il dito. Il modale ora copre l'header, quindi
      non serve piu' agganciarla a var(--hh). */
@@ -4728,6 +4895,12 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="pp-hero-title">
       <span class="pp-hero-label" data-i18n="pp_hero_label">Marine Cookers · Electric</span>
       <span class="pp-hero-name" id="pp-name"> · </span>
+      <!-- Bollino "variante Oceano". Nascosto per difetto: goProd lo accende
+           solo per i modelli dell'elenco OC_MODELS. -->
+      <span class="pp-oc-badge" id="pp-oc-badge" onclick="openOcean()" role="button" tabindex="0">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M2 16c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 10c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span data-i18n="oc_badge">Bluewater variant available</span>
+      </span>
     </div>
     <button class="pp-back" onclick="ppBack()">
       <svg width="18" height="8" viewBox="0 0 18 8" fill="none"><path d="M17 4H1M1 4L5 1M1 4L5 7" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -5278,6 +5451,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <a href="#" class="btg" onclick="openAbout();return false;"><span data-i18n="hero_btn_story">Our Story</span><svg viewBox="0 0 16 16" fill="none"><path d="M3 8H13M9 4L13 8L9 12" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
     <a href="#" class="bte" onclick="openEff();return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 13.5H11L10 22L18.5 10.5H12L13 2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span data-i18n="eff_btn">Energy Efficiency</span></a>
+    <a href="#" class="bte" onclick="openOcean();return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M2 16c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 10c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><span data-i18n="oc_btn">Bluewater Passages</span></a>
   </div>
   <div class="hsb">
     <div class="hsi"><span class="hsn">1st</span><span class="hsl" data-i18n="stat_craft">Complete electric marine range</span></div>
@@ -5794,6 +5968,159 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   </div>
  </div><!-- /ef-modal -->
 </div><!-- /effpage -->
+
+
+<!-- ══ PAGINA OCEANO / BLUEWATER ══
+     Gemella di Energy Efficiency: stesse classi ef-*, stesso modale.
+     Unica differenza: la hero ha un video al posto dell'immagine.
+     ATTENZIONE gli indirizzi dei video restano GREZZI, senza f_auto,q_auto:
+     su un video quelle trasformazioni obbligano Cloudinary a generare una
+     derivata che alla prima richiesta puo' non esserci, e il video non parte.
+     La desaturazione si fa in CSS (.oc-hero-vid), mai nel file. -->
+<div id="oceanpage" onclick="if(event.target===this)closeOcean()">
+ <div class="ef-modal">
+  <button class="ef-x" onclick="closeOcean()" aria-label="Close">
+    <span class="ef-x-lbl" data-i18n="ppd_hint_close">Close</span>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+  </button>
+
+  <div class="oc-brand">
+    <span class="oc-brand-name">OCEANO</span>
+    <span class="oc-brand-sub" data-i18n="oc_brand_sub">Bluewater Cookers</span>
+  </div>
+
+  <div class="ef-hero">
+    <video id="ocVid" class="oc-hero-vid" loop muted playsinline preload="none"
+      data-src="https://res.cloudinary.com/dseiw9ndw/video/upload/v1787132477/iStock-1371179858_1_gcghfr.mp4"
+      data-src-mobile="https://res.cloudinary.com/dseiw9ndw/video/upload/v1787133137/202608191145_1_niilkh.mp4">
+      <track kind="captions" src="" label="No captions">
+    </video>
+    <video id="ocVid2" class="oc-hero-vid" muted playsinline preload="none" aria-hidden="true" style="opacity:0">
+      <track kind="captions" src="" label="No captions">
+    </video>
+    <!-- FERMO IMMAGINE. Non e' l'attributo poster del <video>: da attributo
+         appartiene al video, e sfumando il video sfumerebbe anche lui
+         lasciando il NERO sotto. Da elemento a se' si dissolve SOPRA il video,
+         che a quel punto e' gia' dipinto: nessun istante di nero possibile.
+         E' il fotogramma zero estratto da Cloudinary (so_0), quindi non e' un
+         file in piu' da gestire e combacia esattamente col primo fotogramma.
+         ATTENZIONE il filtro grayscale/brightness lo eredita da .oc-hero-vid:
+         senza, la dissolvenza andrebbe da una foto a colori a un video
+         desaturato e si vedrebbe eccome.
+         ATTENZIONE la sparizione e' agganciata SOLO all'evento playing: se la
+         riproduzione automatica viene negata (iOS in risparmio energetico) il
+         fermo immagine resta a schermo invece di lasciare il nero. -->
+    <picture style="display:contents">
+      <source media="(max-width:768px)" srcset="https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto,w_900/v1787133137/202608191145_1_niilkh.jpg">
+      <img id="ocPoster" class="oc-hero-vid" src="https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto,w_1600/v1787132477/iStock-1371179858_1_gcghfr.jpg" alt="" aria-hidden="true" style="opacity:1">
+    </picture>
+    <div class="ef-hero-ovl"></div>
+    <div class="ef-hero-inner">
+      <span class="ef-hero-tag" data-i18n="oc_hero_tag">Ocean Passages &middot; Since the Beginning</span>
+      <h1 class="ef-hero-title" data-i18n-html="oc_hero_title">Cookers built<br>for the <em>ocean</em></h1>
+      <p class="ef-hero-lead" data-i18n="oc_hero_lead">A cooker built for an ocean passage has almost nothing in common with one built for coastal cruising. Two different worlds, and in part incompatible ones.</p>
+    </div>
+  </div>
+
+  <div class="ef-body">
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">I</span>
+        <span class="ef-ch-label" data-i18n="oc_c1_label">Why It Differs</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="oc_c1_title">Weeks at sea change every decision</h2>
+        <p class="ef-ch-body" data-i18n="oc_c1_b1">We have built cookers for ocean passages since the very beginning, and there are today literally thousands of Techimpex cookers at sea aboard yachts of every kind.</p>
+        <p class="ef-ch-body" data-i18n="oc_c1_b2">Crossing an ocean means living for weeks with limited power, constant motion, salt air and no prospect of assistance. Every construction choice that ashore is a detail becomes, on board, the difference between cooking and not cooking.</p>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">II</span>
+        <span class="ef-ch-label" data-i18n="oc_c2_label">At Sea</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n-html="oc_c2_title">The boats that <em>ask the most</em></h2>
+        <p class="ef-ch-body" data-i18n="oc_c2_b1">Among them is the XXL3 built to measure for Elmo&rsquo;s Fire, the yacht of the great Italian offshore sailor Giovanni Soldini.</p>
+        <p class="ef-ch-body" data-i18n="oc_c2_b2">And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife &amp; Son, she was regarded by her own designer as his finest and most accomplished work. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.</p>
+        <figure class="oc-fig">
+          <img class="oc-fig-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg" alt="Techimpex cooker, Classic variant, built to measure for the ocean racer Latifa" loading="lazy" onclick="hdZoom(this.getAttribute('data-zoom')||this.src, this.alt)" data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg">
+          <figcaption class="oc-fig-cap" data-i18n="oc_fig_cap">Latifa &middot; Classic variant, built entirely to measure</figcaption>
+        </figure>
+        <p class="ef-ch-body" data-i18n="oc_c2_b3">Latifa is one example among many of what an Oceano bluewater customisation can be: the specification is the starting point, and from there the cooker is built around the boat it will live on.</p>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">III</span>
+        <span class="ef-ch-label" data-i18n="oc_c3_label">Structure</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="oc_c3_title">Built as one piece</h2>
+        <p class="ef-ch-body" data-i18n="oc_c3_b1">The oven cavity is assembled by interlocking joints rather than by fastening separate panels. The result behaves as a single monolithic body, and it is what gives these models their exceptional rigidity under sustained working loads.</p>
+        <p class="ef-ch-body" data-i18n="oc_c3_b2">Stainless steels are drawn from the top of the range, AISI 316L included: the molybdenum-bearing grade, the one that resists chlorides.</p>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">IV</span>
+        <span class="ef-ch-label" data-i18n="oc_c4_label">Safety On Board</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="oc_c4_title">A cooker you can trust in a seaway</h2>
+        <ul class="ef-list">
+          <li data-i18n-html="oc_c4_l1"><strong>Heat-resistant knobs.</strong> A dedicated variant for long cooking sessions in a closed galley.</li>
+          <li data-i18n-html="oc_c4_l2"><strong>Door handles of dedicated design.</strong> Shaped to reduce the risk of injuring yourself against them as the vessel moves.</li>
+          <li data-i18n-html="oc_c4_l3"><strong>Reinforced pot holders.</strong> Sized to keep pans in place through a working seaway.</li>
+          <li data-i18n-html="oc_c4_l4"><strong>Oversized door lock.</strong> The oven stays shut whatever the boat is doing.</li>
+          <li data-i18n-html="oc_c4_l5"><strong>Ultra-reinforced gimbal variants.</strong> Heavier brackets and pivots than the standard range, for continuous motion over weeks rather than hours.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">V</span>
+        <span class="ef-ch-label" data-i18n="oc_c5_label">Cooking &amp; Power</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n-html="oc_c5_title">Cooking well on <em>limited power</em></h2>
+        <ul class="ef-list">
+          <li data-i18n-html="oc_c5_l1"><strong>Dedicated burners.</strong> Not the ones fitted to the standard range, and more capable.</li>
+          <li data-i18n-html="oc_c5_l2"><strong>Induction hobs developed for life on board.</strong> Not standard modules: power management is designed to reduce cycling and the strain it places on inverter and generator.</li>
+          <li data-i18n-html="oc_c5_l3"><strong>Ovens adapted to ocean passages.</strong> Specific heating elements and a heat management approach conceived for limited power.</li>
+        </ul>
+        <p class="ef-ch-body" data-i18n="oc_c5_b1">Further bluewater solutions are available on request, or can be developed together with the client. It is the work we have always done for shipyards and owners, one boat at a time.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="ef-milestones">
+    <div class="ef-ms">
+      <span class="ef-ms-num">316L</span>
+      <span class="ef-ms-label" data-i18n="oc_ms1">The molybdenum grade, against chlorides</span>
+    </div>
+    <div class="ef-ms">
+      <span class="ef-ms-num">1000<span style="font-size:.5em">s</span></span>
+      <span class="ef-ms-label" data-i18n="oc_ms2">Thousands of cookers aboard boats that sail the world&rsquo;s oceans</span>
+    </div>
+    <div class="ef-ms">
+      <span class="ef-ms-num">1936</span>
+      <span class="ef-ms-label" data-i18n="oc_ms3">Latifa, William Fife III &middot; a cooker built to measure</span>
+    </div>
+  </div>
+
+  <div class="ef-close">
+    <p class="ef-quote" data-i18n="oc_quote">On a boat that sails far from help, the availability of a part counts as much as its quality. That is why spare parts are held in stock by our distributors in every principal market.</p>
+    <a class="ef-cta" onclick="closeOcean();openContact();" data-i18n="eff_cta">Talk to our engineers</a>
+  </div>
+ </div><!-- /ef-modal -->
+</div><!-- /oceanpage -->
 
 
 <!-- CONTACT PAGE -->
@@ -6624,7 +6951,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785231038/SEAFARER4_PER_SITO_xkheix.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582675/GRANDE_gpddo8.jpg',
     specs:[['Technology','Gas'],['Burners','4'],['Power','6,1 kW'],['Gas · pressure','Butane / Propane · 30 mbar'],['Dimensions (W×D×H)','50 × 40 cm']],
     specText:['Gas cooktop with 4 powerful burners.','High-end valves, finely adjustable for simmering.','One-piece grate, mechanically locked (no vibration); maximum stability.','Burner caps fire-enamelled at 800°; safety thermocouples as standard.','Optional AA-battery electronic ignition; optional pot-holders (various models).','Power 6.1 kW; butane/propane 30 mbar'],
-    paras:['Grande lines up four powerful burners, governed by high-end valves finely adjustable down to a simmer: the complete onboard galley for those who entertain and will not give up anything. An important lunch takes shape with no waiting: the pasta water boiling, a sauce simmering, a pan browning and a sauce warming, all at the same time.','The one-piece grate ensures maximum stability for pots and is mechanically locked, so it does not vibrate under way. The burner caps are fire-enamelled at 800 degrees, the safety thermocouples are standard and the optional AA-battery electronic ignition avoids complex wiring. The optional pot-holders, in various models, hold everything firm even in a swell.','The design is the Italian one that sets us apart: stainless steel, clean lines and careful finishes. Grande combines the power of the flame with elegance and fits with measure into the galley worktop, made for the interior project.'],
+    paras:['Grande lines up four powerful burners, governed by high-end valves finely adjustable down to a simmer: the complete onboard cooktop for those who entertain and will not give up anything. An important lunch takes shape with no waiting: the pasta water boiling, a sauce simmering, a pan browning and a sauce warming, all at the same time.','The one-piece grate ensures maximum stability for pots and is mechanically locked, so it does not vibrate under way. The burner caps are fire-enamelled at 800 degrees, the safety thermocouples are standard and the optional AA-battery electronic ignition avoids complex wiring. The optional pot-holders, in various models, hold everything firm even in a swell.','The design is the Italian one that sets us apart: stainless steel, clean lines and careful finishes. Grande combines the power of the flame with elegance and fits with measure into the galley worktop, made for the interior project.'],
     specKeys:['ppd_grande_s0','ppd_grande_s1','ppd_grande_s2','ppd_grande_s3','ppd_grande_s4','ppd_grande_s5'],
     paraKeys:['ppd_grande_p0','ppd_grande_p1','ppd_grande_p2'] },
   'GUSTO': { label:'GUSTO · Technical Datasheet',
@@ -6633,7 +6960,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657228/GUSTO_-_MARINER3_xvfjed.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785591581/GUSTO_k7jqjh.jpg',
     specs:[['Type','Gas cooker with oven'],['Burners','3'],['Power','6.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Battery electronic'],['Oven','Thermostatic · optional grill'],['Dimensions (W×D×H)','52.5 × 48 × 46h cm']],
     specText:['Static gas oven over 30 litres, compact body.','Italian-style static oven burner, optimised for performance and consumption.','Oven-cavity insulation in rock wool or glass fibre, metal sandwich system.','Door with double tempered safety glass.','Thermometer on the door or automatic thermostat (depending on version).','Oven drip tray in special steel, fire-enamelled at over 800°.','Hob with differentiated-power burners, caps enamelled at 800°.','Deep-drawn cooking top for containing liquids.','One-piece hob grate with front bar and pot-holder arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum.'],
-    paras:['Gusto is made for those who put flavour first, and its Italian-style static oven is the perfect tool for it. The burner, designed for even heat distribution at low consumption, cooks without swings: an aubergine parmigiana gratinates evenly, a frittata di pasta sets golden, a tray of stuffed vegetables colours without burning at the edges.','The glass-fibre metal-sandwich insulation and the double tempered-glass door stabilise the temperature, the ideal condition for a ciambellone that must rise evenly or for a tart with crumbly pastry. The drip tray, fire-enamelled at over 800°, gives heat back from below, while on the hob the valves calibrated from minimum simmering to full flame carry you from the slow reduction of an amatriciana sauce to the quick searing of a tagliata. And with the optional soapstone, Neapolitan pizza finds its perfect base on board.','And it does so with the restraint of Italian design: balanced proportions, mirror-finish steel and careful details make Gusto a galley that is beautiful to look at, designed to blend discreetly into the boat\'s interiors and to follow the designer\'s choices.'],
+    paras:['Gusto is made for those who put flavour first, and its Italian-style static oven is the perfect tool for it. The burner, designed for even heat distribution at low consumption, cooks without swings: an aubergine parmigiana gratinates evenly, a frittata di pasta sets golden, a tray of stuffed vegetables colours without burning at the edges.','The glass-fibre metal-sandwich insulation and the double tempered-glass door stabilise the temperature, the ideal condition for a ciambellone that must rise evenly or for a tart with crumbly pastry. The drip tray, fire-enamelled at over 800°, gives heat back from below, while on the hob the valves calibrated from minimum simmering to full flame carry you from the slow reduction of an amatriciana sauce to the quick searing of a tagliata. And with the optional soapstone, Neapolitan pizza finds its perfect base on board.','And it does so with the restraint of Italian design: balanced proportions, mirror-finish steel and careful details make Gusto a cooker that is beautiful to look at, designed to blend discreetly into the boat\'s interiors and to follow the designer\'s choices.'],
     specKeys:['ppd_gusto_s0','ppd_gusto_s1','ppd_gusto_s2','ppd_gusto_s3','ppd_gusto_s4','ppd_gusto_s5','ppd_gusto_s6','ppd_gusto_s7','ppd_gusto_s8','ppd_gusto_s9'],
     paraKeys:['ppd_gusto_p0','ppd_gusto_p1','ppd_gusto_p2'] },
   'LIPARI': { label:'LIPARI · Technical Datasheet',
@@ -6687,7 +7014,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657235/MARINA_-_mariner2_copiare_in_foto_idjllk.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785591580/MARINA_ritdgp.jpg',
     specs:[['Type','Gas cooker with oven'],['Burners','2'],['Power','6.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Battery electronic'],['Oven','Thermostatic · optional grill'],['Dimensions (W×D×H)','52.5 × 48 × 46h cm']],
     specText:['Static gas oven over 30 litres, compact body.','Italian-style static oven burner, optimised for performance and consumption.','Oven-cavity insulation in rock wool or glass fibre, metal sandwich system.','Door with double tempered safety glass.','Thermometer on the door or automatic thermostat (depending on version).','Oven drip tray in special steel, fire-enamelled at over 800°.','Hob with differentiated-power burners, caps enamelled at 800°.','Deep-drawn cooking top for containing liquids.','One-piece hob grate with front bar and pot-holder arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum.'],
-    paras:['Marina brings the heart of Italian cooking on board: a true static oven. Its burner, engineered for optimal performance at low consumption, wraps the food in an even heat that is the secret of lasagne alla bolognese with just the right crust, or of a pork roast in milk, tender within. The rock-wool insulated cavity in a metal-sandwich system and the double tempered-glass door keep the temperature constant, essential for raising a soft pan brioche or for gratinating a tray of cannelloni just right.','The steel drip tray, fire-enamelled at over 800°, radiates heat downward, perfect for browning the potatoes beneath an oven-baked sea bass. Meanwhile, on the hob, the differentiated-power burners and the valves adjustable from simmering to full flame let you finish an asparagus risotto while the oven works; and with the optional soapstone, homemade bread and pizza come out with a crisp base like a real pizzeria.','All of this in a galley designed with Italian taste: mirror-finish steel surfaces, essential lines and careful finishes that let it blend elegantly into the galley project, like an element conceived together with the interior architect.'],
+    paras:['Marina brings the heart of Italian cooking on board: a true static oven. Its burner, engineered for optimal performance at low consumption, wraps the food in an even heat that is the secret of lasagne alla bolognese with just the right crust, or of a pork roast in milk, tender within. The rock-wool insulated cavity in a metal-sandwich system and the double tempered-glass door keep the temperature constant, essential for raising a soft pan brioche or for gratinating a tray of cannelloni just right.','The steel drip tray, fire-enamelled at over 800°, radiates heat downward, perfect for browning the potatoes beneath an oven-baked sea bass. Meanwhile, on the hob, the differentiated-power burners and the valves adjustable from simmering to full flame let you finish an asparagus risotto while the oven works; and with the optional soapstone, homemade bread and pizza come out with a crisp base like a real pizzeria.','All of this in an oven designed with Italian taste: mirror-finish steel surfaces, essential lines and careful finishes that let it blend elegantly into the galley project, like an element conceived together with the interior architect.'],
     specKeys:['ppd_marina_s0','ppd_marina_s1','ppd_marina_s2','ppd_marina_s3','ppd_marina_s4','ppd_marina_s5','ppd_marina_s6','ppd_marina_s7','ppd_marina_s8','ppd_marina_s9'],
     paraKeys:['ppd_marina_p0','ppd_marina_p1','ppd_marina_p2'] },
   'MARINA E': { label:'MARINA E · Technical Datasheet',
@@ -6705,7 +7032,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784901110/MARIS_-_xl2_con_paraventi_sfondo_nero_kq3qmq.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582599/MARIS_dd0uyl.jpg',
     specs:[['Type','Gas cooker with oven'],['Burners','2'],['Power','5.7 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Oven','Enamelled or st. steel cavity'],['Dimensions (W×D×H)','52.5 × 48 × 46h cm']],
     specText:['Hob burners with hot-forged solid brass flame spreaders.','Burners with differentiated power.','Static gas oven over 30 litres, Italian-style static burner.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','One-piece hob grate with front bar and arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.','Safety thermocouples; latch and automatic door lock.','Oven interior enamelled at 800° or mirror-polished stainless steel; solid stainless steel gimbal brackets.'],
-    paras:['Maris makes the quality of its flame its strong point: the burners with hot-forged solid brass flame spreaders store the heat and release it softly and steadily, the perfect condition for cooking that calls for delicacy. On this flame a seafood risotto finishes to perfection, a bechamel does not catch and an English custard stays silky.','The Italian-style static oven, with an optimised burner and a drip tray fire-enamelled at over 800°, wraps in its even heat a sea bream all\'acqua pazza scented with cherry tomatoes and capers, or a tray of stuffed peppers. The metal-sandwich insulated cavity and the double tempered-glass door keep the temperature stable, while the safety features, thermocouples and an automatic door lock, let you cook with peace of mind. To finish, a wild-berry panna cotta, cooked gently over the brass flame.','Behind the performance lies the care of Italian design: mirror-finish steel external panels, clean proportions and finishes attended to in the smallest detail make Maris a galley that blends elegantly into the spaces on board, conceived to work with the interior designer\'s project rather than impose on it.'],
+    paras:['Maris makes the quality of its flame its strong point: the burners with hot-forged solid brass flame spreaders store the heat and release it softly and steadily, the perfect condition for cooking that calls for delicacy. On this flame a seafood risotto finishes to perfection, a bechamel does not catch and an English custard stays silky.','The Italian-style static oven, with an optimised burner and a drip tray fire-enamelled at over 800°, wraps in its even heat a sea bream all\'acqua pazza scented with cherry tomatoes and capers, or a tray of stuffed peppers. The metal-sandwich insulated cavity and the double tempered-glass door keep the temperature stable, while the safety features, thermocouples and an automatic door lock, let you cook with peace of mind. To finish, a wild-berry panna cotta, cooked gently over the brass flame.','Behind the performance lies the care of Italian design: mirror-finish steel external panels, clean proportions and finishes attended to in the smallest detail make Maris a cooker that blends elegantly into the spaces on board, conceived to work with the interior designer\'s project rather than impose on it.'],
     specKeys:['ppd_maris_s0','ppd_maris_s1','ppd_maris_s2','ppd_maris_s3','ppd_maris_s4','ppd_maris_s5','ppd_maris_s6','ppd_maris_s7','ppd_maris_s8','ppd_maris_s9'],
     paraKeys:['ppd_maris_p0','ppd_maris_p1','ppd_maris_p2'] },
   'MAXIMA': { label:'MAXIMA · Technical Datasheet',
@@ -6714,7 +7041,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657261/MAXIMA_-_LT4GL2-2_lwxf0d.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582617/MAXIMA_4_xiwwxo.jpg',
     specs:[['Type','Gas cooker with oven'],['Burners','4 or 5'],['Power','6.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Battery electronic'],['Oven','Thermostatic · optional grill'],['Dimensions (W×D×H)','64.6 × 51.5 × 49.5h cm']],
     specText:['Oversized, extra-large oven with a large-capacity drip tray.','Oversized, large cooking top.','Individual grates for each burner, lockable and fully removable (patented system).','Pot-holder arms adjustable lengthways and in height.','Extra-large static gas oven, Italian-style static burner.','Hob burners with differentiated power, caps enamelled at 800°.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.'],
-    paras:['Maxima is the cooker for grand occasions, when you cook on board for a large table. Its extra-large oven easily takes a tray of lasagne for all the guests, a veal roast with a side of potatoes, or several preparations together; the extra-capacity drip tray gathers the cooking juices for a rich sauce to serve on the side. The large cooking top leaves room to work freely: the water for tortellini in broth on one burner, a white ragù on another, a pan of sautéed mushrooms on the third.','The real signature is the individual grates for each burner, lockable and fully removable thanks to a patented system: after a fry or a stew that has made a mess, you take them off and wash them one by one in a moment. The pot-holder arms, adjustable in height too, keep everything steady, so you can focus on the result, perhaps finishing with a tray of cantucci to serve with vin santo.','Behind its generosity lies Italian design: substantial dimensions handled with elegant proportions, mirror-finish steel and careful finishes make Maxima a striking yet restrained galley, designed to fit with measure into the interiors of the largest yachts.'],
+    paras:['Maxima is the cooker for grand occasions, when you cook on board for a large table. Its extra-large oven easily takes a tray of lasagne for all the guests, a veal roast with a side of potatoes, or several preparations together; the extra-capacity drip tray gathers the cooking juices for a rich sauce to serve on the side. The large cooking top leaves room to work freely: the water for tortellini in broth on one burner, a white ragù on another, a pan of sautéed mushrooms on the third.','The real signature is the individual grates for each burner, lockable and fully removable thanks to a patented system: after a fry or a stew that has made a mess, you take them off and wash them one by one in a moment. The pot-holder arms, adjustable in height too, keep everything steady, so you can focus on the result, perhaps finishing with a tray of cantucci to serve with vin santo.','Behind its generosity lies Italian design: substantial dimensions handled with elegant proportions, mirror-finish steel and careful finishes make Maxima a striking yet restrained cooker, designed to fit with measure into the interiors of the largest yachts.'],
     specKeys:['ppd_maxima_s0','ppd_maxima_s1','ppd_maxima_s2','ppd_maxima_s3','ppd_maxima_s4','ppd_maxima_s5','ppd_maxima_s6','ppd_maxima_s7','ppd_maxima_s8','ppd_maxima_s9'],
     paraKeys:['ppd_maxima_p0','ppd_maxima_p1','ppd_maxima_p2'] },
   'MEDITERRANEO': { label:'MEDITERRANEO · Technical Datasheet',
@@ -6885,7 +7212,7 @@ window.PROD_DATASHEET = {
     photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657218/VENTUS_-_xxl3-2_fspppu.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582624/VENTUS_iufyoi.jpg',
     specs:[['Type','Gas cooker with oven'],['Burners','3 or 4'],['Power','7.95 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Oven','Enamelled or st. steel cavity'],['Dimensions (W×D×H)','52.5 × 53.4 × 47.4h cm']],
     specText:['Wide and generous cooking top.','Static gas oven over 30 litres.','Italian-style static oven burner, optimised for performance and consumption.','Hob burners with differentiated power, caps enamelled at 800°.','Oven-cavity insulation in rock wool or glass fibre, metal sandwich system.','Door with double tempered safety glass.','Thermometer on the door or automatic thermostat (depending on version).','Oven drip tray in special steel, fire-enamelled at over 800°.','Deep-drawn cooking top; one-piece grate with front bar and arms with heat-proof knobs.','Valves calibrated from minimum (simmering) to maximum.'],
-    paras:['Ventus gives the chef what is needed when there are many guests: a wide, generous cooking top, able to hold at the same time the tall pot for paccheri, the large pan for a mixed fry of small fish and the pot for a mussel-and-clam guazzetto. Below, the Italian-style static oven works like the one at home: the optimised burner and the drip tray fire-enamelled at over 800° wrap in even heat a tray of sea bream with potatoes and olives, or a parmigiana that gratinates slowly.','The metal-sandwich insulated cavity and the double tempered-glass door hold the heat where it is needed, while the deep-drawn top collects any spills when the pasta water boils vigorously. The one-piece grate with front bar and arms with heat-proof knobs keeps the largest pots firmly in place even under way: so you bring to the table an abundant lunch, from the first course to dessert (perhaps a torta caprese), without giving up anything.','The generous top does not give up elegance: the wide, clean lines, the mirror-finish steel and the careful finishes make Ventus an imposing yet harmonious galley, designed to fit into the galley of the most spacious yachts and to work with the interior project.'],
+    paras:['Ventus gives the chef what is needed when there are many guests: a wide, generous cooking top, able to hold at the same time the tall pot for paccheri, the large pan for a mixed fry of small fish and the pot for a mussel-and-clam guazzetto. Below, the Italian-style static oven works like the one at home: the optimised burner and the drip tray fire-enamelled at over 800° wrap in even heat a tray of sea bream with potatoes and olives, or a parmigiana that gratinates slowly.','The metal-sandwich insulated cavity and the double tempered-glass door hold the heat where it is needed, while the deep-drawn top collects any spills when the pasta water boils vigorously. The one-piece grate with front bar and arms with heat-proof knobs keeps the largest pots firmly in place even under way: so you bring to the table an abundant lunch, from the first course to dessert (perhaps a torta caprese), without giving up anything.','The generous top does not give up elegance: the wide, clean lines, the mirror-finish steel and the careful finishes make Ventus an imposing yet harmonious cooker, designed to fit into the galley of the most spacious yachts and to work with the interior project.'],
     specKeys:['ppd_ventus_s0','ppd_ventus_s1','ppd_ventus_s2','ppd_ventus_s3','ppd_ventus_s4','ppd_ventus_s5','ppd_ventus_s6','ppd_ventus_s7','ppd_ventus_s8','ppd_ventus_s9'],
     paraKeys:['ppd_ventus_p0','ppd_ventus_p1','ppd_ventus_p2'] },
   'VERA': { label:'VERA · Technical Datasheet',
@@ -7255,6 +7582,18 @@ function openCat(name,models){
       var _z=(window.PROD_IMG_ZOOM&&window.PROD_IMG_ZOOM[m])?window.PROD_IMG_ZOOM[m]:0;
       var _y=(window.PROD_IMG_SHIFT&&window.PROD_IMG_SHIFT[m])?window.PROD_IMG_SHIFT[m]:0;
       var _za=_z?' class="pimg-zoom" style="--pz:'+_z+';--py:'+_y+'%"':'';
+      /* Bollino OCEANO: compare solo sui modelli disponibili nella variante
+         bluewater. L'elenco e' window.OC_MODELS, in un posto solo.
+         stopPropagation e' obbligatorio: la scheda apre il prodotto, il
+         bollino apre la pagina Oceano, e senza si aprirebbero tutte e due. */
+      var _ocOn=(window.OC_MODELS||[]).indexOf(m)!==-1;
+      var _ocTip=window.__t?window.__t('oc_badge','Bluewater variant available'):'Bluewater variant available';
+      var _ocB=_ocOn
+        ?'<span class="pcard-oc" onclick="event.stopPropagation();openOcean();">'
+          +'<span class="pcard-oc-short">Oceano<br>Bluewater</span>'
+          +'<span class="pcard-oc-full">'+_ocTip+'</span>'
+          +'</span>'
+        :'';
       var imgBox=src
         ?'<div class="pimg"><img'+_za+' src="'+src+'" alt="'+dm+'"></div>'
         :'<div class="pimg"><div class="pph"><svg viewBox="0 0 40 40" fill="none"><rect x="6" y="10" width="28" height="22" rx="1" stroke="currentColor" stroke-width=".8"/><circle cx="20" cy="21" r="7" stroke="currentColor" stroke-width=".8"/></svg><span>Photo coming soon</span></div></div>';
@@ -7270,7 +7609,7 @@ function openCat(name,models){
       var _hk=_tap?'pcard_hint_tap':'pcard_hint_desk';
       var _hf=_tap?'Tap to open':'Double click to open';
       var _ht=window.__t?window.__t(_hk,_hf):_hf;
-      card.innerHTML=imgBox+'<div class="pinf"><span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc">'+desc+'</span>':'')+'<span class="pcard-hint" data-i18n="'+_hk+'">'+_ht+'</span></div>';
+      card.innerHTML=imgBox+'<div class="pinf">'+_ocB+'<span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc">'+desc+'</span>':'')+'<span class="pcard-hint" data-i18n="'+_hk+'">'+_ht+'</span></div>';
       g.appendChild(card);
     }
     
@@ -7361,6 +7700,13 @@ window.__initPgridHint=function(){
     if(Date.now()-ultimoScroll<250) return;
     if(Date.now()-t0>500) return;
     if(Math.abs(t.clientX-x0)>10 || Math.abs(t.clientY-y0)>10) return;
+    /* Il bollino OCEANO e' dentro la scheda: senza questa uscita, toccarlo
+       aprirebbe il prodotto invece della pagina Oceano. */
+    if(t.target.closest('.pcard-oc')){
+      e.preventDefault();
+      if(window.openOcean) window.openOcean();
+      return;
+    }
     var card=(t.target && t.target.closest) ? t.target.closest('.pcard') : null;
     if(!card && document.elementFromPoint){
       var el=document.elementFromPoint(t.clientX, t.clientY);
@@ -7468,6 +7814,13 @@ function goProd(m){
   });
   var nameEl=document.getElementById('pp-name');
   if(nameEl)nameEl.textContent=prodDisp(m);
+  /* Bollino "variante Oceano". L'elenco sta qui e in un posto solo: per
+     aggiungere un modello si tocca OC_MODELS, nient'altro.
+     ATTENZIONE va SEMPRE tolto quando non serve, non solo messo: la scheda
+     prodotto e' un contenitore riusato, e senza il ramo else il bollino
+     resterebbe acceso sul modello aperto dopo uno che lo prevede. */
+  var _ocb=document.getElementById('pp-oc-badge');
+  if(_ocb){ _ocb.classList.toggle('on', (window.OC_MODELS||[]).indexOf(m)!==-1); }
   // Hero prodotto: porta DENTRO la scheda l'hero della categoria, usando lo
   // stesso media (video o immagine) della categoria a cui il prodotto appartiene.
   var ppVid=document.getElementById('pp-herovid');
@@ -8551,6 +8904,8 @@ document.addEventListener('keydown',function(e){
   if(_sp&&_sp.classList.contains('show')){closeSpare();return;}
   var _ef=document.getElementById('effpage');
   if(_ef&&_ef.classList.contains('show')){closeEff();return;}
+  var _oc=document.getElementById('oceanpage');
+  if(_oc&&_oc.classList.contains('show')){closeOcean();return;}
   var _ab=document.getElementById('aboutpage');
   if(_ab&&_ab.classList.contains('show')){goHome();return;}
   var _ca=document.getElementById('catpage');
@@ -9687,6 +10042,112 @@ function closeEff(){
 window.openEff=openEff; window.closeEff=closeEff;
 
 
+/* ══ PAGINA OCEANO ══
+   Stessa meccanica di openEff/closeEff. In piu' governa il video della hero:
+   parte all'apertura e si ferma alla chiusura, cosi' non consuma banda ne'
+   batteria mentre la pagina e' chiusa. */
+var _ocLock=false;
+function openOcean(){
+  var oc=document.getElementById('oceanpage');
+  if(!oc) return;
+  if(typeof cm==='function'){ try{ cm(); }catch(e){} }
+  var _hdr=document.getElementById('hdr'); if(_hdr) _hdr.classList.remove('hide');
+  var modal=oc.querySelector('.ef-modal'); if(modal) modal.scrollTop=0;
+  document.body.style.overflow='hidden';
+  if(!document.body.classList.contains('page-open')){ document.body.classList.add('page-open'); _ocLock=true; }
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      oc.classList.add('show');
+      if(window.__ocScrollReset) window.__ocScrollReset();
+      ocPlay();
+    });
+  });
+}
+function closeOcean(){
+  var oc=document.getElementById('oceanpage');
+  if(!oc) return;
+  oc.classList.remove('show');
+  ocStop();
+  if(_ocLock){ document.body.classList.remove('page-open'); _ocLock=false; }
+  if(!document.body.classList.contains('page-open')){ document.body.style.overflow=''; }
+}
+window.openOcean=openOcean; window.closeOcean=closeOcean;
+
+/* Dissolvenza incrociata fine/inizio, 2 secondi.
+   Un elemento video non puo' dissolversi su se stesso: negli ultimi 2 secondi
+   il secondo elemento riparte da zero e i due si scambiano l'opacita'.
+   ATTENZIONE il loop nativo NON si toglie: se il secondo elemento non partisse
+   (alcuni browser mobili rifiutano due video simultanei) senza loop la hero si
+   inchioderebbe sull'ultimo fotogramma. Tenendolo, nel caso peggiore si perde
+   la dissolvenza e resta lo stacco netto: si perde l'effetto, non il video. */
+var OC_FADE=2.0;
+function ocSrc(){
+  var a=document.getElementById('ocVid');
+  if(!a) return '';
+  var mob=window.matchMedia && window.matchMedia('(max-width:768px)').matches;
+  return (mob && a.dataset.srcMobile) ? a.dataset.srcMobile : (a.dataset.src||'');
+}
+function ocArm(a,b){
+  if(a.__ocArmed) return;
+  a.__ocArmed=true;
+  a.addEventListener('timeupdate',function(){
+    var d=a.duration;
+    if(!d||!isFinite(d)) return;
+    if(d-a.currentTime>OC_FADE){ a.__go=false; return; }
+    if(a.__go) return;
+    a.__go=true;
+    try{ b.currentTime=0; }catch(e){}
+    var pr=b.play(); if(pr&&pr.catch) pr.catch(function(){});
+    b.style.opacity='1';
+    a.style.opacity='0';
+    setTimeout(function(){
+      a.pause();
+      try{ a.currentTime=0; }catch(e){}
+      a.__go=false;
+    }, OC_FADE*1000+200);
+  });
+}
+function ocPlay(){
+  var a=document.getElementById('ocVid'), b=document.getElementById('ocVid2');
+  if(!a) return;
+  var src=ocSrc();
+  if(!src) return;
+  if(!a.__ocLoaded){
+    a.src=src; a.preload='auto'; a.load(); a.__ocLoaded=1;
+    if(b){
+      /* Stessa URL: il secondo arriva dalla cache, non e' un secondo
+         scaricamento. */
+      b.src=src; b.loop=true; b.preload='auto'; b.load();
+    }
+  }
+  a.style.opacity='1';
+  if(b) b.style.opacity='0';
+  /* Il fermo immagine se ne va SOLO quando il video suona davvero: agganciarlo
+     a play() vorrebbe dire farlo sparire su una promessa che puo' fallire,
+     lasciando il nero. La dissolvenza di 2s e' quella di .oc-hero-vid. */
+  var ps=document.getElementById('ocPoster');
+  if(ps) a.addEventListener('playing', function(){ ps.style.opacity='0'; }, {once:true});
+  var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){});
+  if(b) a.addEventListener('loadedmetadata',function(){
+    /* Sotto i 6 secondi una dissolvenza da 2 mangerebbe il video: si resta al
+       loop nativo, che e' gia' attivo. */
+    if(a.duration && isFinite(a.duration) && a.duration >= 3*OC_FADE){
+      ocArm(a,b); ocArm(b,a);
+    }
+  },{once:true});
+}
+function ocStop(){
+  /* Alla chiusura il fermo immagine torna visibile: riaprendo, il video
+     riparte da zero e senza questo si vedrebbe un lampo di nero. */
+  var ps=document.getElementById('ocPoster');
+  if(ps) ps.style.opacity='1';
+  ['ocVid','ocVid2'].forEach(function(id){
+    var v=document.getElementById(id);
+    if(v){ try{ v.pause(); }catch(e){} }
+  });
+}
+
+
 /* ══════════════════════════════════════════════════════════
    ABOUT US · STICKY STACK PARALLAX ENGINE
    - Track height = 9 pannelli × 100vh
@@ -10040,6 +10501,10 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     var lgL=lg?divScroller(lg):null;
     var efL=efModal?divScroller(efModal):null;
     window.__efScrollReset=function(){ efL&&efL.reset(); };
+    var oc=document.getElementById('oceanpage');
+    var ocModal=oc?oc.querySelector('.ef-modal'):null;
+    var ocL=ocModal?divScroller(ocModal):null;
+    window.__ocScrollReset=function(){ ocL&&ocL.reset(); };
     var homeL=homeScroller();
 
     function isOpen(el,cls){return el&&el.classList.contains(cls);}
@@ -10059,6 +10524,10 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
         return;
       }
       if(isOpen(ef,'show')){ if(efModal&&efModal.contains(e.target)){ efL&&efL.wheel(e); } return; }
+      /* ⚠️ TRAPPOLA 3.5 · senza questa riga il modale Oceano NON scorre: la
+         rotellina finirebbe allo scroller della home, che chiama
+         preventDefault, e la pagina sembrerebbe bloccata. */
+      if(isOpen(oc,'show')){ if(ocModal&&ocModal.contains(e.target)){ ocL&&ocL.wheel(e); } return; }
       if(navOpen()){ if(np&&np.contains(e.target)){ npL&&npL.wheel(e); } return; }
       if(isOpen(pp,'show')&&pp.contains(e.target)){ppL&&ppL.wheel(e);return;}
       if(isOpen(cp,'show')&&cp.contains(e.target)){cpL&&cpL.wheel(e);return;}
@@ -11254,12 +11723,12 @@ var DICT = {
     ggrill_02_body:'Everything exposed is 316L stainless steel, the grade that holds against salt. The burners are sealed, the ignition is protected, and the grease tray slides out for cleaning without tools. What lives outdoors has to be built differently from what lives in the galley.',
     ggrill_03_label:'03 · Made to Measure',
     ggrill_03_title:'Sized for your cockpit',
-    ggrill_03_body:'Every grill is handcrafted in Conegliano and can be adapted in power and dimensions to the space available. It is the same approach that has taken our galleys aboard yachts from Ferretti, Sunseeker, Sanlorenzo and Cantiere del Pardo.',
+    ggrill_03_body:'Every grill is handcrafted in Conegliano and can be adapted in power and dimensions to the space available. It is the same approach that has taken our cookers aboard yachts from Ferretti, Sunseeker, Sanlorenzo and Cantiere del Pardo.',
     ph_eye:'Patented System',
     ph_ttl:'Panholders',
     ph_p1:'We design and build patented panholder systems, unique of their kind.',
     ph_p2:'It began many years ago, when owners started asking for something practical that was also beautiful to look at: a restraint that would sit naturally alongside our hobs and our cookers, instead of interrupting their line.',
-    ph_p3:'They were received so well that today many shipyards fit them to galleys built by other brands.',
+    ph_p3:'They were received so well that today many shipyards fit them to cookers built by other brands.',
     ph_note:'Below you can browse the general catalogue. What you see is only a selection: contact us for every variant, we build to order.',
     ph_btn:'View the catalogue',
     /* About Us */
@@ -11344,6 +11813,14 @@ var DICT = {
     hcf_ok: "Thank you, we will reply shortly.",
     pcard_hint_desk: "Double click to open",
     pcard_hint_tap: "Tap to open",
+    oc_hero_tag: "Ocean Passages · Since the Beginning",
+    oc_brand_sub: "Bluewater Cookers",
+    oc_ms1: "The molybdenum grade, against chlorides",
+    oc_ms3: "Latifa, William Fife III · a cooker built to measure",
+    oc_fig_cap: "Latifa · Classic variant, built entirely to measure",
+    oc_btn: "Bluewater Passages",
+    oc_ms2: "Thousands of cookers aboard boats that sail the world’s oceans",
+    oc_badge: "Bluewater variant available",
     ct_hours_label: "Hours",
     ct_hours_val: "Monday - Friday<br>08:30 - 17:30 CET",
     ct_open_maps: "Open in Google Maps",
@@ -11514,7 +11991,7 @@ var DICT = {
     ppd_caprera_s5: "Power 5.55 kW; butane/propane 30 mbar",
     ppd_grande_t: "Grande: the four-powerful-burner gas cooktop, for those who really cook on board.",
     ppd_grande_k: "The Grande story",
-    ppd_grande_p0: "Grande lines up four powerful burners, governed by high-end valves finely adjustable down to a simmer: the complete onboard galley for those who entertain and will not give up anything. An important lunch takes shape with no waiting: the pasta water boiling, a sauce simmering, a pan browning and a sauce warming, all at the same time.",
+    ppd_grande_p0: "Grande lines up four powerful burners, governed by high-end valves finely adjustable down to a simmer: the complete onboard cooktop for those who entertain and will not give up anything. An important lunch takes shape with no waiting: the pasta water boiling, a sauce simmering, a pan browning and a sauce warming, all at the same time.",
     ppd_grande_p1: "The one-piece grate ensures maximum stability for pots and is mechanically locked, so it does not vibrate under way. The burner caps are fire-enamelled at 800 degrees, the safety thermocouples are standard and the optional AA-battery electronic ignition avoids complex wiring. The optional pot-holders, in various models, hold everything firm even in a swell.",
     ppd_grande_p2: "The design is the Italian one that sets us apart: stainless steel, clean lines and careful finishes. Grande combines the power of the flame with elegance and fits with measure into the galley worktop, made for the interior project.",
     ppd_grande_s0: "Gas cooktop with 4 powerful burners.",
@@ -11882,7 +12359,7 @@ var DICT = {
     ppd_ventus_k: "The Ventus story",
     ppd_ventus_p0: "Ventus gives the chef what is needed when there are many guests: a wide, generous cooking top, able to hold at the same time the tall pot for paccheri, the large pan for a mixed fry of small fish and the pot for a mussel-and-clam guazzetto. Below, the Italian-style static oven works like the one at home: the optimised burner and the drip tray fire-enamelled at over 800° wrap in even heat a tray of sea bream with potatoes and olives, or a parmigiana that gratinates slowly.",
     ppd_ventus_p1: "The metal-sandwich insulated cavity and the double tempered-glass door hold the heat where it is needed, while the deep-drawn top collects any spills when the pasta water boils vigorously. The one-piece grate with front bar and arms with heat-proof knobs keeps the largest pots firmly in place even under way: so you bring to the table an abundant lunch, from the first course to dessert (perhaps a torta caprese), without giving up anything.",
-    ppd_ventus_p2: "The generous top does not give up elegance: the wide, clean lines, the mirror-finish steel and the careful finishes make Ventus an imposing yet harmonious galley, designed to fit into the galley of the most spacious yachts and to work with the interior project.",
+    ppd_ventus_p2: "The generous top does not give up elegance: the wide, clean lines, the mirror-finish steel and the careful finishes make Ventus an imposing yet harmonious cooker, designed to fit into the galley of the most spacious yachts and to work with the interior project.",
     ppd_ventus_s0: "Wide and generous cooking top.",
     ppd_ventus_s1: "Static gas oven over 30 litres.",
     ppd_ventus_s2: "Italian-style static oven burner, optimised for performance and consumption.",
@@ -11901,7 +12378,7 @@ var DICT = {
     ppd_maxima_k: "The Maxima story",
     ppd_maxima_p0: "Maxima is the cooker for grand occasions, when you cook on board for a large table. Its extra-large oven easily takes a tray of lasagne for all the guests, a veal roast with a side of potatoes, or several preparations together; the extra-capacity drip tray gathers the cooking juices for a rich sauce to serve on the side. The large cooking top leaves room to work freely: the water for tortellini in broth on one burner, a white ragù on another, a pan of sautéed mushrooms on the third.",
     ppd_maxima_p1: "The real signature is the individual grates for each burner, lockable and fully removable thanks to a patented system: after a fry or a stew that has made a mess, you take them off and wash them one by one in a moment. The pot-holder arms, adjustable in height too, keep everything steady, so you can focus on the result, perhaps finishing with a tray of cantucci to serve with vin santo.",
-    ppd_maxima_p2: "Behind its generosity lies Italian design: substantial dimensions handled with elegant proportions, mirror-finish steel and careful finishes make Maxima a striking yet restrained galley, designed to fit with measure into the interiors of the largest yachts.",
+    ppd_maxima_p2: "Behind its generosity lies Italian design: substantial dimensions handled with elegant proportions, mirror-finish steel and careful finishes make Maxima a striking yet restrained cooker, designed to fit with measure into the interiors of the largest yachts.",
     ppd_maxima_s0: "Oversized, extra-large oven with a large-capacity drip tray.",
     ppd_maxima_s1: "Oversized, large cooking top.",
     ppd_maxima_s2: "Individual grates for each burner, lockable and fully removable (patented system).",
@@ -11972,7 +12449,7 @@ var DICT = {
     ppd_maris_k: "The Maris story",
     ppd_maris_p0: "Maris makes the quality of its flame its strong point: the burners with hot-forged solid brass flame spreaders store the heat and release it softly and steadily, the perfect condition for cooking that calls for delicacy. On this flame a seafood risotto finishes to perfection, a bechamel does not catch and an English custard stays silky.",
     ppd_maris_p1: "The Italian-style static oven, with an optimised burner and a drip tray fire-enamelled at over 800°, wraps in its even heat a sea bream all'acqua pazza scented with cherry tomatoes and capers, or a tray of stuffed peppers. The metal-sandwich insulated cavity and the double tempered-glass door keep the temperature stable, while the safety features, thermocouples and an automatic door lock, let you cook with peace of mind. To finish, a wild-berry panna cotta, cooked gently over the brass flame.",
-    ppd_maris_p2: "Behind the performance lies the care of Italian design: mirror-finish steel external panels, clean proportions and finishes attended to in the smallest detail make Maris a galley that blends elegantly into the spaces on board, conceived to work with the interior designer's project rather than impose on it.",
+    ppd_maris_p2: "Behind the performance lies the care of Italian design: mirror-finish steel external panels, clean proportions and finishes attended to in the smallest detail make Maris a cooker that blends elegantly into the spaces on board, conceived to work with the interior designer's project rather than impose on it.",
     ppd_maris_s0: "Hob burners with hot-forged solid brass flame spreaders.",
     ppd_maris_s1: "Burners with differentiated power.",
     ppd_maris_s2: "Static gas oven over 30 litres, Italian-style static burner.",
@@ -11984,7 +12461,7 @@ var DICT = {
     ppd_maris_s8: "Safety thermocouples; latch and automatic door lock.",
     ppd_maris_s9: "Oven interior enamelled at 800° or mirror-polished stainless steel; solid stainless steel gimbal brackets.",
     ppd_maris_s10: "Options: soapstone, side heat shields, mirror-finish external panels, patented gimbal adjustment.",
-    ppd_nauta_t: "Nauta: the galley for long passages, rugged and refined in Italian style.",
+    ppd_nauta_t: "Nauta: the cooker for long passages, rugged and refined in Italian style.",
     ppd_nauta_k: "The Nauta story",
     ppd_nauta_p0: "Nauta is the cooker for long passages, sturdy and dependable without giving up excellence at the table. Its burners with hot-forged solid brass flame spreaders offer a full, steady flame that makes even the most technical preparations easy: a pasta alla Norma with its thick tomato sauce, or a mascarpone cream whipped over the flame.",
     ppd_nauta_p1: "The Italian-style static oven, with a drip tray in steel enamelled at very high temperature, cooks saltimbocca alla romana or a tray of melanzane a funghetto evenly. The metal-sandwich insulation and the double tempered glass waste no energy, a precious advantage when you are far from the coast; the deep-drawn top contains any liquids and the one-piece grate with front bar keeps the pots firmly in place. On waking, toast and orange marmalade; at the end of dinner, a zuppa inglese made at leisure.",
@@ -12004,7 +12481,7 @@ var DICT = {
     ppd_marina_k: "The Marina story",
     ppd_marina_p0: "Marina brings the heart of Italian cooking on board: a true static oven. Its burner, engineered for optimal performance at low consumption, wraps the food in an even heat that is the secret of lasagne alla bolognese with just the right crust, or of a pork roast in milk, tender within. The rock-wool insulated cavity in a metal-sandwich system and the double tempered-glass door keep the temperature constant, essential for raising a soft pan brioche or for gratinating a tray of cannelloni just right.",
     ppd_marina_p1: "The steel drip tray, fire-enamelled at over 800°, radiates heat downward, perfect for browning the potatoes beneath an oven-baked sea bass. Meanwhile, on the hob, the differentiated-power burners and the valves adjustable from simmering to full flame let you finish an asparagus risotto while the oven works; and with the optional soapstone, homemade bread and pizza come out with a crisp base like a real pizzeria.",
-    ppd_marina_p2: "All of this in a galley designed with Italian taste: mirror-finish steel surfaces, essential lines and careful finishes that let it blend elegantly into the galley project, like an element conceived together with the interior architect.",
+    ppd_marina_p2: "All of this in an oven designed with Italian taste: mirror-finish steel surfaces, essential lines and careful finishes that let it blend elegantly into the galley project, like an element conceived together with the interior architect.",
     ppd_marina_s0: "Static gas oven over 30 litres, compact body.",
     ppd_marina_s1: "Italian-style static oven burner, optimised for performance and consumption.",
     ppd_marina_s2: "Oven-cavity insulation in rock wool or glass fibre, metal sandwich system.",
@@ -12025,7 +12502,7 @@ var DICT = {
     ppd_gusto_k: "The Gusto story",
     ppd_gusto_p0: "Gusto is made for those who put flavour first, and its Italian-style static oven is the perfect tool for it. The burner, designed for even heat distribution at low consumption, cooks without swings: an aubergine parmigiana gratinates evenly, a frittata di pasta sets golden, a tray of stuffed vegetables colours without burning at the edges.",
     ppd_gusto_p1: "The glass-fibre metal-sandwich insulation and the double tempered-glass door stabilise the temperature, the ideal condition for a ciambellone that must rise evenly or for a tart with crumbly pastry. The drip tray, fire-enamelled at over 800°, gives heat back from below, while on the hob the valves calibrated from minimum simmering to full flame carry you from the slow reduction of an amatriciana sauce to the quick searing of a tagliata. And with the optional soapstone, Neapolitan pizza finds its perfect base on board.",
-    ppd_gusto_p2: "And it does so with the restraint of Italian design: balanced proportions, mirror-finish steel and careful details make Gusto a galley that is beautiful to look at, designed to blend discreetly into the boat's interiors and to follow the designer's choices.",
+    ppd_gusto_p2: "And it does so with the restraint of Italian design: balanced proportions, mirror-finish steel and careful details make Gusto a cooker that is beautiful to look at, designed to blend discreetly into the boat's interiors and to follow the designer's choices.",
     ppd_gusto_s0: "Static gas oven over 30 litres, compact body.",
     ppd_gusto_s1: "Italian-style static oven burner, optimised for performance and consumption.",
     ppd_gusto_s2: "Oven-cavity insulation in rock wool or glass fibre, metal sandwich system.",
@@ -12042,7 +12519,7 @@ var DICT = {
     ppd_gusto_s13: "Safety latch as standard and automatic door lock.",
     ppd_gusto_s14: "Gimbal brackets in solid stainless steel (several models).",
     ppd_gusto_s15: "Options: soapstone, side heat shields (2/3 sides), mirror-finish stainless external panels, patented longitudinal gimbal adjustment.",
-    ppd_altura_t: "Altura: the galley for real seas, an 8 mm stainless grate and Italian fine cooking.",
+    ppd_altura_t: "Altura: the cooker for real seas, an 8 mm stainless grate and Italian fine cooking.",
     ppd_altura_k: "The Altura story",
     ppd_altura_p0: "Altura is the cooker for those who face the real sea without giving up fine cooking. Its hob grate, made of solid stainless steel bars 8 mm in diameter, is a rock-solid base: it holds the tall pot of a cacciucco alla livornese steady even when the boat moves, and does not fear the weight of an ossobuco casserole with gremolata. The pot-holder arms, adjustable not only lengthways but also in height, embrace the vessel and lock it, giving you the confidence to turn a Barolo braise with a sea running.",
     ppd_altura_p1: "The space-saving one-piece grate folds open for quick cleaning at the end of service. In the Italian-style static oven, wrapped in metal-sandwich insulation and closed by the double tempered glass, a herb-roasted lamb cooks slow and even, while on the hob a gentle flame brings a wine sauce to completion to go with it.",
@@ -12613,6 +13090,14 @@ var DICT = {
     hcf_ok: "Grazie, le risponderemo a breve.",
     pcard_hint_desk: "Doppio clic per la scheda",
     pcard_hint_tap: "Tocca per la scheda",
+    oc_hero_tag: "Traversate oceaniche · Da sempre",
+    oc_brand_sub: "Cucine bluewater",
+    oc_ms1: "L'acciaio al molibdeno, contro i cloruri",
+    oc_ms3: "Latifa, William Fife III · una cucina su misura",
+    oc_fig_cap: "Latifa · variante Classic, interamente su misura",
+    oc_btn: "Traversate oceaniche",
+    oc_ms2: "Migliaia di cucine installate su barche che solcano gli oceani di tutto il mondo",
+    oc_badge: "Variante Bluewater disponibile",
     ct_hours_label: "Orari",
     ct_hours_val: "Lunedì - Venerdì<br>08:30 - 17:30 CET",
     ct_open_maps: "Apri in Google Maps",
@@ -13880,6 +14365,14 @@ var DICT = {
     hcf_ok: "Merci, nous vous répondrons sous peu.",
     pcard_hint_desk: "Double clic pour la fiche",
     pcard_hint_tap: "Touchez pour la fiche",
+    oc_hero_tag: "Traversées océaniques · Depuis toujours",
+    oc_brand_sub: "Cuisinières bluewater",
+    oc_ms1: "L'acier au molybdène, contre les chlorures",
+    oc_ms3: "Latifa, William Fife III · une cuisinière sur mesure",
+    oc_fig_cap: "Latifa · variante Classic, entièrement sur mesure",
+    oc_btn: "Traversées océaniques",
+    oc_ms2: "Des milliers de cuisinières installées sur des bateaux qui sillonnent les océans du monde entier",
+    oc_badge: "Variante Bluewater disponible",
     ct_hours_label: "Horaires",
     ct_hours_val: "Lundi - Vendredi<br>08h30 - 17h30 CET",
     ct_open_maps: "Ouvrir dans Google Maps",
@@ -15147,6 +15640,14 @@ var DICT = {
     hcf_ok: "Vielen Dank, wir melden uns in Kürze.",
     pcard_hint_desk: "Doppelklick für das Datenblatt",
     pcard_hint_tap: "Tippen für das Datenblatt",
+    oc_hero_tag: "Ozeanpassagen · Von Anfang an",
+    oc_brand_sub: "Bluewater-Herde",
+    oc_ms1: "Der Molybdän-Stahl, gegen Chloride",
+    oc_ms3: "Latifa, William Fife III · ein Herd nach Maß",
+    oc_fig_cap: "Latifa · Variante Classic, vollständig nach Maß",
+    oc_btn: "Ozeanpassagen",
+    oc_ms2: "Tausende Kocher an Bord von Booten, die die Ozeane der Welt durchqueren",
+    oc_badge: "Bluewater-Variante verfügbar",
     ct_hours_label: "Öffnungszeiten",
     ct_hours_val: "Montag - Freitag<br>08:30 - 17:30 Uhr MEZ",
     ct_open_maps: "In Google Maps öffnen",
@@ -16414,6 +16915,14 @@ var DICT = {
     hcf_ok: "Gracias, le responderemos en breve.",
     pcard_hint_desk: "Doble clic para la ficha",
     pcard_hint_tap: "Toca para la ficha",
+    oc_hero_tag: "Travesías oceánicas · Desde siempre",
+    oc_brand_sub: "Cocinas bluewater",
+    oc_ms1: "El acero al molibdeno, contra los cloruros",
+    oc_ms3: "Latifa, William Fife III · una cocina a medida",
+    oc_fig_cap: "Latifa · variante Classic, enteramente a medida",
+    oc_btn: "Travesías oceánicas",
+    oc_ms2: "Miles de cocinas instaladas en barcos que surcan los océanos de todo el mundo",
+    oc_badge: "Variante Bluewater disponible",
     ct_hours_label: "Horario",
     ct_hours_val: "Lunes - Viernes<br>08:30 - 17:30 CET",
     ct_open_maps: "Abrir en Google Maps",
@@ -17426,6 +17935,17 @@ window.setLang = setLang;
   // Esposto per la ricerca globale del sito (#srch): serve la mappa
   // categoria -> modelli. Sola lettura, nessun altro uso.
   window.CATS = CATS;
+
+/* Modelli disponibili nella variante Bluewater OCEANO. Il bollino nella hero
+   della scheda prodotto legge questo elenco e rimanda alla pagina Oceano.
+   Elettriche con forno al completo, piu' i forni da incasso e i piani
+   compatti richiesti dal committente. */
+window.OC_MODELS = [
+  'MARINA','GUSTO','MAREA','LUX','VENTUS','ALTURA','MAXIMA',
+  'ORIZZONTE','TOLOMEO','NOBILIS','ALTALUX','FORMA','VERA',
+  'MARINA E','NAUTICA','COMPACTA','GRANLUX','MODULAR',
+  'ROMA','FIRENZE','NAPOLI','DUE','TRE'
+];
 
   function norm(x){ return (x||'').toLowerCase().replace(/[^a-z0-9]/g,''); }
   var PRODUCTS = [];   // tutte le chiavi prodotto (per riconoscere i deep-link)
