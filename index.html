@@ -2592,7 +2592,7 @@ header.hide{transform:translateY(-100%);}
     font-size: 8px;
     letter-spacing: .16em;
   }
-  .bte{ margin-top:26px; font-size:9px; letter-spacing:.16em; }
+
 }
 
 
@@ -2702,7 +2702,11 @@ header.hide{transform:translateY(-100%);}
 
 /* Foto dentro un capitolo. Non usa la cornice dei disegni: qui l'immagine
    e' il contenuto, non un allegato tecnico. */
-.oc-fig{ margin:34px 0 0; }
+/* ATTENZIONE il margine INFERIORE non e' facoltativo: .ef-ch-body ha
+   margin:0 0 18px, cioe' spazio solo sotto e zero sopra, quindi il paragrafo
+   che segue la figura le si incolla addosso. Si vede soprattutto su telefono,
+   dove la didascalia va a capo e finisce a contatto col testo. */
+.oc-fig{ margin:34px 0 34px; }
 .oc-fig-img{
   width:100%; height:auto; display:block;
   cursor:zoom-in;
@@ -2711,10 +2715,17 @@ header.hide{transform:translateY(-100%);}
 }
 .oc-fig-img:hover{ filter:grayscale(0); }
 .oc-fig-cap{
-  margin-top:10px;
+  margin-top:12px;
   font-family:'Outfit',sans-serif;
   font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+  line-height:1.7;
   color:rgba(248,246,241,.45);
+}
+@media(max-width:768px){
+  /* Su telefono la didascalia va a capo su due righe: serve piu' aria sotto,
+     e un interlinea che non faccia sembrare le due righe una massa unica. */
+  .oc-fig{ margin:26px 0 30px; }
+  .oc-fig-cap{ font-size:9px; letter-spacing:.14em; line-height:1.8; }
 }
 
 /* Bollino "variante Oceano" accanto al nome del prodotto. Discreto: filetto
@@ -2921,6 +2932,18 @@ header.hide{transform:translateY(-100%);}
 }
 .bte svg{ width:16px; height:16px; color:rgba(184,150,90,.9); }
 .bte:hover{ color:#b8965a; }
+
+/* ATTENZIONE questo blocco sta QUI e non nella media query piu' in alto:
+   la vecchia regola mobile di .bte era dichiarata PRIMA di quella base ed
+   era quindi inerte (trappola 3.1), il telefono ha sempre usato 34px e 12px.
+   Da quando i pulsanti sono DUE quei margini alzavano il contenuto della hero
+   fino a mandarlo sotto l'header. Il primo pulsante tiene lo stacco dal testo,
+   il secondo si appoggia al primo. */
+@media(max-width:768px){
+  .bte{ margin-top:16px; font-size:8.5px; letter-spacing:.13em; gap:7px; }
+  .bte + .bte{ margin-top:9px; }
+  .bte svg{ width:13px; height:13px; }
+}
 
 @media(max-width:768px){
   #effpage,#oceanpage{ padding:0; }
@@ -6031,6 +6054,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </div>
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n="oc_c1_title">Weeks at sea change every decision</h2>
+        <p class="ef-ch-body" data-i18n="oc_c1_b0">Many of our cookers can be built in variants modified for bluewater use: the models that offer it carry the Oceano Bluewater badge. And in any case, every product in the range can be customised into a dedicated reinforced variant.</p>
         <p class="ef-ch-body" data-i18n="oc_c1_b1">We have built cookers for ocean passages since the very beginning, and there are today literally thousands of Techimpex cookers at sea aboard yachts of every kind.</p>
         <p class="ef-ch-body" data-i18n="oc_c1_b2">Crossing an ocean means living for weeks with limited power, constant motion, salt air and no prospect of assistance. Every construction choice that ashore is a detail becomes, on board, the difference between cooking and not cooking.</p>
       </div>
@@ -6049,7 +6073,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
           <img class="oc-fig-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg" alt="Techimpex cooker, Classic variant, built to measure for the ocean racer Latifa" loading="lazy" onclick="hdZoom(this.getAttribute('data-zoom')||this.src, this.alt)" data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg">
           <figcaption class="oc-fig-cap" data-i18n="oc_fig_cap">Latifa &middot; Classic variant, built entirely to measure</figcaption>
         </figure>
-        <p class="ef-ch-body" data-i18n="oc_c2_b3">Latifa is one example among many of what an Oceano bluewater customisation can be: the specification is the starting point, and from there the cooker is built around the boat it will live on.</p>
+        <p class="ef-ch-body" data-i18n="oc_c2_b3">The XXL3 and the LATIFA model, which takes its name from the yacht herself, are only two examples of cookers reinforced or customised for extreme ocean use. The specification is the starting point, and from there the cooker is built around the boat it will live on.</p>
       </div>
     </div>
 
@@ -11814,6 +11838,36 @@ var DICT = {
     pcard_hint_desk: "Double click to open",
     pcard_hint_tap: "Tap to open",
     oc_hero_tag: "Ocean Passages · Since the Beginning",
+    oc_hero_title: "Cookers built<br>for the <em>ocean</em>",
+    oc_hero_lead: "A cooker built for an ocean passage has almost nothing in common with one built for coastal cruising. Two different worlds, and in part incompatible ones.",
+    oc_c1_label: "Why It Differs",
+    oc_c1_title: "Weeks at sea change every decision",
+    oc_c1_b1: "We have built cookers for ocean passages since the very beginning, and there are today literally thousands of Techimpex cookers at sea aboard yachts of every kind.",
+    oc_c1_b0: "Many of our cookers can be built in variants modified for bluewater use: the models that offer it carry the Oceano Bluewater badge. And in any case, every product in the range can be customised into a dedicated reinforced variant.",
+    oc_c1_b2: "Crossing an ocean means living for weeks with limited power, constant motion, salt air and no prospect of assistance. Every construction choice that ashore is a detail becomes, on board, the difference between cooking and not cooking.",
+    oc_c2_label: "At Sea",
+    oc_c2_title: "The boats that <em>ask the most</em>",
+    oc_c2_b1: "Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor Giovanni Soldini.",
+    oc_c2_b2: "And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife &amp; Son, she was regarded by her own designer as his finest and most accomplished work. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.",
+    oc_c2_b3: "The XXL3 and the LATIFA model, which takes its name from the yacht herself, are only two examples of cookers reinforced or customised for extreme ocean use. The specification is the starting point, and from there the cooker is built around the boat it will live on.",
+    oc_c3_label: "Structure",
+    oc_c3_title: "Built as one piece",
+    oc_c3_b1: "The oven cavity is assembled by interlocking joints rather than by fastening separate panels. The result behaves as a single monolithic body, and it is what gives these models their exceptional rigidity under sustained working loads.",
+    oc_c3_b2: "Stainless steels are drawn from the top of the range, AISI 316L included: the molybdenum-bearing grade, the one that resists chlorides.",
+    oc_c4_label: "Safety On Board",
+    oc_c4_title: "A cooker you can trust in a seaway",
+    oc_c4_l1: "<strong>Heat-resistant knobs.</strong> A dedicated variant for long cooking sessions in a closed galley.",
+    oc_c4_l2: "<strong>Door handles of dedicated design.</strong> Shaped to reduce the risk of injuring yourself against them as the vessel moves.",
+    oc_c4_l3: "<strong>Reinforced pot holders.</strong> Sized to keep pans in place through a working seaway.",
+    oc_c4_l4: "<strong>Oversized door lock.</strong> The oven stays shut whatever the boat is doing.",
+    oc_c4_l5: "<strong>Ultra-reinforced gimbal variants.</strong> Heavier brackets and pivots than the standard range, for continuous motion over weeks rather than hours.",
+    oc_c5_label: "Cooking & Power",
+    oc_c5_title: "Cooking well on <em>limited power</em>",
+    oc_c5_l1: "<strong>Dedicated burners.</strong> Not the ones fitted to the standard range, and more capable.",
+    oc_c5_l2: "<strong>Induction hobs developed for life on board.</strong> Not standard modules: power management is designed to reduce cycling and the strain it places on inverter and generator.",
+    oc_c5_l3: "<strong>Ovens adapted to ocean passages.</strong> Specific heating elements and a heat management approach conceived for limited power.",
+    oc_c5_b1: "Further bluewater solutions are available on request, or can be developed together with the client. It is the work we have always done for shipyards and owners, one boat at a time.",
+    oc_quote: "On a boat that sails far from help, the availability of a part counts as much as its quality. That is why spare parts are held in stock by our distributors in every principal market.",
     oc_brand_sub: "Bluewater Cookers",
     oc_ms1: "The molybdenum grade, against chlorides",
     oc_ms3: "Latifa, William Fife III · a cooker built to measure",
@@ -12890,7 +12944,7 @@ var DICT = {
     nav_home: "Collezioni Residenziali",
     nav_about: "Chi Siamo",
     nav_efficiency: "Efficienza Energetica",
-    eff_btn: "Efficienza Energetica, una nostra bandiera",
+    eff_btn: "Efficienza Energetica",
     eff_hero_tag: "Cucina Off-grid · Ricerca & Sviluppo",
     eff_hero_title: "L'efficienza energetica<br>è la nostra <em>bandiera</em>",
     eff_hero_lead: "In mare come in spedizione, la cucina di bordo richiede soluzioni ingegneristiche dedicate capaci di azzerare lo stress energetico e garantire prestazioni e sicurezza costanti. I nostri apparecchi sono progettati per ridefinire gli standard del settore, puntando sull'efficienza assoluta e sull'eccellenza strutturale.",
@@ -13091,11 +13145,41 @@ var DICT = {
     pcard_hint_desk: "Doppio clic per la scheda",
     pcard_hint_tap: "Tocca per la scheda",
     oc_hero_tag: "Traversate oceaniche · Da sempre",
+    oc_hero_title: "Cucine costruite<br>per l'<em>oceano</em>",
+    oc_hero_lead: "Una cucina costruita per una traversata oceanica non ha quasi nulla in comune con una pensata per la navigazione costiera. Sono due mondi diversi, e in parte incompatibili.",
+    oc_c1_label: "Perché è diverso",
+    oc_c1_title: "Settimane in mare cambiano ogni scelta",
+    oc_c1_b1: "Costruiamo cucine per la navigazione oceanica da sempre, e oggi ci sono letteralmente migliaia di cucine Techimpex in mare, a bordo di yacht di ogni tipo.",
+    oc_c1_b0: "Molte delle nostre cucine possono essere realizzate in varianti modificate per l'impiego bluewater: i modelli che lo prevedono portano il bollino Oceano Bluewater. In ogni caso, tutti i prodotti della gamma possono essere personalizzati in varianti rinforzate dedicate.",
+    oc_c1_b2: "Attraversare un oceano significa convivere per settimane con energia limitata, movimento continuo, salsedine e nessuna possibilità di assistenza. Ogni scelta costruttiva che a terra è un dettaglio, a bordo diventa la differenza fra cucinare e non cucinare.",
+    oc_c2_label: "In mare",
+    oc_c2_title: "Le barche che <em>chiedono di più</em>",
+    oc_c2_b1: "Fra queste c'è la XXL3 realizzata su misura per Elmo's Fire, la barca del grande velista italiano Giovanni Soldini.",
+    oc_c2_b2: "E c'è Latifa. Un ocean racer nel senso pieno del termine: progettata da William Fife III e varata in Scozia nel 1936 dal cantiere William Fife &amp; Son, è considerata dal progettista stesso la sua opera migliore e più riuscita. Per Latifa abbiamo realizzato una cucina in variante Classic, interamente su misura: bruciatori speciali, forno maggiorato, griglia monopezzo in acciaio maggiorato tagliata dal pieno e perni basculanti di robustezza eccezionale.",
+    oc_c2_b3: "La XXL3 e il modello LATIFA, che prende il nome dalla barca stessa, sono solo due esempi di cucine implementate o personalizzate per impieghi oceanici estremi. Le specifiche sono il punto di partenza, e da lì la cucina si costruisce intorno alla barca che la ospiterà.",
+    oc_c3_label: "Struttura",
+    oc_c3_title: "Costruita come un pezzo solo",
+    oc_c3_b1: "La muffola del forno è assemblata a incastri anziché fissando pannelli separati. Il risultato si comporta come un corpo unico e monolitico, ed è ciò che conferisce a questi modelli una robustezza eccezionale sotto sollecitazioni prolungate.",
+    oc_c3_b2: "Gli acciai inossidabili sono al vertice della gamma, AISI 316L compreso: il grado con molibdeno, quello che resiste ai cloruri.",
+    oc_c4_label: "Sicurezza a bordo",
+    oc_c4_title: "Una cucina di cui fidarsi con il mare formato",
+    oc_c4_l1: "<strong>Manopole anticalore.</strong> Una variante dedicata alle cotture lunghe in una cambusa chiusa.",
+    oc_c4_l2: "<strong>Maniglie porta con disegno dedicato.</strong> Studiate per ridurre il rischio di ferirsi contro di esse quando la barca si muove.",
+    oc_c4_l3: "<strong>Sistemi fermapentole rinforzati.</strong> Dimensionati per tenere le pentole al loro posto con il mare che lavora.",
+    oc_c4_l4: "<strong>Bloccaporta di sicurezza maggiorato.</strong> Il forno resta chiuso qualunque cosa stia facendo la barca.",
+    oc_c4_l5: "<strong>Varianti cardaniche ultra rinforzate.</strong> Staffe e perni maggiorati rispetto alla gamma standard, per un movimento continuo che dura settimane e non ore.",
+    oc_c5_label: "Cottura ed energia",
+    oc_c5_title: "Cucinare bene con <em>energia limitata</em>",
+    oc_c5_l1: "<strong>Bruciatori dedicati.</strong> Diversi da quelli della gamma standard, e più performanti.",
+    oc_c5_l2: "<strong>Piani a induzione messi a punto per l'uso di bordo.</strong> Non i moduli standard: la gestione della potenza è studiata per ridurre il ciclaggio e lo stress su inverter e generatore.",
+    oc_c5_l3: "<strong>Forni adattati alla navigazione oceanica.</strong> Resistenze specifiche e una gestione del calore pensata per il consumo limitato.",
+    oc_c5_b1: "Ulteriori soluzioni bluewater sono disponibili su richiesta, o possono essere sviluppate insieme al cliente. È il lavoro che facciamo da sempre per cantieri e armatori, una barca alla volta.",
+    oc_quote: "Su una barca che naviga lontano dai soccorsi, la disponibilità di un pezzo conta quanto la sua qualità. Per questo i ricambi sono a magazzino presso i nostri distributori nei principali mercati.",
     oc_brand_sub: "Cucine bluewater",
     oc_ms1: "L'acciaio al molibdeno, contro i cloruri",
     oc_ms3: "Latifa, William Fife III · una cucina su misura",
     oc_fig_cap: "Latifa · variante Classic, interamente su misura",
-    oc_btn: "Traversate oceaniche",
+    oc_btn: "Cucine oceaniche",
     oc_ms2: "Migliaia di cucine installate su barche che solcano gli oceani di tutto il mondo",
     oc_badge: "Variante Bluewater disponibile",
     ct_hours_label: "Orari",
@@ -14366,11 +14450,41 @@ var DICT = {
     pcard_hint_desk: "Double clic pour la fiche",
     pcard_hint_tap: "Touchez pour la fiche",
     oc_hero_tag: "Traversées océaniques · Depuis toujours",
+    oc_hero_title: "Des cuisinières conçues<br>pour l'<em>océan</em>",
+    oc_hero_lead: "Une cuisinière conçue pour une traversée océanique n'a presque rien de commun avec une cuisinière pensée pour la navigation côtière. Deux mondes différents, et en partie incompatibles.",
+    oc_c1_label: "Pourquoi c'est différent",
+    oc_c1_title: "Des semaines en mer changent chaque choix",
+    oc_c1_b1: "Nous construisons des cuisinières pour la navigation océanique depuis toujours, et il y a aujourd'hui littéralement des milliers de cuisinières Techimpex en mer, à bord de yachts de toute sorte.",
+    oc_c1_b0: "Beaucoup de nos cuisinières peuvent être réalisées en variantes modifiées pour l'usage bluewater : les modèles concernés portent le macaron Oceano Bluewater. En tout état de cause, tous les produits de la gamme peuvent être personnalisés en variantes renforcées dédiées.",
+    oc_c1_b2: "Traverser un océan, c'est vivre pendant des semaines avec une énergie limitée, un mouvement continu, l'air salin et aucune possibilité d'assistance. Chaque choix de construction qui à terre est un détail devient, à bord, la différence entre cuisiner et ne pas cuisiner.",
+    oc_c2_label: "En mer",
+    oc_c2_title: "Les bateaux qui <em>exigent le plus</em>",
+    oc_c2_b1: "Parmi elles, la XXL3 réalisée sur mesure pour Elmo's Fire, le bateau du grand navigateur italien Giovanni Soldini.",
+    oc_c2_b2: "Et il y a Latifa. Un ocean racer au sens plein du terme : dessinée par William Fife III et lancée en Écosse en 1936 par le chantier William Fife &amp; Son, elle est considérée par son concepteur lui-même comme son œuvre la plus belle et la plus aboutie. Pour Latifa nous avons réalisé une cuisinière en variante Classic, entièrement sur mesure : brûleurs spéciaux, four surdimensionné, grille monobloc en acier renforcé taillée dans la masse et axes de cardan d'une robustesse exceptionnelle.",
+    oc_c2_b3: "La XXL3 et le modèle LATIFA, qui tient son nom du bateau lui-même, ne sont que deux exemples de cuisinières renforcées ou personnalisées pour des usages océaniques extrêmes. Les spécifications sont le point de départ, et à partir de là la cuisinière se construit autour du bateau qui l'accueillera.",
+    oc_c3_label: "Structure",
+    oc_c3_title: "Construite d'une seule pièce",
+    oc_c3_b1: "L'enceinte du four est assemblée par emboîtements plutôt que par fixation de panneaux séparés. Le résultat se comporte comme un corps unique et monolithique, et c'est ce qui donne à ces modèles une robustesse exceptionnelle sous des sollicitations prolongées.",
+    oc_c3_b2: "Les aciers inoxydables sont au sommet de la gamme, AISI 316L compris : la nuance au molybdène, celle qui résiste aux chlorures.",
+    oc_c4_label: "Sécurité à bord",
+    oc_c4_title: "Une cuisinière digne de confiance par mer formée",
+    oc_c4_l1: "<strong>Manettes anticalorifiques.</strong> Une variante dédiée aux cuissons longues dans une cambuse fermée.",
+    oc_c4_l2: "<strong>Poignées de porte au dessin dédié.</strong> Étudiées pour réduire le risque de se blesser contre elles lorsque le bateau bouge.",
+    oc_c4_l3: "<strong>Systèmes de maintien des casseroles renforcés.</strong> Dimensionnés pour garder les casseroles en place par mer agitée.",
+    oc_c4_l4: "<strong>Verrou de porte surdimensionné.</strong> Le four reste fermé quoi que fasse le bateau.",
+    oc_c4_l5: "<strong>Variantes cardan ultra renforcées.</strong> Étriers et axes surdimensionnés par rapport à la gamme standard, pour un mouvement continu qui dure des semaines et non des heures.",
+    oc_c5_label: "Cuisson et énergie",
+    oc_c5_title: "Bien cuisiner avec une <em>énergie limitée</em>",
+    oc_c5_l1: "<strong>Brûleurs dédiés.</strong> Différents de ceux de la gamme standard, et plus performants.",
+    oc_c5_l2: "<strong>Tables à induction mises au point pour la vie à bord.</strong> Pas les modules standard : la gestion de la puissance est étudiée pour réduire le cyclage et la contrainte sur l'onduleur et le générateur.",
+    oc_c5_l3: "<strong>Fours adaptés à la navigation océanique.</strong> Résistances spécifiques et une gestion de la chaleur pensée pour une consommation limitée.",
+    oc_c5_b1: "D'autres solutions bluewater sont disponibles sur demande, ou peuvent être développées avec le client. C'est le travail que nous faisons depuis toujours pour les chantiers et les armateurs, un bateau à la fois.",
+    oc_quote: "Sur un bateau qui navigue loin des secours, la disponibilité d'une pièce compte autant que sa qualité. C'est pourquoi les pièces détachées sont en stock chez nos distributeurs sur les principaux marchés.",
     oc_brand_sub: "Cuisinières bluewater",
     oc_ms1: "L'acier au molybdène, contre les chlorures",
     oc_ms3: "Latifa, William Fife III · une cuisinière sur mesure",
     oc_fig_cap: "Latifa · variante Classic, entièrement sur mesure",
-    oc_btn: "Traversées océaniques",
+    oc_btn: "Cuisines océaniques",
     oc_ms2: "Des milliers de cuisinières installées sur des bateaux qui sillonnent les océans du monde entier",
     oc_badge: "Variante Bluewater disponible",
     ct_hours_label: "Horaires",
@@ -15641,11 +15755,41 @@ var DICT = {
     pcard_hint_desk: "Doppelklick für das Datenblatt",
     pcard_hint_tap: "Tippen für das Datenblatt",
     oc_hero_tag: "Ozeanpassagen · Von Anfang an",
+    oc_hero_title: "Herde, gebaut<br>für den <em>Ozean</em>",
+    oc_hero_lead: "Ein Herd für eine Ozeanüberquerung hat mit einem Herd für die Küstenfahrt fast nichts gemein. Zwei verschiedene Welten, und zum Teil unvereinbare.",
+    oc_c1_label: "Warum es anders ist",
+    oc_c1_title: "Wochen auf See ändern jede Entscheidung",
+    oc_c1_b1: "Wir bauen Herde für Ozeanpassagen seit jeher, und heute sind buchstäblich Tausende Techimpex-Herde auf See, an Bord von Yachten aller Art.",
+    oc_c1_b0: "Viele unserer Herde lassen sich in Varianten bauen, die für den Bluewater-Einsatz abgewandelt sind: Die Modelle, bei denen das möglich ist, tragen das Zeichen Oceano Bluewater. In jedem Fall kann jedes Produkt der Reihe zu einer eigenen verstärkten Variante angepasst werden.",
+    oc_c1_b2: "Einen Ozean zu überqueren heißt, wochenlang mit begrenzter Energie, ständiger Bewegung, Salzluft und ohne Aussicht auf Hilfe zu leben. Jede bauliche Entscheidung, die an Land ein Detail ist, wird an Bord zum Unterschied zwischen Kochen und Nichtkochen.",
+    oc_c2_label: "Auf See",
+    oc_c2_title: "Die Boote, die <em>am meisten verlangen</em>",
+    oc_c2_b1: "Darunter die XXL3, nach Maß gefertigt für Elmo's Fire, das Boot des großen italienischen Hochseeseglers Giovanni Soldini.",
+    oc_c2_b2: "Und da ist Latifa. Ein Ocean Racer im vollen Sinne des Wortes: entworfen von William Fife III und 1936 in Schottland bei der Werft William Fife &amp; Son vom Stapel gelaufen, galt sie ihrem Konstrukteur selbst als sein bestes und gelungenstes Werk. Für Latifa bauten wir einen Herd in der Variante Classic, vollständig nach Maß: Spezialbrenner, ein vergrößerter Backofen, ein verstärkter einteiliger Stahlrost aus dem Vollen geschnitten und Kardanbolzen von außergewöhnlicher Festigkeit.",
+    oc_c2_b3: "Die XXL3 und das Modell LATIFA, das seinen Namen vom Boot selbst trägt, sind nur zwei Beispiele für Herde, die für extreme Ozeaneinsätze verstärkt oder angepasst wurden. Die Spezifikation ist der Ausgangspunkt, und von dort wird der Herd um das Boot herum gebaut, auf dem er leben wird.",
+    oc_c3_label: "Struktur",
+    oc_c3_title: "Gebaut wie aus einem Stück",
+    oc_c3_b1: "Die Backofenmuffel wird durch Steckverbindungen gefügt und nicht durch das Verschrauben einzelner Bleche. Das Ergebnis verhält sich wie ein einziger monolithischer Körper, und genau das gibt diesen Modellen ihre außergewöhnliche Steifigkeit unter Dauerbelastung.",
+    oc_c3_b2: "Die Edelstähle stammen aus der Spitze des Sortiments, AISI 316L eingeschlossen: die molybdänhaltige Güte, jene, die Chloriden widersteht.",
+    oc_c4_label: "Sicherheit an Bord",
+    oc_c4_title: "Ein Herd, dem man bei Seegang vertrauen kann",
+    oc_c4_l1: "<strong>Hitzebeständige Knebel.</strong> Eine eigene Variante für lange Garzeiten in einer geschlossenen Kombüse.",
+    oc_c4_l2: "<strong>Türgriffe in eigener Formgebung.</strong> Entworfen, um das Verletzungsrisiko bei bewegtem Schiff zu verringern.",
+    oc_c4_l3: "<strong>Verstärkte Topfhalter.</strong> Dimensioniert, um Töpfe auch bei arbeitender See an ihrem Platz zu halten.",
+    oc_c4_l4: "<strong>Vergrößerte Türverriegelung.</strong> Der Backofen bleibt geschlossen, was das Boot auch tut.",
+    oc_c4_l5: "<strong>Ultraverstärkte Kardan-Varianten.</strong> Schwerere Bügel und Bolzen als in der Standardreihe, für Dauerbewegung über Wochen statt Stunden.",
+    oc_c5_label: "Kochen und Energie",
+    oc_c5_title: "Gut kochen mit <em>begrenzter Energie</em>",
+    oc_c5_l1: "<strong>Eigene Brenner.</strong> Andere als in der Standardreihe, und leistungsfähiger.",
+    oc_c5_l2: "<strong>Induktionsfelder, entwickelt für das Leben an Bord.</strong> Keine Standardmodule: Die Leistungssteuerung ist darauf ausgelegt, das Takten und die Belastung von Wechselrichter und Generator zu verringern.",
+    oc_c5_l3: "<strong>Backöfen für Ozeanpassagen angepasst.</strong> Eigene Heizelemente und eine Wärmeführung, die für begrenzten Verbrauch gedacht ist.",
+    oc_c5_b1: "Weitere Bluewater-Lösungen sind auf Anfrage erhältlich oder können gemeinsam mit dem Kunden entwickelt werden. Es ist die Arbeit, die wir seit jeher für Werften und Eigner leisten, ein Boot nach dem anderen.",
+    oc_quote: "Auf einem Boot, das fernab jeder Hilfe fährt, zählt die Verfügbarkeit eines Teils so viel wie seine Qualität. Deshalb halten unsere Händler in allen wichtigen Märkten Ersatzteile auf Lager.",
     oc_brand_sub: "Bluewater-Herde",
     oc_ms1: "Der Molybdän-Stahl, gegen Chloride",
     oc_ms3: "Latifa, William Fife III · ein Herd nach Maß",
     oc_fig_cap: "Latifa · Variante Classic, vollständig nach Maß",
-    oc_btn: "Ozeanpassagen",
+    oc_btn: "Hochsee-Herde",
     oc_ms2: "Tausende Kocher an Bord von Booten, die die Ozeane der Welt durchqueren",
     oc_badge: "Bluewater-Variante verfügbar",
     ct_hours_label: "Öffnungszeiten",
@@ -16916,11 +17060,41 @@ var DICT = {
     pcard_hint_desk: "Doble clic para la ficha",
     pcard_hint_tap: "Toca para la ficha",
     oc_hero_tag: "Travesías oceánicas · Desde siempre",
+    oc_hero_title: "Cocinas construidas<br>para el <em>océano</em>",
+    oc_hero_lead: "Una cocina construida para una travesía oceánica no tiene casi nada en común con una pensada para la navegación costera. Dos mundos distintos, y en parte incompatibles.",
+    oc_c1_label: "Por qué es distinto",
+    oc_c1_title: "Semanas en el mar cambian cada decisión",
+    oc_c1_b1: "Construimos cocinas para la navegación oceánica desde siempre, y hoy hay literalmente miles de cocinas Techimpex en el mar, a bordo de yates de todo tipo.",
+    oc_c1_b0: "Muchas de nuestras cocinas pueden realizarse en variantes modificadas para el uso bluewater: los modelos que lo prevén llevan el distintivo Oceano Bluewater. En cualquier caso, todos los productos de la gama pueden personalizarse en variantes reforzadas dedicadas.",
+    oc_c1_b2: "Cruzar un océano significa convivir durante semanas con energía limitada, movimiento continuo, salitre y ninguna posibilidad de asistencia. Cada decisión constructiva que en tierra es un detalle se convierte, a bordo, en la diferencia entre cocinar y no cocinar.",
+    oc_c2_label: "En el mar",
+    oc_c2_title: "Los barcos que <em>más exigen</em>",
+    oc_c2_b1: "Entre ellas está la XXL3 realizada a medida para Elmo's Fire, el barco del gran navegante italiano Giovanni Soldini.",
+    oc_c2_b2: "Y está Latifa. Un ocean racer en el sentido pleno del término: proyectada por William Fife III y botada en Escocia en 1936 por el astillero William Fife &amp; Son, su propio proyectista la consideraba su obra mejor y más lograda. Para Latifa realizamos una cocina en variante Classic, enteramente a medida: quemadores especiales, horno sobredimensionado, parrilla monopieza de acero reforzado cortada del macizo y pernos basculantes de robustez excepcional.",
+    oc_c2_b3: "La XXL3 y el modelo LATIFA, que toma su nombre del propio barco, son solo dos ejemplos de cocinas reforzadas o personalizadas para usos oceánicos extremos. Las especificaciones son el punto de partida, y desde ahí la cocina se construye en torno al barco que la acogerá.",
+    oc_c3_label: "Estructura",
+    oc_c3_title: "Construida como una sola pieza",
+    oc_c3_b1: "La mufla del horno se ensambla por encajes en lugar de fijar paneles separados. El resultado se comporta como un cuerpo único y monolítico, y es lo que da a estos modelos una robustez excepcional bajo esfuerzos prolongados.",
+    oc_c3_b2: "Los aceros inoxidables son de la cima de la gama, AISI 316L incluido: el grado con molibdeno, el que resiste a los cloruros.",
+    oc_c4_label: "Seguridad a bordo",
+    oc_c4_title: "Una cocina de la que fiarse con mar formada",
+    oc_c4_l1: "<strong>Mandos anticalor.</strong> Una variante dedicada a las cocciones largas en una cocina cerrada.",
+    oc_c4_l2: "<strong>Tiradores de puerta de diseño dedicado.</strong> Estudiados para reducir el riesgo de herirse contra ellos cuando el barco se mueve.",
+    oc_c4_l3: "<strong>Sistemas sujeta-ollas reforzados.</strong> Dimensionados para mantener las ollas en su sitio con mar trabajando.",
+    oc_c4_l4: "<strong>Bloqueo de puerta sobredimensionado.</strong> El horno permanece cerrado haga lo que haga el barco.",
+    oc_c4_l5: "<strong>Variantes cardánicas ultrarreforzadas.</strong> Soportes y pernos sobredimensionados respecto a la gama estándar, para un movimiento continuo de semanas y no de horas.",
+    oc_c5_label: "Cocción y energía",
+    oc_c5_title: "Cocinar bien con <em>energía limitada</em>",
+    oc_c5_l1: "<strong>Quemadores dedicados.</strong> Distintos de los de la gama estándar, y más prestacionales.",
+    oc_c5_l2: "<strong>Placas de inducción puestas a punto para la vida a bordo.</strong> No son módulos estándar: la gestión de la potencia está estudiada para reducir el ciclado y el esfuerzo sobre inversor y generador.",
+    oc_c5_l3: "<strong>Hornos adaptados a la navegación oceánica.</strong> Resistencias específicas y una gestión del calor pensada para el consumo limitado.",
+    oc_c5_b1: "Otras soluciones bluewater están disponibles bajo pedido, o pueden desarrollarse junto al cliente. Es el trabajo que hacemos desde siempre para astilleros y armadores, un barco cada vez.",
+    oc_quote: "En un barco que navega lejos de los auxilios, la disponibilidad de una pieza cuenta tanto como su calidad. Por eso los recambios están en almacén en nuestros distribuidores de los principales mercados.",
     oc_brand_sub: "Cocinas bluewater",
     oc_ms1: "El acero al molibdeno, contra los cloruros",
     oc_ms3: "Latifa, William Fife III · una cocina a medida",
     oc_fig_cap: "Latifa · variante Classic, enteramente a medida",
-    oc_btn: "Travesías oceánicas",
+    oc_btn: "Cocinas oceánicas",
     oc_ms2: "Miles de cocinas instaladas en barcos que surcan los océanos de todo el mundo",
     oc_badge: "Variante Bluewater disponible",
     ct_hours_label: "Horario",
