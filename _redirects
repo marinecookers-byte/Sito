@@ -35,13 +35,14 @@
 # ROUTES: serve qui, dove si lavora sull'indirizzo completo.
 # Il post su Soldini vale 357 impressioni in posizione 2,59 (miglior piazzamento
 # del sito) e oggi quel traffico si perde in home.
-# ATTENZIONE: i due post su Elmo's Fire vanno ENTRAMBI su /espresso12, non sulla
-# scheda della cucina. Chi cerca Soldini non vuole comprare un fornello: vuole
-# vedere cosa e' stato fatto con lui, e la pagina ESPRESSO12 e' l'unica dove ci
-# sono le foto con Soldini. Concentrare i due redirect su una sola destinazione
-# le trasferisce anche l'autorita' di entrambi i vecchi indirizzi.
-/single-post/2013/09/10/xxl3-cooker-installed-on-giovanni-soldini-oscar-farinettis-elmos-fire   /espresso12        301
-/single-post/2013/09/19/espresso12-cooker-installed-on-soldinis-elmos-fire                      /espresso12        301
+# ATTENZIONE: i due post su Elmo's Fire vanno ENTRAMBI su /oceano, non sulla
+# scheda della cucina ne' sulla categoria. Chi cerca Soldini non vuole comprare
+# un fornello: vuole vedere cosa e' stato fatto con lui. La pagina OCEANO ne
+# parla nel testo in cinque lingue, e da li' il nome apre la galleria con le
+# foto. Concentrare i due redirect su una sola destinazione le trasferisce
+# anche l'autorita' di entrambi i vecchi indirizzi. (agg. 22/08)
+/single-post/2013/09/10/xxl3-cooker-installed-on-giovanni-soldini-oscar-farinettis-elmos-fire   /oceano            301
+/single-post/2013/09/19/espresso12-cooker-installed-on-soldinis-elmos-fire                      /oceano            301
 /single-post/2013/07/01/chopi-chopi                                                             /electric-grills   301
 /single-post/2010/08/10/top4-royal-installed-on-merrymaid-classic-yacht                         /antiche-cambuse   301
 /single-post/2012/02/12/top4-royal-installed-on-isabel                                          /antiche-cambuse   301
