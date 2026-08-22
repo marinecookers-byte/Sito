@@ -1710,6 +1710,17 @@ header.hide{transform:translateY(-100%);}
 /* Galleria multi-foto (es. ORIZZONTE): cornice proporzionata alla foto, piu foto per riga */
 .pp-gallery-grid.pp-gallery-multi{grid-template-columns:repeat(3,1fr);gap:12px}
 .pp-gallery-grid.pp-gallery-multi .pp-gallery-item img{aspect-ratio:auto;height:auto;padding:8px}
+/* ⚠️ Con TRE foto la disposizione a tre colonne le mette tutte in fila, e la
+   terza finisce accanto alle altre invece che sotto. Qui la terza, quando e'
+   anche l'ultima, prende l'intera larghezza e va a capo da sola.
+   Vale per ESPRESSO12, FORMA e GUSTO, che oggi hanno tre foto: su tutte e tre
+   la fila da tre schiacciava le immagini. */
+.pp-gallery-grid.pp-gallery-multi .pp-gallery-item:nth-child(3):last-child{
+  grid-column:1 / -1;
+}
+.pp-gallery-grid.pp-gallery-multi .pp-gallery-item:nth-child(3):last-child img{
+  max-height:56vh; object-fit:contain;
+}
 @media(max-width:600px){.pp-gallery-grid.pp-gallery-multi{grid-template-columns:1fr 1fr;gap:8px}}
 /* Tile video nella galleria (opt-in via PROD_GALLERY_VIDEO). Il poster riempie
    la cella come le foto; un pulsante play dorato lo distingue. Se il poster non
@@ -1828,7 +1839,7 @@ header.hide{transform:translateY(-100%);}
 @media(prefers-reduced-motion:reduce){
   .pp-gallery-item.mag,.pp-gallery-item.mag.in{opacity:1;transform:none;transition:none}
   /* L'invito resta visibile, ma fermo. */
-  .pgrid-arrow-next{ animation:none !important; }
+  .pgrid-arrow-next{ animation:none !important; opacity:.9 !important; }
 }
 
 /* ── DOWNLOADS ── */
@@ -2910,6 +2921,76 @@ header.hide{transform:translateY(-100%);}
 }
 
 
+/* ═══ HERO · LA RIGA DELLE BUYER PERSONA ═════════════════════════
+   Il blocco sta QUI, dopo ogni altra regola della hero (le basi alla riga 278
+   circa, le media query dei portatili bassi, quella dei 768px e quella dei
+   430px). E' la regola del progetto: un override in media query va DOPO cio'
+   che deve battere, altrimenti resta inerte.
+
+   IL MARGINE NEGATIVO NON E' UN VEZZO. La hero e' allineata in basso
+   (justify-content:flex-end) dentro un'altezza fissa: ogni pixel aggiunto
+   spinge il titolo verso l'alto, e sul telefono lo spazio non c'e'. Il
+   margin-top negativo si mangia parte del margine inferiore della descrizione,
+   cosi' la riga costa poche decine di pixel invece di un blocco intero.
+   ⚠ Se un giorno si tocca il margin-bottom di .hde, va ricontrollato qui.
+
+   Le due versioni si escludono a vicenda: mai visibili insieme. */
+.hwho{
+  font-family:"Cormorant Garamond",serif;
+  font-style:italic;
+  font-size:15px;
+  line-height:1.5;
+  color:rgba(248,246,241,.5);
+  max-width:430px;
+  margin:-26px 0 30px;
+  opacity:0;
+  animation:fiu 1s ease .8s forwards;
+}
+.hwho-sm{display:none}
+.hwho .hw-go{
+  color:var(--go);
+  border-bottom:1px solid rgba(184,150,90,.45);
+  padding-bottom:1px;
+  cursor:pointer;
+  transition:color .3s,border-color .3s;
+}
+.hwho .hw-go:hover{color:var(--gl);border-bottom-color:var(--gl)}
+.hwho .hw-go:focus-visible{outline:1px solid var(--go);outline-offset:3px}
+
+/* Portatili bassi: la descrizione si stringe, quindi si stringe anche questa. */
+@media (max-height:720px) and (min-width:769px){
+  .hwho{font-size:14px;margin:-18px 0 22px}
+}
+/* Sotto i 600px la descrizione sparisce del tutto: senza di lei non c'e' piu'
+   nessun margine da recuperare e il margine negativo va azzerato, altrimenti
+   la riga finisce addosso al titolo. */
+@media (max-height:600px) and (min-width:769px){
+  .hwho{font-size:13px;margin:0 0 20px}
+}
+/* Telefono: la versione lunga andrebbe a due o tre righe e ruberebbe altezza
+   ai pulsanti. Si scambia con quella corta, che sta su una riga sola in tutte
+   e cinque le lingue. */
+@media (max-width:768px){
+  .hwho-lg{display:none}
+  .hwho-sm{
+    display:block;
+    font-size:11px;
+    font-style:normal;
+    letter-spacing:.12em;
+    line-height:1.4;
+    color:rgba(248,246,241,.55);
+    max-width:100%;
+    margin:-14px 0 14px;
+    text-shadow:0 1px 8px rgba(0,0,0,.55);
+    font-family:"Outfit",sans-serif;
+  }
+  .hwho .hw-go{border-bottom-color:rgba(184,150,90,.6)}
+}
+@media (max-width:430px){
+  .hwho-sm{font-size:10px;letter-spacing:.08em;margin:-14px 0 12px}
+}
+
+
 /* ═══ ENERGY EFFICIENCY · A FLAG (pop-up modale scrollabile) ═══
    Non è una pagina full-screen né una voce di menu: è un capitolo cliccabile
    dalla hero che apre un modale centrato, con backdrop scuro e pannello
@@ -2919,7 +3000,7 @@ header.hide{transform:translateY(-100%);}
    Vanno replicate solo le regole legate all'ID, che non si ereditano.
    ATTENZIONE se si tocca l'aspetto del modale qui sotto, cambia per
    entrambe le pagine: e' voluto, sono gemelle. */
-#effpage,#oceanpage,#custompage{
+#effpage,#oceanpage,#custompage,#sinkpage,#accpage{
   position:fixed;
   inset:0;
   /* Sopra l'header (800): la barra di chiusura sta in cima al modale e
@@ -2938,7 +3019,7 @@ header.hide{transform:translateY(-100%);}
   pointer-events:none;
   transition:opacity .45s ease;
 }
-#effpage.show,#oceanpage.show,#custompage.show{ opacity:1; pointer-events:all; }
+#effpage.show,#oceanpage.show,#custompage.show,#sinkpage.show,#accpage.show{ opacity:1; pointer-events:all; }
 .ef-modal{
   position:relative;
   width:min(1040px,100%);
@@ -2952,7 +3033,7 @@ header.hide{transform:translateY(-100%);}
   transform:translateY(24px) scale(.985);
   transition:transform .45s cubic-bezier(.16,1,.3,1);
 }
-#effpage.show .ef-modal,#oceanpage.show .ef-modal,#custompage.show .ef-modal{ transform:translateY(0) scale(1); }
+#effpage.show .ef-modal,#oceanpage.show .ef-modal,#custompage.show .ef-modal,#sinkpage.show .ef-modal,#accpage.show .ef-modal{ transform:translateY(0) scale(1); }
 /* Video di sfondo della hero Oceano. Stessa resa dell'immagine ef-hero-media,
    ma servono DUE elementi sovrapposti: un video non puo' dissolversi su se
    stesso, quindi negli ultimi 2 secondi il secondo riparte da zero e i due si
@@ -3069,6 +3150,85 @@ header.hide{transform:translateY(-100%);}
 
 /* Popup del bollino Bluewater. Volutamente piccolo: e' una nota, non una
    pagina. Stesso velo e stessa scatola scura del modale grande, in scala. */
+/* ═══ DISTRIBUTORI ═══
+   Riusa la meccanica e l'aspetto di #ocinfo: stessa velatura, stessa scatola,
+   stessa X. Qui cambia solo la larghezza, per contenere l'elenco.
+   ⚠️ max-height + overflow: l'elenco e' destinato a crescere, e senza questo
+   la scatola uscirebbe dallo schermo portandosi via la X. */
+/* ═══ DISTRIBUTORI E PARTNER · in fondo a Dove Siamo ═══
+   Era una finestra a se', aperta da una voce di menu. Spostata qui perche' e'
+   informazione di contatto, non una sezione del catalogo: chi cerca un
+   distributore sta cercando come raggiungerci.
+   Le classi dist-* sono rimaste identiche: cambia solo la cornice. */
+.ct-dist{
+  margin-top:clamp(44px,5.5vw,76px);
+  padding-top:clamp(32px,4vw,52px);
+  border-top:1px solid rgba(184,150,90,.16);
+}
+.ct-dist-ttl{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,3.2vw,38px); font-weight:300; line-height:1.06;
+  letter-spacing:.01em; color:#f8f6f1; margin:0;
+}
+.ct-dist-ttl::after{
+  content:''; display:block; width:46px; height:1px; margin-top:16px;
+  background:rgba(184,150,90,.55);
+}
+.ct-dist-lead{
+  margin:20px 0 0; max-width:70ch;
+  font-family:'Outfit',sans-serif; font-size:13.5px; font-weight:300;
+  line-height:1.85; color:rgba(248,246,241,.62);
+}
+@media(max-width:768px){
+  .ct-dist-ttl{ font-size:24px; }
+  .ct-dist-lead{ font-size:12.5px; }
+}
+.dist-list{ margin:26px 0 4px; max-width:70ch; border-top:1px solid rgba(248,246,241,.09); }
+.dist-row{
+  display:flex; align-items:center; gap:12px;
+  padding:13px 2px;
+  border-bottom:1px solid rgba(248,246,241,.09);
+  text-decoration:none;
+  transition:background .35s ease;
+}
+.dist-c{
+  flex:0 0 34%;
+  font-family:'Outfit',sans-serif; font-size:11.5px; font-weight:400;
+  letter-spacing:.18em; text-transform:uppercase; color:#b8965a;
+}
+.dist-u{
+  flex:1; min-width:0;
+  font-family:'Outfit',sans-serif; font-size:11px; font-weight:300;
+  color:rgba(248,246,241,.5);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  transition:color .35s ease;
+}
+.dist-go{ flex-shrink:0; width:11px; height:11px; color:rgba(184,150,90,.55);
+  transition:color .35s ease; }
+.dist-warn{
+  margin:24px 0 0; max-width:70ch; padding:14px 16px;
+  background:rgba(184,150,90,.07); border-left:3px solid #b8965a;
+  font-family:'Outfit',sans-serif; font-size:12px; font-weight:300; line-height:1.65;
+  color:rgba(248,246,241,.72);
+}
+/* Il pulsante chiude la finestra: sta in fondo a un riquadro che scorre, e
+   con la sola sottolineatura passava inosservato. Riquadro dorato a tutta
+   larghezza, cosi' si vede appena si arriva in fondo. */
+.dist-cta{
+  display:block; margin-top:26px; max-width:340px; cursor:pointer; text-align:center;
+  padding:15px 18px;
+  font-family:'Outfit',sans-serif; font-size:11px; font-weight:300;
+  letter-spacing:.24em; text-transform:uppercase; color:#b8965a;
+  border:1px solid rgba(184,150,90,.45);
+  transition:color .35s ease, border-color .35s ease, background .35s ease;
+}
+@media(hover:hover){
+  .dist-row:hover{ background:rgba(184,150,90,.05); }
+  .dist-row:hover .dist-u{ color:rgba(248,246,241,.8); }
+  .dist-row:hover .dist-go{ color:#b8965a; }
+  .dist-cta:hover{ color:#d4b07a; border-color:rgba(184,150,90,.9); background:rgba(184,150,90,.07); }
+}
+
 #ocinfo{
   position:fixed; inset:0;
   z-index:960;
@@ -3131,6 +3291,10 @@ header.hide{transform:translateY(-100%);}
 }
 @media(max-width:768px){
   .ocinfo-box{ padding:32px 22px 26px; }
+  .dist-row{ flex-wrap:wrap; gap:4px 10px; padding:12px 2px; }
+  .dist-c{ flex:0 0 100%; font-size:10.5px; letter-spacing:.14em; }
+  .dist-u{ flex:1; font-size:10.5px; }
+  .dist-warn{ font-size:11.5px; padding:12px 14px; }
   .ocinfo-body{ font-size:12.5px; }
 }
 
@@ -3200,6 +3364,18 @@ header.hide{transform:translateY(-100%);}
      il passaggio del mouse, solo passa dal tocco invece che dal sorvolo.
      Le due foto con classe .cst-color restano a colori anche qui. */
   .cst-img{ filter:grayscale(.85) brightness(.95); }
+}
+
+/* Collegamento dentro un paragrafo delle pagine modali: filetto dorato sotto,
+   nessun cambio di dimensione. Su un testo scuro l'oro basta a segnalarlo. */
+.oc-lnk{
+  color:#b8965a; cursor:pointer;
+  border-bottom:1px solid rgba(184,150,90,.4);
+  padding-bottom:1px;
+  transition:color .35s ease, border-color .35s ease;
+}
+@media(hover:hover){
+  .oc-lnk:hover{ color:#d4b07a; border-color:rgba(184,150,90,.9); }
 }
 
 .ef-modal::-webkit-scrollbar{ width:8px; }
@@ -3395,13 +3571,13 @@ header.hide{transform:translateY(-100%);}
 }
 
 @media(max-width:768px){
-  #effpage,#oceanpage,#custompage{ padding:0; }
+  #effpage,#oceanpage,#custompage,#sinkpage,#accpage{ padding:0; }
   .ef-modal{ max-height:100dvh; height:100dvh; width:100%; border:none; }
   /* Il modale a tutto schermo non ha bisogno del transform d'ingresso: lo
      azzero cosi' che la barra di chiusura (position:fixed) si ancori al
      viewport e non al modale. Senza questo la X non compariva su iOS. */
-  #effpage .ef-modal,#oceanpage .ef-modal,#custompage .ef-modal{ transform:none; }
-  #effpage.show .ef-modal,#oceanpage.show .ef-modal,#custompage.show .ef-modal{ transform:none; }
+  #effpage .ef-modal,#oceanpage .ef-modal,#custompage .ef-modal,#sinkpage .ef-modal,#accpage .ef-modal{ transform:none; }
+  #effpage.show .ef-modal,#oceanpage.show .ef-modal,#custompage.show .ef-modal,#sinkpage.show .ef-modal,#accpage.show .ef-modal{ transform:none; }
   /* La barra vale gia' per tutte le larghezze (regola base): qui resta solo
      il tocco piu' generoso per il dito. Il modale ora copre l'header, quindi
      non serve piu' agganciarla a var(--hh). */
@@ -5365,7 +5541,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="nrow">
       <button class="nbtn" id="bcat" onclick="tDrop()">
         <span class="nnum">01</span>
-        <span class="ntxt" data-i18n="nav_products">Product Categories</span>
+        <span class="ntxt" data-i18n="nav_products">Collections</span>
         <span class="narr"></span>
         <span class="nplus">+</span>
       </button>
@@ -5410,29 +5586,45 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
           <svg class="ncat-lock" width="9" height="11" viewBox="0 0 9 11" fill="none" aria-hidden="true"><path d="M2 5V3.3A2.3 2.3 0 0 1 6.6 3.3V5M1 5h7v5.4H1z" stroke="currentColor" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <span class="ncat-sub ncat-sub-soon">
-          <span class="ncat-sub-name" data-i18n="coll_ga_name">Galileo Collection</span>
-          <span class="ncat-sub-tag" data-i18n="coll_ga_tag">Monolithic culinary solutions</span>
-          <span class="ncat-soon-badge" data-i18n="coming_soon">Coming soon</span>
-        </span>
+        <!-- ⚠️ RIMOSSA TEMPORANEAMENTE il 22/08/2026 - Galileo Collection.
+             Nascosta perche' non porta a nulla: il visitatore cliccava e non
+             trovava niente. Il markup esatto per il ripristino sta in
+             RIPRISTINO_VOCI_SIDEBAR.md, sezione 1. -->
 
-        <span class="ncat-macro" data-i18n="nav_rv">The Luxury RV Collections</span>
-        <span class="ncat-coming" data-i18n="coming_soon">Coming soon</span>
+        <!-- ⚠️ RIMOSSA TEMPORANEAMENTE il 22/08/2026 - Collezioni Overland Luxury.
+             Nascosta perche' non porta a nulla: il visitatore cliccava e non
+             trovava niente. Il markup esatto per il ripristino sta in
+             RIPRISTINO_VOCI_SIDEBAR.md, sezione 2. -->
 
-        <span class="ncat-macro" data-i18n="nav_home">The Residential Collections</span>
-        <span class="ncat-coming" data-i18n="coming_soon">Coming soon</span>
+        <!-- ⚠️ RIMOSSA TEMPORANEAMENTE il 22/08/2026 - Collezioni Residenziali.
+             Nascosta perche' non porta a nulla: il visitatore cliccava e non
+             trovava niente. Il markup esatto per il ripristino sta in
+             RIPRISTINO_VOCI_SIDEBAR.md, sezione 3. -->
 
       </div></div>
     </div>
-    <div class="nrow"><button class="nbtn" onclick="openAbout()"><span class="nnum">02</span><span class="ntxt" data-i18n="nav_about">About Us</span><span class="narr"></span></button></div>
-    <div class="nrow"><button class="nbtn" onclick="openCatalogues()"><span class="nnum">03</span><span class="ntxt" data-i18n="nav_catalogues">Catalogues</span><span class="narr"></span></button></div>
-    <div class="nrow"><button class="nbtn" onclick="openSpare()"><span class="nnum">04</span><span class="ntxt" data-i18n="nav_spare">Spare Parts</span><span class="narr"></span></button></div>
-    <div class="nrow"><button class="nbtn" onclick="openCat('Panholders',[])"><span class="nnum">05</span><span class="ntxt" data-i18n="cat_panholders">Panholders</span><span class="narr"></span></button></div>
-    <div class="nrow"><button class="nbtn" onclick="openCatBySlug('sinks')"><span class="nnum">06</span><span class="ntxt" data-i18n="cat_sinks">Sinks</span><span class="narr"></span></button></div>
-    <div class="nrow"><button class="nbtn" onclick="openCatBySlug('accessori-per-la-cottura')"><span class="nnum">07</span><span class="ntxt" data-i18n="cat_accessori">Cooking Accessories</span><span class="narr"></span></button></div>
-    <div class="nrow"><button class="nbtn" onclick="openCustom()"><span class="nnum">08</span><span class="ntxt" data-i18n="cat_custom">Custom Projects</span><span class="narr"></span></button></div>
-    <div class="nrow"><button class="nbtn" onclick="openCatBySlug('manuali')"><span class="nnum">09</span><span class="ntxt" data-i18n="cat_manuali">Manuals</span><span class="narr"></span></button></div>
-    <div class="nrow"><button class="nbtn" onclick="openContact()"><span class="nnum">10</span><span class="ntxt" data-i18n="nav_contact">Contact Us</span><span class="narr"></span></button></div>
+    <!-- Ordine voluto: subito sotto Collezioni le tre famiglie che NON stanno
+         dentro una collezione (Fermapentole, Progetti su misura, Lavelli),
+         poi i Ricambi e i Cataloghi, poi l'azienda. Accessori e Manuali
+         chiudono in sordina: cliccabili, ma spenti.
+         ⚠ Le voci qui sotto sono di PRIMO livello: nella fascia del percorso
+         discendono da Navigazione, non da Collezioni. -->
+    <div class="nrow"><button class="nbtn" onclick="openCat('Panholders',[])"><span class="nnum">02</span><span class="ntxt" data-i18n="cat_panholders">Panholders</span><span class="narr"></span></button></div>
+    <div class="nrow"><button class="nbtn" onclick="openCustom()"><span class="nnum">03</span><span class="ntxt" data-i18n="cat_custom">Custom Projects</span><span class="narr"></span></button></div>
+    <div class="nrow"><button class="nbtn" onclick="openSinks()"><span class="nnum">04</span><span class="ntxt" data-i18n="cat_sinks">Sinks</span><span class="narr"></span></button></div>
+    <div class="nrow"><button class="nbtn" onclick="openAcc()"><span class="nnum">05</span><span class="ntxt" data-i18n="cat_accessori">Cooking Accessories</span><span class="narr"></span></button></div>
+    <div class="nrow"><button class="nbtn" onclick="openSpare()"><span class="nnum">06</span><span class="ntxt" data-i18n="nav_spare">Spare Parts</span><span class="narr"></span></button></div>
+    <div class="nrow"><button class="nbtn" onclick="openCatalogues()"><span class="nnum">07</span><span class="ntxt" data-i18n="nav_catalogues">Catalogues</span><span class="narr"></span></button></div>
+    <div class="nrow"><button class="nbtn" onclick="openAbout()"><span class="nnum">08</span><span class="ntxt" data-i18n="nav_about">About Us</span><span class="narr"></span></button></div>
+    <div class="nrow"><button class="nbtn" onclick="openContact()"><span class="nnum">09</span><span class="ntxt" data-i18n="nav_where">Where We Are</span><span class="narr"></span></button></div>
+    <!-- ⚠ Il filo dorato (.nrow-div) era sulla voce Manuali, oggi rimossa: al
+         momento NESSUNA voce e' spenta, quindi non c'e' nulla da separare.
+         Ripristinando i Manuali va rimesso su di loro, e comunque sempre sulla
+         PRIMA voce spenta: altrimenti separa il nulla. -->
+    <!-- ⚠️ RIMOSSA TEMPORANEAMENTE il 22/08/2026 - Manuali, voce 10.
+             Nascosta perche' non porta a nulla: il visitatore cliccava e non
+             trovava niente. Il markup esatto per il ripristino sta in
+             RIPRISTINO_VOCI_SIDEBAR.md, sezione 4. -->
   </div>
   <div class="nfoot">
     <span class="nfootl" data-i18n="nav_touch">Get in touch</span>
@@ -5932,6 +6124,14 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   </div>
 </header>
 
+<!-- BARRA DEL PERCORSO · compare SOLO dentro la griglia di categoria (#cp) e
+     la scheda prodotto (#prodpage), mai sulla home e mai sulle altre pagine.
+     Sta subito sotto l'header (z-index 799 contro 800) ed e' un figlio diretto
+     di body: nessun antenato con transform, quindi position:fixed regge
+     (regola 3.2 del progetto).
+     Il contenuto lo scrive bcDraw() in fondo al file. -->
+<nav id="bcbar" aria-label="Percorso"></nav>
+
 <!-- ── RICERCA SITO · popup ────────────────────────────────────────────────
      Indicizza prodotti, categorie, codici ricambio e pagine. L'indice viene
      costruito alla prima apertura leggendo window.CATS, window.PROD_DESCS e
@@ -6034,6 +6234,16 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <p class="hey" data-i18n="hero_tag">Artisan Marine Cooking Equipment</p>
     <h1 class="hti" data-i18n-html="hero_title">Alta cucina italiana,<br><em>anywhere</em></h1>
     <p class="hde" data-i18n="hero_desc">Professional gimballed cookers, cooktops, ovens and grills · from dayboats to vintage yachts, from charter to ocean passages. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.</p>
+    <!-- LA RIGA DELLE BUYER PERSONA · le quattro figure che il sito serve
+         erano nominate solo dentro il modulo di contatto, cioe' alla FINE del
+         percorso. Qui il visitatore si riconosce in una parola prima ancora di
+         scorrere. Due versioni della stessa riga: quella lunga su desktop,
+         quella corta sul telefono, dove la hero ha poco spazio in altezza.
+         Solo "ricambio" e' cliccabile: le altre tre figure hanno gia' la loro
+         destinazione nei pulsanti qui sotto, i ricambi no, ed erano la ricerca
+         piu' frequente su Google. Chiama openSpare(), funzione gia' esistente. -->
+    <p class="hwho hwho-lg" data-i18n-html="hero_who">For owners, shipyards and designers · and for anyone looking for a <span class="hw-go" onclick="openSpare()" role="button" tabindex="0">spare part</span>.</p>
+    <p class="hwho hwho-sm" data-i18n-html="hero_who_s">Owners · Shipyards · <span class="hw-go" onclick="openSpare()" role="button" tabindex="0">Spare parts</span></p>
     <div class="hac">
       <a href="#" class="btp" onclick="tm();setTimeout(tDrop,400);return false;" data-i18n="hero_btn_explore">Explore Products</a>
       <a href="#" class="btm" onclick="openMatrix();return false;" data-i18n="matrix_btn">Product Overview</a>
@@ -6638,7 +6848,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </div>
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n-html="oc_c2_title">The boats that <em>ask the most</em></h2>
-        <p class="ef-ch-body" data-i18n="oc_c2_b1">Among them is the XXL3 built to measure for Elmo&rsquo;s Fire, the yacht of the great Italian offshore sailor Giovanni Soldini.</p>
+        <p class="ef-ch-body" data-i18n-html="oc_c2_b1">Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor <span class="oc-lnk" onclick="ocSoldini()" role="link" tabindex="0">Giovanni Soldini</span>.</p>
         <p class="ef-ch-body" data-i18n="oc_c2_b2">And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife &amp; Son, she was regarded by her own designer as his finest and most accomplished work. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.</p>
         <figure class="oc-fig">
           <img class="oc-fig-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg" alt="Techimpex cooker, Classic variant, built to measure for the ocean racer Latifa" loading="lazy" onclick="hdZoom(this.getAttribute('data-zoom')||this.src, this.alt)" data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg">
@@ -7237,6 +7447,260 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
  </div><!-- /ef-modal -->
 </div><!-- /custompage -->
 
+
+
+<!-- PAGINA LAVELLI · stessa ossatura di Progetti su misura: modale a tutto
+     schermo, hero di solo testo, due capitoli, immagini, chiusura con invito.
+     ⚠ Le foto passano da Cloudinary con f_auto,q_auto e una larghezza
+     imposta: w_1200 per la pagina, w_1800 per l'ingrandimento. Caricare gli
+     originali significherebbe decine di MB per una pagina sola.
+     ⚠ Su desktop si vedono due immagini, su telefono una sola e diversa: non
+     e' la stessa foto rimpicciolita, e' uno scatto scelto per lo schermo
+     stretto. Lo scambio lo fa il CSS, quindi il browser scarica solo quella
+     che serve. -->
+<div id="sinkpage" onclick="if(event.target===this)closeSinks()">
+ <div class="ef-modal">
+  <button class="ef-x" onclick="closeSinks()" aria-label="Close">
+    <span class="ef-x-lbl" data-i18n="ppd_hint_close">Close</span>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+  </button>
+
+  <div class="oc-brand">
+    <span class="oc-brand-name" data-i18n="snk_brand">SINKS</span>
+    <span class="oc-brand-sub" data-i18n="snk_sub">Made to Measure</span>
+  </div>
+
+  <div class="ef-hero cst-hero">
+    <div class="ef-hero-ovl"></div>
+    <div class="ef-hero-inner">
+      <span class="ef-hero-tag" data-i18n="snk_tag">Sinks &middot; Any Dimension</span>
+      <h1 class="ef-hero-title" data-i18n-html="snk_title">Cut to the<br><em>millimetre</em></h1>
+      <p class="ef-hero-lead" data-i18n="snk_lead">Every sink we build is made to measure. There is no list of standard sizes to choose from: you give us the opening, and the basin is drawn around it.</p>
+    </div>
+  </div>
+
+  <div class="ef-body">
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">I</span>
+        <span class="ef-ch-label" data-i18n="snk_c1_l">How They Are Made</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="snk_c1_t">Professional processes, marine dimensions</h2>
+        <p class="ef-ch-body" data-i18n="snk_c1_b">These sinks come from the world of professional kitchens: the same forming, the same welds, the same tolerances. We build them with a zero radius in the corners, or with a wider radius where a softer line suits the galley better. The choice is yours, and it takes nothing away from the strength of the basin.</p>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">II</span>
+        <span class="ef-ch-label" data-i18n="snk_c2_l">What Goes With Them</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="snk_c2_t">Boards, colanders, and whatever else is needed</h2>
+        <p class="ef-ch-body" data-i18n="snk_c2_b">On board a sink is rarely only a sink: every surface has to do more than one job. Ours take chopping boards, colanders, draining trays and other accessories that rest on the rim and turn the basin into worktop when it is not in use.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="snk-grid">
+    <figure class="snk-it snk-desk">
+      <img class="snk-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787389502/SINK_SINGOLO_ORIZZONTALE_wlpwgl.jpg" alt="Single bowl marine sink" loading="lazy"
+           onclick="this.classList.toggle('snk-on')">
+      <figcaption class="cst-cap"><span data-i18n="snk_cap1">Zero radius</span></figcaption>
+    </figure>
+    <figure class="snk-it snk-desk">
+      <img class="snk-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787389506/SINK_DOPPIO_ORIZZONTALE_owsoew.jpg" alt="Double bowl marine sink" loading="lazy"
+           onclick="this.classList.toggle('snk-on')">
+      <figcaption class="cst-cap"><span data-i18n="snk_cap2">Bespoke basin</span></figcaption>
+    </figure>
+    <figure class="snk-it snk-mob">
+      <img class="snk-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_900/v1787389509/SINK_VERTICALE_f435i6.jpg" alt="Made to measure sink" loading="lazy"
+           onclick="this.classList.toggle('snk-on')">
+      <figcaption class="cst-cap"><span data-i18n="snk_cap3">Made to measure</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="ef-close">
+    <p class="ef-quote" data-i18n="snk_quote">Give us the opening, and we build the basin around it.</p>
+    <a class="ef-cta" onclick="closeSinks();openContactForm();" data-i18n="snk_cta">Talk to our engineers</a>
+  </div>
+ </div><!-- /ef-modal -->
+</div><!-- /sinkpage -->
+
+<!-- PAGINA ACCESSORI DI COTTURA · stessa ossatura dei Lavelli e di Progetti
+     su misura: il vestito del modale e' quello condiviso, qui cambiano solo
+     i testi e le immagini.
+     ⚠ Le foto sono in bianco e nero e riprendono colore al passaggio del
+     mouse: sul telefono, dove il passaggio non esiste, restano a colori.
+     ⚠ Tre scatti orizzontali per lo schermo largo, tre verticali per quello
+     stretto. Lo scambio lo fa il CSS con display, quindi il browser scarica
+     soltanto la terna che gli serve. -->
+<div id="accpage" onclick="if(event.target===this)closeAcc()">
+ <div class="ef-modal">
+  <button class="ef-x" onclick="closeAcc()" aria-label="Close">
+    <span class="ef-x-lbl" data-i18n="ppd_hint_close">Close</span>
+    <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+  </button>
+
+  <div class="oc-brand">
+    <span class="oc-brand-name" data-i18n="acc_brand">SOAPSTONE</span>
+    <span class="oc-brand-sub" data-i18n="acc_sub">Valtellina</span>
+  </div>
+
+  <div class="ef-hero cst-hero">
+    <div class="ef-hero-ovl"></div>
+    <div class="ef-hero-inner">
+      <span class="ef-hero-tag" data-i18n="acc_tag">Cooking Accessories</span>
+      <h1 class="ef-hero-title" data-i18n-html="acc_title">Soapstone from<br>the <em>Valtellina</em></h1>
+      <p class="ef-hero-lead" data-i18n="acc_lead">Our ovens are Italian ovens: built for static cooking, with the heat rising from below. It is an old choice, and it is the one that makes everything else on this page possible.</p>
+    </div>
+  </div>
+
+  <div class="ef-body">
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">I</span>
+        <span class="ef-ch-label" data-i18n="acc_c1_l">The Static Oven</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="acc_c1_t">Heat that comes from below</h2>
+        <p class="ef-ch-body" data-i18n="acc_c1_b">In a static oven heat is not blown: it radiates. It rises from the floor of the chamber and wraps the food slowly, without drying the surface before the inside is ready. This is how Italian home ovens and bread ovens cook, and it is why in an oven like this the rise carries on through the first minutes instead of stopping, the crust forms where crust belongs, and what should stay soft underneath stays soft. It allows the long braise, the roast that keeps its juices, the gratin that closes on top without drying the filling, and pastry, which a current of air would ruin.</p>
+      </div>
+    </div>
+
+  <div class="acc-media">
+    <figure class="acc-it acc-desk">
+      <img class="acc-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787392553/PENTOLA_OLLARE_ORIZZONTALE_zglr9j.jpg" alt="Soapstone pot" loading="lazy"
+           onclick="this.classList.toggle('acc-on')">
+      <figcaption class="cst-cap"><span data-i18n="acc_cap3">Soapstone pot</span></figcaption>
+    </figure>
+    <figure class="acc-it acc-mob">
+      <img class="acc-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_900/v1787392536/PENTOLA_OLLARE_VERTICALE_ykzcqe.jpg" alt="Soapstone pot" loading="lazy"
+           onclick="this.classList.toggle('acc-on')">
+      <figcaption class="cst-cap"><span data-i18n="acc_cap3">Soapstone pot</span></figcaption>
+    </figure>
+  </div>
+
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">II</span>
+        <span class="ef-ch-label" data-i18n="acc_c2_l">In the Galley</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="acc_c2_t">What comes out of an oven like this</h2>
+        <p class="ef-ch-body" data-i18n="acc_c2_b">Bread, pizza and focaccia, which take their double nature of crust and crumb from static heat. Roasts and braises, cooked long and low. Fish in salt crust or in paper, where what matters is heat that wraps rather than heat that dries. Bakes, soufflés and vegetable flans, which a fan would collapse. Short pastry, sweet leavened doughs, meringues left to dry for hours in an oven almost switched off. And whole roasted vegetables, which want time and not haste.</p>
+      </div>
+    </div>
+
+  <div class="acc-media">
+    <figure class="acc-it acc-desk">
+      <img class="acc-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787394746/PIZZA_ORIZZONTALE_pkfivl.jpg" alt="Pizza on the stone" loading="lazy"
+           onclick="this.classList.toggle('acc-on')">
+      <figcaption class="cst-cap"><span data-i18n="acc_cap1">Pizza on the stone</span></figcaption>
+    </figure>
+    <figure class="acc-it acc-mob">
+      <img class="acc-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_900/v1787394301/PIZZA_MARGHERITA_ON_PIETRA_OLLARE_VERTICALE_knhti2.jpg" alt="Pizza on the stone" loading="lazy"
+           onclick="this.classList.toggle('acc-on')">
+      <figcaption class="cst-cap"><span data-i18n="acc_cap1">Pizza on the stone</span></figcaption>
+    </figure>
+  </div>
+
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">III</span>
+        <span class="ef-ch-label" data-i18n="acc_c3_l">The Accessory</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="acc_c3_t">The advantages do not stop there</h2>
+        <p class="ef-ch-body" data-i18n="acc_c3_b">Having the heat arrive from below made it possible to introduce an accessory unlike any other into our ovens: the stone. There are two of them, and they come from two different Italies. Lava stone is volcanic basalt, quarried from the old flows of Etna, in Sicily, and from the slopes of Vesuvius, in Campania. Soapstone comes instead from the thousand-year-old quarries of the Valtellina and the Valchiavenna, in the province of Sondrio. Two rocks opposite in history and in temperament, and good for two different things.</p>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">IV</span>
+        <span class="ef-ch-label" data-i18n="acc_c4_l">The Soapstone</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="acc_c4_t">Five thousand years of quarries</h2>
+        <p class="ef-ch-body" data-i18n="acc_c4_b">It is not born of fire but of pressure: deep rocks, rich in magnesium, slowly transformed in the roots of the Alps. What comes out is a metamorphic rock of talc, chlorite and magnesite, matt green, soft enough to be turned on a lathe and yet refractory. The conditions that form it are so particular that in Italy it is found almost nowhere else. In the quarries of Alpe Pirlo, Val Giumellino and Valbrutta, above Chiesa in Valmalenco and Lanzada, it has been cut since the Neolithic: Pliny the Elder already mentions it in his Naturalis Historia, and by the sixteenth century the pots turned on water-driven lathes were going down the valley to be sold across Italy. Those same pots are still in use, and the same slabs sit in the ovens of Italian restaurants that hold stars. It cooks gently and evenly: it is the stone of bread, of pizza, of focaccia, of the long bake.</p>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">V</span>
+        <span class="ef-ch-label" data-i18n="acc_c5_l">The Lava Stone</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="acc_c5_t">Basalt from the volcanoes</h2>
+        <p class="ef-ch-body" data-i18n="acc_c5_b">It is magma that stopped. Cooling in the open air along the slopes, the flow becomes basalt: a dark, dense rock full of microscopic pores, made of plagioclase, pyroxenes and olivine. It is hard where soapstone is soft, and it takes high temperatures and sudden changes without cracking. That is why it is the stone of the grill made indoors: steaks, fish, vegetables over fierce heat. The porous surface is naturally non-stick and keeps the fat away from the food.</p>
+      </div>
+    </div>
+
+  <div class="acc-media acc-media-vid">
+    <figure class="acc-it acc-vid">
+      <!-- ⚠ preload="none": il filmato sta dentro una pagina che di solito non
+           viene aperta, e senza questo il browser lo scaricherebbe comunque al
+           caricamento del sito. Parte da openAcc(), quando la pagina si apre
+           davvero. Muto, in ciclo e playsinline: senza playsinline iOS lo
+           aprirebbe a tutto schermo da solo. -->
+      <video class="acc-video" muted loop playsinline preload="none"
+             src="https://res.cloudinary.com/dseiw9ndw/video/upload/q_auto/v1787393392/9320060-hd_1280_720_30fps_im0qnj.mp4"></video>
+      <figcaption class="cst-cap"><span data-i18n="acc_cap4">Lava flow</span></figcaption>
+    </figure>
+  </div>
+
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">VI</span>
+        <span class="ef-ch-label" data-i18n="acc_c6_l">On Board</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="acc_c6_t">One pan less, one flywheel more</h2>
+        <p class="ef-ch-body" data-i18n="acc_c6_b">Cooking a steak on the stone, inside the oven, means not having a searing pan on the cooktop while the boat moves: no spitting fat, no smoke in the saloon, less risk. And the stone, once hot, is a remarkable thermal flywheel: it holds heat for a long time and gives it back slowly, so the oven works less to keep its temperature. On board, where every watt and every kilo of gas is counted, that is not a detail.</p>
+      </div>
+    </div>
+
+  <div class="acc-media">
+    <figure class="acc-it acc-desk">
+      <img class="acc-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787392574/FIORENTINA_STEAK_ORIZZONTALE_jitzah.jpg" alt="Steak on the stone" loading="lazy"
+           onclick="this.classList.toggle('acc-on')">
+      <figcaption class="cst-cap"><span data-i18n="acc_cap2">Steak on the stone</span></figcaption>
+    </figure>
+    <figure class="acc-it acc-mob">
+      <img class="acc-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_900/v1787392587/FIORENTINA_STEAK_VERTICALE_ey15rv.jpg" alt="Steak on the stone" loading="lazy"
+           onclick="this.classList.toggle('acc-on')">
+      <figcaption class="cst-cap"><span data-i18n="acc_cap2">Steak on the stone</span></figcaption>
+    </figure>
+  </div>
+
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">VII</span>
+        <span class="ef-ch-label" data-i18n="acc_c7_l">When It Was Magic</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n="acc_c7_t">The stone that took the poison out</h2>
+        <p class="ef-ch-body" data-i18n="acc_c7_b">For centuries these stones were believed to hold powers. At Piuro, in the Valchiavenna, soapstone pots were said to neutralise poison while the food boiled, which is how they ended up on the tables of those who had enemies. Fat kept in those vessels was said to last for decades without turning, the stone was said never to wear away, the fire was said to have no hold on it. It was the talc and the chlorite, the porosity, the slowness with which heat enters and leaves. But whoever was cooking did not know that, and called it the magic stone.</p>
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="ef-close">
+    <p class="ef-quote" data-i18n="acc_quote">The same rock that five thousand years ago became a cooking pot now goes into an oven that sails.</p>
+    <a class="ef-cta" onclick="closeAcc();openContactForm();" data-i18n="acc_cta">Talk to our engineers</a>
+  </div>
+ </div><!-- /ef-modal -->
+</div><!-- /accpage -->
+
 <!-- Popup del bollino Bluewater. Piccolo, non e' una pagina: spiega cosa
      comporta la variante e, per le cucine, rimanda alla pagina Oceano.
      ATTENZIONE sulle griglie e sui barbecue il collegamento NON deve
@@ -7321,6 +7785,55 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     <div class="ct-form-wrap">
       <span class="ct-block-label" data-i18n="ct_form_label">Write to us</span>
       <div id="cpform"></div>
+    </div>
+
+
+    <!-- ══ DISTRIBUTORI E PARTNER ══ In fondo alla pagina Dove Siamo,
+         sotto i recapiti e il modulo. Era una finestra a se' aperta da una voce
+         di menu: spostata qui perche' e' informazione di contatto, non una
+         sezione del catalogo. Le classi dist-* sono rimaste le stesse. -->
+    <div class="ct-dist">
+      <h2 class="ct-dist-ttl" data-i18n="dist_ttl">International Distributors and Partners</h2>
+        <p class="ct-dist-lead" data-i18n="dist_p1">Our production is broad and varied: some of our lines are distributed worldwide, others are built to order for a single shipyard or a single boat, and others again are dedicated lines developed with partner brands. Where a line is distributed, spare parts are normally held by the distributor. The list below is not exhaustive: write to us and we will point you to the nearest dealer, distributor, exclusive agent or partner.</p>
+      <div class="dist-list">
+          <a class="dist-row" href="https://techimpexamerica.com/" target="_blank" rel="noopener">
+            <span class="dist-c" data-i18n="dist_c1">USA</span>
+            <span class="dist-u">techimpexamerica.com</span>
+            <svg class="dist-go" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.6M8.5 3.5V7.4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="dist-row" href="https://www.technautic.nl/" target="_blank" rel="noopener">
+            <span class="dist-c" data-i18n="dist_c2">Netherlands</span>
+            <span class="dist-u">technautic.nl</span>
+            <svg class="dist-go" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.6M8.5 3.5V7.4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="dist-row" href="https://www.improducts.co.uk/" target="_blank" rel="noopener">
+            <span class="dist-c" data-i18n="dist_c3">United Kingdom</span>
+            <span class="dist-u">improducts.co.uk</span>
+            <svg class="dist-go" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.6M8.5 3.5V7.4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="dist-row" href="https://www.nmsproff.no/" target="_blank" rel="noopener">
+            <span class="dist-c" data-i18n="dist_c4">Norway</span>
+            <span class="dist-u">nmsproff.no</span>
+            <svg class="dist-go" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.6M8.5 3.5V7.4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="dist-row" href="https://www.navinordic.com/" target="_blank" rel="noopener">
+            <span class="dist-c" data-i18n="dist_c5">Sweden</span>
+            <span class="dist-u">navinordic.com</span>
+            <svg class="dist-go" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.6M8.5 3.5V7.4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="dist-row" href="https://www.esconet.fi/" target="_blank" rel="noopener">
+            <span class="dist-c" data-i18n="dist_c6">Finland</span>
+            <span class="dist-u">esconet.fi</span>
+            <svg class="dist-go" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.6M8.5 3.5V7.4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a class="dist-row" href="https://www.ogrzewania-postojowe.sklep.pl" target="_blank" rel="noopener">
+            <span class="dist-c" data-i18n="dist_c7">Poland</span>
+            <span class="dist-u">ogrzewania-postojowe.sklep.pl</span>
+            <svg class="dist-go" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M3.5 8.5L8.5 3.5M8.5 3.5H4.6M8.5 3.5V7.4" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+      </div>
+      <p class="dist-warn" data-i18n="dist_warn">One important note. The product lines presented on this site do not always coincide with those handled by the dealers and wholesalers who stock their spare parts: despite sharing a name, the products can differ substantially. The same model may also vary from one distributor to another in finishes, materials, burners, accessories and optional equipment, differences that are reflected in the price.</p>
+      <a class="dist-cta" onclick="openContactForm();" data-i18n="dist_cta">Write to us</a>
     </div>
 
   </div>
@@ -10138,6 +10651,10 @@ document.addEventListener('keydown',function(e){
   if(_oc&&_oc.classList.contains('show')){closeOcean();return;}
   var _cu=document.getElementById('custompage');
   if(_cu&&_cu.classList.contains('show')){closeCustom();return;}
+  var _sn=document.getElementById('sinkpage');
+  if(_sn&&_sn.classList.contains('show')){closeSinks();return;}
+  var _ac=document.getElementById('accpage');
+  if(_ac&&_ac.classList.contains('show')){closeAcc();return;}
   var _ab=document.getElementById('aboutpage');
   if(_ab&&_ab.classList.contains('show')){goHome();return;}
   var _ca=document.getElementById('catpage');
@@ -10550,7 +11067,7 @@ window.PROD_GALLERY={
   'ESPRESSO12':[
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785405715/ESPRESSO12_SOLDINI_kz7ath.webp',
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1785405713/ESPRESSO12_SOLDINI_2_ddshfv.webp',
-    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787324122/mamma1_swrh5w.jpg'
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787409409/ESPRESSO12_COFFEE_t8lgxo.jpg'
   ],
   'GUSTO':[
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1784657228/GUSTO_-_MARINER3_xvfjed.jpg',
@@ -10581,6 +11098,10 @@ window.PROD_GALLERY={
   'CAPITANO':[
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787333687/IMG_20191209_163135_lbx64h.jpg',
     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787333689/IMG_20191209_163146_kqj7ut.jpg'
+  ],
+  'NOBILIS':[
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787412065/NOBILIS_INSTALLED_qaeen8.jpg',
+    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787411424/NOBILIS_FOTO_lngwhz.png'
   ]
 };
 
@@ -11337,6 +11858,32 @@ function closeOcean(){
 }
 window.openOcean=openOcean; window.closeOcean=closeOcean;
 
+/* Collegamento sul nome di Soldini nel capitolo II di Oceano.
+   Apre DIRETTAMENTE la galleria fotografica di ESPRESSO12, dove ci sono le
+   due foto con lui, invece della scheda o della categoria.
+   ⚠️ La categoria 'coffee-makers' contiene UN SOLO modello: mandarci il
+   visitatore significava aprire una griglia con una miniatura sola.
+   ⚠️ Due ricadute in ordine, perche' questo indirizzo vale il miglior
+   piazzamento del sito e non deve mai finire nel vuoto: se la galleria non
+   e' disponibile si apre la scheda, e se manca anche quella la categoria. */
+function ocSoldini(){
+  /* ⚠️ OCEANO NON SI CHIUDE. La galleria sta a z-index 9500, cioe' sopra la
+     pagina (940): si apre sovrapposta, e alla X il visitatore si ritrova
+     esattamente dove aveva cliccato, invece di finire in home. */
+  var g=(window.PROD_GALLERY||{})['ESPRESSO12']||[];
+  if(g.length && typeof window.ppGalleryOpen==='function'){
+    window.ppGalleryOpen(g.map(function(u){
+      return {src:u, alt:"Techimpex ESPRESSO12 · Giovanni Soldini, Elmo's Fire"};
+    }), 0);
+    return;
+  }
+  /* Le ricadute portano altrove, quindi la pagina va chiusa. */
+  if(typeof closeOcean==='function') closeOcean();
+  if(typeof goProd==='function'){ goProd('ESPRESSO12'); return; }
+  if(typeof openCatBySlug==='function') openCatBySlug('coffee-makers');
+}
+window.ocSoldini=ocSoldini;
+
 /* ══ PAGINA CUSTOM ══ Stessa meccanica di openOcean, senza il video. */
 var _cuLock=false;
 function openCustom(){
@@ -11362,6 +11909,178 @@ function closeCustom(){
   if(!document.body.classList.contains('page-open')){ document.body.style.overflow=''; }
 }
 window.openCustom=openCustom; window.closeCustom=closeCustom;
+
+
+
+/* ══ PAGINA LAVELLI ══ Stessa meccanica di openCustom. */
+var _snLock=false;
+function openSinks(){
+  var sn=document.getElementById('sinkpage');
+  if(!sn) return;
+  if(typeof cm==='function'){ try{ cm(); }catch(e){} }
+  var _hdr=document.getElementById('hdr'); if(_hdr) _hdr.classList.remove('hide');
+  var modal=sn.querySelector('.ef-modal'); if(modal) modal.scrollTop=0;
+  document.body.style.overflow='hidden';
+  if(!document.body.classList.contains('page-open')){ document.body.classList.add('page-open'); _snLock=true; }
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      sn.classList.add('show');
+      if(window.__snScrollReset) window.__snScrollReset();
+    });
+  });
+}
+function closeSinks(){
+  var sn=document.getElementById('sinkpage');
+  if(!sn) return;
+  sn.classList.remove('show');
+  if(_snLock){ document.body.classList.remove('page-open'); _snLock=false; }
+  if(!document.body.classList.contains('page-open')){ document.body.style.overflow=''; }
+}
+window.openSinks=openSinks; window.closeSinks=closeSinks;
+
+/* ══ PAGINA ACCESSORI DI COTTURA ══ Stessa meccanica di openSinks. */
+var _acLock=false;
+function openAcc(){
+  var ac=document.getElementById('accpage');
+  if(!ac) return;
+  if(typeof cm==='function'){ try{ cm(); }catch(e){} }
+  var _hdr=document.getElementById('hdr'); if(_hdr) _hdr.classList.remove('hide');
+  var modal=ac.querySelector('.ef-modal'); if(modal) modal.scrollTop=0;
+  document.body.style.overflow='hidden';
+  if(!document.body.classList.contains('page-open')){ document.body.classList.add('page-open'); _acLock=true; }
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      ac.classList.add('show');
+      if(window.__acScrollReset) window.__acScrollReset();
+      /* ⚠ Il filmato ha preload="none" per non pesare sul caricamento del
+         sito: va avviato a mano qui. Il catch serve perche' alcuni browser
+         rifiutano la riproduzione e restituiscono una promessa respinta: senza
+         di lui finirebbe un errore in console a ogni apertura. */
+      var _v=ac.querySelector('.acc-video');
+      if(_v){ try{ var _pr=_v.play(); if(_pr&&_pr.catch) _pr.catch(function(){}); }catch(e){} }
+      if(window.__accColore) window.__accColore(true);
+    });
+  });
+}
+function closeAcc(){
+  var ac=document.getElementById('accpage');
+  if(!ac) return;
+  /* Chiusa la pagina il filmato si ferma: continuare a girare dietro le quinte
+     consuma batteria e banda per niente. */
+  var _v=ac.querySelector('.acc-video');
+  if(_v){ try{ _v.pause(); }catch(e){} }
+  if(window.__accColore) window.__accColore(false);
+  ac.classList.remove('show');
+  if(_acLock){ document.body.classList.remove('page-open'); _acLock=false; }
+  if(!document.body.classList.contains('page-open')){ document.body.style.overflow=''; }
+}
+window.openAcc=openAcc; window.closeAcc=closeAcc;
+
+/* ══ ACCESSORI · ACCENSIONE PROGRESSIVA DELLE FOTO (SOLO TELEFONO) ══════════
+   Le foto partono in bianco e nero e prendono colore mano a mano che salgono
+   verso il centro dello schermo, per poi spegnersi uscendo. Su desktop non
+   serve: li' c'e' il passaggio del mouse.
+
+   ⚠ NON si ascolta lo scorrimento della finestra. Questa pagina scorre DENTRO
+   il proprio riquadro (.ef-modal), quindi e' li' che va agganciato l'ascolto:
+   sulla finestra non arriverebbe mai nulla e le foto resterebbero grigie.
+
+   ⚠ Il conto si fa sulla distanza dal centro dello schermo, non sul semplice
+   "e' entrata": cosi' il colore cresce e cala con continuita' invece di
+   accendersi di scatto a una soglia.
+
+   ⚠ Chi ha chiesto meno movimento le vede subito a colori: nessun effetto. */
+(function(){
+  var ac=null, modal=null, foto=null, atteso=false, acceso=false;
+
+  function telefono(){
+    return !!(window.matchMedia && window.matchMedia('(max-width:768px)').matches);
+  }
+  function menoMovimento(){
+    return !!(window.matchMedia &&
+              window.matchMedia('(prefers-reduced-motion:reduce)').matches);
+  }
+
+  function dipingi(){
+    atteso=false;
+    if(!foto || !foto.length) return;
+    var h = window.innerHeight || document.documentElement.clientHeight;
+    for(var i=0;i<foto.length;i++){
+      var im=foto[i];
+      var r=im.getBoundingClientRect();
+      if(!r.height) continue;
+      var g;
+      if(r.bottom<=0 || r.top>=h){
+        g=1;
+      } else {
+        /* 0 quando il centro della foto e' al centro dello schermo,
+           1 quando e' appena fuori dal bordo. */
+        var d=Math.abs((r.top+r.height/2)-h/2)/(h/2+r.height/2);
+        g=d*1.45;
+        if(g<0) g=0;
+        if(g>1) g=1;
+      }
+      im.style.filter='grayscale('+g.toFixed(3)+') contrast('+(1+0.02*g).toFixed(3)+')';
+    }
+  }
+
+  function chiedi(){
+    if(atteso) return;
+    atteso=true;
+    requestAnimationFrame(dipingi);
+  }
+
+  function spegni(){
+    if(!foto) return;
+    for(var i=0;i<foto.length;i++) foto[i].style.filter='';
+  }
+
+  window.__accColore=function(attiva){
+    ac=ac||document.getElementById('accpage');
+    if(!ac) return;
+    modal=modal||ac.querySelector('.ef-modal');
+    foto=ac.querySelectorAll('.acc-img');
+
+    if(!attiva || !telefono()){
+      if(acceso && modal){ modal.removeEventListener('scroll',chiedi); }
+      acceso=false;
+      spegni();
+      return;
+    }
+    if(menoMovimento()){ 
+      for(var i=0;i<foto.length;i++) foto[i].style.filter='grayscale(0)';
+      return;
+    }
+    if(!acceso && modal){
+      modal.addEventListener('scroll',chiedi,{passive:true});
+      acceso=true;
+    }
+    dipingi();
+  };
+  window.addEventListener('resize',function(){ if(acceso) chiedi(); },{passive:true});
+})();
+
+/* ══ CURSORE · LA CLASSE DI SORVOLO CHE RESTAVA INCOLLATA ═══════════════════
+   Difetto che il codice originale del cursore segnala nei propri commenti ma
+   non chiude: se l'elemento sorvolato sparisce mentre il puntatore ci sta
+   sopra (si clicca una voce del menu e il menu si chiude), l'evento di uscita
+   non parte mai, la classe cur-hover resta sul body e il pallino dorato
+   rimane a larghezza zero, cioe' invisibile, fino al movimento successivo.
+   Qui si ripulisce da sola a ogni movimento.
+   ⚠ Solo dove il cursore custom esiste: su telefono i due elementi sono
+   display:none e non c'e' niente da riparare. */
+(function(){
+  if(!(window.matchMedia &&
+       window.matchMedia('(hover:hover) and (pointer:fine)').matches)) return;
+
+  document.addEventListener('mousemove', function(e){
+    if(!document.body.classList.contains('cur-hover')) return;
+    var t = e.target;
+    if(t && t.closest && !t.closest('a,button,.pcard,.ncat,.nbtn,.cpbk,.pp-nav-item,.pp-back,.hbg,.btp,.btg,.pp-sdl-toggle,.pp-sdl-link,.pp-drawing-full,.pp-spec-media-frame')){
+      document.body.classList.remove('cur-hover');
+    }
+  }, {passive:true});
+})();
 
 /* Popup del bollino. Riceve il modello per decidere se mostrare o no il
    collegamento alla pagina Oceano. */
@@ -11892,6 +12611,14 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
     var cuModal=cu?cu.querySelector('.ef-modal'):null;
     var cuL=cuModal?divScroller(cuModal):null;
     window.__cuScrollReset=function(){ cuL&&cuL.reset(); };
+    var sn=document.getElementById('sinkpage');
+    var snModal=sn?sn.querySelector('.ef-modal'):null;
+    var snL=snModal?divScroller(snModal):null;
+    window.__snScrollReset=function(){ snL&&snL.reset(); };
+    var ac=document.getElementById('accpage');
+    var acModal=ac?ac.querySelector('.ef-modal'):null;
+    var acL=acModal?divScroller(acModal):null;
+    window.__acScrollReset=function(){ acL&&acL.reset(); };
     var homeL=homeScroller();
 
     function isOpen(el,cls){return el&&el.classList.contains(cls);}
@@ -11928,6 +12655,10 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
       if(isOpen(oc,'show')){ if(ocModal&&ocModal.contains(e.target)){ ocL&&ocL.wheel(e); } return; }
       /* ⚠️ TRAPPOLA 3.5 · senza questa riga la pagina Custom non scorre. */
       if(isOpen(cu,'show')){ if(cuModal&&cuModal.contains(e.target)){ cuL&&cuL.wheel(e); } return; }
+      /* ⚠️ TRAPPOLA 3.5 · idem per i Lavelli. */
+      if(isOpen(sn,'show')){ if(snModal&&snModal.contains(e.target)){ snL&&snL.wheel(e); } return; }
+      /* ⚠️ TRAPPOLA 3.5 · idem per gli Accessori di cottura. */
+      if(isOpen(ac,'show')){ if(acModal&&acModal.contains(e.target)){ acL&&acL.wheel(e); } return; }
       if(navOpen()){ if(np&&np.contains(e.target)){ npL&&npL.wheel(e); } return; }
       if(isOpen(pp,'show')&&pp.contains(e.target)){ppL&&ppL.wheel(e);return;}
       if(isOpen(cp,'show')&&cp.contains(e.target)){cpL&&cpL.wheel(e);return;}
@@ -12546,7 +13277,10 @@ window.SRCH_CATKEY = {
     stopVideo();
     lb.classList.remove('on');
     var __lbDl=document.getElementById('pp-lightbox-download'); if(__lbDl)__lbDl.style.display='none';
-    document.body.style.overflow='';
+    /* ⚠️ Se sotto la galleria c'e' ancora una pagina aperta (Oceano, Custom,
+       Energia...), il blocco dello scorrimento del corpo va LASCIATO: toglierlo
+       farebbe scorrere la home dietro alla pagina. */
+    if(!document.body.classList.contains('page-open')) document.body.style.overflow='';
   };
   window.ppLightbox=function(imgEl){
     var drawingImg=(imgEl&&imgEl.tagName==='IMG')?imgEl:document.querySelector('.pp-drawing-img');
@@ -13032,6 +13766,69 @@ var DICT = {
     hero_tag: "Marine Cooking, Crafted in Italy",
     hero_title: "Alta cucina italiana,<br><em>anywhere</em>",
     hero_desc: "Professional gimballed cookers, cooktops, ovens and grills · from dayboats to vintage yachts, from charter to ocean passages. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.",
+    acc_cap4: "Lava flow",
+    acc_brand: "SOAPSTONE",
+    acc_sub: "Valtellina",
+    acc_tag: "Cooking Accessories · Static Ovens",
+    acc_title: "Soapstone from<br>the <em>Valtellina</em>",
+    acc_lead: "Our ovens are Italian ovens: built for static cooking, with the heat rising from below. It is an old choice, and it is the one that makes everything else on this page possible.",
+    acc_c1_l: "The Static Oven",
+    acc_c1_t: "Heat that comes from below",
+    acc_c1_b: "In a static oven heat is not blown: it radiates. It rises from the floor of the chamber and wraps the food slowly, without drying the surface before the inside is ready. This is how Italian home ovens and bread ovens cook, and it is why in an oven like this the rise carries on through the first minutes instead of stopping, the crust forms where crust belongs, and what should stay soft underneath stays soft. It allows the long braise, the roast that keeps its juices, the gratin that closes on top without drying the filling, and pastry, which a current of air would ruin.",
+    acc_c2_l: "In the Galley",
+    acc_c2_t: "What comes out of an oven like this",
+    acc_c2_b: "Bread, pizza and focaccia, which take their double nature of crust and crumb from static heat. Roasts and braises, cooked long and low. Fish in salt crust or in paper, where what matters is heat that wraps rather than heat that dries. Bakes, soufflés and vegetable flans, which a fan would collapse. Short pastry, sweet leavened doughs, meringues left to dry for hours in an oven almost switched off. And whole roasted vegetables, which want time and not haste.",
+    acc_c3_l: "The Accessory",
+    acc_c3_t: "The advantages do not stop there",
+    acc_c3_b: "Having the heat arrive from below made it possible to introduce an accessory unlike any other into our ovens: the stone. There are two of them, and they come from two different Italies. Lava stone is volcanic basalt, quarried from the old flows of Etna, in Sicily, and from the slopes of Vesuvius, in Campania. Soapstone comes instead from the thousand-year-old quarries of the Valtellina and the Valchiavenna, in the province of Sondrio. Two rocks opposite in history and in temperament, and good for two different things.",
+    acc_c4_l: "The Soapstone",
+    acc_c4_t: "Five thousand years of quarries",
+    acc_c4_b: "It is not born of fire but of pressure: deep rocks, rich in magnesium, slowly transformed in the roots of the Alps. What comes out is a metamorphic rock of talc, chlorite and magnesite, matt green, soft enough to be turned on a lathe and yet refractory. The conditions that form it are so particular that in Italy it is found almost nowhere else. In the quarries of Alpe Pirlo, Val Giumellino and Valbrutta, above Chiesa in Valmalenco and Lanzada, it has been cut since the Neolithic: Pliny the Elder already mentions it in his Naturalis Historia, and by the sixteenth century the pots turned on water-driven lathes were going down the valley to be sold across Italy. Those same pots are still in use, and the same slabs sit in the ovens of Italian restaurants that hold stars. It cooks gently and evenly: it is the stone of bread, of pizza, of focaccia, of the long bake.",
+    acc_c5_l: "The Lava Stone",
+    acc_c5_t: "Basalt from the volcanoes",
+    acc_c5_b: "It is magma that stopped. Cooling in the open air along the slopes, the flow becomes basalt: a dark, dense rock full of microscopic pores, made of plagioclase, pyroxenes and olivine. It is hard where soapstone is soft, and it takes high temperatures and sudden changes without cracking. That is why it is the stone of the grill made indoors: steaks, fish, vegetables over fierce heat. The porous surface is naturally non-stick and keeps the fat away from the food.",
+    acc_c6_l: "On Board",
+    acc_c6_t: "One pan less, one flywheel more",
+    acc_c6_b: "Cooking a steak on the stone, inside the oven, means not having a searing pan on the cooktop while the boat moves: no spitting fat, no smoke in the saloon, less risk. And the stone, once hot, is a remarkable thermal flywheel: it holds heat for a long time and gives it back slowly, so the oven works less to keep its temperature. On board, where every watt and every kilo of gas is counted, that is not a detail.",
+    acc_c7_l: "When It Was Magic",
+    acc_c7_t: "The stone that took the poison out",
+    acc_c7_b: "For centuries these stones were believed to hold powers. At Piuro, in the Valchiavenna, soapstone pots were said to neutralise poison while the food boiled, which is how they ended up on the tables of those who had enemies. Fat kept in those vessels was said to last for decades without turning, the stone was said never to wear away, the fire was said to have no hold on it. It was the talc and the chlorite, the porosity, the slowness with which heat enters and leaves. But whoever was cooking did not know that, and called it the magic stone.",
+    acc_cap1: "Pizza on the stone",
+    acc_cap2: "Steak on the stone",
+    acc_cap3: "Soapstone pot",
+    acc_quote: "The same rock that five thousand years ago became a cooking pot now goes into an oven that sails.",
+    acc_cta: "Talk to our engineers",
+    snk_brand: "SINKS",
+    snk_sub: "Made to Measure",
+    snk_tag: "Sinks · Any Dimension",
+    snk_title: "Cut to the<br><em>millimetre</em>",
+    snk_lead: "Every sink we build is made to measure. There is no list of standard sizes to choose from: you give us the opening, and the basin is drawn around it.",
+    snk_c1_l: "How They Are Made",
+    snk_c1_t: "Professional processes, marine dimensions",
+    snk_c1_b: "These sinks come from the world of professional kitchens: the same forming, the same welds, the same tolerances. We build them with a zero radius in the corners, or with a wider radius where a softer line suits the galley better. The choice is yours, and it takes nothing away from the strength of the basin.",
+    snk_c2_l: "What Goes With Them",
+    snk_c2_t: "Boards, colanders, and whatever else is needed",
+    snk_c2_b: "On board a sink is rarely only a sink: every surface has to do more than one job. Ours take chopping boards, colanders, draining trays and other accessories that rest on the rim and turn the basin into worktop when it is not in use.",
+    snk_cap1: "Zero radius",
+    snk_cap2: "Bespoke basin",
+    snk_cap3: "Made to measure",
+    snk_quote: "Give us the opening, and we build the basin around it.",
+    snk_cta: "Talk to our engineers",
+    nav_where: "Where We Are",
+    nav_dist: "Distributors",
+    dist_ttl: "International Distributors and Partners",
+    dist_p1: "Our production is broad and varied: some of our lines are distributed worldwide, others are built to order for a single shipyard or a single boat, and others again are dedicated lines developed with partner brands. Where a line is distributed, spare parts are normally held by the distributor. The list below is not exhaustive: write to us and we will point you to the nearest dealer, distributor, exclusive agent or partner.",
+    dist_warn: "One important note. The product lines presented on this site do not always coincide with those handled by the dealers and wholesalers who stock their spare parts: despite sharing a name, the products can differ substantially. The same model may also vary from one distributor to another in finishes, materials, burners, accessories and optional equipment, differences that are reflected in the price.",
+    dist_cta: "Write to us",
+    dist_c1: "USA",
+    dist_c2: "Netherlands",
+    dist_c3: "United Kingdom",
+    dist_c4: "Norway",
+    dist_c5: "Sweden",
+    dist_c6: "Finland",
+    dist_c7: "Poland",
+    hero_who: "For owners, shipyards and designers · and for anyone looking for a <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">spare part</span>.",
+    hero_who_s: "Owners · Shipyards · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Spare parts</span>",
     hero_btn_explore: "Explore Products",
     hero_btn_story: "Our Story",
     stat_craft: "Complete electric marine range",
@@ -13043,7 +13840,7 @@ var DICT = {
     rv_intro: "Words from real customers, gathered over the years: letters, emails and public reviews.",
     /* Nav */
     nav_label: "Navigation",
-    nav_products: "Product Categories",
+    nav_products: "Collections",
     nav_marine: "The Yachting Collections",
     nav_rv: "The Luxury RV Collections",
     nav_home: "The Residential Collections",
@@ -13301,7 +14098,7 @@ var DICT = {
     oc_c1_b2: "Crossing an ocean means living for weeks with limited power, constant motion, salt air and no prospect of assistance. Every construction choice that ashore is a detail becomes, on board, the difference between cooking and not cooking.",
     oc_c2_label: "At Sea",
     oc_c2_title: "The boats that <em>ask the most</em>",
-    oc_c2_b1: "Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor Giovanni Soldini.",
+    oc_c2_b1: "Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
     oc_c2_b2: "And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife &amp; Son, she was regarded by her own designer as his finest and most accomplished work. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.",
     oc_c2_b3: "The XXL3 and the LATIFA model, which takes its name from the yacht herself, are only two examples of cookers reinforced or customised for extreme ocean use. The specification is the starting point, and from there the cooker is built around the boat it will live on.",
     oc_c3_label: "Structure",
@@ -14398,6 +15195,69 @@ var DICT = {
     hero_tag: "Cucine Marine d'Autore",
     hero_title: "Alta cucina italiana,<br><em>ovunque</em>",
     hero_desc: "Cucine basculanti, piani cottura, forni e grill professionali · dai day cruiser agli yacht d'epoca, dal charter alle traversate oceaniche. Fatti a mano nell'Inox Valley, Conegliano - Venezia · costruiti con elementi torniti e fresati dal pieno acciaio inox.",
+    acc_cap4: "Colata lavica",
+    acc_brand: "PIETRA OLLARE",
+    acc_sub: "Valtellina",
+    acc_tag: "Accessori di cottura · Forni statici",
+    acc_title: "Pietra ollare<br>della <em>Valtellina</em>",
+    acc_lead: "I nostri forni sono forni all’italiana: concepiti per la cottura statica, con il calore che sale dal basso. È una scelta antica, e è quella che rende possibile tutto il resto di questa pagina.",
+    acc_c1_l: "Il Forno Statico",
+    acc_c1_t: "Il calore che viene dal basso",
+    acc_c1_b: "In un forno statico il calore non viene soffiato: irraggia. Sale dalla suola, riempie la camera e avvolge il cibo lentamente, senza asciugarne la superficie prima che l’interno sia pronto. È la cottura dei forni di casa italiani e dei forni da pane, ed è il motivo per cui in un forno così la lievitazione continua nei primi minuti invece di fermarsi, la crosta si forma dove serve e resta morbido quello che sotto deve restare morbido. Consente la cottura lenta dei brasati, l’arrosto che rimane succoso, il gratin che si chiude in superficie senza seccare il ripieno, e la pasticceria, dove una corrente d’aria rovinerebbe tutto.",
+    acc_c2_l: "In Cucina",
+    acc_c2_t: "Cosa esce da un forno così",
+    acc_c2_b: "Pane, pizza e focaccia, che dalla cottura statica prendono la doppia natura di crosta e mollica. Arrosti e brasati, cotti a lungo e a bassa temperatura. Pesce al sale e al cartoccio, dove conta il calore che avvolge e non quello che asciuga. Sformati, soufflé, flan di verdure, che una ventola farebbe collassare. Le paste frolle, i lievitati dolci, le meringhe lasciate ad asciugare per ore a forno quasi spento. E le verdure arrostite intere, che vogliono tempo e non fretta.",
+    acc_c3_l: "L’Accessorio",
+    acc_c3_t: "I vantaggi non finiscono qui",
+    acc_c3_b: "Avere il calore che arriva dal basso ha reso possibile introdurre nei nostri forni un accessorio unico nel suo genere: la pietra. Ne esistono due, e vengono da due Italie diverse. La pietra lavica è basalto vulcanico, estratto dalle antiche colate dell’Etna, in Sicilia, e dai versanti del Vesuvio, in Campania. La pietra ollare arriva invece dalle cave millenarie della Valtellina e della Valchiavenna, in provincia di Sondrio. Sono due rocce opposte per storia e per indole, e servono a due cose diverse.",
+    acc_c4_l: "La Pietra Ollare",
+    acc_c4_t: "Cinquemila anni di cave",
+    acc_c4_b: "Non nasce dal fuoco ma dalla pressione: rocce profonde, ricche di magnesio, trasformate lentamente nelle radici delle Alpi. Ne esce una roccia metamorfica di talco, clorite e magnesite, verde opaca, tenera al punto da lavorarsi al tornio eppure refrattaria. Le condizioni per formarla sono così particolari che in Italia si trova quasi soltanto lì. Nelle cave dell’Alpe Pirlo, della Val Giumellino e della Valbrutta, sopra Chiesa in Valmalenco e Lanzada, la si estrae dal Neolitico: Plinio il Vecchio la cita già nella Naturalis Historia, e nel Cinquecento i “lavecc” tornati sui torni ad acqua scendevano a valle per essere venduti in tutta Italia. Le stesse pentole si usano ancora oggi, e le stesse lastre stanno nei forni di ristoranti italiani premiati con le stelle. Cuoce dolce e in modo uniforme: è la pietra del pane, della pizza, della focaccia, delle cotture lunghe.",
+    acc_c5_l: "La Pietra Lavica",
+    acc_c5_t: "Il basalto dei vulcani",
+    acc_c5_b: "È magma che si è fermato. Raffreddandosi all’aria lungo le pendici, la colata diventa basalto: una roccia scura, densa, piena di pori microscopici, fatta di plagioclasio, pirosseni e olivina. È dura dove l’ollare è tenera, e sopporta senza incrinarsi temperature alte e sbalzi improvvisi. Per questo è la pietra della brace fatta in forno: bistecche, pesce, verdure a fuoco vivo. La superficie porosa è antiaderente per natura e tiene il grasso fuori dal contatto con il cibo.",
+    acc_c6_l: "A Bordo",
+    acc_c6_t: "Una padella in meno, un volano termico in più",
+    acc_c6_b: "Cuocere una bistecca sulla pietra, dentro il forno, vuol dire non avere una padella rovente sul piano cottura mentre la barca si muove: niente schizzi, niente fumo in dinette, meno rischio. E la pietra, una volta calda, è un volano termico eccezionale: trattiene il calore a lungo, lo restituisce piano, e il forno lavora meno per mantenere la temperatura. A bordo, dove ogni watt e ogni chilo di gas si contano, non è un dettaglio.",
+    acc_c7_l: "Quando Era Magia",
+    acc_c7_t: "La pietra che toglieva il veleno",
+    acc_c7_b: "Per secoli si è creduto che queste pietre avessero poteri. A Piuro, in Valchiavenna, si diceva che le pentole di pietra ollare neutralizzassero i veleni durante la bollitura, e per questo finivano sulle tavole di chi aveva nemici. Si raccontava che il grasso conservato in quei recipienti durasse decenni senza irrancidire, che la pietra non si consumasse mai, che il fuoco non potesse nulla contro di lei. Erano il talco e la clorite, la porosità, la lentezza con cui il calore entra ed esce. Ma chi cucinava non lo sapeva, e la chiamava pietra magica.",
+    acc_cap1: "Pizza sulla pietra",
+    acc_cap2: "Bistecca sulla pietra",
+    acc_cap3: "Pentola in pietra ollare",
+    acc_quote: "La stessa roccia che cinquemila anni fa diventava pentola, oggi entra in un forno che naviga.",
+    acc_cta: "Parla con i nostri tecnici",
+    snk_brand: "LAVELLI",
+    snk_sub: "Su Misura",
+    snk_tag: "Lavelli · Qualsiasi Dimensione",
+    snk_title: "Tagliati al<br><em>millimetro</em>",
+    snk_lead: "Ogni lavello che costruiamo è fatto su misura. Non esiste un elenco di misure standard fra cui scegliere: ci date l'apertura, e la vasca viene disegnata intorno a quella.",
+    snk_c1_l: "Come Nascono",
+    snk_c1_t: "Processi professionali, misure di bordo",
+    snk_c1_b: "Questi lavelli arrivano dal mondo della ristorazione professionale: stessa formatura, stesse saldature, stesse tolleranze. Li realizziamo con raggio zero negli angoli, oppure con raggi più ampi dove alla cambusa serve una linea più morbida. La scelta è vostra e non toglie nulla alla solidità della vasca.",
+    snk_c2_l: "Cosa Ci Va Sopra",
+    snk_c2_t: "Taglieri, scolapasta e tutto il resto",
+    snk_c2_b: "A bordo un lavello è raramente solo un lavello: ogni superficie deve fare più di un mestiere. I nostri accolgono taglieri, scolapasta, vassoi sgocciolatoi e altri accessori che appoggiano sul bordo e trasformano la vasca in piano di lavoro quando non serve.",
+    snk_cap1: "Raggio zero",
+    snk_cap2: "Vasca su misura",
+    snk_cap3: "Fatto su misura",
+    snk_quote: "Dateci l'apertura, e costruiamo la vasca intorno.",
+    snk_cta: "Parla con i nostri tecnici",
+    nav_where: "Dove Siamo",
+    nav_dist: "Distributori",
+    dist_ttl: "Distributori e partner esteri",
+    dist_p1: "La nostra produzione è ampia e articolata: alcune delle nostre linee sono distribuite in tutto il mondo, altre nascono su commessa per un singolo cantiere o una singola barca, altre ancora sono linee dedicate sviluppate insieme a marchi partner. Dove una linea è distribuita, i ricambi sono di norma disponibili presso il distributore. L'elenco che segue non è esaustivo: scriveteci, e vi indicheremo il rivenditore, il distributore, l'esclusivista o il partner più vicino.",
+    dist_warn: "Una precisazione importante. Le linee di prodotto presentate su questo sito non sempre coincidono con quelle trattate dai rivenditori e dai grossisti che ne tengono i ricambi: a parità di nome, i prodotti possono differire in misura sostanziale. Lo stesso modello può inoltre variare da un distributore all'altro per finiture, materiali, bruciatori, accessori e dotazioni opzionali, differenze che si riflettono anche sul prezzo.",
+    dist_cta: "Scriveteci",
+    dist_c1: "USA",
+    dist_c2: "Olanda",
+    dist_c3: "Regno Unito",
+    dist_c4: "Norvegia",
+    dist_c5: "Svezia",
+    dist_c6: "Finlandia",
+    dist_c7: "Polonia",
+    hero_who: "Per armatori, cantieri e progettisti · e per chi cerca un <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">ricambio</span>.",
+    hero_who_s: "Armatori · Cantieri · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ricambi</span>",
     hero_btn_explore: "Esplora i Prodotti",
     hero_btn_story: "La Nostra Storia",
     stat_craft: "Gamma elettrica marina completa",
@@ -14407,7 +15267,7 @@ var DICT = {
     rv_title: "Cosa dicono i nostri clienti",
     rv_intro: "Parole di clienti reali, raccolte negli anni: lettere, email e recensioni pubbliche.",
     nav_label: "Navigazione",
-    nav_products: "Categorie Prodotti",
+    nav_products: "Collezioni",
     nav_marine: "Collezioni Yachting",
     nav_rv: "Collezioni Overland Luxury",
     nav_home: "Collezioni Residenziali",
@@ -14661,7 +15521,7 @@ var DICT = {
     oc_c1_b2: "Attraversare un oceano significa convivere per settimane con energia limitata, movimento continuo, salsedine e nessuna possibilità di assistenza. Ogni scelta costruttiva che a terra è un dettaglio, a bordo diventa la differenza fra cucinare e non cucinare.",
     oc_c2_label: "In mare",
     oc_c2_title: "Le barche che <em>chiedono di più</em>",
-    oc_c2_b1: "Fra queste c'è la XXL3 realizzata su misura per Elmo's Fire, la barca del grande velista italiano Giovanni Soldini.",
+    oc_c2_b1: "Fra queste c'è la XXL3 realizzata su misura per Elmo's Fire, la barca del grande velista italiano <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
     oc_c2_b2: "E c'è Latifa. Un ocean racer nel senso pieno del termine: progettata da William Fife III e varata in Scozia nel 1936 dal cantiere William Fife &amp; Son, è considerata dal progettista stesso la sua opera migliore e più riuscita. Per Latifa abbiamo realizzato una cucina in variante Classic, interamente su misura: bruciatori speciali, forno maggiorato, griglia monopezzo in acciaio maggiorato tagliata dal pieno e perni basculanti di robustezza eccezionale.",
     oc_c2_b3: "La XXL3 e il modello LATIFA, che prende il nome dalla barca stessa, sono solo due esempi di cucine implementate o personalizzate per impieghi oceanici estremi. Le specifiche sono il punto di partenza, e da lì la cucina si costruisce intorno alla barca che la ospiterà.",
     oc_c3_label: "Struttura",
@@ -15756,6 +16616,69 @@ var DICT = {
     hero_tag: "Cuisines Marines d'Exception",
     hero_title: "Alta cucina italiana,<br><em>partout</em>",
     hero_desc: "Cuisinières à cardan, plans de cuisson, fours et grils professionnels · des day cruisers aux yachts d'époque, du charter aux traversées océaniques. Fabriqués à la main dans l'Inox Valley, Conegliano - Venezia · construits avec des pièces tournées et fraisées dans l'inox massif.",
+    acc_cap4: "Coulée de lave",
+    acc_brand: "PIERRE OLLAIRE",
+    acc_sub: "Valteline",
+    acc_tag: "Accessoires de cuisson · Fours statiques",
+    acc_title: "Pierre ollaire<br>de la <em>Valteline</em>",
+    acc_lead: "Nos fours sont des fours à l’italienne : conçus pour la cuisson statique, avec la chaleur qui monte par le bas. C’est un choix ancien, et c’est lui qui rend possible tout le reste de cette page.",
+    acc_c1_l: "Le Four Statique",
+    acc_c1_t: "La chaleur qui vient du bas",
+    acc_c1_b: "Dans un four statique la chaleur n’est pas soufflée : elle rayonne. Elle monte de la sole, remplit la chambre et enveloppe lentement les aliments, sans dessécher la surface avant que l’intérieur ne soit prêt. C’est ainsi que cuisent les fours domestiques italiens et les fours à pain, et c’est pourquoi dans un tel four la levée se poursuit pendant les premières minutes au lieu de s’arrêter, la croûte se forme là où elle doit se former, et ce qui doit rester moelleux le reste. Il permet le braisage long, le rôti qui garde ses sucs, le gratin qui se ferme en surface sans dessécher ce qu’il y a dessous, et la pâtisserie, qu’un courant d’air ruinerait.",
+    acc_c2_l: "En Cuisine",
+    acc_c2_t: "Ce qui sort d’un tel four",
+    acc_c2_b: "Le pain, la pizza et la focaccia, qui tiennent de la cuisson statique leur double nature de croûte et de mie. Les rôtis et les braisés, cuits longtemps et à basse température. Le poisson en croûte de sel ou en papillote, où compte la chaleur qui enveloppe et non celle qui dessèche. Les gratins, les soufflés, les flans de légumes, qu’un ventilateur ferait retomber. Les pâtes sablées, les pâtes levées sucrées, les meringues laissées à sécher des heures dans un four presque éteint. Et les légumes rôtis entiers, qui demandent du temps et non de la hâte.",
+    acc_c3_l: "L’Accessoire",
+    acc_c3_t: "Les avantages ne s’arrêtent pas là",
+    acc_c3_b: "Une chaleur venue du bas a rendu possible l’introduction dans nos fours d’un accessoire unique en son genre : la pierre. Il en existe deux, et elles viennent de deux Italies différentes. La pierre de lave est un basalte volcanique, extrait des anciennes coulées de l’Etna, en Sicile, et des pentes du Vésuve, en Campanie. La pierre ollaire vient au contraire des carrières millénaires de la Valteline et du Val Chiavenna, dans la province de Sondrio. Deux roches opposées par l’histoire et par le tempérament, faites pour deux usages différents.",
+    acc_c4_l: "La Pierre Ollaire",
+    acc_c4_t: "Cinq mille ans de carrières",
+    acc_c4_b: "Elle ne naît pas du feu mais de la pression : des roches profondes, riches en magnésium, lentement transformées dans les racines des Alpes. Il en sort une roche métamorphique de talc, de chlorite et de magnésite, vert mat, assez tendre pour être tournée et pourtant réfractaire. Les conditions nécessaires à sa formation sont si particulières qu’en Italie on ne la trouve presque nulle part ailleurs. Dans les carrières de l’Alpe Pirlo, du Val Giumellino et de la Valbrutta, au-dessus de Chiesa in Valmalenco et de Lanzada, on l’extrait depuis le Néolithique : Pline l’Ancien la cite déjà dans sa Naturalis Historia, et au XVIe siècle les marmites tournées sur des tours à eau descendaient la vallée pour être vendues dans toute l’Italie. Ces mêmes marmites servent encore, et les mêmes plaques se trouvent dans les fours de restaurants italiens étoilés. Elle cuit doucement et uniformément : c’est la pierre du pain, de la pizza, de la focaccia, des cuissons longues.",
+    acc_c5_l: "La Pierre de Lave",
+    acc_c5_t: "Le basalte des volcans",
+    acc_c5_b: "C’est du magma qui s’est arrêté. En refroidissant à l’air libre le long des pentes, la coulée devient basalte : une roche sombre, dense, pleine de pores microscopiques, faite de plagioclase, de pyroxènes et d’olivine. Elle est dure là où l’ollaire est tendre, et supporte sans se fendre les hautes températures et les écarts brusques. C’est pourquoi elle est la pierre du grill fait au four : côtes de bœuf, poisson, légumes à feu vif. Sa surface poreuse est naturellement antiadhésive et tient la graisse à l’écart des aliments.",
+    acc_c6_l: "À Bord",
+    acc_c6_t: "Une poêle en moins, un volant thermique en plus",
+    acc_c6_b: "Cuire une côte de bœuf sur la pierre, dans le four, c’est ne pas avoir de poêle brûlante sur la table de cuisson pendant que le bateau bouge : pas d’éclaboussures, pas de fumée dans le carré, moins de risque. Et la pierre, une fois chaude, est un volant thermique remarquable : elle retient longtemps la chaleur et la restitue lentement, si bien que le four travaille moins pour tenir sa température. À bord, où chaque watt et chaque kilo de gaz comptent, ce n’est pas un détail.",
+    acc_c7_l: "Quand C’Était Magique",
+    acc_c7_t: "La pierre qui ôtait le poison",
+    acc_c7_b: "Pendant des siècles on a cru que ces pierres avaient des pouvoirs. À Piuro, dans le Val Chiavenna, on disait que les marmites en pierre ollaire neutralisaient le poison pendant l’ébullition, et c’est ainsi qu’elles finissaient sur les tables de ceux qui avaient des ennemis. On racontait que la graisse conservée dans ces récipients tenait des décennies sans rancir, que la pierre ne s’usait jamais, que le feu ne pouvait rien contre elle. C’étaient le talc et la chlorite, la porosité, la lenteur avec laquelle la chaleur entre et sort. Mais celui qui cuisinait l’ignorait, et l’appelait pierre magique.",
+    acc_cap1: "Pizza sur la pierre",
+    acc_cap2: "Côte de bœuf sur la pierre",
+    acc_cap3: "Marmite en pierre ollaire",
+    acc_quote: "La même roche qui devenait marmite il y a cinq mille ans entre aujourd’hui dans un four qui navigue.",
+    acc_cta: "Parlez à nos techniciens",
+    snk_brand: "ÉVIERS",
+    snk_sub: "Sur Mesure",
+    snk_tag: "Éviers · Toutes Dimensions",
+    snk_title: "Coupés au<br><em>millimètre</em>",
+    snk_lead: "Chaque évier que nous fabriquons est fait sur mesure. Il n'existe pas de liste de dimensions standard : vous nous donnez l'ouverture, et la cuve est dessinée autour.",
+    snk_c1_l: "Leur Fabrication",
+    snk_c1_t: "Procédés professionnels, dimensions de bord",
+    snk_c1_b: "Ces éviers viennent du monde de la restauration professionnelle : même formage, mêmes soudures, mêmes tolérances. Nous les réalisons avec un rayon zéro dans les angles, ou avec des rayons plus larges là où la cambuse demande une ligne plus douce. Le choix vous appartient et n'enlève rien à la solidité de la cuve.",
+    snk_c2_l: "Ce Qui Les Accompagne",
+    snk_c2_t: "Planches, passoires et tout le reste",
+    snk_c2_b: "À bord, un évier n'est que rarement seulement un évier : chaque surface doit faire plus d'un métier. Les nôtres accueillent planches à découper, passoires, plateaux égouttoirs et d'autres accessoires qui reposent sur le bord et transforment la cuve en plan de travail quand elle ne sert pas.",
+    snk_cap1: "Rayon zéro",
+    snk_cap2: "Cuve sur mesure",
+    snk_cap3: "Fait sur mesure",
+    snk_quote: "Donnez-nous l'ouverture, et nous construisons la cuve autour.",
+    snk_cta: "Parlez à nos techniciens",
+    nav_where: "Où Nous Trouver",
+    nav_dist: "Distributeurs",
+    dist_ttl: "Distributeurs et partenaires à l'étranger",
+    dist_p1: "Notre production est vaste et diversifiée : certaines de nos lignes sont distribuées dans le monde entier, d'autres naissent sur commande pour un seul chantier naval ou un seul bateau, d'autres encore sont des lignes dédiées développées avec des marques partenaires. Là où une ligne est distribuée, les pièces détachées sont généralement disponibles auprès du distributeur. La liste ci-dessous n'est pas exhaustive : écrivez-nous et nous vous indiquerons le revendeur, le distributeur, l'agent exclusif ou le partenaire le plus proche.",
+    dist_warn: "Une précision importante. Les lignes de produits présentées sur ce site ne correspondent pas toujours à celles traitées par les revendeurs et grossistes qui en tiennent les pièces détachées : à nom égal, les produits peuvent différer de façon substantielle. Un même modèle peut en outre varier d'un distributeur à l'autre par ses finitions, ses matériaux, ses brûleurs, ses accessoires et ses équipements en option, des différences qui se répercutent également sur le prix.",
+    dist_cta: "Écrivez-nous",
+    dist_c1: "USA",
+    dist_c2: "Pays-Bas",
+    dist_c3: "Royaume-Uni",
+    dist_c4: "Norvège",
+    dist_c5: "Suède",
+    dist_c6: "Finlande",
+    dist_c7: "Pologne",
+    hero_who: "Pour armateurs, chantiers et architectes navals · et pour qui cherche une <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">pièce détachée</span>.",
+    hero_who_s: "Armateurs · Chantiers · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Pièces détachées</span>",
     hero_btn_explore: "Découvrir les Produits",
     hero_btn_story: "Notre Histoire",
     stat_craft: "Gamme électrique marine complète",
@@ -15765,7 +16688,7 @@ var DICT = {
     rv_title: "Ce que disent nos clients",
     rv_intro: "Des mots de clients réels, recueillis au fil des ans : lettres, e-mails et avis publics.",
     nav_label: "Navigation",
-    nav_products: "Catégories de Produits",
+    nav_products: "Collections",
     nav_marine: "Collections Yachting",
     nav_rv: "Collections Overland Luxury",
     nav_home: "Collections Résidentielles",
@@ -16019,7 +16942,7 @@ var DICT = {
     oc_c1_b2: "Traverser un océan, c'est vivre pendant des semaines avec une énergie limitée, un mouvement continu, l'air salin et aucune possibilité d'assistance. Chaque choix de construction qui à terre est un détail devient, à bord, la différence entre cuisiner et ne pas cuisiner.",
     oc_c2_label: "En mer",
     oc_c2_title: "Les bateaux qui <em>exigent le plus</em>",
-    oc_c2_b1: "Parmi elles, la XXL3 réalisée sur mesure pour Elmo's Fire, le bateau du grand navigateur italien Giovanni Soldini.",
+    oc_c2_b1: "Parmi elles, la XXL3 réalisée sur mesure pour Elmo's Fire, le bateau du grand navigateur italien <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
     oc_c2_b2: "Et il y a Latifa. Un ocean racer au sens plein du terme : dessinée par William Fife III et lancée en Écosse en 1936 par le chantier William Fife &amp; Son, elle est considérée par son concepteur lui-même comme son œuvre la plus belle et la plus aboutie. Pour Latifa nous avons réalisé une cuisinière en variante Classic, entièrement sur mesure : brûleurs spéciaux, four surdimensionné, grille monobloc en acier renforcé taillée dans la masse et axes de cardan d'une robustesse exceptionnelle.",
     oc_c2_b3: "La XXL3 et le modèle LATIFA, qui tient son nom du bateau lui-même, ne sont que deux exemples de cuisinières renforcées ou personnalisées pour des usages océaniques extrêmes. Les spécifications sont le point de départ, et à partir de là la cuisinière se construit autour du bateau qui l'accueillera.",
     oc_c3_label: "Structure",
@@ -17114,6 +18037,69 @@ var DICT = {
     hero_tag: "Handgefertigte Marine-Küchen",
     hero_title: "Alta cucina italiana,<br><em>überall</em>",
     hero_desc: "Kardanisch aufgehängte Kocher, Kochfelder, Backöfen und professionelle Grills · vom Dayboat bis zur historischen Yacht, vom Charter bis zur Ozeanpassage. Handgefertigt im Inox Valley, Conegliano - Venezia · gebaut mit gedrehten und gefrästen Teilen aus massivem Edelstahl.",
+    acc_cap4: "Lavastrom",
+    acc_brand: "SPECKSTEIN",
+    acc_sub: "Veltlin",
+    acc_tag: "Kochzubehör · Statische Öfen",
+    acc_title: "Speckstein<br>aus dem <em>Veltlin</em>",
+    acc_lead: "Unsere Öfen sind Öfen nach italienischer Art: gebaut für das statische Garen, mit der Hitze, die von unten aufsteigt. Das ist eine alte Entscheidung, und sie macht alles Weitere auf dieser Seite erst möglich.",
+    acc_c1_l: "Der Statische Ofen",
+    acc_c1_t: "Die Hitze, die von unten kommt",
+    acc_c1_b: "Im statischen Ofen wird die Hitze nicht geblasen: sie strahlt. Sie steigt vom Ofenboden auf, füllt den Raum und umhüllt die Speisen langsam, ohne die Oberfläche auszutrocknen, bevor das Innere gar ist. So garen italienische Hausöfen und Brotöfen, und deshalb geht der Teig in einem solchen Ofen in den ersten Minuten weiter auf, statt stehenzubleiben; die Kruste bildet sich dort, wo Kruste hingehört, und was darunter weich bleiben soll, bleibt weich. Er erlaubt das lange Schmoren, den Braten, der saftig bleibt, den Gratin, der oben schließt, ohne die Füllung auszutrocknen, und das Backwerk, das ein Luftstrom verderben würde.",
+    acc_c2_l: "In Der Kombüse",
+    acc_c2_t: "Was aus einem solchen Ofen kommt",
+    acc_c2_b: "Brot, Pizza und Focaccia, die dem statischen Garen ihre doppelte Natur aus Kruste und Krume verdanken. Braten und Schmorgerichte, lange und bei niedriger Temperatur gegart. Fisch in der Salzkruste oder im Papier, wo es auf die Hitze ankommt, die umhüllt, nicht auf die, die austrocknet. Auflaufe, Soufflés und Gemüseflans, die ein Gebläse zusammenfallen ließe. Mürbeteig, süße Hefeteige, Baisers, die stundenlang im fast abgeschalteten Ofen trocknen. Und ganze Ofengemüse, die Zeit wollen und keine Eile.",
+    acc_c3_l: "Das Zubehör",
+    acc_c3_t: "Damit sind die Vorteile nicht zu Ende",
+    acc_c3_b: "Weil die Hitze von unten kommt, ließ sich in unsere Öfen ein Zubehör einführen, das es so kein zweites Mal gibt: der Stein. Es gibt zwei davon, und sie kommen aus zwei verschiedenen Italien. Der Lavastein ist vulkanischer Basalt, gewonnen aus den alten Strömen des Ätna auf Sizilien und von den Hängen des Vesuvs in Kampanien. Der Speckstein stammt dagegen aus den jahrtausendealten Brüchen des Veltlins und des Val Chiavenna in der Provinz Sondrio. Zwei Gesteine, in Geschichte und Wesen gegensätzlich, und für zwei verschiedene Dinge gemacht.",
+    acc_c4_l: "Der Speckstein",
+    acc_c4_t: "Fünftausend Jahre Steinbruch",
+    acc_c4_b: "Er entsteht nicht aus Feuer, sondern aus Druck: tiefe, magnesiumreiche Gesteine, langsam umgewandelt in den Wurzeln der Alpen. Heraus kommt ein metamorphes Gestein aus Talk, Chlorit und Magnesit, mattgrün, weich genug für die Drehbank und dennoch feuerfest. Die Bedingungen dafür sind so besonders, dass er in Italien fast nirgendwo sonst vorkommt. In den Brüchen der Alpe Pirlo, des Val Giumellino und der Valbrutta, oberhalb von Chiesa in Valmalenco und Lanzada, wird er seit dem Neolithikum gebrochen: Plinius der Ältere erwähnt ihn bereits in seiner Naturalis Historia, und im 16. Jahrhundert gingen die auf wasserbetriebenen Drehbänken gefertigten Töpfe ins Tal hinunter, um in ganz Italien verkauft zu werden. Dieselben Töpfe sind bis heute in Gebrauch, und dieselben Platten liegen in den Öfen italienischer Sternerestaurants. Er gart sanft und gleichmäßig: er ist der Stein des Brotes, der Pizza, der Focaccia, der langen Garzeiten.",
+    acc_c5_l: "Der Lavastein",
+    acc_c5_t: "Der Basalt der Vulkane",
+    acc_c5_b: "Er ist Magma, das stehengeblieben ist. Beim Abkühlen an der Luft entlang der Hänge wird der Strom zu Basalt: ein dunkles, dichtes Gestein voller mikroskopischer Poren, aus Plagioklas, Pyroxenen und Olivin. Er ist hart, wo der Speckstein weich ist, und hält hohe Temperaturen und plötzliche Wechsel aus, ohne zu reißen. Deshalb ist er der Stein für den Grill im Ofen: Steaks, Fisch, Gemüse bei starker Hitze. Die poröse Oberfläche ist von Natur aus antihaftend und hält das Fett vom Gargut fern.",
+    acc_c6_l: "An Bord",
+    acc_c6_t: "Eine Pfanne weniger, eine Schwungmasse mehr",
+    acc_c6_b: "Ein Steak auf dem Stein im Ofen zu garen heißt, keine glühende Pfanne auf dem Kochfeld zu haben, während das Boot sich bewegt: kein Spritzen, kein Rauch in der Messe, weniger Risiko. Und der Stein ist, einmal heiß, eine bemerkenswerte thermische Schwungmasse: er hält die Wärme lange und gibt sie langsam zurück, sodass der Ofen weniger arbeiten muss, um seine Temperatur zu halten. An Bord, wo jedes Watt und jedes Kilo Gas zählt, ist das kein Detail.",
+    acc_c7_l: "Als Es Zauber War",
+    acc_c7_t: "Der Stein, der das Gift herausnahm",
+    acc_c7_b: "Jahrhundertelang glaubte man, diese Steine hätten Kräfte. In Piuro im Val Chiavenna hieß es, Specksteintöpfe machten Gift beim Kochen unschädlich, und so landeten sie auf den Tischen derer, die Feinde hatten. Man erzählte, in solchen Gefäßen halte sich Fett jahrzehntelang, ohne ranzig zu werden, der Stein nutze sich nie ab, das Feuer könne ihm nichts anhaben. Es waren Talk und Chlorit, die Porosität, die Langsamkeit, mit der die Wärme ein- und austritt. Aber wer kochte, wusste das nicht und nannte ihn den Zauberstein.",
+    acc_cap1: "Pizza auf dem Stein",
+    acc_cap2: "Steak auf dem Stein",
+    acc_cap3: "Specksteintopf",
+    acc_quote: "Dasselbe Gestein, das vor fünftausend Jahren zum Kochtopf wurde, kommt heute in einen Ofen, der zur See fährt.",
+    acc_cta: "Sprechen Sie mit unseren Technikern",
+    snk_brand: "SPÜLBECKEN",
+    snk_sub: "Nach Maß",
+    snk_tag: "Spülbecken · Jedes Maß",
+    snk_title: "Auf den<br><em>Millimeter</em>",
+    snk_lead: "Jedes Spülbecken, das wir bauen, entsteht nach Maß. Es gibt keine Liste von Standardgrößen: Sie geben uns die Öffnung, und das Becken wird darum herum gezeichnet.",
+    snk_c1_l: "Wie Sie Entstehen",
+    snk_c1_t: "Professionelle Verfahren, Maße für an Bord",
+    snk_c1_b: "Diese Spülbecken kommen aus der Profigastronomie: dieselbe Umformung, dieselben Schweißnähte, dieselben Toleranzen. Wir fertigen sie mit Nullradius in den Ecken oder mit größeren Radien, wo die Pantry eine weichere Linie verlangt. Die Wahl liegt bei Ihnen und nimmt der Stabilität des Beckens nichts.",
+    snk_c2_l: "Was Dazugehört",
+    snk_c2_t: "Schneidbretter, Siebe und alles Weitere",
+    snk_c2_b: "An Bord ist ein Spülbecken selten nur ein Spülbecken: jede Fläche muss mehr als eine Aufgabe erfüllen. Unsere nehmen Schneidbretter, Siebe, Abtropfschalen und weiteres Zubehör auf, das auf dem Rand aufliegt und das Becken zur Arbeitsfläche macht, wenn es nicht gebraucht wird.",
+    snk_cap1: "Nullradius",
+    snk_cap2: "Becken nach Maß",
+    snk_cap3: "Nach Maß gefertigt",
+    snk_quote: "Geben Sie uns die Öffnung, und wir bauen das Becken darum herum.",
+    snk_cta: "Sprechen Sie mit unseren Technikern",
+    nav_where: "Wo Sie Uns Finden",
+    nav_dist: "Vertriebspartner",
+    dist_ttl: "Vertriebspartner und Partner im Ausland",
+    dist_p1: "Unsere Fertigung ist breit und vielgestaltig: einige unserer Linien werden weltweit vertrieben, andere entstehen auf Bestellung für eine einzelne Werft oder ein einzelnes Boot, wieder andere sind eigens entwickelte Linien für Partnermarken. Wo eine Linie vertrieben wird, sind Ersatzteile in der Regel beim Vertriebspartner erhältlich. Die folgende Liste ist nicht vollständig: schreiben Sie uns, und wir nennen Ihnen den nächstgelegenen Händler, Vertriebspartner, Exklusivvertreter oder Partner.",
+    dist_warn: "Ein wichtiger Hinweis. Die auf dieser Website vorgestellten Produktlinien stimmen nicht immer mit jenen überein, die von Händlern und Großhändlern geführt werden, welche die zugehörigen Ersatzteile bevorraten: bei gleichem Namen können sich die Produkte erheblich unterscheiden. Dasselbe Modell kann zudem von Vertriebspartner zu Vertriebspartner in Ausführung, Materialien, Brennern, Zubehör und Sonderausstattung abweichen, Unterschiede, die sich auch im Preis niederschlagen.",
+    dist_cta: "Schreiben Sie uns",
+    dist_c1: "USA",
+    dist_c2: "Niederlande",
+    dist_c3: "Vereinigtes Königreich",
+    dist_c4: "Norwegen",
+    dist_c5: "Schweden",
+    dist_c6: "Finnland",
+    dist_c7: "Polen",
+    hero_who: "Für Eigner, Werften und Konstrukteure · und für alle, die ein <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ersatzteil</span> suchen.",
+    hero_who_s: "Eigner · Werften · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ersatzteile</span>",
     hero_btn_explore: "Produkte Entdecken",
     hero_btn_story: "Unsere Geschichte",
     stat_craft: "Komplette elektrische Marine-Baureihe",
@@ -17123,7 +18109,7 @@ var DICT = {
     rv_title: "Was unsere Kunden sagen",
     rv_intro: "Worte echter Kunden, über die Jahre gesammelt: Briefe, E-Mails und öffentliche Bewertungen.",
     nav_label: "Navigation",
-    nav_products: "Produktkategorien",
+    nav_products: "Kollektionen",
     nav_marine: "Yachting-Kollektionen",
     nav_rv: "Overland Luxury Kollektionen",
     nav_home: "Residential Kollektionen",
@@ -17377,7 +18363,7 @@ var DICT = {
     oc_c1_b2: "Einen Ozean zu überqueren heißt, wochenlang mit begrenzter Energie, ständiger Bewegung, Salzluft und ohne Aussicht auf Hilfe zu leben. Jede bauliche Entscheidung, die an Land ein Detail ist, wird an Bord zum Unterschied zwischen Kochen und Nichtkochen.",
     oc_c2_label: "Auf See",
     oc_c2_title: "Die Boote, die <em>am meisten verlangen</em>",
-    oc_c2_b1: "Darunter die XXL3, nach Maß gefertigt für Elmo's Fire, das Boot des großen italienischen Hochseeseglers Giovanni Soldini.",
+    oc_c2_b1: "Darunter die XXL3, nach Maß gefertigt für Elmo's Fire, das Boot des großen italienischen Hochseeseglers <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
     oc_c2_b2: "Und da ist Latifa. Ein Ocean Racer im vollen Sinne des Wortes: entworfen von William Fife III und 1936 in Schottland bei der Werft William Fife &amp; Son vom Stapel gelaufen, galt sie ihrem Konstrukteur selbst als sein bestes und gelungenstes Werk. Für Latifa bauten wir einen Herd in der Variante Classic, vollständig nach Maß: Spezialbrenner, ein vergrößerter Backofen, ein verstärkter einteiliger Stahlrost aus dem Vollen geschnitten und Kardanbolzen von außergewöhnlicher Festigkeit.",
     oc_c2_b3: "Die XXL3 und das Modell LATIFA, das seinen Namen vom Boot selbst trägt, sind nur zwei Beispiele für Herde, die für extreme Ozeaneinsätze verstärkt oder angepasst wurden. Die Spezifikation ist der Ausgangspunkt, und von dort wird der Herd um das Boot herum gebaut, auf dem er leben wird.",
     oc_c3_label: "Struktur",
@@ -18472,6 +19458,69 @@ var DICT = {
     hero_tag: "Cocinas Marinas de Autor",
     hero_title: "Alta cucina italiana,<br><em>donde sea</em>",
     hero_desc: "Cocinas basculantes, encimeras, hornos y parrillas profesionales · de los day cruisers a los yates de época, del charter a las travesías oceánicas. Hechos a mano en el Inox Valley, Conegliano - Venezia · construidos con elementos torneados y fresados en acero inoxidable macizo.",
+    acc_cap4: "Colada de lava",
+    acc_brand: "PIEDRA OLLAR",
+    acc_sub: "Valtelina",
+    acc_tag: "Accesorios de cocción · Hornos estáticos",
+    acc_title: "Piedra ollar<br>de la <em>Valtelina</em>",
+    acc_lead: "Nuestros hornos son hornos a la italiana: concebidos para la cocción estática, con el calor que sube desde abajo. Es una elección antigua, y es la que hace posible todo lo demás de esta página.",
+    acc_c1_l: "El Horno Estático",
+    acc_c1_t: "El calor que viene de abajo",
+    acc_c1_b: "En un horno estático el calor no se sopla: irradia. Sube desde la solera, llena la cámara y envuelve la comida despacio, sin secar la superficie antes de que el interior esté listo. Así cuecen los hornos domésticos italianos y los hornos de pan, y por eso en un horno así la fermentación continúa durante los primeros minutos en lugar de detenerse, la corteza se forma donde debe formarse y lo que debajo tiene que quedar tierno queda tierno. Permite el estofado largo, el asado que conserva sus jugos, el gratinado que cierra en superficie sin secar el relleno, y la repostería, que una corriente de aire arruinaría.",
+    acc_c2_l: "En La Cocina",
+    acc_c2_t: "Lo que sale de un horno así",
+    acc_c2_b: "Pan, pizza y focaccia, que de la cocción estática toman su doble naturaleza de corteza y miga. Asados y estofados, cocinados largo y a baja temperatura. Pescado a la sal o en papillote, donde importa el calor que envuelve y no el que seca. Pasteles salados, soufflés y flanes de verdura, que un ventilador haría caer. Masas quebradas, masas dulces fermentadas, merengues dejados a secar durante horas con el horno casi apagado. Y verduras asadas enteras, que quieren tiempo y no prisa.",
+    acc_c3_l: "El Accesorio",
+    acc_c3_t: "Las ventajas no acaban aquí",
+    acc_c3_b: "Tener el calor llegando desde abajo hizo posible introducir en nuestros hornos un accesorio único en su género: la piedra. Hay dos, y vienen de dos Italias distintas. La piedra volcánica es basalto, extraído de las antiguas coladas del Etna, en Sicilia, y de las laderas del Vesubio, en Campania. La piedra ollar procede en cambio de las canteras milenarias de la Valtelina y del Valchiavenna, en la provincia de Sondrio. Dos rocas opuestas por historia y por carácter, y buenas para dos cosas distintas.",
+    acc_c4_l: "La Piedra Ollar",
+    acc_c4_t: "Cinco mil años de canteras",
+    acc_c4_b: "No nace del fuego sino de la presión: rocas profundas, ricas en magnesio, transformadas lentamente en las raíces de los Alpes. Sale de ahí una roca metamórfica de talco, clorita y magnesita, verde mate, lo bastante blanda para tornearse y sin embargo refractaria. Las condiciones que la forman son tan particulares que en Italia no se encuentra casi en ningún otro sitio. En las canteras del Alpe Pirlo, del Val Giumellino y de la Valbrutta, sobre Chiesa in Valmalenco y Lanzada, se extrae desde el Neolítico: Plinio el Viejo ya la cita en su Naturalis Historia, y en el siglo XVI las ollas torneadas en tornos de agua bajaban al valle para venderse por toda Italia. Esas mismas ollas siguen usándose, y las mismas losas están en los hornos de restaurantes italianos con estrellas. Cuece suave y de forma uniforme: es la piedra del pan, de la pizza, de la focaccia, de las cocciones largas.",
+    acc_c5_l: "La Piedra Volcánica",
+    acc_c5_t: "El basalto de los volcanes",
+    acc_c5_b: "Es magma que se detuvo. Al enfriarse al aire libre por las laderas, la colada se vuelve basalto: una roca oscura, densa, llena de poros microscópicos, hecha de plagioclasa, piroxenos y olivino. Es dura donde la ollar es blanda, y aguanta sin agrietarse temperaturas altas y cambios bruscos. Por eso es la piedra de la brasa hecha en el horno: chuletones, pescado, verduras a fuego vivo. La superficie porosa es antiadherente por naturaleza y mantiene la grasa lejos del alimento.",
+    acc_c6_l: "A Bordo",
+    acc_c6_t: "Una sartén menos, un volante térmico más",
+    acc_c6_b: "Cocinar un chuletón sobre la piedra, dentro del horno, significa no tener una sartén al rojo en la encimera mientras el barco se mueve: sin salpicaduras, sin humo en el salón, con menos riesgo. Y la piedra, una vez caliente, es un volante térmico excepcional: retiene el calor mucho tiempo y lo devuelve despacio, de modo que el horno trabaja menos para mantener su temperatura. A bordo, donde cada vatio y cada kilo de gas cuentan, eso no es un detalle.",
+    acc_c7_l: "Cuando Era Magia",
+    acc_c7_t: "La piedra que quitaba el veneno",
+    acc_c7_b: "Durante siglos se creyó que estas piedras tenían poderes. En Piuro, en el Valchiavenna, se decía que las ollas de piedra ollar neutralizaban el veneno mientras hervía la comida, y así acababan en las mesas de quienes tenían enemigos. Se contaba que la grasa guardada en esos recipientes duraba décadas sin enranciarse, que la piedra nunca se gastaba, que el fuego no podía nada contra ella. Eran el talco y la clorita, la porosidad, la lentitud con la que el calor entra y sale. Pero quien cocinaba no lo sabía, y la llamaba piedra mágica.",
+    acc_cap1: "Pizza sobre la piedra",
+    acc_cap2: "Chuletón sobre la piedra",
+    acc_cap3: "Olla de piedra ollar",
+    acc_quote: "La misma roca que hace cinco mil años se volvía olla entra hoy en un horno que navega.",
+    acc_cta: "Habla con nuestros técnicos",
+    snk_brand: "FREGADEROS",
+    snk_sub: "A Medida",
+    snk_tag: "Fregaderos · Cualquier Dimensión",
+    snk_title: "Cortados al<br><em>milímetro</em>",
+    snk_lead: "Cada fregadero que construimos se hace a medida. No hay una lista de medidas estándar entre las que elegir: nos dais la abertura, y la cubeta se dibuja alrededor.",
+    snk_c1_l: "Cómo Nacen",
+    snk_c1_t: "Procesos profesionales, medidas de a bordo",
+    snk_c1_b: "Estos fregaderos vienen del mundo de la restauración profesional: el mismo conformado, las mismas soldaduras, las mismas tolerancias. Los realizamos con radio cero en las esquinas, o con radios más amplios donde la cocina de a bordo pide una línea más suave. La elección es vuestra y no le quita nada a la solidez de la cubeta.",
+    snk_c2_l: "Lo Que Los Acompaña",
+    snk_c2_t: "Tablas, escurridores y todo lo demás",
+    snk_c2_b: "A bordo un fregadero rara vez es solo un fregadero: cada superficie tiene que hacer más de un trabajo. Los nuestros admiten tablas de cortar, escurridores, bandejas de goteo y otros accesorios que se apoyan en el borde y convierten la cubeta en encimera cuando no se usa.",
+    snk_cap1: "Radio cero",
+    snk_cap2: "Cubeta a medida",
+    snk_cap3: "Hecho a medida",
+    snk_quote: "Dadnos la abertura, y construimos la cubeta alrededor.",
+    snk_cta: "Habla con nuestros técnicos",
+    nav_where: "Dónde Estamos",
+    nav_dist: "Distribuidores",
+    dist_ttl: "Distribuidores y socios en el extranjero",
+    dist_p1: "Nuestra producción es amplia y variada: algunas de nuestras líneas se distribuyen en todo el mundo, otras nacen por encargo para un solo astillero o un solo barco, y otras son líneas dedicadas desarrolladas junto a marcas asociadas. Allí donde una línea se distribuye, los repuestos suelen estar disponibles en el propio distribuidor. La lista siguiente no es exhaustiva: escríbanos y le indicaremos el revendedor, distribuidor, representante exclusivo o socio más cercano.",
+    dist_warn: "Una precisión importante. Las líneas de producto presentadas en este sitio no siempre coinciden con las que manejan los revendedores y mayoristas que tienen sus repuestos: con el mismo nombre, los productos pueden diferir de forma sustancial. Un mismo modelo puede además variar de un distribuidor a otro en acabados, materiales, quemadores, accesorios y equipamiento opcional, diferencias que se reflejan también en el precio.",
+    dist_cta: "Escríbanos",
+    dist_c1: "USA",
+    dist_c2: "Países Bajos",
+    dist_c3: "Reino Unido",
+    dist_c4: "Noruega",
+    dist_c5: "Suecia",
+    dist_c6: "Finlandia",
+    dist_c7: "Polonia",
+    hero_who: "Para armadores, astilleros y proyectistas · y para quien busca un <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">recambio</span>.",
+    hero_who_s: "Armadores · Astilleros · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Recambios</span>",
     hero_btn_explore: "Explorar Productos",
     hero_btn_story: "Nuestra Historia",
     stat_craft: "Gama eléctrica marina completa",
@@ -18481,7 +19530,7 @@ var DICT = {
     rv_title: "Lo que dicen nuestros clientes",
     rv_intro: "Palabras de clientes reales, recogidas a lo largo de los años: cartas, correos y reseñas públicas.",
     nav_label: "Navegación",
-    nav_products: "Categorías de Productos",
+    nav_products: "Colecciones",
     nav_marine: "Colecciones Yachting",
     nav_rv: "Colecciones Overland Luxury",
     nav_home: "Colecciones Residenciales",
@@ -18735,7 +19784,7 @@ var DICT = {
     oc_c1_b2: "Cruzar un océano significa convivir durante semanas con energía limitada, movimiento continuo, salitre y ninguna posibilidad de asistencia. Cada decisión constructiva que en tierra es un detalle se convierte, a bordo, en la diferencia entre cocinar y no cocinar.",
     oc_c2_label: "En el mar",
     oc_c2_title: "Los barcos que <em>más exigen</em>",
-    oc_c2_b1: "Entre ellas está la XXL3 realizada a medida para Elmo's Fire, el barco del gran navegante italiano Giovanni Soldini.",
+    oc_c2_b1: "Entre ellas está la XXL3 realizada a medida para Elmo's Fire, el barco del gran navegante italiano <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
     oc_c2_b2: "Y está Latifa. Un ocean racer en el sentido pleno del término: proyectada por William Fife III y botada en Escocia en 1936 por el astillero William Fife &amp; Son, su propio proyectista la consideraba su obra mejor y más lograda. Para Latifa realizamos una cocina en variante Classic, enteramente a medida: quemadores especiales, horno sobredimensionado, parrilla monopieza de acero reforzado cortada del macizo y pernos basculantes de robustez excepcional.",
     oc_c2_b3: "La XXL3 y el modelo LATIFA, que toma su nombre del propio barco, son solo dos ejemplos de cocinas reforzadas o personalizadas para usos oceánicos extremos. Las especificaciones son el punto de partida, y desde ahí la cocina se construye en torno al barco que la acogerá.",
     oc_c3_label: "Estructura",
@@ -19935,7 +20984,12 @@ window.OC_MODELS = [
   ROUTES['custom-projects'] = function(){ if(typeof openCustom==='function') openCustom(); };
   /* Esposte perche' anche la ricerca interna possa consultarle: vedi build(). */
   window.__ROUTES = ROUTES;
-  ROUTES['sinks']           = function(){ openCatBySlug('sinks'); };
+  /* La categoria Lavelli era vuota: nessun modello a catalogo, solo una
+     griglia senza schede. Adesso l'indirizzo apre la pagina dedicata. */
+  ROUTES['sinks']               = function(){ openSinks(); };
+  ROUTES['accessori-per-la-cottura'] = function(){ openAcc(); };
+  ROUTES['cooking-accessories']      = function(){ openAcc(); };
+  ROUTES['lavelli']             = function(){ openSinks(); };
   ROUTES['lavelli']         = function(){ openCatBySlug('sinks'); };
   ROUTES['custom']          = ROUTES['custom-projects'];
   ROUTES['custom-cookers']  = ROUTES['custom-projects'];
@@ -19967,7 +21021,20 @@ window.OC_MODELS = [
   ROUTES['free-standing-glass-ceramic-grill'] = function(){ openCatBySlug('electric-grills'); };
   ROUTES['bbq-74']                  = function(){ openCatBySlug('electric-grills'); };
   ROUTES['double-plancha']          = function(){ openCatBySlug('gas-grills'); };
-  ROUTES['espresso12']              = function(){ openCatBySlug('coffee-makers'); };
+  /* ⚠️ INDIRIZZI DELLA PAGINA OCEANO. Fino al 22/08 la pagina si raggiungeva
+     SOLO dal pulsante in home: non aveva un indirizzo proprio, quindi non era
+     ne' linkabile ne' bersaglio di un redirect.
+     /oceano e' ora il bersaglio dei due 301 dai vecchi post Wix su Elmo's Fire,
+     che valgono il miglior piazzamento del sito: 357 impressioni in posizione
+     2,59. Chi cerca Soldini trova la pagina che ne parla, e da li' il nome apre
+     la galleria con le foto. */
+  ROUTES['oceano']                  = function(){ if(typeof openOcean==='function') openOcean(); };
+  ROUTES['bluewater']               = ROUTES['oceano'];
+  ROUTES['ocean-passages']          = ROUTES['oceano'];
+  /* Vecchio bersaglio, tenuto per i link gia' in giro: porta alla stessa pagina. */
+  ROUTES['espresso12']              = ROUTES['oceano'];
+  /* Mancava del tutto: 216 visite l'anno e 14 clic da Google finivano in home. */
+  ROUTES['coffee-makers']           = function(){ openCatBySlug('coffee-makers'); };
   // Prodotti specifici -> categoria che li contiene (Opzione A)
   ROUTES['xl2-cooker-with-oven']    = function(){ openCatBySlug('gas-cookers-with-oven'); }; // MARIS (gas)
   ROUTES['xl2black']                = function(){ openCatBySlug('gas-cookers-with-oven'); }; // MARIS
@@ -20747,6 +21814,307 @@ body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; point
 }
 @media print{ #backtotop{ display:none !important; } }
 
+/* ═══ BARRA DEL PERCORSO ═════════════════════════════════════════
+   Sta in fondo all'ULTIMO blocco di stile del documento, quindi dopo ogni
+   altra regola che tocca gli stessi selettori: e' la condizione perche' gli
+   scostamenti qui sotto vincano davvero (regola 3.1).
+
+   ⚠ IL TRUCCO DI --bh. L'altezza della barra e' zero finche' il body non ha
+   la classe .bcon. Cosi' TUTTI gli scostamenti di geometria qui sotto sono
+   scritti una volta sola e restano inerti quando la barra non c'e': non
+   esistono due versioni del layout da tenere allineate, e togliere la barra
+   significa togliere una classe, non rimettere a posto dieci regole. */
+:root{ --bh:0px; }
+body.bcon{ --bh:38px; }
+
+#bcbar{
+  position:fixed; top:var(--hh); left:0; right:0;
+  height:38px; z-index:799;
+  /* ⚠ SEMPRE SCURA, MAI CHIARA. Niente sfocatura, che la farebbe sembrare un
+     pannello pieno, ma neppure un velo cosi' leggero da lasciarsi attraversare
+     dal bianco: sopra una foto chiara o una pagina chiara le scritte
+     sparivano. Due terzi di nero tengono il testo leggibile su qualunque
+     fondo e lasciano comunque intravedere cio' che scorre sotto. */
+  background:rgba(10,10,10,.66);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:none; align-items:center;
+  padding:0 40px;
+  overflow-x:auto; overflow-y:visible; white-space:nowrap;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+#bcbar::-webkit-scrollbar{ display:none; }
+body.bcon #bcbar{ display:flex; }
+/* Col menu aperto la fascia NON sparisce: e' il punto fermo del sito, sta
+   sempre alla stessa altezza e cambia solo cio' che ci scrive sopra. Aperta la
+   sidebar dice NAVIGAZIONE, cioe' il gradino in cui ti trovi.
+   ⚠ NON si usa body.nav-open: tm() non la applica mai, il menu si segnala solo
+   con #np.on. La classe bcmenu la mette il codice in fondo al file. */
+body.bcmenu #bcbar{ display:flex; }
+/* La stessa scritta era gia' in cima al pannello: adesso la porta la fascia e
+   li' sarebbe ripetuta due volte a dieci pixel di distanza. */
+body.bcmenu .nlbl{ display:none; }
+/* Su telefono il pannello comincia appena sotto l'header e finirebbe dietro
+   alla fascia: gli si lascia lo spessore in piu'. */
+@media(max-width:768px){
+  body.bcmenu #np{ padding-top:calc(var(--hh) + var(--bh) + 18px); }
+}
+
+.bc-i{ display:inline-flex; align-items:center; flex:0 0 auto; }
+.bc-b{
+  background:none; border:0; padding:7px 0;
+  font-family:"Outfit",sans-serif; font-weight:300;
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(255,255,255,.68); cursor:pointer;
+  transition:color .35s ease;
+  text-shadow:0 1px 6px rgba(0,0,0,.4);
+}
+/* ⚠ Al passaggio cambia SOLO il colore: niente transform, niente ombre che
+   crescono (regola 3.12, l'effetto molla). */
+.bc-b:hover{ color:var(--go); }
+.bc-b:focus-visible{ outline:1px solid var(--go); outline-offset:3px; }
+/* Sei gia' qui, quindi la scritta e' dorata come ogni voce attiva della fascia.
+   Ma resta un bottone: serve a richiudere i sottomenu senza uscire dal menu.
+   ⚠ Si usa il dorato CHIARO --gl, non --go: su una fascia scura e trasparente
+   il dorato pieno perde leggibilita', e questa e' la parola che deve saltare
+   all'occhio per prima. */
+.bc-b-qui{ color:var(--gl); }
+.bc-b-qui:hover{ color:var(--wh); }
+
+/* L'ultima voce e' la pagina in cui ti trovi: non e' un bottone, non si clicca. */
+.bc-cur{
+  font-family:"Outfit",sans-serif; font-weight:300;
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--gl); padding:7px 0; cursor:default;
+  text-shadow:0 1px 6px rgba(0,0,0,.4);
+}
+/* Voci del menu volutamente in sordina: restano cliccabili e al passaggio si
+   riaccendono come le altre, perche' .nbtn:hover .ntxt ha specificita' piu'
+   alta di queste due righe. */
+.nbtn-soft .ntxt{ color:rgba(248,246,241,.52); }
+.nbtn-soft .nnum{ opacity:.70; }
+/* Filo dorato che stacca le ultime due voci dal resto del menu: restano
+   numerate e cliccabili, ma si capisce a colpo d'occhio che sono un'altra
+   cosa. Il bordo va sulla riga, non sul bottone, per allinearsi a quello
+   grigio che .nrow ha gia' in basso. */
+.nrow-div{ border-top:1px solid rgba(184,150,90,.34); }
+
+.bc-sep{
+  color:rgba(184,150,90,.85); margin:0 12px; font-size:11px;
+  flex:0 0 auto; line-height:1;
+  font-family:"Outfit",sans-serif; font-weight:200;
+}
+
+/* Con la fascia non serve piu' il pulsante Indietro: il percorso dice dove sei
+   e ti riporta a qualunque livello. Due modi di tornare indietro nella stessa
+   schermata si contraddicono. Nascosto, non cancellato: se si toglie la
+   fascia, il pulsante torna da solo. */
+body.bcon .pp-back{ display:none; }
+body.bcon .cphd{ display:none; }
+
+/* ═══ PAGINA LAVELLI ═════════════════════════════════════════════════════
+   Il modale riusa per intero il vestito di Progetti su misura (.ef-modal,
+   .ef-hero, .ef-chapter, .ef-close): qui c'e' solo la parte che cambia, cioe'
+   le immagini.
+   ⚠ Lo scambio desktop/telefono e' fatto con display, non con una foto sola
+   ridimensionata: cosi' il browser scarica soltanto l'immagine che gli serve
+   e sul telefono non passa mai il file grande. */
+/* ⚠ NESSUNA REGOLA DI POSIZIONE QUI. Il riquadro e' centrato perche'
+   #sinkpage e' stato aggiunto agli elenchi condivisi piu' sopra, quelli di
+   Energia, Oceano e Progetti su misura. Riscrivere qui inset, z-index e
+   sfondo significava avere due verita' sulla stessa cosa: bastava che un
+   domani si ritoccasse il modale comune perche' i Lavelli restassero
+   indietro. Qui sotto c'e' solo cio' che i Lavelli hanno di diverso: le foto.
+
+   ⚠ LE FOTO NASCONO GRANDI. Una per riga, a tutta larghezza del riquadro,
+   senza ritaglio: si vede l'inquadratura intera, non un pezzo. Al tocco
+   crescono del 10% e basta, e un secondo tocco le riporta a posto. Niente
+   ingrandimento a schermo intero: a questa dimensione non aggiungerebbe
+   nulla e porterebbe via il lettore dalla pagina. */
+.snk-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:clamp(14px,2vw,28px);
+  padding:0 clamp(20px,4vw,64px) clamp(50px,6vw,90px);
+}
+.snk-it{ margin:0; position:relative; overflow:hidden; }
+.snk-img{
+  width:100%; display:block; height:auto;
+  cursor:zoom-in;
+  transform-origin:center center;
+  transition:transform .6s cubic-bezier(.16,1,.3,1);
+}
+.snk-img.snk-on{ transform:scale(1.1); cursor:zoom-out; }
+.snk-mob{ display:none; }
+
+@media(max-width:768px){
+  .snk-grid{ gap:10px; padding:0 16px 60px; }
+  .snk-desk{ display:none; }
+  .snk-mob{ display:block; }
+}
+/* Chi ha chiesto meno movimento non deve vedere nulla muoversi. */
+@media(prefers-reduced-motion:reduce){
+  .snk-img{ transition:none; }
+}
+
+/* ═══ PAGINA ACCESSORI DI COTTURA ══════════════════════════════
+   Come per i Lavelli: la posizione e il vestito del riquadro vengono dagli
+   elenchi condivisi piu' sopra. Qui c'e' solo cio' che riguarda le foto.
+
+   ⚠ IL VELO E' UN ELEMENTO A PARTE, non un filtro sull'immagine. Se fosse
+   parte dell'immagine crescerebbe insieme a lei durante l'ingrandimento e il
+   bordo scuro si allargherebbe; steso sopra come strato indipendente, resta
+   fermo e la foto cresce sotto di lui. */
+/* Le immagini non stanno piu' tutte in fondo: respirano fra un capitolo e
+   l'altro. ⚠ Sono dentro .ef-body, che ha gia' il suo margine laterale: qui
+   NON si aggiunge padding orizzontale, altrimenti rientrerebbero rispetto al
+   testo invece di allinearsi. */
+.acc-media{ margin:clamp(26px,4vw,52px) 0; }
+.acc-it{ margin:0; position:relative; overflow:hidden; }
+/* Le velature: una sfumatura scura in alto e in basso piu' un tocco laterale,
+   per legare le foto al fondo nero della pagina invece di lasciarle come
+   rettangoli incollati sopra. Al passaggio del mouse si alleggeriscono, cosi'
+   la foto che prende colore prende anche luce. */
+.acc-it::after{
+  content:"";
+  position:absolute; left:0; right:0; top:0; bottom:0;
+  background:
+    linear-gradient(to bottom,
+      rgba(10,10,10,.55) 0%,
+      rgba(10,10,10,.10) 34%,
+      rgba(10,10,10,.14) 62%,
+      rgba(10,10,10,.62) 100%),
+    linear-gradient(to right,
+      rgba(10,10,10,.30) 0%,
+      rgba(10,10,10,0) 16%,
+      rgba(10,10,10,0) 84%,
+      rgba(10,10,10,.30) 100%);
+  pointer-events:none;
+  transition:opacity .7s ease;
+}
+@media(hover:hover){ .acc-it:hover::after{ opacity:.42; } }
+.acc-img{
+  width:100%; display:block; height:auto;
+  filter:grayscale(1) contrast(1.02);
+  transition:filter .7s ease;
+}
+/* Il colore si accende solo dove esiste un puntatore che possa passarci sopra. */
+@media(hover:hover){
+  .acc-img:hover{ filter:grayscale(0) contrast(1); }
+}
+/* ⚠ LE FOTO NON SI INGRANDISCONO. Il tocco serve soltanto ad accendere il
+   colore, perche' sul telefono il passaggio del mouse non esiste e senza un
+   gesto resterebbero grigie per sempre. Si tocca, si accendono; si tocca di
+   nuovo e tornano in bianco e nero.
+   ⚠ Niente transform qui: e' la ragione per cui il velo puo' restare un
+   elemento sovrapposto e non si sfalsa mai rispetto all'immagine. */
+.acc-img.acc-on{ filter:grayscale(0) contrast(1); }
+.acc-video{
+  width:100%; display:block; height:auto;
+  filter:grayscale(1) contrast(1.02);
+  transition:filter .7s ease;
+}
+@media(hover:hover){ .acc-vid:hover .acc-video{ filter:grayscale(0); } }
+.acc-mob{ display:none; }
+
+@media(max-width:768px){
+  .acc-media{ margin:22px 0; }
+  .acc-desk{ display:none; }
+  .acc-mob{ display:block; }
+  /* ⚠ SU TELEFONO IL COLORE LO DECIDE LO SCORRIMENTO, non il tocco: il codice
+     in fondo al file scrive il grigio direttamente sull'elemento, mano a mano
+     che la foto sale verso il centro dello schermo.
+     ⚠ Per questo la transizione va SPENTA: se restasse, ogni fotogramma
+     inseguirebbe il precedente con mezzo secondo di ritardo e il colore
+     arriverebbe dopo la foto, a scatti.
+     ⚠ Le foto NON vengono sbiancate qui: restano in bianco e nero e si
+     accendono salendo.
+     Il filmato del vulcano e' l'eccezione: non si tocca, quindi senza questa
+     riga resterebbe grigio per sempre su telefono. E' l'unica immagine della
+     pagina sempre a colori. */
+  .acc-video{ filter:grayscale(0); }
+  .acc-img{ transition:none; }
+
+  /* Il filmato va a vivo con lo schermo, mentre le foto restano allineate al
+     testo. ⚠ I 24 pixel non sono scelti a caso: sono esattamente il margine
+     laterale che .ef-body ha su telefono. Toccando quel margine va cambiato
+     anche questo, altrimenti il filmato sborda o rientra.
+     ⚠ Nessun ritaglio: altezza automatica, il fotogramma resta intero e
+     l'inquadratura si vede tutta. */
+  .acc-media-vid{ margin-left:-24px; margin-right:-24px; }
+  .acc-media-vid .cst-cap{ padding:0 16px; }
+  .acc-media-vid .acc-video{ height:auto; object-fit:contain; }
+}
+@media(prefers-reduced-motion:reduce){
+  .acc-img{ transition:none; }
+}
+
+/* ── GLI SCOSTAMENTI DI GEOMETRIA ──────────────────────────────
+   Tutto cio' che era misurato sull'altezza dell'header ora tiene conto anche
+   della barra. Con --bh a zero queste righe non cambiano nulla. */
+/* Le altre pagine interne partono da top:0 e hanno gia' dentro di se' un
+   distacco calcolato sull'altezza dell'header. Invece di riscrivere il
+   riempimento di ogni singola hero (una decina di regole, meta' dentro media
+   query), si aggiunge lo spessore della fascia al CONTENITORE: tutti gli
+   scostamenti interni restano quelli di prima e continuano a funzionare.
+   Con box-sizing:border-box, gia' globale a riga 29, il riquadro non cresce.
+   ⚠ Non ci sono Energia, Oceano e Progetti su misura: quelle tre stanno a
+   z-index 940, cioe' SOPRA l'header, sono finestre modali con la loro barra
+   di chiusura. La fascia non si vedrebbe e non avrebbe senso. */
+body.bcon #aboutpage,
+body.bcon #contactpage,
+body.bcon #sparepage,
+body.bcon #matrixpage,
+body.bcon #catpage{ padding-top:var(--bh); }
+
+#prodpage{ top:calc(var(--hh) + var(--bh)); }
+.pp-hero{ height:calc(100vh - var(--hh) - var(--bh)); }
+.slr-pin{ height:calc(100vh - var(--hh) - var(--bh) - 77px); }
+.cp-header-cover{ height:calc(var(--hh) + var(--bh)); }
+.cphd{ top:calc(var(--hh) + var(--bh)); }
+.cp-electric-hero{ height:calc(100vh - var(--hh) - var(--bh)); }
+.cp-electric-hero.iframe-mode{ height:auto; max-height:calc(100vh - var(--hh) - var(--bh)); }
+
+/* ═══ INVITO A SCORRERE · TELEFONO ═══════════════════════════════════════
+   Sta A SINISTRA, sopra la prima foto, non a destra: e' li' che l'occhio
+   comincia a leggere e li' che parte il dito. La punta guarda a destra, cioe'
+   indica il verso dello scorrimento.
+   Niente dischetto: solo la punta dorata, un filo piu' grande, un'ombra che la
+   stacca dalla foto sotto, e un battito lento di opacita' invece di uno
+   spostamento. Deve farsi notare, non farsi guardare.
+   ⚠ Resta pointer-events:none dalla regola originale: sta sopra la scheda e
+   se fosse premibile ruberebbe il tocco che deve aprire il prodotto.
+   ⚠ Continua a spegnersi al primo scorrimento, perche' .pg-scrolled ha una
+   specificita' piu' alta di queste righe: l'invito serve una volta sola. */
+/* Solo luce, nessuno spostamento: e' il modo piu' sobrio di farsi notare.
+   Nota che qui NON si tocca transform, altrimenti servirebbe ripetere il
+   translateY della regola base e basterebbe dimenticarlo per far saltare la
+   freccia fuori posto. */
+@keyframes pgridBattito{
+  0%,100%{ opacity:.42; }
+  50%    { opacity:1; }
+}
+@media(max-width:768px),(hover:none){
+  .pgrid-arrow-next{
+    top:-34px; left:0; right:auto;
+    transform:none;
+    width:32px; height:30px;
+    justify-content:flex-start;
+    color:#d8b478;
+    background:transparent;
+    filter:drop-shadow(0 1px 5px rgba(0,0,0,.55));
+    animation:pgridBattito 2.4s ease-in-out infinite;
+  }
+  .pgrid-arrow-next svg{ width:26px; height:26px; }
+}
+
+@media(max-width:768px){
+  body.bcon{ --bh:34px; }
+  #bcbar{ height:34px; padding:0 16px; }
+  .bc-b{ font-size:9px; letter-spacing:.12em; }
+  .bc-sep{ margin:0 9px; }
+  .bc-d{ min-width:210px; max-height:50vh; }
+  .cp-electric-hero{ height:calc(100svh - var(--hh) - var(--bh)); }
+}
 </style>
 <script>
 (function(){
@@ -21137,6 +22505,585 @@ body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; point
       window[fn] = function(){ window.hctClose(); return orig.apply(this, arguments); };
     }
   });
+})();
+
+/* ═══ BARRA DEL PERCORSO ════════════════════════════════════════
+   Mostra dove ti trovi E ti fa cambiare ramo senza tornare indietro: dove una
+   voce ha dei fratelli compare un pallino e si apre l'elenco.
+
+   ⚠ DUE SOLI AGGANCI AL CODICE ESISTENTE, ed e' una scelta:
+   1) un MutationObserver guarda la classe .show di #cp e #prodpage. Cosi' la
+      barra compare e sparisce da sola qualunque funzione apra o chiuda quelle
+      pagine, comprese quelle che verranno scritte domani. Avvolgere una per
+      una le dodici funzioni che le aprono sarebbe stato un elenco da tenere
+      aggiornato per sempre.
+   2) goProd viene avvolta soltanto per sapere QUALE modello e' aperto.
+   La categoria non ha bisogno di agganci: sta gia' in window.__prodBackCat.
+
+   ⚠ NESSUNA STRINGA NUOVA DA TRADURRE. I bottoni portano il data-i18n della
+   voce corrispondente del menu laterale e il testo iniziale viene copiato da
+   li': cambiando lingua, setLang traduce anche questa barra da sola. */
+(function(){
+  /* Le due collezioni con prodotti a catalogo. Leonardo e Galileo non hanno
+     schede sul sito: non compaiono nel percorso. */
+  var COLL = [
+    { key:'coll_mp_name', coll:'mp', slugs:[
+        'electric-cookers-with-oven','gas-cookers-with-oven','gas-cookers',
+        'built-in-gas-cooktops','built-in-electric-cooktops','electric-grills',
+        'electric-bbqs','gas-grills','built-in-gas-ovens',
+        'built-in-electric-ovens','coffee-makers'] },
+    { key:'coll_ve_name', coll:'ve', slugs:['antiche-cambuse'] }
+  ];
+
+  var bar = null, model = null, traducendo = false;
+
+  /* ⚠ QUI STAVA IL DIFETTO DELLA VOCE SBAGLIATA, e non era della fascia.
+     Le funzioni che aprono le pagine non ripuliscono tutte le stesse: per
+     esempio openAbout non toglie la classe .show alla Panoramica, e
+     openCatalogues non la toglie ne' ai Ricambi ne' alla Panoramica. Il
+     risultato e' che DUE pagine possono risultare aperte insieme: non si vede,
+     perche' quella sopra copre l'altra, ma chi legge le classi trova entrambe.
+     La fascia e' la prima cosa del sito che quelle classi le legge davvero, ed
+     e' per questo che il difetto e' saltato fuori solo adesso.
+     Invece di correggere cinque funzioni una per una, si tiene qui il nome
+     dell'ultima pagina che ha ricevuto .show: quella e' la pagina in cui ti
+     trovi, sempre, qualunque residuo sia rimasto indietro. */
+  var ultima = null;
+
+  function cats(){ return window.CATS || []; }
+
+  /* Il testo tradotto si prende da un elemento che ce l'ha gia' nel documento:
+     nessuna stringa nuova da mantenere, e al cambio lingua setLang traduce
+     anche questa fascia perche' i bottoni portano il loro data-i18n. */
+  function txt(key, fallback){
+    var el = document.querySelector('[data-i18n="' + key + '"]');
+    var t = el ? (el.textContent || '').trim() : '';
+    return t || fallback || '';
+  }
+  function catByName(nm){
+    var c = cats();
+    for(var i = 0; i < c.length; i++){ if(c[i].name === nm) return c[i]; }
+    return null;
+  }
+  function collOf(sl){
+    for(var i = 0; i < COLL.length; i++){
+      if(COLL[i].slugs.indexOf(sl) >= 0) return i;
+    }
+    return -1;
+  }
+  function keyOf(sl){
+    return (window.SRCH_CATKEY && window.SRCH_CATKEY[sl]) || '';
+  }
+  function shown(id){
+    var el = document.getElementById(id);
+    return !!(el && el.classList.contains('show'));
+  }
+
+  /* Apre il menu laterale in due modi.
+     'pulito'  · il menu e basta, tutto richiuso: e' GENERALE, cioe' la sidebar
+                 stessa nel suo stato di partenza.
+     'elenco'  · con le categorie distese, e se serve una collezione aperta.
+     ⚠ tm(), tDrop() e toggleColl() sono INTERRUTTORI, non comandi di
+     apertura: chiamati quando la cosa e' gia' aperta la richiudono. Per questo
+     ogni passo guarda prima lo stato reale dell'elemento. */
+  function apriMenu(modo, coll){
+    var np = document.getElementById('np');
+    if(np && !np.classList.contains('on') && typeof window.tm === 'function'){
+      window.tm();
+    }
+    setTimeout(function(){
+      var dr = document.getElementById('ndrop');
+      var disteso = !!(dr && dr.classList.contains('open'));
+
+      if(modo === 'pulito'){
+        if(disteso && typeof window.cDrop === 'function') window.cDrop();
+        ['mp', 've'].forEach(function(c){
+          var el = document.getElementById('ncoll-' + c);
+          if(el) el.classList.remove('open');
+        });
+        return;
+      }
+
+      if(!disteso && typeof window.tDrop === 'function') window.tDrop();
+
+      /* ⚠ SI RISALE A COLLEZIONI, NON DENTRO UNA COLLEZIONE. Tornando a questo
+         gradino i pannelli delle singole collezioni vanno richiusi: altrimenti
+         Marco Polo resterebbe disteso da prima e il visitatore si ritroverebbe
+         un livello piu' in basso di quello che ha chiesto. Si chiudono sempre,
+         e solo dopo si riapre quella eventualmente richiesta.
+         ⚠ Si toglie la classe direttamente invece di chiamare toggleColl:
+         quella e' un interruttore e su un pannello gia' chiuso lo aprirebbe. */
+      ['mp', 've'].forEach(function(c){
+        if(c === coll) return;
+        var el = document.getElementById('ncoll-' + c);
+        if(el) el.classList.remove('open');
+      });
+
+      if(!coll) return;
+      setTimeout(function(){
+        var el = document.getElementById('ncoll-' + coll);
+        if(el && !el.classList.contains('open') && typeof window.toggleColl === 'function'){
+          window.toggleColl(coll);
+        }
+      }, 260);
+    }, 360);
+  }
+
+  function crumb(label, key, go){
+    var b = document.createElement('button');
+    b.className = 'bc-b';
+    b.type = 'button';
+    b.textContent = label;
+    if(key) b.setAttribute('data-i18n', key);
+    b.onclick = function(e){ e.stopPropagation(); go(); };
+    var w = document.createElement('span');
+    w.className = 'bc-i';
+    w.appendChild(b);
+    return w;
+  }
+  function current(label){
+    var sp = document.createElement('span');
+    sp.className = 'bc-i';
+    var t = document.createElement('span');
+    t.className = 'bc-cur';
+    t.setAttribute('aria-current', 'page');
+    t.textContent = label;
+    sp.appendChild(t);
+    return sp;
+  }
+
+  /* Le pagine interne che NON stanno nell'albero dei prodotti: il percorso e'
+     di due soli gradini, Generale e la pagina stessa. La chiave e' la stessa
+     della voce di menu, cosi' la scritta e' identica nelle cinque lingue. */
+  var SEMPLICI = [
+    { id:'matrixpage',  key:'matrix_btn'     },
+    { id:'aboutpage',   key:'nav_about'      },
+    { id:'contactpage', key:'nav_where'      },
+    { id:'sparepage',   key:'nav_spare'      },
+    { id:'catpage',     key:'nav_catalogues' }
+  ];
+
+  /* La pagina in cui ti trovi: l'ultima che ha ricevuto .show, se ce l'ha
+     ancora. Altrimenti si ripiega sulla prima ancora aperta, in ordine di
+     profondita': la scheda sta sopra la griglia, la griglia sopra il resto. */
+  function attiva(){
+    if(ultima && shown(ultima)) return ultima;
+    var ordine = ['prodpage', 'cp', 'matrixpage', 'aboutpage',
+                  'contactpage', 'sparepage', 'catpage'];
+    for(var i = 0; i < ordine.length; i++){
+      if(shown(ordine[i])) return ordine[i];
+    }
+    return null;
+  }
+
+  function draw(){
+    if(!bar) return;
+
+    /* MENU APERTO · la fascia segue i livelli distesi nel pannello, in tempo
+       reale: Navigazione da sola, poi Collezioni quando si apre l'elenco delle
+       categorie, poi il nome della collezione quando se ne apre una. Sono gli
+       stessi gradini che vedresti navigando, e si muovono insieme al menu
+       qualunque cosa li apra, la fascia o un tocco nella barra laterale.
+       ⚠ L'ultimo gradino e' quello in cui ti trovi. Navigazione, quando e'
+       l'ultimo, resta comunque cliccabile: serve a richiudere cio' che e'
+       rimasto disteso senza uscire dal menu. */
+    if(document.body.classList.contains('bcmenu')){
+      bar.innerHTML = '';
+
+      var dr = document.getElementById('ndrop');
+      var disteso = !!(dr && dr.classList.contains('open'));
+      var apertaIdx = -1;
+      for(var q = 0; q < COLL.length; q++){
+        var pan = document.getElementById('ncoll-' + COLL[q].coll);
+        if(pan && pan.classList.contains('open')){ apertaIdx = q; break; }
+      }
+
+      if(!disteso){
+        var solo = crumb(txt('nav_label', 'Navigation'), 'nav_label', function(){
+          apriMenu('pulito');
+        });
+        if(solo.firstChild) solo.firstChild.className = 'bc-b bc-b-qui';
+        bar.appendChild(solo);
+      } else {
+        var passi = [];
+        passi.push(crumb(txt('nav_label', 'Navigation'), 'nav_label', function(){
+          apriMenu('pulito');
+        }));
+        if(apertaIdx < 0){
+          passi.push(current(txt('nav_products', 'Collections')));
+        } else {
+          passi.push(crumb(txt('nav_products', 'Collections'), 'nav_products', function(){
+            apriMenu('elenco');
+          }));
+          passi.push(current(txt(COLL[apertaIdx].key, '')));
+        }
+        passi.forEach(function(el, n){
+          if(n){
+            var sp = document.createElement('span');
+            sp.className = 'bc-sep';
+            sp.textContent = '>';
+            bar.appendChild(sp);
+          }
+          bar.appendChild(el);
+        });
+      }
+
+      document.body.classList.add('bcon');
+      chiudiConTraduzione();
+      return;
+    }
+
+    var qui = attiva();
+    var pp  = (qui === 'prodpage');
+    var cpg = (qui === 'cp');
+    var bc = window.__prodBackCat;
+    var cat = (!pp && !cpg) ? null : ((bc && bc.name) ? catByName(bc.name) : null);
+
+    /* Pagina semplice: Navigazione piu' il suo nome, e non si va oltre. */
+    if(!cat){
+      var sem = null;
+      for(var k = 0; k < SEMPLICI.length; k++){
+        if(SEMPLICI[k].id === qui){ sem = SEMPLICI[k]; break; }
+      }
+      if(!sem){
+        document.body.classList.remove('bcon');
+        bar.innerHTML = '';
+        return;
+      }
+      bar.innerHTML = '';
+      {
+        bar.appendChild(crumb(txt('nav_label', 'Navigation'), 'nav_label', function(){
+          apriMenu('pulito');
+        }));
+        var s1 = document.createElement('span');
+        s1.className = 'bc-sep'; s1.textContent = '>';
+        bar.appendChild(s1);
+      }
+      bar.appendChild(current(txt(sem.key, '')));
+      chiudiConTraduzione();
+      return;
+    }
+
+    bar.innerHTML = '';
+    var pezzi = [];
+
+    /* 1 · Navigazione E' LA SIDEBAR STESSA, nel suo stato di partenza: menu
+       aperto e nessun sottomenu disteso. Non e' una pagina, e' il gradino da
+       cui si riparte, e la parola e' la stessa scritta in cima al pannello che
+       apre: si clicca "Navigazione" e si ottiene Navigazione.
+       ⚠ Chiave riusata, non nuova: nav_label esiste gia' nelle cinque lingue,
+       quindi le due scritte non potranno mai divergere. */
+    pezzi.push(crumb(txt('nav_label', 'Navigation'), 'nav_label', function(){
+      apriMenu('pulito');
+    }));
+
+    /* 2 · Collezioni, MA SOLO SE LA CATEGORIA CI APPARTIENE DAVVERO.
+       ⚠ Qui c'era un errore: il gradino veniva messo sempre, e cosi'
+       Fermapentole, Lavelli, Accessori e Manuali risultavano figli delle
+       Collezioni. Nel menu non lo sono: sono voci di primo livello, sorelle di
+       Collezioni, e quindi nel percorso discendono direttamente da
+       Navigazione. La fascia deve rispecchiare il menu, non inventare un
+       ramo che non esiste.
+       ⚠ tm() e tDrop() sono INTERRUTTORI, non comandi di apertura: chiamati a
+       vuoto richiuderebbero. Si guarda prima lo stato reale degli elementi. */
+    var ci = collOf(cat.slug);
+    if(ci >= 0){
+      pezzi.push(crumb(txt('nav_products', 'Collections'), 'nav_products', function(){
+        apriMenu('elenco');
+      }));
+
+      /* 3 · La collezione → stesso menu, col suo pannello aperto. */
+      pezzi.push(crumb(txt(COLL[ci].key, ''), COLL[ci].key, function(){
+        apriMenu('elenco', COLL[ci].coll);
+      }));
+    }
+
+    /* 3 · La categoria · sulla scheda prodotto e' un passo indietro, sulla
+       griglia e' la pagina in cui ti trovi. */
+    var kc = keyOf(cat.slug), nc = txt(kc, cat.name);
+    if(pp){
+      pezzi.push(crumb(nc, kc, function(){
+        if(typeof window.openCat === 'function') window.openCat(cat.name, cat.models);
+      }));
+      pezzi.push(current(model || ''));
+    } else {
+      pezzi.push(current(nc));
+    }
+
+    pezzi.forEach(function(el, i){
+      if(i){
+        var sp = document.createElement('span');
+        sp.className = 'bc-sep';
+        sp.textContent = '>';
+        bar.appendChild(sp);
+      }
+      bar.appendChild(el);
+    });
+
+    chiudiConTraduzione();
+  }
+
+  /* ⚠ "Generale" e' l'unica voce del percorso che non ha un gemello nel menu
+     da cui copiare la traduzione: nella sidebar non c'e'. Quindi, costruita la
+     fascia, si chiede una passata di setLang, che traduce ogni elemento con
+     data-i18n, questo compreso. La guardia evita che una passata ne inneschi
+     un'altra. */
+  function chiudiConTraduzione(){
+    if(typeof window.setLang === 'function' && !traducendo){
+      traducendo = true;
+      try{
+        window.setLang((document.documentElement && document.documentElement.lang) || 'en');
+      }catch(e){}
+      traducendo = false;
+    }
+    document.body.classList.add('bcon');
+    bar.scrollLeft = bar.scrollWidth;
+  }
+
+  function init(){
+    bar = document.getElementById('bcbar');
+    if(!bar) return;
+
+    /* La X di Progetti su misura non chiude e basta: riporta alla sidebar nel
+       suo stato di partenza, cioe' a GENERALE. Vale anche per il tocco fuori
+       dal riquadro, che chiama la stessa funzione.
+       ⚠ I 320 millesimi non sono un vezzo: il modale sta a z-index 940, sopra
+       il menu, e sparisce in dissolvenza. Aprendo la sidebar subito, questa
+       comparirebbe dietro al modale ancora visibile e sembrerebbe rotta. */
+    ['closeCustom', 'closeSinks', 'closeAcc'].forEach(function(fn){
+      var orig = window[fn];
+      if(typeof orig !== 'function') return;
+      window[fn] = function(){
+        var r = orig.apply(this, arguments);
+        setTimeout(function(){
+          /* ⚠ NON SI RIAPRE IL MENU SE E' APERTA LA BUSTINA DEI CONTATTI.
+             In fondo a queste pagine c'e' un invito a scrivere che chiama
+             prima la chiusura della pagina e subito dopo l'apertura della
+             bustina. Senza questo controllo, 320 millesimi piu' tardi si
+             apriva anche il menu laterale: e siccome tm() richiama hctClose(),
+             la bustina spariva appena l'utente provava a scriverci dentro.
+             Il ritardo e' proprio cio' che rendeva il difetto difficile da
+             leggere: la bustina compariva, e solo dopo se ne andava. */
+          var hp = document.getElementById('hctp');
+          if(hp && hp.classList.contains('on')) return;
+          apriMenu('pulito');
+        }, 320);
+        return r;
+      };
+    });
+
+    var gp = window.goProd;
+    if(typeof gp === 'function'){
+      window.goProd = function(m){
+        model = m;
+        var r = gp.apply(this, arguments);
+        setTimeout(draw, 60);
+        return r;
+      };
+    }
+
+    /* ⚠ UN SOLO OSSERVATORE al posto di dodici funzioni avvolte: guarda la
+       classe .show della griglia e della scheda, cosi' la fascia compare e
+       sparisce da sola con qualunque funzione le apra, anche quelle che
+       verranno scritte in futuro. */
+    if(window.MutationObserver){
+      var ob = new MutationObserver(function(mut){
+        for(var k = 0; k < mut.length; k++){
+          var el = mut[k].target;
+          if(el && el.id && el.classList.contains('show')) ultima = el.id;
+        }
+        setTimeout(draw, 40);
+      });
+      ['cp', 'prodpage', 'matrixpage', 'aboutpage',
+       'contactpage', 'sparepage', 'catpage'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) ob.observe(el, { attributes:true, attributeFilter:['class'] });
+      });
+
+      /* Menu, tendina o ricerca aperti: la fascia si toglie di mezzo. Si
+         guardano gli ELEMENTI, non una classe sul body, perche' tm() non ne
+         applica nessuna. */
+      var om = new MutationObserver(syncMenu);
+      ['np', 'bd', 'srch'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) om.observe(el, { attributes:true, attributeFilter:['class'] });
+      });
+
+      /* ⚠ L'elenco delle categorie e i pannelli delle collezioni vanno
+         osservati a parte: si aprono e si chiudono anche con un tocco DENTRO
+         la barra laterale, non solo dalla fascia. Senza questi, la fascia
+         seguirebbe soltanto i propri comandi e resterebbe indietro appena
+         l'utente usa il menu direttamente. */
+      var ol = new MutationObserver(function(){ setTimeout(draw, 40); });
+      ['ndrop', 'ncoll-mp', 'ncoll-ve'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) ol.observe(el, { attributes:true, attributeFilter:['class'] });
+      });
+    }
+    syncMenu();
+  }
+
+  function syncMenu(){
+    var ap = document.querySelector('#np.on')   !== null ||
+             document.querySelector('#bd.on')   !== null ||
+             document.querySelector('#srch.on') !== null;
+    var era = document.body.classList.contains('bcmenu');
+    document.body.classList.toggle('bcmenu', ap);
+    /* Aprendo o chiudendo il menu cambia cio' che la fascia deve scrivere:
+       si ridisegna solo quando lo stato e' davvero cambiato, non a ogni
+       singola modifica di classe segnalata dall'osservatore. */
+    if(era !== ap) draw();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+/* ═══ GALLERIA DI CATEGORIA · SCORRIMENTO D'ATTESA (SOLO TELEFONO) ══════════
+   La striscia dei modelli si mette in moto da sola, piano, verso destra. Non e'
+   un carosello: e' una dimostrazione. Serve a far capire in due secondi che li
+   dentro c'e' altro oltre il bordo dello schermo.
+
+   ⚠ AL PRIMO GESTO DELL'UTENTE SI SPEGNE E NON RIPARTE PIU' per quella
+   categoria. Una striscia che continua a muoversi mentre uno la trattiene e'
+   il modo piu' rapido di far sembrare rotto un sito. Da quel momento comanda
+   il dito e basta.
+
+   ⚠ NON si tocca il codice dello scorrimento esistente (lerp, inerzia, frecce,
+   apertura al tocco): qui si scrive solo scrollLeft, come farebbe un dito.
+
+   ⚠ La posizione si accumula in un numero con la virgola e poi si assegna. A
+   34 pixel al secondo ogni fotogramma vale mezzo pixel: assegnando direttamente
+   scrollLeft, l'arrotondamento a numero intero mangerebbe il movimento e la
+   striscia resterebbe ferma.
+
+   Si spegne da sola anche se qualcuno sposta la striscia in altro modo: se la
+   posizione reale si discosta da quella attesa, vuol dire che non siamo stati
+   noi. */
+(function(){
+  var VELOCITA = 34;    /* pixel al secondo: si vede, ma non da' fastidio */
+  var ATTESA   = 1100;  /* respiro prima di partire, a categoria aperta   */
+
+  var grid = null, raf = null, avvio = null;
+  var pos = 0, ultimo = 0, atteso = -1, spento = false, legato = false;
+
+  function telefono(){
+    return !!(window.matchMedia && window.matchMedia('(max-width:768px)').matches);
+  }
+  function menoMovimento(){
+    return !!(window.matchMedia &&
+              window.matchMedia('(prefers-reduced-motion:reduce)').matches);
+  }
+  function visibile(id){
+    var el = document.getElementById(id);
+    return !!(el && el.classList.contains('show'));
+  }
+
+  function ferma(){
+    spento = true;
+    if(raf){ cancelAnimationFrame(raf); raf = null; }
+    if(avvio){ clearTimeout(avvio); avvio = null; }
+  }
+
+  function passo(t){
+    if(!grid || spento){ raf = null; return; }
+    var dt = ultimo ? (t - ultimo) : 0;
+    ultimo = t;
+    if(dt > 120) dt = 120;   /* tornando da un'altra scheda niente balzi */
+
+    var max = grid.scrollWidth - grid.clientWidth;
+    if(max <= 8 || grid.scrollLeft >= max - 1){ ferma(); return; }
+
+    if(atteso >= 0 && Math.abs(grid.scrollLeft - atteso) > 2){ ferma(); return; }
+
+    pos += VELOCITA * dt / 1000;
+    grid.scrollLeft = pos;
+    atteso = grid.scrollLeft;
+    raf = requestAnimationFrame(passo);
+  }
+
+  function lega(){
+    if(legato || !grid) return;
+    legato = true;
+    ['touchstart','pointerdown','mousedown','wheel','keydown'].forEach(function(ev){
+      grid.addEventListener(ev, ferma, {passive:true});
+    });
+    window.addEventListener('keydown', ferma, {passive:true});
+  }
+
+  function arma(){
+    if(!telefono() || menoMovimento()) return;
+    grid = document.getElementById('pgrid');
+    if(!grid) return;
+    lega();
+    ferma();                 /* azzera un eventuale giro precedente */
+    spento = false;
+    if(avvio) clearTimeout(avvio);
+    avvio = setTimeout(function(){
+      if(spento || !visibile('cp') || visibile('prodpage')) return;
+      pos = grid.scrollLeft;
+      ultimo = 0;
+      atteso = -1;
+      raf = requestAnimationFrame(passo);
+    }, ATTESA);
+  }
+
+  function init(){
+    /* ⚠ QUI STAVA IL LIMITE: la griglia #pgrid e' UNA SOLA, riempita ogni volta
+       con i modelli della categoria che si apre. Armando lo scorrimento solo
+       quando #cp riceve la classe .show, partiva soltanto la PRIMA volta:
+       passando da una categoria all'altra col menu, la pagina era gia' aperta,
+       la classe non cambiava, l'osservatore non si accorgeva di nulla e la
+       striscia restava ferma.
+       Agganciandosi anche a openCat, che viene chiamata a ogni cambio di
+       categoria, lo scorrimento si riarma per tutte. */
+    var oc = window.openCat;
+    if(typeof oc === 'function'){
+      window.openCat = function(){
+        var r = oc.apply(this, arguments);
+        setTimeout(arma, 120);
+        return r;
+      };
+    }
+    var ocs = window.openCatBySlug;
+    if(typeof ocs === 'function'){
+      window.openCatBySlug = function(){
+        var r = ocs.apply(this, arguments);
+        setTimeout(arma, 120);
+        return r;
+      };
+    }
+
+    if(!window.MutationObserver) return;
+    var cp = document.getElementById('cp');
+    var pp = document.getElementById('prodpage');
+    if(cp){
+      new MutationObserver(function(){
+        if(cp.classList.contains('show')) setTimeout(arma, 60);
+        else ferma();
+      }).observe(cp, { attributes:true, attributeFilter:['class'] });
+    }
+    /* Aperta una scheda la striscia sotto si ferma; tornando alla griglia
+       riparte, perche' e' di nuovo lei quella che si guarda. */
+    if(pp){
+      new MutationObserver(function(){
+        if(pp.classList.contains('show')) ferma();
+        else if(visibile('cp')) setTimeout(arma, 120);
+      }).observe(pp, { attributes:true, attributeFilter:['class'] });
+    }
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden) ferma();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
 </script>
 </body>
