@@ -1676,10 +1676,13 @@ header.hide{transform:translateY(-100%);}
 }
 
 /* ── GALLERY ── */
+/* Respiro tra le foto · allargato il 23/08/2026.
+   Non e' solo estetica: con lo stacco stretto le foto entravano quasi
+   sovrapposte e lo sfasamento non si leggeva. Lo spazio serve all'ingresso. */
 .pp-gallery-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 52px;
 }
 .pp-gallery-item {
   background: #f2efe9;
@@ -1708,7 +1711,7 @@ header.hide{transform:translateY(-100%);}
   margin-top:-4px;
 }
 /* Galleria multi-foto (es. ORIZZONTE): cornice proporzionata alla foto, piu foto per riga */
-.pp-gallery-grid.pp-gallery-multi{grid-template-columns:repeat(3,1fr);gap:12px}
+.pp-gallery-grid.pp-gallery-multi{grid-template-columns:repeat(3,1fr);gap:36px}
 .pp-gallery-grid.pp-gallery-multi .pp-gallery-item img{aspect-ratio:auto;height:auto;padding:8px}
 /* ⚠️ Con TRE foto la disposizione a tre colonne le mette tutte in fila, e la
    terza finisce accanto alle altre invece che sotto. Qui la terza, quando e'
@@ -1721,7 +1724,7 @@ header.hide{transform:translateY(-100%);}
 .pp-gallery-grid.pp-gallery-multi .pp-gallery-item:nth-child(3):last-child img{
   max-height:56vh; object-fit:contain;
 }
-@media(max-width:600px){.pp-gallery-grid.pp-gallery-multi{grid-template-columns:1fr 1fr;gap:8px}}
+@media(max-width:600px){.pp-gallery-grid.pp-gallery-multi{grid-template-columns:1fr 1fr;gap:26px}}
 /* Tile video nella galleria (opt-in via PROD_GALLERY_VIDEO). Il poster riempie
    la cella come le foto; un pulsante play dorato lo distingue. Se il poster non
    carica, resta lo sfondo scuro con il play, sempre cliccabile. */
@@ -1745,8 +1748,8 @@ header.hide{transform:translateY(-100%);}
    la loro proporzione naturale (nessun ritaglio) e una foto ogni tre occupa
    tutta la larghezza, per un ritmo piu' editoriale e dinamico. Le gallerie
    regolari (ORIZZONTE, VERA, GRANLUX) restano invariate. */
-.pp-gallery-grid.pp-gallery-dyn{display:block;-webkit-column-count:2;column-count:2;-webkit-column-gap:14px;column-gap:14px}
-.pp-gallery-grid.pp-gallery-dyn .pp-gallery-item{-webkit-column-break-inside:avoid;break-inside:avoid;margin:0 0 14px;display:block;width:100%;background:#f2efe9}
+.pp-gallery-grid.pp-gallery-dyn{display:block;-webkit-column-count:2;column-count:2;-webkit-column-gap:40px;column-gap:40px}
+.pp-gallery-grid.pp-gallery-dyn .pp-gallery-item{-webkit-column-break-inside:avoid;break-inside:avoid;margin:0 0 40px;display:block;width:100%;background:#f2efe9}
 .pp-gallery-grid.pp-gallery-dyn .pp-gallery-item img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain;padding:10px;display:block;box-sizing:border-box}
 .pp-gallery-grid.pp-gallery-dyn .pp-gallery-item.span-all{-webkit-column-span:all;column-span:all}
 .pp-gallery-grid.pp-gallery-dyn .pp-gallery-item.span-all img{max-height:60vh}
@@ -1836,8 +1839,100 @@ header.hide{transform:translateY(-100%);}
   .cat-intro-note{font-size:12.5px !important;margin:30px 0 24px !important}
   .cat-intro-btn{display:block;text-align:center;padding:16px 20px}
 }
+/* ═══ INGRESSO DELLE FOTO DELLA GALLERIA · ANCHE SU DESKTOP ═══
+   Stessi valori gia' collaudati sul telefono (la copia dentro la media query
+   piu' sotto resta, identica, e non da' conflitto): translateY(72px) con
+   scale(1.05), corsa 1.1s su cubic-bezier(.16,1,.3,1), dissolvenza .55s
+   lineare. Lo sfasamento tra una foto e l'altra lo mette il JS, come
+   transition-delay in linea.
+   ⚠ Questo blocco sta PRIMA di @media(prefers-reduced-motion:reduce)
+   apposta: a parita' di specificita' vince l'ultima regola scritta, quindi
+   spostandolo piu' in basso si toglierebbe la protezione a chi ha chiesto meno
+   movimento. NON spostarlo dopo quel blocco. */
+.pp-gallery-item.mag{
+  opacity:0;
+  transform:translateY(92px);
+  transition:opacity .8s linear, transform 1.2s cubic-bezier(.42,0,.25,1);
+  will-change:transform,opacity;
+}
+.pp-gallery-item.mag.in{
+  opacity:1;
+  transform:none;
+  will-change:auto;
+}
+
+/* ═══ PAGINE INTERNE · INGRESSO DI FOTO E TESTI ═══
+   Usato da Efficienza energetica, Oceano, Su misura, Lavelli e Accessori.
+   ⚠ Stessi identici valori di Chi siamo e della galleria prodotto: se un
+   giorno si cambia l'andatura, si cambia in TUTTI i punti insieme. Una pagina
+   con un ritmo diverso dalle altre si nota subito ed e' l'errore piu' facile. */
+.rise-up{
+  opacity:0;
+  transform:translateY(92px);
+  transition:opacity .8s linear, transform 1.2s cubic-bezier(.42,0,.25,1);
+  will-change:transform,opacity;
+}
+.rise-tx{
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity .8s linear, transform 1.2s cubic-bezier(.42,0,.25,1);
+  will-change:transform,opacity;
+}
+.rise-up.in,.rise-tx.in{
+  opacity:1;
+  transform:none;
+  will-change:auto;
+}
+
+/* ═══ CHI SIAMO · INGRESSO DI FOTO E TESTI ═══
+   ⚠ DURATA E CURVA IDENTICHE alla galleria prodotto, e identiche fra foto e
+   testi: cambia SOLO la distanza (foto 92px, testi 40px). I testi avevano una
+   durata piu' corta e il risultato era stonato - dentro lo stesso capitolo il
+   titolo arrivava prima della sua fotografia e sembrava un errore. Con la
+   stessa andatura partono e si posano insieme, e la differenza di corsa si
+   legge come gerarchia invece che come scarto. NON rimettere durate diverse.
+   ⚠ Cosa NON si tocca in questa pagina, e il motivo:
+   - .ab-panel / .ab-panel-inner: reggono l'impaginazione (sticky appiattito su
+     desktop). Un transform qui sposta l'intero capitolo.
+   - .ab-panel-video: ha un transform suo, messo dal motore parallax.
+   - .ab-hd-* (Heavy duty): scorrimento orizzontale guidato da transform su
+     desktop, e su mobile ha gia' un difetto aperto sullo zoom delle foto.
+   - il primo pannello (hero): deve esserci subito, non entrare.
+   ⚠ Come per la galleria, questo blocco sta PRIMA di prefers-reduced-motion. */
+#aboutpage .ab-rise{
+  opacity:0;
+  transform:translateY(92px);
+  transition:opacity .8s linear, transform 1.2s cubic-bezier(.42,0,.25,1);
+  will-change:transform,opacity;
+}
+#aboutpage .ab-rise-t{
+  opacity:0;
+  transform:translateY(40px);
+  transition:opacity .8s linear, transform 1.2s cubic-bezier(.42,0,.25,1);
+  will-change:transform,opacity;
+}
+/* ⚠⚠ HEAVY DUTY · LA REGOLA PIU' IMPORTANTE DI QUESTO BLOCCO
+   Su DESKTOP la fascia Heavy duty scorre in orizzontale ed e' guidata da un
+   transform sul binario: un secondo transform sulle foto la manda in pezzi.
+   Qui l'ingresso e' azzerato sopra i 769px in modo incondizionato, cosi' anche
+   se la classe restasse appiccicata (ruotando il telefono, allargando la
+   finestra) il desktop torna esattamente com'era. Il JS gia' non la mette
+   fuori dal telefono: questa e' la seconda rete e va tenuta. */
+@media(min-width:769px){
+  #aboutpage .ab-hd-hitem.ab-rise,
+  #aboutpage .ab-hd-hitem.ab-rise.in{opacity:1;transform:none;transition:none;will-change:auto}
+}
+#aboutpage .ab-rise.in,#aboutpage .ab-rise-t.in{
+  opacity:1;
+  transform:none;
+  will-change:auto;
+}
+
 @media(prefers-reduced-motion:reduce){
   .pp-gallery-item.mag,.pp-gallery-item.mag.in{opacity:1;transform:none;transition:none}
+  #aboutpage .ab-rise,#aboutpage .ab-rise-t,
+  #aboutpage .ab-rise.in,#aboutpage .ab-rise-t.in{opacity:1;transform:none;transition:none}
+  .rise-up,.rise-tx,.rise-up.in,.rise-tx.in{opacity:1;transform:none;transition:none}
   /* L'invito resta visibile, ma fermo. */
   .pgrid-arrow-next{ animation:none !important; opacity:.9 !important; }
 }
@@ -2543,10 +2638,10 @@ header.hide{transform:translateY(-100%);}
   /* Galleria prodotto su mobile: una sola colonna, foto grandi e in evidenza,
      meno spazio in alto così la foto non finisce troppo in basso. */
   .pp-section-header{margin-bottom:10px;padding-bottom:8px}
-  .pp-gallery-grid{grid-template-columns:1fr;gap:14px}
+  .pp-gallery-grid{grid-template-columns:1fr;gap:72px}
   /* Una foto per riga anche in galleria multipla. Serve la stessa specificita'
      della regola .pp-gallery-multi, altrimenti resta a due colonne. */
-  .pp-gallery-grid.pp-gallery-multi{grid-template-columns:1fr;gap:16px}
+  .pp-gallery-grid.pp-gallery-multi{grid-template-columns:1fr;gap:72px}
   .pp-gallery-grid.pp-gallery-multi .pp-gallery-item img{padding:10px}
   .pp-gallery-item img{aspect-ratio:4/3;padding:10px}
 
@@ -2554,18 +2649,27 @@ header.hide{transform:translateY(-100%);}
      VERSIONE ORIGINALE, ripristinata dopo due semplificazioni che l'avevano
      impoverita. Da non "correggere" di nuovo: le tre cose qui sotto lavorano
      insieme e toglierne una svuota l'effetto.
-     - translateY(72px) con scale(1.05): la corsa lunga e il minimo ingrandimento
-       danno il peso del movimento. Senza scale l'effetto diventa piatto.
-     - cubic-bezier(.16,1,.3,1) su 1.1s: partenza lentissima e arrivo rapido,
-       la foto sembra restare indietro e poi essere richiamata verso quella sopra.
-     - opacity .55s LINEARE: e' la dissolvenza, ed e' voluta. Accorciarla toglie
+     - translateY(110px) SENZA scale. ⚠ C'era uno scale(1.05) che si riduceva
+       a 1: rimosso su richiesta esplicita il 23/08/2026 perche' si leggeva come
+       una foto che si rimpicciolisce mentre sale, ed e' un movimento non
+       voluto. NON rimetterlo. Il peso lo da' la corsa lunga.
+     - cubic-bezier(.42,0,.25,1) su 1.2s: parte da ferma, accelera a meta'
+       corsa e si posa. ⚠ La precedente .5,0,.2,1 raggiungeva quasi il punto
+       d'arrivo troppo presto e poi strisciava: era quel finale a sembrare
+       lento, non la durata. Allungare la durata senza correggere la coda
+       peggiora le cose. ⚠ La vecchia .16,1,.3,1 era
+       il contrario (scatto iniziale e frenata lunga) e il commento di allora
+       la descriveva al rovescio: non rimetterla credendo di tornare indietro.
+     - opacity .8s LINEARE: e' la dissolvenza, ed e' voluta. Accorciarla toglie
        la morbidezza dell'ingresso.
+     - translateY(92px): la corsa e' lunga apposta, deve leggersi come "la
+       foto arriva da lontano". Sotto i ~70px l'effetto sparisce.
      Nessuna libreria e nessun listener di scroll: solo IntersectionObserver,
      che il browser gestisce da solo fuori dal thread principale. */
   .pp-gallery-item.mag{
     opacity:0;
-    transform:translateY(72px) scale(1.05);
-    transition:opacity .55s linear, transform 1.1s cubic-bezier(.16,1,.3,1);
+    transform:translateY(92px);
+    transition:opacity .8s linear, transform 1.2s cubic-bezier(.42,0,.25,1);
     will-change:transform,opacity;
   }
   .pp-gallery-item.mag.in{
@@ -2689,6 +2793,19 @@ header.hide{transform:translateY(-100%);}
   flex-direction: column;
   flex: 0 0 clamp(260px, 38vw, 580px);
   transition: opacity .4s ease;
+  /* ⚠ SERVONO PER I DUE TOCCHI (23/08/2026), non sono rifiniture:
+     - touch-action:manipulation toglie al browser lo zoom da doppio tocco.
+       Senza, il secondo tocco ingrandiva la pagina e la galleria diventava
+       incomprensibile. Lo scorrimento e la pinza restano, si perde SOLO lo
+       zoom da doppio tocco, che qui non serve a nessuno.
+     - user-select:none: col mouse due clic ravvicinati selezionano il testo
+       della scheda e lo evidenziano. Stesso fastidio, altra strada.
+     - tap-highlight trasparente: toglie il lampo grigio di Android. */
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 /* Sfoca le card non-hover quando qualcuna è hovered */
 /* card accesa su hover tramite brightness sull'immagine */
@@ -2771,6 +2888,15 @@ header.hide{transform:translateY(-100%);}
 }
 .pcard:hover .pimg img {
   filter: brightness(1);
+}
+/* PRIMO TOCCO SU TELEFONO · la foto si accende e basta (il secondo apre la
+   scheda). Senza mouse :hover non scatta mai: .lit e' il suo equivalente al
+   dito, e usa lo stesso identico valore per non avere due luminosita' diverse. */
+.pcard.lit .pimg img {
+  filter: brightness(1);
+}
+.pcard.lit .pcard-hint {
+  color: rgba(184,150,90,.75);
 }
 /* Zoom facoltativo della foto DENTRO la card (la card resta identica alle altre).
    Attivato solo per i modelli elencati in window.PROD_IMG_ZOOM.
@@ -6081,7 +6207,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
         <!-- La prima voce ha valore vuoto: con required il browser la
              considera non valida e blocca l'invio finche' non si sceglie. -->
         <option value="" data-i18n="hcf_who_0">Please choose</option>
-        <option value="owner" data-i18n="hcf_who_1">A private owner</option>
+        <option value="owner" data-i18n="hcf_who_1">An owner or owner's representative</option>
         <option value="yard" data-i18n="hcf_who_2">A shipyard</option>
         <option value="dealer" data-i18n="hcf_who_3">A dealer or distributor</option>
         <option value="designer" data-i18n="hcf_who_4">A designer or naval architect</option>
@@ -6242,8 +6368,8 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
          Solo "ricambio" e' cliccabile: le altre tre figure hanno gia' la loro
          destinazione nei pulsanti qui sotto, i ricambi no, ed erano la ricerca
          piu' frequente su Google. Chiama openSpare(), funzione gia' esistente. -->
-    <p class="hwho hwho-lg" data-i18n-html="hero_who">For owners, shipyards and designers · and for anyone looking for a <span class="hw-go" onclick="openSpare()" role="button" tabindex="0">spare part</span>.</p>
-    <p class="hwho hwho-sm" data-i18n-html="hero_who_s">Owners · Shipyards · <span class="hw-go" onclick="openSpare()" role="button" tabindex="0">Spare parts</span></p>
+    <p class="hwho hwho-lg" data-i18n-html="hero_who">For owners, shipyards, designers and dealers · and for anyone looking for a <span class="hw-go" onclick="openSpare()" role="button" tabindex="0">spare part</span>.</p>
+    <p class="hwho hwho-sm" data-i18n-html="hero_who_s">Owners · Yards · Designers · Dealers · <span class="hw-go" onclick="openSpare()" role="button" tabindex="0">Spare parts</span></p>
     <div class="hac">
       <a href="#" class="btp" onclick="tm();setTimeout(tDrop,400);return false;" data-i18n="hero_btn_explore">Explore Products</a>
       <a href="#" class="btm" onclick="openMatrix();return false;" data-i18n="matrix_btn">Product Overview</a>
@@ -6716,7 +6842,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
         <ul class="ef-list">
           <li data-i18n-html="eff_c3_l1"><strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.</li>
           <li data-i18n-html="eff_c3_l2"><strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.</li>
-          <li data-i18n-html="eff_c3_l3"><strong>Induction first (2015).</strong> In 2015 we were the very first to develop a line of cookers with tilting induction hobs for sailing and motor yachts.</li>
+          <li data-i18n-html="eff_c3_l3"><strong>Induction first (2015).</strong> The project was completed in 2015 and the line reached the market at the beginning of 2016: the very first cookers with tilting induction hobs for sailing and motor yachts.</li>
         </ul>
       </div>
     </div>
@@ -6849,7 +6975,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n-html="oc_c2_title">The boats that <em>ask the most</em></h2>
         <p class="ef-ch-body" data-i18n-html="oc_c2_b1">Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor <span class="oc-lnk" onclick="ocSoldini()" role="link" tabindex="0">Giovanni Soldini</span>.</p>
-        <p class="ef-ch-body" data-i18n="oc_c2_b2">And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife &amp; Son, she was regarded by her own designer as his finest and most accomplished work. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.</p>
+        <p class="ef-ch-body" data-i18n="oc_c2_b2">And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife & Son, she is counted among the finest the great Scottish designer ever drew, and by many as the finest of them all. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.</p>
         <figure class="oc-fig">
           <img class="oc-fig-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg" alt="Techimpex cooker, Classic variant, built to measure for the ocean racer Latifa" loading="lazy" onclick="hdZoom(this.getAttribute('data-zoom')||this.src, this.alt)" data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg">
           <figcaption class="oc-fig-cap" data-i18n="oc_fig_cap">Latifa &middot; Classic variant, built entirely to measure</figcaption>
@@ -9284,7 +9410,7 @@ function openCat(name,models){
       var _tap=(window.matchMedia&&window.matchMedia('(pointer:coarse)').matches)
                || (window.innerWidth<=768) || ('ontouchstart' in window);
       var _hk=_tap?'pcard_hint_tap':'pcard_hint_desk';
-      var _hf=_tap?'Tap to open':'Double click to open';
+      var _hf=_tap?'Tap twice to open':'Double click to open';
       var _ht=window.__t?window.__t(_hk,_hf):_hf;
       card.innerHTML=imgBox+'<div class="pinf">'+_ocB+'<span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc">'+desc+'</span>':'')+'<span class="pcard-hint" data-i18n="'+_hk+'">'+_ht+'</span></div>';
       g.appendChild(card);
@@ -9395,7 +9521,27 @@ window.__initPgridHint=function(){
     if(!card) return;
     var key=card.getAttribute('data-model');
     if(!key){ var nm=card.querySelector('.pnm'); key=nm?nm.textContent.trim():''; }
-    if(key && window.goProd){ e.preventDefault(); window.goProd(key); }
+    if(!key) return;
+    /* ── DUE TOCCHI, COME IL DOPPIO CLIC DEL MOUSE (rimesso il 23/08/2026) ──
+       Col mouse il primo passaggio accende la foto e solo il doppio clic apre
+       la scheda: e' il gesto che rende bella la galleria, e al dito mancava.
+       Ora il primo tocco fa la parte del passaggio del mouse (accende, e
+       niente altro), il secondo apre. Non e' un vero "doppio tocco" a tempo:
+       non c'e' finestra da rispettare, la scheda accesa resta accesa finche'
+       non se ne tocca un'altra. Chi non capisce al primo colpo tocca di nuovo
+       e funziona lo stesso. */
+    /* Timbro: sui telefoni il tocco genera ANCHE un click sintetico. Senza
+       questo, il gestore del clic qui sotto vedrebbe la scheda gia' accesa e
+       aprirebbe al primo tocco, annullando i due passaggi. */
+    window.__pgTocco=Date.now();
+    if(!card.classList.contains('lit')){
+      e.preventDefault();
+      var accese=g.querySelectorAll('.pcard.lit');
+      for(var a=0;a<accese.length;a++){ if(accese[a]!==card) accese[a].classList.remove('lit'); }
+      card.classList.add('lit');
+      return;
+    }
+    if(window.goProd){ e.preventDefault(); card.classList.remove('lit'); window.goProd(key); }
   }, {passive:false});
 })();
 
@@ -10751,41 +10897,341 @@ document.addEventListener('keydown',function(e){
 //     #prodpage come root non funziona: passare un root sbagliato equivale a
 //     non far scattare mai l'osservazione.
 //
-// In piu' c'e' una RETE DI SICUREZZA a tempo: qualunque cosa vada storta, dopo
-// 1.4s le foto non ancora animate vengono mostrate comunque. La galleria non
-// deve poter restare vuota in nessuno scenario, l'effetto e' secondario.
+// In piu' c'e' una RETE DI SICUREZZA, che pero' NON e' piu' un timer cieco.
+//
+// ⚠️ STORIA DA NON RIPETERE (corretta il 23/08/2026): la rete era
+// setTimeout(accendi tutte, 1400) - dopo 1,4s dall'apertura della scheda le
+// foto venivano mostrate d'ufficio, animate o no. Ma la galleria e' la sezione
+// 03, in fondo alla pagina: nessuno ci arriva scorrendo in un secondo e mezzo.
+// Quando l'utente arrivava, le foto erano gia' accese e ferme al loro posto:
+// l'effetto era scritto bene e non partiva MAI. La rete si mangiava
+// l'animazione che doveva solo proteggere.
+//
+// Ora la rete e' un controllo periodico (700ms) che accende una foto solo se e'
+// DAVVERO entrata nello schermo: fa lo stesso mestiere dell'osservatore, quindi
+// se l'osservatore fallisse la galleria si riempirebbe comunque - ma non tocca
+// le foto piu' in basso e non brucia l'ingresso a chi legge con calma. Si ferma
+// da sola quando sono tutte accese o quando la scheda viene chiusa.
 (function(){
-  var mo=null, safety=null;
-  function reveal(items){
-    for(var i=0;i<items.length;i++){items[i].classList.add('in');}
+  var mo=null, watch=null, GIRO=0;
+  /* Sfasamento tra foto che entrano insieme. E' il "ritardo" che si nota sui
+     siti di design tipo Henge: senza, una fila intera parte in blocco e il
+     movimento sembra meccanico. 90ms bastano a leggersi e non fanno aspettare. */
+  var STAGGER=90;
+  function accendi(el,ritardo){
+    if(el.classList.contains('in'))return;
+    el.style.transitionDelay=ritardo?ritardo+'ms':'';
+    el.classList.add('in');
   }
+  function inSchermo(el){
+    var r=el.getBoundingClientRect();
+    if(!r.height)return false;          /* scheda chiusa o foto non ancora disegnata */
+    var h=window.innerHeight||document.documentElement.clientHeight;
+    return r.top<h*0.76 && r.bottom>0;
+  }
+  function ferma(){if(watch){clearInterval(watch);watch=null;}}
   function ppGalleryMagnetic(){
     var gg=document.getElementById('pp-gallery-grid');
     if(!gg)return;
     var items=gg.querySelectorAll('.pp-gallery-item');
     if(!items.length)return;
     if(mo){mo.disconnect();mo=null;}
-    if(safety){clearTimeout(safety);safety=null;}
-    var isMobile=window.matchMedia('(max-width:768px)').matches;
+    ferma();
     var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
     // Senza i requisiti si esce lasciando le foto semplicemente visibili.
-    if(!isMobile||reduce||!('IntersectionObserver' in window)){
-      for(var i0=0;i0<items.length;i0++){items[i0].classList.remove('mag','in');}
+    if(reduce||!('IntersectionObserver' in window)){
+      for(var i0=0;i0<items.length;i0++){items[i0].classList.remove('mag','in');items[i0].style.transitionDelay='';}
       return;
     }
-    for(var j=0;j<items.length;j++){items[j].classList.remove('in');items[j].classList.add('mag');}
+    for(var j=0;j<items.length;j++){items[j].classList.remove('in');items[j].style.transitionDelay='';items[j].classList.add('mag');}
+    /* ⚠ LE PRIME FOTO DELLA GALLERIA (corretto il 23/08/2026)
+       Quelle gia' dentro lo schermo all'apertura non si vedevano entrare, e non
+       era un caso: il browser accorpa le modifiche di stile dello stesso ciclo.
+       Aggiungendo 'mag' e subito dopo 'in', lo stato di partenza non veniva mai
+       DISEGNATO, quindi non c'era nulla da cui transitare e la foto compariva
+       gia' al suo posto. Due contromisure, servono entrambe:
+        1. la lettura di offsetHeight qui sotto forza il disegno immediato dello
+           stato iniziale (non e' una riga inutile: toglierla riporta il bug);
+        2. l'osservatore nasce 420ms dopo, a dissolvenza della scheda finita.
+       ⚠ E il MARGINE (-24%) non e' un dettaglio: con -10% la foto veniva
+       accesa appena spuntava dal bordo inferiore, cosi' la corsa da 1,25s
+       finiva mentre era ancora quasi tutta fuori schermo e chi scorreva piano
+       la trovava gia' ferma. Alzando il margine il movimento avviene DENTRO lo
+       schermo. Se serve ancora piu' evidente si sale (-30%), non si scende.
+       Il testimone 'giro' evita che una scheda aperta e chiusa in fretta lasci
+       indietro un osservatore di una galleria che non esiste piu'. */
+    void gg.offsetHeight;
+    var giro=++GIRO;
+    setTimeout(function(){
+      if(giro!==GIRO)return;
+      avvia(gg,items);
+    },420);
+  }
+  function avvia(gg,items){
     mo=new IntersectionObserver(function(entries){
+      /* Lo sfasamento segue l'ordine delle foto NELLA PAGINA, non l'ordine in
+         cui l'osservatore le consegna (che non e' garantito): cosi' su desktop
+         una fila si accende da sinistra a destra e non alla rinfusa. */
+      var dentro=[];
       for(var k=0;k<entries.length;k++){
-        if(entries[k].isIntersecting){
-          entries[k].target.classList.add('in');
-          mo.unobserve(entries[k].target);
-        }
+        if(entries[k].isIntersecting){dentro.push(entries[k].target);mo.unobserve(entries[k].target);}
       }
-    },{root:null,rootMargin:'0px 0px -10% 0px',threshold:.12});
+      if(!dentro.length)return;
+      var p=0;
+      for(var q=0;q<items.length;q++){
+        if(dentro.indexOf(items[q])>-1){accendi(items[q],p*STAGGER);p++;}
+      }
+    },{root:null,rootMargin:'0px 0px -24% 0px',threshold:.1});
     for(var n=0;n<items.length;n++){mo.observe(items[n]);}
-    safety=setTimeout(function(){reveal(items);},1400);
+    watch=setInterval(function(){
+      var pp=document.getElementById('prodpage');
+      if(pp&&!pp.classList.contains('show')){ferma();return;}   /* scheda chiusa */
+      var restanti=0,p2=0;
+      for(var i=0;i<items.length;i++){
+        if(items[i].classList.contains('in'))continue;
+        if(inSchermo(items[i])){accendi(items[i],p2*STAGGER);p2++;}
+        else restanti++;
+      }
+      if(!restanti)ferma();
+    },700);
   }
   window._ppGalleryMagnetic=ppGalleryMagnetic;
+})();
+
+/* ══ CHI SIAMO · FOTO E TESTI CHE SALGONO ════════════════════════
+   Stesso impianto della galleria prodotto (osservatore + rete di sicurezza a
+   controllo periodico), stessi errori gia' pagati e gia' evitati:
+   - si chiama a pagina VISIBILE, se no gli elementi hanno area zero e non
+     vengono mai visti;
+   - la lettura di offsetHeight forza il disegno dello stato di partenza;
+   - la rete di sicurezza accende solo cio' che e' davvero entrato nello
+     schermo, quindi non brucia l'ingresso a chi legge piano.
+   ⚠ L'elenco degli elementi e' una LISTA CHIUSA. Non sostituirlo con un
+   selettore largo tipo "tutte le immagini della pagina": mezza pagina Chi siamo
+   e' mossa da transform (video parallax, scorrimento Heavy duty) e aggiungerne
+   un altro sopra rompe l'impaginazione. */
+(function(){
+  var mo=null, watch=null, GIRO=0;
+  var STAGGER=90;
+  var FOTO=['#aboutpage .ab-panel:not(:first-child) .ab-figure',
+            '#aboutpage .ab-spread'];
+  var TESTI=['#aboutpage .ab-panel:not(:first-child) .ab-tag',
+             '#aboutpage .ab-panel:not(:first-child) .ab-section-title',
+             '#aboutpage .ab-panel:not(:first-child) .ab-section-body'];
+  function raccogli(){
+    var out=[], i, j, n;
+    /* Le foto della fascia Heavy duty entrano nell'elenco SOLO su telefono,
+       dove sono impilate una sopra l'altra come tutte le altre. Su desktop
+       stanno su un binario orizzontale mosso da transform e non si toccano:
+       vedi la regola gemella nel CSS. */
+    var foto=FOTO.slice();
+    var mob=!!(window.matchMedia && window.matchMedia('(max-width:768px)').matches);
+    if(mob) foto.push('#aboutpage .ab-hd-hitem');
+    for(i=0;i<foto.length;i++){
+      n=document.querySelectorAll(foto[i]);
+      for(j=0;j<n.length;j++) out.push([n[j],'ab-rise']);
+    }
+    for(i=0;i<TESTI.length;i++){
+      n=document.querySelectorAll(TESTI[i]);
+      for(j=0;j<n.length;j++) out.push([n[j],'ab-rise-t']);
+    }
+    /* Fuori cio' che vive DENTRO lo scorrimento Heavy duty (didascalie e testi
+       del blocco), tranne le foto stesse quando sono state ammesse sopra. */
+    var puliti=[];
+    for(i=0;i<out.length;i++){
+      var el=out[i][0];
+      if(el.closest && el.closest('.ab-hd-hscroll') &&
+         !(el.classList && el.classList.contains('ab-hd-hitem'))) continue;
+      puliti.push(out[i]);
+    }
+    /* Ordine di pagina: lo sfasamento deve seguire la lettura, non l'ordine dei
+       selettori (se no il testo si accende prima del suo occhiello). */
+    puliti.sort(function(x,y){
+      var p=x[0].compareDocumentPosition(y[0]);
+      return (p & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+    });
+    return puliti;
+  }
+  function accendi(el,ritardo){
+    if(el.classList.contains('in'))return;
+    el.style.transitionDelay=ritardo?ritardo+'ms':'';
+    el.classList.add('in');
+  }
+  function inSchermo(el){
+    var r=el.getBoundingClientRect();
+    if(!r.height)return false;
+    var h=window.innerHeight||document.documentElement.clientHeight;
+    return r.top<h*0.82 && r.bottom>0;
+  }
+  function ferma(){if(watch){clearInterval(watch);watch=null;}}
+  function abRise(){
+    var ab=document.getElementById('aboutpage');
+    if(!ab)return;
+    var coppie=raccogli();
+    if(!coppie.length)return;
+    var els=[], i;
+    for(i=0;i<coppie.length;i++) els.push(coppie[i][0]);
+    if(mo){mo.disconnect();mo=null;}
+    ferma();
+    var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(reduce||!('IntersectionObserver' in window)){
+      for(i=0;i<coppie.length;i++){
+        coppie[i][0].classList.remove('ab-rise','ab-rise-t','in');
+        coppie[i][0].style.transitionDelay='';
+      }
+      return;
+    }
+    for(i=0;i<coppie.length;i++){
+      coppie[i][0].classList.remove('in');
+      coppie[i][0].style.transitionDelay='';
+      coppie[i][0].classList.add(coppie[i][1]);
+    }
+    void ab.offsetHeight;
+    var giro=++GIRO;
+    setTimeout(function(){
+      if(giro!==GIRO)return;
+      mo=new IntersectionObserver(function(entries){
+        var dentro=[], k, q;
+        for(k=0;k<entries.length;k++){
+          if(entries[k].isIntersecting){dentro.push(entries[k].target);mo.unobserve(entries[k].target);}
+        }
+        if(!dentro.length)return;
+        var p=0;
+        for(q=0;q<els.length;q++){
+          if(dentro.indexOf(els[q])>-1){accendi(els[q],p*STAGGER);p++;}
+        }
+      },{root:null,rootMargin:'0px 0px -20% 0px',threshold:.08});
+      for(var n=0;n<els.length;n++) mo.observe(els[n]);
+      watch=setInterval(function(){
+        if(!ab.classList.contains('show')){ferma();return;}
+        var restanti=0,p2=0;
+        for(var i2=0;i2<els.length;i2++){
+          if(els[i2].classList.contains('in'))continue;
+          if(inSchermo(els[i2])){accendi(els[i2],p2*STAGGER);p2++;}
+          else restanti++;
+        }
+        if(!restanti)ferma();
+      },700);
+    },420);
+  }
+  window._abRise=abRise;
+})();
+
+/* ══ PAGINE INTERNE · STESSO INGRESSO ════════════════════════════
+   Stesso impianto gia' collaudato altrove: osservatore + rete di sicurezza a
+   controllo periodico, avvio 420ms dopo l'apertura, lettura forzata del layout
+   perche' lo stato di partenza venga disegnato.
+   Ogni pagina tiene il proprio stato: aprirne una non spegne l'altra.
+
+   ⚠ SCELTE FATTE GUARDANDO IL CODICE, NON A CASO:
+   - Le HERO sono escluse ovunque. Devono esserci gia' all'apertura: un titolo
+     di testata che entra in ritardo sembra un difetto di caricamento.
+   - Su Accessori sono escluse le schede del catalogo ricambi (.item-card):
+     hanno gia' un transform loro sul passaggio del mouse e soprattutto vengono
+     nascoste e rimostrate da filtri e ricerca. Una scheda rimessa a video da un
+     filtro dopo l'avvio non sarebbe piu' osservata da nessuno e resterebbe
+     invisibile: un catalogo mezzo vuoto per un effetto decorativo non e' un
+     baratto accettabile.
+   - Su Su misura le foto sono 92: nessun problema per l'osservatore, che il
+     browser gestisce fuori dal thread principale. */
+(function(){
+  var stato={};
+  var STAGGER=90;
+  var PAGINE={
+    effpage:   {foto:[],            testi:['.ef-ch-side','.ef-ch-title','.ef-ch-body']},
+    oceanpage: {foto:['.oc-fig'],   testi:['.ef-ch-side','.ef-ch-title','.ef-ch-body']},
+    custompage:{foto:['.cst-it'],   testi:['.ef-ch-side','.ef-ch-title','.ef-ch-body']},
+    sinkpage:  {foto:['.snk-it'],   testi:['.ef-ch-side','.ef-ch-title','.ef-ch-body']},
+    accpage:   {foto:['.acc-it'],   testi:['.ef-ch-side','.ef-ch-title','.ef-ch-body']}
+  };
+  function accendi(el,ritardo){
+    if(el.classList.contains('in'))return;
+    el.style.transitionDelay=ritardo?ritardo+'ms':'';
+    el.classList.add('in');
+  }
+  function inSchermo(el){
+    var r=el.getBoundingClientRect();
+    if(!r.height)return false;
+    var h=window.innerHeight||document.documentElement.clientHeight;
+    return r.top<h*0.82 && r.bottom>0;
+  }
+  function ferma(id){
+    var st=stato[id];
+    if(st&&st.watch){clearInterval(st.watch);st.watch=null;}
+  }
+  function rise(id){
+    var conf=PAGINE[id];
+    var pag=document.getElementById(id);
+    if(!conf||!pag)return;
+    var st=stato[id]||(stato[id]={mo:null,watch:null,giro:0});
+    if(st.mo){st.mo.disconnect();st.mo=null;}
+    ferma(id);
+    var coppie=[], i, j, n;
+    for(i=0;i<conf.foto.length;i++){
+      n=pag.querySelectorAll(conf.foto[i]);
+      for(j=0;j<n.length;j++) coppie.push([n[j],'rise-up']);
+    }
+    for(i=0;i<conf.testi.length;i++){
+      n=pag.querySelectorAll(conf.testi[i]);
+      for(j=0;j<n.length;j++) coppie.push([n[j],'rise-tx']);
+    }
+    /* Niente hero, niente schede del catalogo ricambi. */
+    var puliti=[];
+    for(i=0;i<coppie.length;i++){
+      var e0=coppie[i][0];
+      if(e0.closest && (e0.closest('.ef-hero')||e0.closest('.oc-hero')||e0.closest('.item-card'))) continue;
+      puliti.push(coppie[i]);
+    }
+    if(!puliti.length)return;
+    /* Ordine di lettura, non ordine dei selettori. */
+    puliti.sort(function(x,y){
+      var p=x[0].compareDocumentPosition(y[0]);
+      return (p & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+    });
+    var els=[];
+    for(i=0;i<puliti.length;i++) els.push(puliti[i][0]);
+    var reduce=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(reduce||!('IntersectionObserver' in window)){
+      for(i=0;i<puliti.length;i++){
+        puliti[i][0].classList.remove('rise-up','rise-tx','in');
+        puliti[i][0].style.transitionDelay='';
+      }
+      return;
+    }
+    for(i=0;i<puliti.length;i++){
+      puliti[i][0].classList.remove('in');
+      puliti[i][0].style.transitionDelay='';
+      puliti[i][0].classList.add(puliti[i][1]);
+    }
+    void pag.offsetHeight;
+    var giro=++st.giro;
+    setTimeout(function(){
+      if(giro!==st.giro)return;
+      st.mo=new IntersectionObserver(function(entries){
+        var dentro=[], k, q;
+        for(k=0;k<entries.length;k++){
+          if(entries[k].isIntersecting){dentro.push(entries[k].target);st.mo.unobserve(entries[k].target);}
+        }
+        if(!dentro.length)return;
+        var p=0;
+        for(q=0;q<els.length;q++){
+          if(dentro.indexOf(els[q])>-1){accendi(els[q],p*STAGGER);p++;}
+        }
+      },{root:null,rootMargin:'0px 0px -20% 0px',threshold:.08});
+      for(var m=0;m<els.length;m++) st.mo.observe(els[m]);
+      st.watch=setInterval(function(){
+        if(!pag.classList.contains('show')){ferma(id);return;}
+        var restanti=0,p2=0;
+        for(var i2=0;i2<els.length;i2++){
+          if(els[i2].classList.contains('in'))continue;
+          if(inSchermo(els[i2])){accendi(els[i2],p2*STAGGER);p2++;}
+          else restanti++;
+        }
+        if(!restanti)ferma(id);
+      },700);
+    },420);
+  }
+  window.__rise=rise;
 })();
 
 // Immagini prodotti
@@ -11434,6 +11880,29 @@ function ppLightboxClose(){
       }
     }, true);
 
+    /* ── UN CLIC ACCENDE, IL SECONDO APRE (23/08/2026) ─────────────────
+       Prima il doppio clic era l'UNICA via: chi cliccava una volta per fermare
+       lo scorrimento si ritrovava a doverne fare altri due, tre gesti in tutto.
+       Ora il conto e' sempre due, col mouse come col dito. Il doppio clic resta
+       sotto come scorciatoia e non e' un doppione: apre da qualsiasi stato.
+       ⚠ La guardia sul timbro del tocco e' obbligatoria, vedi il gestore
+       touchend piu' sopra. ⚠ Se hasMoved, il gestore in cattura registrato
+       prima di questo ferma il clic: un trascinamento non accende nulla. */
+    wrap.addEventListener('click', function(e){
+      if(window.__pgTocco && Date.now()-window.__pgTocco<700) return;
+      var card = e.target.closest('.pcard');
+      if(!card) return;
+      if(!card.classList.contains('lit')){
+        var accese = wrap.querySelectorAll('.pcard.lit');
+        for(var a=0;a<accese.length;a++){ if(accese[a]!==card) accese[a].classList.remove('lit'); }
+        card.classList.add('lit');
+        return;
+      }
+      var k = card.getAttribute('data-model');
+      if(!k){ var n0 = card.querySelector('.pnm'); k = n0 ? n0.textContent.trim() : ''; }
+      if(k && window.goProd){ card.classList.remove('lit'); window.goProd(k); }
+    });
+
     wrap.addEventListener('dblclick', function(e){
       var card = e.target.closest('.pcard');
       if(!card) return;
@@ -11592,7 +12061,12 @@ function openAbout(){
   var cpEl=document.getElementById('cp');if(cpEl)cpEl.classList.remove('show');;
   ab.scrollTop = 0;
   requestAnimationFrame(function(){
-    requestAnimationFrame(function(){ ab.classList.add('show'); });
+    requestAnimationFrame(function(){
+      ab.classList.add('show');
+      /* Qui, non prima: a pagina gia' visibile. Con #aboutpage ancora nascosto
+         gli elementi hanno area zero e l'osservatore non li vedrebbe mai. */
+      if(window._abRise) window._abRise();
+    });
   });
   document.body.classList.add('page-open');
   // Avvia i video dei pannelli "Chi siamo" solo ora (su home non erano caricati)
@@ -11814,7 +12288,7 @@ function openEff(){
   document.body.style.overflow='hidden';
   if(!document.body.classList.contains('page-open')){ document.body.classList.add('page-open'); _efLock=true; }
   requestAnimationFrame(function(){
-    requestAnimationFrame(function(){ ef.classList.add('show'); if(window.__efScrollReset) window.__efScrollReset(); });
+    requestAnimationFrame(function(){ ef.classList.add('show'); if(window.__efScrollReset) window.__efScrollReset(); if(window.__rise) window.__rise('effpage'); });
   });
 }
 function closeEff(){
@@ -11843,7 +12317,7 @@ function openOcean(){
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       oc.classList.add('show');
-      if(window.__ocScrollReset) window.__ocScrollReset();
+      if(window.__ocScrollReset) window.__ocScrollReset(); if(window.__rise) window.__rise('oceanpage');
       ocPlay();
     });
   });
@@ -11897,7 +12371,7 @@ function openCustom(){
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       cu.classList.add('show');
-      if(window.__cuScrollReset) window.__cuScrollReset();
+      if(window.__cuScrollReset) window.__cuScrollReset(); if(window.__rise) window.__rise('custompage');
     });
   });
 }
@@ -11925,7 +12399,7 @@ function openSinks(){
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       sn.classList.add('show');
-      if(window.__snScrollReset) window.__snScrollReset();
+      if(window.__snScrollReset) window.__snScrollReset(); if(window.__rise) window.__rise('sinkpage');
     });
   });
 }
@@ -11951,7 +12425,7 @@ function openAcc(){
   requestAnimationFrame(function(){
     requestAnimationFrame(function(){
       ac.classList.add('show');
-      if(window.__acScrollReset) window.__acScrollReset();
+      if(window.__acScrollReset) window.__acScrollReset(); if(window.__rise) window.__rise('accpage');
       /* ⚠ Il filmato ha preload="none" per non pesare sul caricamento del
          sito: va avviato a mano qui. Il catch serve perche' alcuni browser
          rifiutano la riproduzione e restituiscono una promessa respinta: senza
@@ -13816,6 +14290,13 @@ var DICT = {
     snk_cta: "Talk to our engineers",
     nav_where: "Where We Are",
     nav_dist: "Distributors",
+    ts_lbl_0: "Text size: normal",
+    ts_lbl_1: "Text size: large",
+    ts_lbl_2: "Text size: extra large",
+    ts_pop_txt: "Is the text too small? You can enlarge it.",
+    ts_pop_hint: "You can reopen this panel at any time from the button in the header above.",
+    ts_hc: "Contrast",
+    ts_size: "Text size",
     dist_ttl: "International Distributors and Partners",
     dist_p1: "Our production is broad and varied: some of our lines are distributed worldwide, others are built to order for a single shipyard or a single boat, and others again are dedicated lines developed with partner brands. Where a line is distributed, spare parts are normally held by the distributor. The list below is not exhaustive: write to us and we will point you to the nearest dealer, distributor, exclusive agent or partner.",
     dist_warn: "One important note. The product lines presented on this site do not always coincide with those handled by the dealers and wholesalers who stock their spare parts: despite sharing a name, the products can differ substantially. The same model may also vary from one distributor to another in finishes, materials, burners, accessories and optional equipment, differences that are reflected in the price.",
@@ -13827,8 +14308,8 @@ var DICT = {
     dist_c5: "Sweden",
     dist_c6: "Finland",
     dist_c7: "Poland",
-    hero_who: "For owners, shipyards and designers · and for anyone looking for a <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">spare part</span>.",
-    hero_who_s: "Owners · Shipyards · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Spare parts</span>",
+    hero_who: "For owners, shipyards, designers and dealers · and for anyone looking for a <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">spare part</span>.",
+    hero_who_s: "Owners · Yards · Designers · Dealers · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Spare parts</span>",
     hero_btn_explore: "Explore Products",
     hero_btn_story: "Our Story",
     stat_craft: "Complete electric marine range",
@@ -13863,7 +14344,7 @@ var DICT = {
     eff_c3_b1: "We don't just contain consumption: we maximise cooking performance to achieve the gastronomic results that made Italian cooking famous worldwide.",
     eff_c3_l1: "<strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.",
     eff_c3_l2: "<strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.",
-    eff_c3_l3: "<strong>Induction first (2015).</strong> In 2015 we were the very first to develop a line of cookers with tilting induction hobs for sailing and motor yachts.",
+    eff_c3_l3: "<strong>Induction first (2015).</strong> The project was completed in 2015 and the line reached the market at the beginning of 2016: the very first cookers with tilting induction hobs for sailing and motor yachts.",
     eff_c4_label: "Marine Induction",
     eff_c4_title: "Marine induction is not home induction",
     eff_c4_b1: "Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions, available in custom variants too.",
@@ -14032,7 +14513,7 @@ var DICT = {
     hcf_email: "Email",
     hcf_who: "I am",
     hcf_who_0: "Please choose",
-    hcf_who_1: "A private owner",
+    hcf_who_1: "An owner or owner's representative",
     hcf_who_2: "A shipyard",
     hcf_who_3: "A dealer or distributor",
     hcf_who_4: "A designer or naval architect",
@@ -14050,7 +14531,7 @@ var DICT = {
     hcf_send: "Send",
     hcf_ok: "Thank you, we will reply shortly.",
     pcard_hint_desk: "Double click to open",
-    pcard_hint_tap: "Tap to open",
+    pcard_hint_tap: "Tap twice to open",
     oc_hero_tag: "Ocean Passages · Since the Beginning",
     cst_btn: "Custom",
     cst_sub: "Bespoke Work",
@@ -14099,7 +14580,7 @@ var DICT = {
     oc_c2_label: "At Sea",
     oc_c2_title: "The boats that <em>ask the most</em>",
     oc_c2_b1: "Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife &amp; Son, she was regarded by her own designer as his finest and most accomplished work. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.",
+    oc_c2_b2: "And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife & Son, she is counted among the finest the great Scottish designer ever drew, and by many as the finest of them all. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.",
     oc_c2_b3: "The XXL3 and the LATIFA model, which takes its name from the yacht herself, are only two examples of cookers reinforced or customised for extreme ocean use. The specification is the starting point, and from there the cooker is built around the boat it will live on.",
     oc_c3_label: "Structure",
     oc_c3_title: "Built as one piece",
@@ -14248,7 +14729,7 @@ var DICT = {
     ac_02_body: "Each cooker is born with the finest artisans of the Venetian cultural territory, in the broad sense of the Veneto: coloured steels, fire-resistant tempered glass, silk-screen printing done by hand in gilded purple, oven-baked lacquering and polishing by masters. Inside there is a great deal of technology: burners with solid brass flame-spreaders, a stainless static oven with precision thermostat and integrated safety features, to finish a squid-ink risotto or serve a Venetian-style liver just as if ashore.",
     ac_03_label: "Aboard the legends",
     ac_03_title: "Vintage and classic boats",
-    ac_03_body: "Our cookers live aboard many vintage and classic boats, from Lyman-Morse builds to a masterpiece by William Fife III such as Latifa, the 1936 yawl the great Scottish designer regarded as his finest. For her we created a one-of-a-kind project with the Valdettaro shipyard, in the Gulf of Poets at Portovenere. And every cooker remains a bespoke jewel, customisable in its finishes and in its technical and dimensional characteristics, drawn together with the tastes of the owner, the shipyard and the architect.",
+    ac_03_body: "Our cookers live aboard many vintage and classic boats, from Lyman-Morse builds to a masterpiece by William Fife III such as Latifa, the 1936 yawl counted among the finest the great Scottish designer ever drew. For her we created a one-of-a-kind project with the Valdettaro shipyard, in the Gulf of Poets at Portovenere. And every cooker remains a bespoke jewel, customisable in its finishes and in its technical and dimensional characteristics, drawn together with the tastes of the owner, the shipyard and the architect.",
     ppd_principe_t: "Principe: the bespoke jewel for vintage yachts, where Italian fine cooking meets the artisan's art.",
     ppd_principe_k: "The Principe story",
     ppd_principe_p0: "Principe is not a production cooker: it is a jewel made entirely by hand, in a wholly artisanal way, by a team of craftsmen working together. Each piece takes no less than three months to build and is the only one in the world conceived for vintage yachts, sail or motor: a collection already installed in countless boats, where every model can be customised not only in its finishes but also in its technical and dimensional characteristics.",
@@ -14891,7 +15372,7 @@ var DICT = {
     ppd_lipari_s3: "Optional battery electronic ignition (AA battery).",
     ppd_lipari_s4: "Pot holders available in several configurations.",
     ppd_lipari_s5: "Two types of gimbals (recessed in a compartment or on the top).",
-    ppd_oriz_l0: "In 2015 we were the first company in the world to launch gimballed electric induction cookers.",
+    ppd_oriz_l0: "Project completed in 2015, on the market from the beginning of 2016: the first company in the world with gimballed electric induction cookers.",
     ppd_oriz_l1: "Back in the early 2000s we were the global pioneers of the very first line of electric cookers dedicated to the marine market.",
     ppd_oriz_l2: "This premium cooker is the logical evolution of the systems engineered over the last decades, fully upgraded with the latest technology and a wide array of unique, high-end features.",
     ppd_oriz_l3: "Perfectly balanced solid stainless steel hinges, built in-house: oven doors withstand heavy, long-term use without sagging.",
@@ -15245,6 +15726,13 @@ var DICT = {
     snk_cta: "Parla con i nostri tecnici",
     nav_where: "Dove Siamo",
     nav_dist: "Distributori",
+    ts_lbl_0: "Dimensione testo: normale",
+    ts_lbl_1: "Dimensione testo: grande",
+    ts_lbl_2: "Dimensione testo: molto grande",
+    ts_pop_txt: "Il testo è troppo piccolo? Potete ingrandirlo.",
+    ts_pop_hint: "Potete riaprire questo pannello in ogni momento dal pulsante nell'intestazione qui sopra.",
+    ts_hc: "Contrasto",
+    ts_size: "Dimensione del testo",
     dist_ttl: "Distributori e partner esteri",
     dist_p1: "La nostra produzione è ampia e articolata: alcune delle nostre linee sono distribuite in tutto il mondo, altre nascono su commessa per un singolo cantiere o una singola barca, altre ancora sono linee dedicate sviluppate insieme a marchi partner. Dove una linea è distribuita, i ricambi sono di norma disponibili presso il distributore. L'elenco che segue non è esaustivo: scriveteci, e vi indicheremo il rivenditore, il distributore, l'esclusivista o il partner più vicino.",
     dist_warn: "Una precisazione importante. Le linee di prodotto presentate su questo sito non sempre coincidono con quelle trattate dai rivenditori e dai grossisti che ne tengono i ricambi: a parità di nome, i prodotti possono differire in misura sostanziale. Lo stesso modello può inoltre variare da un distributore all'altro per finiture, materiali, bruciatori, accessori e dotazioni opzionali, differenze che si riflettono anche sul prezzo.",
@@ -15256,8 +15744,8 @@ var DICT = {
     dist_c5: "Svezia",
     dist_c6: "Finlandia",
     dist_c7: "Polonia",
-    hero_who: "Per armatori, cantieri e progettisti · e per chi cerca un <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">ricambio</span>.",
-    hero_who_s: "Armatori · Cantieri · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ricambi</span>",
+    hero_who: "Per armatori, cantieri, progettisti e rivenditori · e per chi cerca un <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">ricambio</span>.",
+    hero_who_s: "Armatori · Cantieri · Progettisti · Rivenditori · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ricambi</span>",
     hero_btn_explore: "Esplora i Prodotti",
     hero_btn_story: "La Nostra Storia",
     stat_craft: "Gamma elettrica marina completa",
@@ -15290,7 +15778,7 @@ var DICT = {
     eff_c3_b1: "Non ci limitiamo a contenere i consumi: massimizziamo la resa culinaria per ottenere quei risultati gastronomici che hanno reso celebre la cucina italiana nel mondo.",
     eff_c3_l1: "<strong>Sistemi a gas.</strong> I nostri modelli sono dotati di bruciatori ad alta efficienza realizzati in collaborazione con le primarie aziende della ristorazione professionale.",
     eff_c3_l2: "<strong>Pionieri dell'elettrico.</strong> Siamo stati la prima azienda al mondo nel settore nautico a realizzare una serie completa di cucine nautiche elettriche.",
-    eff_c3_l3: "<strong>Primato nell'induzione (2015).</strong> Nel 2015 siamo stati i primi in assoluto a sviluppare una linea di cucine con piani a induzione basculanti per imbarcazioni a vela e a motore.",
+    eff_c3_l3: "<strong>Primato nell'induzione (2015).</strong> Il progetto è stato realizzato nel 2015 e la linea è arrivata sul mercato all'inizio del 2016: le primissime cucine con piani a induzione basculanti per imbarcazioni a vela e a motore.",
     eff_c4_label: "Induzione Nautica",
     eff_c4_title: "L'induzione nautica non è quella di casa",
     eff_c4_b1: "Cucinare a induzione in mezzo all'oceano o nel deserto richiede accorgimenti specifici rispetto all'ambiente domestico. Forti di anni di esperienza e leadership, abbiamo stretto una partnership strategica con uno dei principali produttori europei di componenti per l'induzione, sviluppando soluzioni flessibili e uniche, realizzabili anche in varianti custom.",
@@ -15455,7 +15943,7 @@ var DICT = {
     hcf_email: "Email",
     hcf_who: "Sono",
     hcf_who_0: "Seleziona",
-    hcf_who_1: "Un armatore privato",
+    hcf_who_1: "Un armatore o suo rappresentante",
     hcf_who_2: "Un cantiere",
     hcf_who_3: "Un rivenditore o distributore",
     hcf_who_4: "Un progettista o studio navale",
@@ -15473,7 +15961,7 @@ var DICT = {
     hcf_send: "Invia",
     hcf_ok: "Grazie, le risponderemo a breve.",
     pcard_hint_desk: "Doppio clic per la scheda",
-    pcard_hint_tap: "Tocca per la scheda",
+    pcard_hint_tap: "Tocca due volte per la scheda",
     oc_hero_tag: "Traversate oceaniche · Da sempre",
     cst_btn: "Su misura",
     cst_sub: "Lavoro su misura",
@@ -15522,7 +16010,7 @@ var DICT = {
     oc_c2_label: "In mare",
     oc_c2_title: "Le barche che <em>chiedono di più</em>",
     oc_c2_b1: "Fra queste c'è la XXL3 realizzata su misura per Elmo's Fire, la barca del grande velista italiano <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "E c'è Latifa. Un ocean racer nel senso pieno del termine: progettata da William Fife III e varata in Scozia nel 1936 dal cantiere William Fife &amp; Son, è considerata dal progettista stesso la sua opera migliore e più riuscita. Per Latifa abbiamo realizzato una cucina in variante Classic, interamente su misura: bruciatori speciali, forno maggiorato, griglia monopezzo in acciaio maggiorato tagliata dal pieno e perni basculanti di robustezza eccezionale.",
+    oc_c2_b2: "E c'è Latifa. Un ocean racer nel senso pieno del termine: progettata da William Fife III e varata in Scozia nel 1936 dal cantiere William Fife & Son, è annoverata fra le migliori barche che il grande progettista scozzese abbia mai disegnato, e da molti come la migliore in assoluto. Per Latifa abbiamo realizzato una cucina in variante Classic, interamente su misura: bruciatori speciali, forno maggiorato, griglia rinforzata in acciaio ricavata dal pieno in un pezzo unico e perni cardanici di eccezionale robustezza.",
     oc_c2_b3: "La XXL3 e il modello LATIFA, che prende il nome dalla barca stessa, sono solo due esempi di cucine implementate o personalizzate per impieghi oceanici estremi. Le specifiche sono il punto di partenza, e da lì la cucina si costruisce intorno alla barca che la ospiterà.",
     oc_c3_label: "Struttura",
     oc_c3_title: "Costruita come un pezzo solo",
@@ -15669,7 +16157,7 @@ var DICT = {
     ac_02_body: "Ogni cucina nasce con i migliori artigiani della cultura del territorio veneziano, nel senso esteso del Veneto: acciai colorati, vetri temperati resistenti al fuoco, serigrafie eseguite a mano con porpora dorata, verniciature a forno e lucidature da maestri. Dentro c'è tanta tecnologia: bruciatori con spartifiamma in ottone massiccio, forno statico in acciaio con termostato di precisione e sicurezze integrate, per mantecare un risotto al nero di seppia o portare in tavola un fegato alla veneziana come a terra.",
     ac_03_label: "A bordo delle leggende",
     ac_03_title: "Barche d'epoca e classiche",
-    ac_03_body: "Le nostre cucine vivono a bordo di moltissime imbarcazioni d'epoca e classiche, dalle costruzioni Lyman-Morse fino a un capolavoro di William Fife III come Latifa, lo yawl del 1936 che il grande progettista scozzese considerava il suo migliore. Per lei abbiamo firmato un progetto unico nel suo genere con il Cantiere Valdettaro, nel Golfo dei Poeti a Portovenere. E ogni cucina resta un gioiello su misura, personalizzabile nelle finiture e nelle caratteristiche tecniche e dimensionali, disegnato con i gusti dell'armatore, del cantiere e dell'architetto.",
+    ac_03_body: "Le nostre cucine vivono a bordo di moltissime imbarcazioni d'epoca e classiche, dalle costruzioni Lyman-Morse fino a un capolavoro di William Fife III come Latifa, lo yawl del 1936 annoverato fra i migliori che il grande progettista scozzese abbia mai disegnato. Per lei abbiamo firmato un progetto unico nel suo genere con il cantiere Valdettaro, nel Golfo dei Poeti a Portovenere. E ogni cucina resta un gioiello su misura, personalizzabile nelle finiture e nelle caratteristiche tecniche e dimensionali, disegnato insieme ai gusti dell'armatore, del cantiere e dell'architetto.",
     ppd_principe_t: "Principe: il gioiello su misura per gli yacht d'epoca, dove l'alta cucina italiana incontra l'arte artigiana.",
     ppd_principe_k: "Il racconto di Principe",
     ppd_principe_p0: "Principe non è una cucina di serie: è un gioiello realizzato in modo totalmente artigianale, interamente a mano, dalla collaborazione di una squadra di artigiani. Ogni esemplare richiede non meno di tre mesi di lavorazione ed è l'unico al mondo pensato per gli yacht d'epoca, a vela o a motore: una collezione già installata in innumerevoli barche, dove ogni modello può essere personalizzato non solo nelle finiture, ma anche nelle caratteristiche tecniche e dimensionali.",
@@ -16312,7 +16800,7 @@ var DICT = {
     ppd_lipari_s3: "Accensione elettronica opzionale a batteria (pila AA).",
     ppd_lipari_s4: "Ferma-pentole disponibili in più configurazioni.",
     ppd_lipari_s5: "Due tipologie di basculanti (incasso in vano o a top).",
-    ppd_oriz_l0: "Nel 2015 siamo stati i primi al mondo a presentare cucine elettriche a induzione con sospensione cardanica.",
+    ppd_oriz_l0: "Progetto realizzato nel 2015, sul mercato dall'inizio del 2016: prima azienda al mondo con cucine elettriche a induzione con sospensione cardanica.",
     ppd_oriz_l1: "Già nei primi anni Duemila siamo stati i pionieri assoluti della prima linea di cucine elettriche dedicata al mercato nautico.",
     ppd_oriz_l2: "Questa cucina premium è l'evoluzione naturale dei sistemi sviluppati negli ultimi decenni, aggiornata con le tecnologie più recenti e con una lunga serie di soluzioni esclusive di alta gamma.",
     ppd_oriz_l3: "Cerniere in acciaio inox massiccio, perfettamente bilanciate e costruite internamente: le porte del forno reggono un uso intenso e prolungato senza cedere.",
@@ -16533,7 +17021,7 @@ var DICT = {
     egrill_es_headline: "Des milliers installés<br><em>à bord des yachts du monde</em>",
     egrill_01_label: "01 · Deux Philosophies",
     egrill_01_title: "Blindées ou vitrocéramique",
-    egrill_01_body: "Pour le cuisinier qui refuse le compromis. Nos grills existent en deux philosophies de cuisson, résistances blindées et vitrocéramique, afin que la cuisine se construise autour de la façon de cuisiner de son propriétaire. Faits à la main, un par un.",
+    egrill_01_body: "Pour le cuisinier qui refuse le compromis. Nos grills existent en deux philosophies de cuisson, résistances blindées et vitrocéramique, afin que la table de cuisson se construise autour de la façon de cuisiner de son armateur. Faits à la main, un par un.",
     egrill_02_label: "02 · Profondeur et Nettoyage",
     egrill_02_title: "Puissance d'un côté, facilité de l'autre",
     egrill_02_body: "Les résistances blindées sont dotées de lèchefrites généreuses pour qui veut profondeur et puissance. Les versions vitrocéramiques offrent un nettoyage des plus faciles. Acier inox 304 ou 316 de série partout.",
@@ -16599,7 +17087,7 @@ var DICT = {
     cs2_ecook_points: "<li>Surfaces vitrocéramiques de première qualité, pour un nettoyage rapide et sans effort.</li><li>Robustes versions radiantes ou les meilleures technologies à induction.</li><li>Systèmes de cuisson exclusifs et brevetés.</li><li>Construction de qualité marine, pour la vie à bord.</li><li>Personnalisables à la demande de l'armateur.</li>",
     cs2_egrill_tag: "La Collection · Grills Électriques",
     cs2_egrill_head: "Des milliers installés<br><em>à bord des yachts du monde</em>",
-    cs2_egrill_lead: "Pour le cuisinier qui refuse le compromis. Nos grills existent en deux philosophies de cuisson, résistances blindées et vitrocéramique, afin que la cuisine se construise autour de la façon de cuisiner de son propriétaire. Faits à la main, un par un.",
+    cs2_egrill_lead: "Pour le cuisinier qui refuse le compromis. Nos grills existent en deux philosophies de cuisson, résistances blindées et vitrocéramique, afin que la table de cuisson se construise autour de la façon de cuisiner de son armateur. Faits à la main, un par un.",
     cs2_egrill_points: "<li>Résistances blindées avec lèchefrites généreuses, pour qui veut profondeur et puissance.</li><li>Versions vitrocéramiques pour un nettoyage des plus faciles.</li><li>Les premiers grills au monde entièrement personnalisables en puissance comme en dimensions.</li><li>Acier inox 304 ou 316 de série.</li><li>Chaque pièce fabriquée à la main à Conegliano.</li>",
     cs2_ebbq_tag: "La Collection · Barbecues Électriques",
     cs2_ebbq_head: "Deux façons de cuire,<br><em>un seul instrument</em>",
@@ -16666,6 +17154,13 @@ var DICT = {
     snk_cta: "Parlez à nos techniciens",
     nav_where: "Où Nous Trouver",
     nav_dist: "Distributeurs",
+    ts_lbl_0: "Taille du texte : normale",
+    ts_lbl_1: "Taille du texte : grande",
+    ts_lbl_2: "Taille du texte : très grande",
+    ts_pop_txt: "Le texte est trop petit ? Vous pouvez l'agrandir.",
+    ts_pop_hint: "Vous pouvez rouvrir ce panneau à tout moment depuis le bouton dans l'en-tête ci-dessus.",
+    ts_hc: "Contraste",
+    ts_size: "Taille du texte",
     dist_ttl: "Distributeurs et partenaires à l'étranger",
     dist_p1: "Notre production est vaste et diversifiée : certaines de nos lignes sont distribuées dans le monde entier, d'autres naissent sur commande pour un seul chantier naval ou un seul bateau, d'autres encore sont des lignes dédiées développées avec des marques partenaires. Là où une ligne est distribuée, les pièces détachées sont généralement disponibles auprès du distributeur. La liste ci-dessous n'est pas exhaustive : écrivez-nous et nous vous indiquerons le revendeur, le distributeur, l'agent exclusif ou le partenaire le plus proche.",
     dist_warn: "Une précision importante. Les lignes de produits présentées sur ce site ne correspondent pas toujours à celles traitées par les revendeurs et grossistes qui en tiennent les pièces détachées : à nom égal, les produits peuvent différer de façon substantielle. Un même modèle peut en outre varier d'un distributeur à l'autre par ses finitions, ses matériaux, ses brûleurs, ses accessoires et ses équipements en option, des différences qui se répercutent également sur le prix.",
@@ -16677,8 +17172,8 @@ var DICT = {
     dist_c5: "Suède",
     dist_c6: "Finlande",
     dist_c7: "Pologne",
-    hero_who: "Pour armateurs, chantiers et architectes navals · et pour qui cherche une <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">pièce détachée</span>.",
-    hero_who_s: "Armateurs · Chantiers · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Pièces détachées</span>",
+    hero_who: "Pour armateurs, chantiers, architectes navals et revendeurs · et pour qui cherche une <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">pièce détachée</span>.",
+    hero_who_s: "Armateurs · Chantiers · Architectes · Revendeurs · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Pièces</span>",
     hero_btn_explore: "Découvrir les Produits",
     hero_btn_story: "Notre Histoire",
     stat_craft: "Gamme électrique marine complète",
@@ -16711,7 +17206,7 @@ var DICT = {
     eff_c3_b1: "Nous ne nous contentons pas de contenir la consommation : nous maximisons les performances de cuisson pour obtenir ces résultats gastronomiques qui ont rendu la cuisine italienne célèbre dans le monde.",
     eff_c3_l1: "<strong>Systèmes à gaz.</strong> Nos modèles sont dotés de brûleurs à haute efficacité développés avec les grands noms de la restauration professionnelle.",
     eff_c3_l2: "<strong>Pionniers de l'électrique.</strong> Nous avons été la première entreprise au monde du secteur nautique à réaliser une gamme complète de cuisinières marines électriques.",
-    eff_c3_l3: "<strong>Première dans l'induction (2015).</strong> En 2015, nous avons été les tout premiers à développer une ligne de cuisinières à plaques à induction basculantes pour voiliers et bateaux à moteur.",
+    eff_c3_l3: "<strong>Première dans l'induction (2015).</strong> Le projet a été réalisé en 2015 et la ligne est arrivée sur le marché au début de 2016 : les toutes premières cuisinières à plaques à induction basculantes pour voiliers et bateaux à moteur.",
     eff_c4_label: "Induction Marine",
     eff_c4_title: "L'induction marine n'est pas celle de la maison",
     eff_c4_b1: "Cuisiner à l'induction en plein océan ou dans le désert exige des précautions spécifiques par rapport à un environnement domestique. Forts d'années d'expérience et de leadership, nous avons noué un partenariat stratégique avec l'un des principaux fabricants européens de composants d'induction, développant des solutions flexibles et uniques, réalisables aussi en variantes sur mesure.",
@@ -16876,7 +17371,7 @@ var DICT = {
     hcf_email: "Email",
     hcf_who: "Je suis",
     hcf_who_0: "Sélectionnez",
-    hcf_who_1: "Un armateur particulier",
+    hcf_who_1: "Un armateur ou son représentant",
     hcf_who_2: "Un chantier naval",
     hcf_who_3: "Un revendeur ou distributeur",
     hcf_who_4: "Un architecte naval ou designer",
@@ -16894,7 +17389,7 @@ var DICT = {
     hcf_send: "Envoyer",
     hcf_ok: "Merci, nous vous répondrons sous peu.",
     pcard_hint_desk: "Double clic pour la fiche",
-    pcard_hint_tap: "Touchez pour la fiche",
+    pcard_hint_tap: "Touchez deux fois pour la fiche",
     oc_hero_tag: "Traversées océaniques · Depuis toujours",
     cst_btn: "Sur mesure",
     cst_sub: "Travail sur mesure",
@@ -16943,7 +17438,7 @@ var DICT = {
     oc_c2_label: "En mer",
     oc_c2_title: "Les bateaux qui <em>exigent le plus</em>",
     oc_c2_b1: "Parmi elles, la XXL3 réalisée sur mesure pour Elmo's Fire, le bateau du grand navigateur italien <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "Et il y a Latifa. Un ocean racer au sens plein du terme : dessinée par William Fife III et lancée en Écosse en 1936 par le chantier William Fife &amp; Son, elle est considérée par son concepteur lui-même comme son œuvre la plus belle et la plus aboutie. Pour Latifa nous avons réalisé une cuisinière en variante Classic, entièrement sur mesure : brûleurs spéciaux, four surdimensionné, grille monobloc en acier renforcé taillée dans la masse et axes de cardan d'une robustesse exceptionnelle.",
+    oc_c2_b2: "Et il y a Latifa. Un ocean racer au sens plein du terme : dessinée par William Fife III et lancée en Écosse en 1936 par le chantier William Fife & Son, elle compte parmi les plus belles que le grand architecte écossais ait jamais dessinées, et pour beaucoup comme la plus belle de toutes. Pour Latifa nous avons réalisé une cuisinière en version Classic, entièrement sur mesure : brûleurs spéciaux, four surdimensionné, grille renforcée en acier taillée dans la masse d'une seule pièce et axes de cardan d'une robustesse exceptionnelle.",
     oc_c2_b3: "La XXL3 et le modèle LATIFA, qui tient son nom du bateau lui-même, ne sont que deux exemples de cuisinières renforcées ou personnalisées pour des usages océaniques extrêmes. Les spécifications sont le point de départ, et à partir de là la cuisinière se construit autour du bateau qui l'accueillera.",
     oc_c3_label: "Structure",
     oc_c3_title: "Construite d'une seule pièce",
@@ -17090,7 +17585,7 @@ var DICT = {
     ac_02_body: "Chaque cuisinière naît avec les meilleurs artisans de la culture du territoire vénitien, au sens large de la Vénétie : aciers colorés, verres trempés résistants au feu, sérigraphies réalisées à la main en pourpre doré, laquages au four et polissages de maîtres. À l'intérieur, beaucoup de technologie : brûleurs à répartiteurs de flamme en laiton massif, four statique en acier à thermostat de précision et sécurités intégrées, pour lier un risotto à l'encre de seiche ou servir un foie à la vénitienne comme à terre.",
     ac_03_label: "À bord des légendes",
     ac_03_title: "Bateaux d'époque et classiques",
-    ac_03_body: "Nos cuisinières vivent à bord de nombreux bateaux d'époque et classiques, des constructions Lyman-Morse jusqu'à un chef-d'œuvre de William Fife III comme Latifa, le yawl de 1936 que le grand architecte écossais considérait comme son meilleur. Pour elle, nous avons signé un projet unique en son genre avec le Cantiere Valdettaro, dans le Golfe des Poètes à Portovenere. Et chaque cuisinière reste un bijou sur mesure, personnalisable dans ses finitions et ses caractéristiques techniques et dimensionnelles, dessiné avec les goûts de l'armateur, du chantier et de l'architecte.",
+    ac_03_body: "Nos cuisinières vivent à bord de très nombreux bateaux d'époque et classiques, des constructions Lyman-Morse jusqu'à un chef-d'œuvre de William Fife III comme Latifa, le yawl de 1936 compté parmi les plus beaux que le grand architecte écossais ait jamais dessinés. Pour elle nous avons signé un projet unique en son genre avec le chantier Valdettaro, dans le Golfe des Poètes à Portovenere. Et chaque cuisinière reste un bijou sur mesure, personnalisable dans ses finitions et dans ses caractéristiques techniques et dimensionnelles, dessiné avec les goûts de l'armateur, du chantier et de l'architecte.",
     ppd_principe_t: "Principe : le bijou sur mesure pour yachts d'époque, où la grande cuisine italienne rencontre l'art artisanal.",
     ppd_principe_k: "Le récit de Principe",
     ppd_principe_p0: "Principe n'est pas une cuisinière de série : c'est un bijou réalisé entièrement à la main, de façon totalement artisanale, par une équipe d'artisans. Chaque exemplaire demande au moins trois mois de fabrication et est le seul au monde conçu pour les yachts d'époque, à voile ou à moteur : une collection déjà installée dans d'innombrables bateaux, où chaque modèle peut être personnalisé non seulement dans ses finitions, mais aussi dans ses caractéristiques techniques et dimensionnelles.",
@@ -17733,7 +18228,7 @@ var DICT = {
     ppd_lipari_s3: "Allumage électronique en option sur pile (pile AA).",
     ppd_lipari_s4: "Porte-casseroles disponibles en plusieurs configurations.",
     ppd_lipari_s5: "Deux types de berceaux (encastré dans un logement ou sur plan).",
-    ppd_oriz_l0: "En 2015, nous avons été les premiers au monde à lancer des cuisinières électriques à induction sur cardans.",
+    ppd_oriz_l0: "Projet réalisé en 2015, sur le marché dès le début de 2016 : première entreprise au monde avec des cuisinières électriques à induction sur cardans.",
     ppd_oriz_l1: "Dès le début des années 2000, nous étions déjà les pionniers de la toute première gamme de cuisinières électriques dédiée au marché nautique.",
     ppd_oriz_l2: "Cette cuisinière haut de gamme est l'évolution naturelle des systèmes développés au fil des dernières décennies, mise à jour avec les technologies les plus récentes et une longue série de solutions exclusives.",
     ppd_oriz_l3: "Charnières en acier inoxydable massif, parfaitement équilibrées et fabriquées en interne : les portes du four supportent un usage intensif et prolongé sans s'affaisser.",
@@ -18087,6 +18582,13 @@ var DICT = {
     snk_cta: "Sprechen Sie mit unseren Technikern",
     nav_where: "Wo Sie Uns Finden",
     nav_dist: "Vertriebspartner",
+    ts_lbl_0: "Textgröße: normal",
+    ts_lbl_1: "Textgröße: groß",
+    ts_lbl_2: "Textgröße: sehr groß",
+    ts_pop_txt: "Ist die Schrift zu klein? Sie können sie vergrößern.",
+    ts_pop_hint: "Sie können dieses Feld jederzeit über die Schaltfläche oben in der Kopfzeile wieder öffnen.",
+    ts_hc: "Kontrast",
+    ts_size: "Schriftgröße",
     dist_ttl: "Vertriebspartner und Partner im Ausland",
     dist_p1: "Unsere Fertigung ist breit und vielgestaltig: einige unserer Linien werden weltweit vertrieben, andere entstehen auf Bestellung für eine einzelne Werft oder ein einzelnes Boot, wieder andere sind eigens entwickelte Linien für Partnermarken. Wo eine Linie vertrieben wird, sind Ersatzteile in der Regel beim Vertriebspartner erhältlich. Die folgende Liste ist nicht vollständig: schreiben Sie uns, und wir nennen Ihnen den nächstgelegenen Händler, Vertriebspartner, Exklusivvertreter oder Partner.",
     dist_warn: "Ein wichtiger Hinweis. Die auf dieser Website vorgestellten Produktlinien stimmen nicht immer mit jenen überein, die von Händlern und Großhändlern geführt werden, welche die zugehörigen Ersatzteile bevorraten: bei gleichem Namen können sich die Produkte erheblich unterscheiden. Dasselbe Modell kann zudem von Vertriebspartner zu Vertriebspartner in Ausführung, Materialien, Brennern, Zubehör und Sonderausstattung abweichen, Unterschiede, die sich auch im Preis niederschlagen.",
@@ -18098,8 +18600,8 @@ var DICT = {
     dist_c5: "Schweden",
     dist_c6: "Finnland",
     dist_c7: "Polen",
-    hero_who: "Für Eigner, Werften und Konstrukteure · und für alle, die ein <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ersatzteil</span> suchen.",
-    hero_who_s: "Eigner · Werften · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ersatzteile</span>",
+    hero_who: "Für Eigner, Werften, Konstrukteure und Händler · und für alle, die ein <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ersatzteil</span> suchen.",
+    hero_who_s: "Eigner · Werften · Planer · Händler · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ersatzteile</span>",
     hero_btn_explore: "Produkte Entdecken",
     hero_btn_story: "Unsere Geschichte",
     stat_craft: "Komplette elektrische Marine-Baureihe",
@@ -18132,7 +18634,7 @@ var DICT = {
     eff_c3_b1: "Wir begrenzen nicht nur den Verbrauch: Wir maximieren die Kochleistung, um jene gastronomischen Ergebnisse zu erzielen, die die italienische Küche weltberühmt gemacht haben.",
     eff_c3_l1: "<strong>Gassysteme.</strong> Unsere Modelle verfügen über Hochleistungsbrenner, die gemeinsam mit führenden Namen der professionellen Gastronomie entwickelt wurden.",
     eff_c3_l2: "<strong>Elektro-Pioniere.</strong> Wir waren das weltweit erste Unternehmen im Marinesektor, das eine komplette Serie elektrischer Bordküchen realisierte.",
-    eff_c3_l3: "<strong>Erste bei der Induktion (2015).</strong> 2015 waren wir die allerersten, die eine Linie von Kochern mit schwenkbaren Induktionskochfeldern für Segel- und Motoryachten entwickelten.",
+    eff_c3_l3: "<strong>Erste bei der Induktion (2015).</strong> Das Projekt entstand 2015, und die Linie kam Anfang 2016 auf den Markt: die allerersten Kocher mit schwenkbaren Induktionskochfeldern für Segel- und Motoryachten.",
     eff_c4_label: "Marine-Induktion",
     eff_c4_title: "Marine-Induktion ist nicht die aus dem Haushalt",
     eff_c4_b1: "Das Kochen mit Induktion mitten im Ozean oder in der Wüste erfordert besondere Vorkehrungen gegenüber dem häuslichen Umfeld. Gestützt auf jahrelange Erfahrung und Führung haben wir eine strategische Partnerschaft mit einem der führenden europäischen Hersteller von Induktionskomponenten geschlossen und flexible, einzigartige Lösungen entwickelt, auch in Sonderanfertigungen.",
@@ -18297,7 +18799,7 @@ var DICT = {
     hcf_email: "E-Mail",
     hcf_who: "Ich bin",
     hcf_who_0: "Bitte wählen",
-    hcf_who_1: "Ein Privateigner",
+    hcf_who_1: "Ein Eigner oder Eignervertreter",
     hcf_who_2: "Eine Werft",
     hcf_who_3: "Ein Händler oder Distributor",
     hcf_who_4: "Ein Konstrukteur oder Yachtdesigner",
@@ -18315,7 +18817,7 @@ var DICT = {
     hcf_send: "Senden",
     hcf_ok: "Vielen Dank, wir melden uns in Kürze.",
     pcard_hint_desk: "Doppelklick für das Datenblatt",
-    pcard_hint_tap: "Tippen für das Datenblatt",
+    pcard_hint_tap: "Zweimal tippen für das Datenblatt",
     oc_hero_tag: "Ozeanpassagen · Von Anfang an",
     cst_btn: "Nach Maß",
     cst_sub: "Arbeit nach Maß",
@@ -18364,7 +18866,7 @@ var DICT = {
     oc_c2_label: "Auf See",
     oc_c2_title: "Die Boote, die <em>am meisten verlangen</em>",
     oc_c2_b1: "Darunter die XXL3, nach Maß gefertigt für Elmo's Fire, das Boot des großen italienischen Hochseeseglers <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "Und da ist Latifa. Ein Ocean Racer im vollen Sinne des Wortes: entworfen von William Fife III und 1936 in Schottland bei der Werft William Fife &amp; Son vom Stapel gelaufen, galt sie ihrem Konstrukteur selbst als sein bestes und gelungenstes Werk. Für Latifa bauten wir einen Herd in der Variante Classic, vollständig nach Maß: Spezialbrenner, ein vergrößerter Backofen, ein verstärkter einteiliger Stahlrost aus dem Vollen geschnitten und Kardanbolzen von außergewöhnlicher Festigkeit.",
+    oc_c2_b2: "Und da ist Latifa. Ein Ocean Racer im vollen Sinne des Wortes: entworfen von William Fife III und 1936 in Schottland bei der Werft William Fife & Son vom Stapel gelaufen, zählt sie zu den schönsten Yachten, die der große schottische Konstrukteur je gezeichnet hat, und für viele zur schönsten überhaupt. Für Latifa haben wir einen Herd in der Variante Classic gefertigt, vollständig nach Maß: besondere Brenner, ein übergroßer Backofen, ein verstärkter, aus dem Vollen gefräster einteiliger Stahlrost und Kardanzapfen von außergewöhnlicher Robustheit.",
     oc_c2_b3: "Die XXL3 und das Modell LATIFA, das seinen Namen vom Boot selbst trägt, sind nur zwei Beispiele für Herde, die für extreme Ozeaneinsätze verstärkt oder angepasst wurden. Die Spezifikation ist der Ausgangspunkt, und von dort wird der Herd um das Boot herum gebaut, auf dem er leben wird.",
     oc_c3_label: "Struktur",
     oc_c3_title: "Gebaut wie aus einem Stück",
@@ -18511,7 +19013,7 @@ var DICT = {
     ac_02_body: "Jeder Kocher entsteht mit den besten Kunsthandwerkern der venezianischen Kulturlandschaft, im weiten Sinne des Veneto: farbige Edelstähle, feuerfestes gehärtetes Glas, von Hand ausgeführte Siebdrucke in vergoldetem Purpur, Ofenlackierungen und Polituren von Meistern. Im Inneren steckt viel Technik: Brenner mit Flammenverteilern aus massivem Messing, ein statischer Edelstahlofen mit Präzisionsthermostat und integrierten Sicherheitsvorkehrungen, um ein Risotto mit Tintenfischtinte zu binden oder eine Leber nach venezianischer Art wie an Land zu servieren.",
     ac_03_label: "An Bord der Legenden",
     ac_03_title: "Oldtimer- und Klassikboote",
-    ac_03_body: "Unsere Kocher leben an Bord vieler Oldtimer- und Klassikboote, von Lyman-Morse-Bauten bis zu einem Meisterwerk von William Fife III wie Latifa, dem Yawl von 1936, das der große schottische Konstrukteur für sein bestes hielt. Für sie haben wir ein einzigartiges Projekt mit der Werft Valdettaro im Golf der Dichter bei Portovenere realisiert. Und jeder Kocher bleibt ein maßgefertigtes Schmuckstück, individualisierbar in den Oberflächen und in den technischen und dimensionalen Eigenschaften, entworfen nach dem Geschmack des Eigners, der Werft und des Architekten.",
+    ac_03_body: "Unsere Herde leben an Bord zahlreicher Oldtimer und klassischer Boote, von Lyman-Morse-Bauten bis zu einem Meisterwerk von William Fife III wie Latifa, dem Yawl von 1936, das zu den schönsten zählt, die der große schottische Konstrukteur je gezeichnet hat. Für sie haben wir gemeinsam mit der Werft Valdettaro im Golf der Dichter bei Portovenere ein einzigartiges Projekt gezeichnet. Und jeder Herd bleibt ein maßgefertigtes Schmuckstück, anpassbar in Ausführung sowie in technischen und maßlichen Eigenschaften, entworfen zusammen mit dem Geschmack des Eigners, der Werft und des Architekten.",
     ppd_principe_t: "Principe: das maßgefertigte Schmuckstück für Oldtimer-Yachten, wo die italienische Spitzenküche auf die Handwerkskunst trifft.",
     ppd_principe_k: "Die Geschichte von Principe",
     ppd_principe_p0: "Principe ist kein Serienherd: Es ist ein Schmuckstück, das vollständig von Hand und rein handwerklich von einem Team von Kunsthandwerkern gefertigt wird. Jedes Exemplar braucht mindestens drei Monate Fertigung und ist das einzige weltweit, das für Oldtimer-Yachten, unter Segel oder Motor, entworfen wurde: eine Kollektion, die bereits in unzähligen Booten verbaut ist, bei der jedes Modell nicht nur in den Oberflächen, sondern auch in den technischen und dimensionalen Eigenschaften individualisiert werden kann.",
@@ -19154,7 +19656,7 @@ var DICT = {
     ppd_lipari_s3: "Elektronische Zündung optional per Batterie (AA-Batterie).",
     ppd_lipari_s4: "Topfhalter in mehreren Konfigurationen erhältlich.",
     ppd_lipari_s5: "Zwei Arten von Kardanrahmen (Einbau in eine Nische oder auf der Arbeitsplatte).",
-    ppd_oriz_l0: "2015 waren wir weltweit die Ersten, die kardanisch aufgehängte Elektro-Induktionsherde auf den Markt gebracht haben.",
+    ppd_oriz_l0: "Projekt 2015 realisiert, ab Anfang 2016 auf dem Markt: weltweit erstes Unternehmen mit kardanisch aufgehängten Elektro-Induktionsherden.",
     ppd_oriz_l1: "Bereits Anfang der 2000er Jahre waren wir die Pioniere der allerersten Elektroherd-Linie für den Yachtmarkt.",
     ppd_oriz_l2: "Dieser Premium-Herd ist die logische Weiterentwicklung der über Jahrzehnte gereiften Systeme, aktualisiert mit den neuesten Technologien und einer langen Reihe exklusiver Lösungen der Spitzenklasse.",
     ppd_oriz_l3: "Perfekt ausbalancierte Scharniere aus massivem Edelstahl, im eigenen Haus gefertigt: die Backofentüren halten schwerem Dauereinsatz stand, ohne abzusacken.",
@@ -19508,6 +20010,13 @@ var DICT = {
     snk_cta: "Habla con nuestros técnicos",
     nav_where: "Dónde Estamos",
     nav_dist: "Distribuidores",
+    ts_lbl_0: "Tamaño de texto: normal",
+    ts_lbl_1: "Tamaño de texto: grande",
+    ts_lbl_2: "Tamaño de texto: muy grande",
+    ts_pop_txt: "¿El texto es demasiado pequeño? Puede agrandarlo.",
+    ts_pop_hint: "Puede volver a abrir este panel en cualquier momento desde el botón de la cabecera de arriba.",
+    ts_hc: "Contraste",
+    ts_size: "Tamaño del texto",
     dist_ttl: "Distribuidores y socios en el extranjero",
     dist_p1: "Nuestra producción es amplia y variada: algunas de nuestras líneas se distribuyen en todo el mundo, otras nacen por encargo para un solo astillero o un solo barco, y otras son líneas dedicadas desarrolladas junto a marcas asociadas. Allí donde una línea se distribuye, los repuestos suelen estar disponibles en el propio distribuidor. La lista siguiente no es exhaustiva: escríbanos y le indicaremos el revendedor, distribuidor, representante exclusivo o socio más cercano.",
     dist_warn: "Una precisión importante. Las líneas de producto presentadas en este sitio no siempre coinciden con las que manejan los revendedores y mayoristas que tienen sus repuestos: con el mismo nombre, los productos pueden diferir de forma sustancial. Un mismo modelo puede además variar de un distribuidor a otro en acabados, materiales, quemadores, accesorios y equipamiento opcional, diferencias que se reflejan también en el precio.",
@@ -19519,8 +20028,8 @@ var DICT = {
     dist_c5: "Suecia",
     dist_c6: "Finlandia",
     dist_c7: "Polonia",
-    hero_who: "Para armadores, astilleros y proyectistas · y para quien busca un <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">recambio</span>.",
-    hero_who_s: "Armadores · Astilleros · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Recambios</span>",
+    hero_who: "Para armadores, astilleros, proyectistas y distribuidores · y para quien busca un <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">recambio</span>.",
+    hero_who_s: "Armadores · Astilleros · Proyectistas · Distribuidores · <span class=\"hw-go\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Recambios</span>",
     hero_btn_explore: "Explorar Productos",
     hero_btn_story: "Nuestra Historia",
     stat_craft: "Gama eléctrica marina completa",
@@ -19553,7 +20062,7 @@ var DICT = {
     eff_c3_b1: "No nos limitamos a contener el consumo: maximizamos el rendimiento de cocción para obtener esos resultados gastronómicos que han hecho célebre la cocina italiana en el mundo.",
     eff_c3_l1: "<strong>Sistemas de gas.</strong> Nuestros modelos cuentan con quemadores de alta eficiencia desarrollados junto a las principales empresas de la restauración profesional.",
     eff_c3_l2: "<strong>Pioneros de lo eléctrico.</strong> Fuimos la primera empresa del mundo en el sector náutico en realizar una serie completa de cocinas náuticas eléctricas.",
-    eff_c3_l3: "<strong>Primacía en la inducción (2015).</strong> En 2015 fuimos los primeros en absoluto en desarrollar una línea de cocinas con placas de inducción basculantes para embarcaciones de vela y de motor.",
+    eff_c3_l3: "<strong>Primacía en la inducción (2015).</strong> El proyecto se realizó en 2015 y la línea llegó al mercado a principios de 2016: las primerísimas cocinas con placas de inducción basculantes para embarcaciones de vela y de motor.",
     eff_c4_label: "Inducción Náutica",
     eff_c4_title: "La inducción náutica no es la de casa",
     eff_c4_b1: "Cocinar con inducción en medio del océano o en el desierto exige precauciones específicas respecto al entorno doméstico. Con años de experiencia y liderazgo, hemos establecido una alianza estratégica con uno de los principales fabricantes europeos de componentes para inducción, desarrollando soluciones flexibles y únicas, realizables también en variantes a medida.",
@@ -19699,7 +20208,7 @@ var DICT = {
     ab_p9_body2: "No es una gama reunida para llenar un catálogo. Es lo que ocurre cuando nunca se le ha dicho a un astillero que algo no se puede hacer.",
     ab_p8_tag: "Nuestros Clientes",
     ab_p8_title: "La confianza de los <em>mejores astilleros</em> del mundo",
-    ab_p8_body1: "Nuestras cocinas han sido elegidas durante décadas por los astilleros más importantes del mundo, los distribuidores más renombrados y propietarios privados. Desde los modernos yates Solaris hasta embarcaciones clásicas como el Latifa de William Fife III (1936), desde el Elmo's Fire de Giovanni Soldini hasta los yates de grandes artistas, campeones de Fórmula 1, estadistas de renombre internacional y figuras destacadas del mundo empresarial y de las finanzas.",
+    ab_p8_body1: "Nuestras cocinas han sido elegidas durante décadas por los astilleros más importantes del mundo, los distribuidores más renombrados y armadores particulares. Desde los modernos yates Solaris hasta embarcaciones clásicas como el Latifa de William Fife III (1936), desde el Elmo's Fire de Giovanni Soldini hasta los yates de grandes artistas, campeones de Fórmula 1, estadistas de renombre internacional y figuras destacadas del mundo empresarial y de las finanzas.",
     ab_p8_body2: "Una tradición que continúa hoy con Cantiere del Pardo, ICE Yachts, Sunseeker, Sanlorenzo y muchos otros · allí donde la excelencia en el mar exige excelencia en la cocina.",
     cat_page_label: "Biblioteca",
     cat_page_title: "Catálogos",
@@ -19718,7 +20227,7 @@ var DICT = {
     hcf_email: "Email",
     hcf_who: "Soy",
     hcf_who_0: "Seleccione",
-    hcf_who_1: "Un armador particular",
+    hcf_who_1: "Un armador o su representante",
     hcf_who_2: "Un astillero",
     hcf_who_3: "Un distribuidor o revendedor",
     hcf_who_4: "Un proyectista o arquitecto naval",
@@ -19736,7 +20245,7 @@ var DICT = {
     hcf_send: "Enviar",
     hcf_ok: "Gracias, le responderemos en breve.",
     pcard_hint_desk: "Doble clic para la ficha",
-    pcard_hint_tap: "Toca para la ficha",
+    pcard_hint_tap: "Toca dos veces para la ficha",
     oc_hero_tag: "Travesías oceánicas · Desde siempre",
     cst_btn: "A medida",
     cst_sub: "Trabajo a medida",
@@ -19785,7 +20294,7 @@ var DICT = {
     oc_c2_label: "En el mar",
     oc_c2_title: "Los barcos que <em>más exigen</em>",
     oc_c2_b1: "Entre ellas está la XXL3 realizada a medida para Elmo's Fire, el barco del gran navegante italiano <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "Y está Latifa. Un ocean racer en el sentido pleno del término: proyectada por William Fife III y botada en Escocia en 1936 por el astillero William Fife &amp; Son, su propio proyectista la consideraba su obra mejor y más lograda. Para Latifa realizamos una cocina en variante Classic, enteramente a medida: quemadores especiales, horno sobredimensionado, parrilla monopieza de acero reforzado cortada del macizo y pernos basculantes de robustez excepcional.",
+    oc_c2_b2: "Y está Latifa. Un ocean racer en el sentido pleno del término: proyectada por William Fife III y botada en Escocia en 1936 por el astillero William Fife & Son, está considerada entre las mejores embarcaciones que el gran proyectista escocés haya dibujado nunca, y para muchos como la mejor de todas. Para Latifa realizamos una cocina en variante Classic, enteramente a medida: quemadores especiales, horno sobredimensionado, parrilla reforzada de acero obtenida de una sola pieza maciza y pernos cardánicos de excepcional robustez.",
     oc_c2_b3: "La XXL3 y el modelo LATIFA, que toma su nombre del propio barco, son solo dos ejemplos de cocinas reforzadas o personalizadas para usos oceánicos extremos. Las especificaciones son el punto de partida, y desde ahí la cocina se construye en torno al barco que la acogerá.",
     oc_c3_label: "Estructura",
     oc_c3_title: "Construida como una sola pieza",
@@ -19932,7 +20441,7 @@ var DICT = {
     ac_02_body: "Cada cocina nace con los mejores artesanos de la cultura del territorio veneciano, en el sentido amplio del Véneto: aceros de colores, vidrios templados resistentes al fuego, serigrafías realizadas a mano en púrpura dorada, barnizados al horno y pulidos de maestros. Dentro hay mucha tecnología: quemadores con difusores de llama en latón macizo, un horno estático de acero con termostato de precisión y seguridades integradas, para ligar un risotto al negro de sepia o llevar a la mesa un hígado a la veneciana como en tierra.",
     ac_03_label: "A bordo de las leyendas",
     ac_03_title: "Barcos de época y clásicos",
-    ac_03_body: "Nuestras cocinas viven a bordo de muchísimas embarcaciones de época y clásicas, desde construcciones Lyman-Morse hasta una obra maestra de William Fife III como Latifa, el yawl de 1936 que el gran proyectista escocés consideraba el mejor. Para ella firmamos un proyecto único en su género con el Cantiere Valdettaro, en el Golfo de los Poetas en Portovenere. Y cada cocina sigue siendo una joya a medida, personalizable en los acabados y en las características técnicas y dimensionales, diseñada con los gustos del armador, del astillero y del arquitecto.",
+    ac_03_body: "Nuestras cocinas viven a bordo de muchísimas embarcaciones de época y clásicas, desde las construcciones Lyman-Morse hasta una obra maestra de William Fife III como Latifa, el yawl de 1936 contado entre los mejores que el gran proyectista escocés haya dibujado nunca. Para ella firmamos un proyecto único en su género con el astillero Valdettaro, en el Golfo de los Poetas en Portovenere. Y cada cocina sigue siendo una joya a medida, personalizable en los acabados y en las características técnicas y dimensionales, dibujada junto a los gustos del armador, del astillero y del arquitecto.",
     ppd_principe_t: "Principe: la joya a medida para yates de época, donde la alta cocina italiana se encuentra con el arte artesanal.",
     ppd_principe_k: "El relato de Principe",
     ppd_principe_p0: "Principe no es una cocina de serie: es una joya realizada enteramente a mano, de forma totalmente artesanal, por un equipo de artesanos. Cada ejemplar requiere no menos de tres meses de fabricación y es la única en el mundo concebida para los yates de época, de vela o de motor: una colección ya instalada en innumerables barcos, en la que cada modelo puede personalizarse no solo en los acabados, sino también en las características técnicas y dimensionales.",
@@ -20575,7 +21084,7 @@ var DICT = {
     ppd_lipari_s3: "Encendido electrónico opcional con pila (pila AA).",
     ppd_lipari_s4: "Sujeta-ollas disponibles en varias configuraciones.",
     ppd_lipari_s5: "Dos tipos de basculantes (empotrado en un hueco o sobre encimera).",
-    ppd_oriz_l0: "En 2015 fuimos la primera empresa del mundo en presentar cocinas eléctricas de inducción con suspensión cardánica.",
+    ppd_oriz_l0: "Proyecto realizado en 2015, en el mercado desde principios de 2016: primera empresa del mundo con cocinas eléctricas de inducción con suspensión cardánica.",
     ppd_oriz_l1: "Ya a principios de los años dos mil fuimos los pioneros de la primera línea de cocinas eléctricas dedicada al mercado náutico.",
     ppd_oriz_l2: "Esta cocina premium es la evolución natural de los sistemas desarrollados durante las últimas décadas, actualizada con las tecnologías más recientes y con una larga serie de soluciones exclusivas de alta gama.",
     ppd_oriz_l3: "Bisagras en acero inoxidable macizo, perfectamente equilibradas y fabricadas internamente: las puertas del horno resisten un uso intenso y prolongado sin ceder.",
@@ -20908,11 +21417,13 @@ window.PROD_3D = {
   'NAUTA':        'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/BOM9T4JeIyqUgiM',
   'NAUTICA':      'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/g45oXqZOmnqUKzv',
   'NOBILIS':      'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/0iWlNloKY31FZw3',
+  'ORIZZONTE':    'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/AktPCi5STF06HZv',
   'RAFFAELLO':    'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/ZC1PMy2zebEo363',
   'ROMA':         'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/WyHDyZyY5RC8ZG5',
   'TINTORETTO':   [{k:'v3d_var1', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/6ftwnqeNWjtJjqB'}, {k:'v3d_var2', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/XJhIymbe4Xj4ZDU'}],
   'TIRRENO':      'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/OLiEFinPwunG3KZ',
   'TIZIANO':      'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/H0zjohRWDF1Gwu9',
+  'TRE':          'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/iuYYmpkBGU8tJe5',
   'UNO':          'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/U2w7X4JlMnxMDGP',
   'VENTOTENE':    [{k:'v3d_std', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/BZZyypvAgXs9xiG'}, {k:'v3d_builtin', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/XFEB3ADWXWv3Qwo'}],
   'VENTUS':       'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/IfqHfFCTSRbj0GQ',
@@ -22115,6 +22626,217 @@ body.bcon #catpage{ padding-top:var(--bh); }
   .bc-d{ min-width:210px; max-height:50vh; }
   .cp-electric-hero{ height:calc(100svh - var(--hh) - var(--bh)); }
 }
+
+/* ═══ CONTROLLO DIMENSIONE TESTO ═══ */
+:root{ --ts: 1; }
+
+/* ── Il pulsante · ricalca esattamente .hsr (la lente) per non stonare ── */
+.htx{
+  width:38px; height:38px;
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:none; padding:0; cursor:pointer;
+  color:rgba(248,246,241,.9);
+  transition:color .3s, transform .3s cubic-bezier(.23,1,.32,1);
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));
+  font-family:"Cormorant Garamond",serif; font-weight:500;
+  font-size:20px; line-height:1; letter-spacing:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.htx:hover{ color:var(--gl); transform:scale(1.08); }
+/* Quando l'ingrandimento è attivo il pulsante resta dorato: è l'unico
+   segnale che lo stato non è quello di partenza. Niente bordi né badge. */
+.htx[data-ts="2"], .htx[data-ts="3"]{ color:var(--gl); }
+/* Il segno e' due A di corpo diverso, allineate sulla linea di base: e' la
+   convenzione tipografica per la dimensione del testo, si capisce senza
+   leggere nulla e non ha bisogno di simboli matematici.
+   ⚠️ NIENTE "+" e "++": erano segni da calcolatrice su un sito che usa il
+   Cormorant. Il livello si legge dal colore e dal corpo della A grande. */
+.htx{ gap:1px; align-items:baseline; }
+.htx-s{ font-size:.62em; opacity:.75; transition:font-size .3s, opacity .3s; }
+.htx-l{ font-size:1em; transition:font-size .3s; }
+.htx[data-ts="2"] .htx-l{ font-size:1.12em; }
+.htx[data-ts="3"] .htx-l{ font-size:1.26em; }
+.htx[data-ts="3"] .htx-s{ opacity:1; }
+/* Mobile: header già affollato (logo + 5 lingue + 3 icone). Il pulsante
+   testo è più stretto delle icone perché non ha bisogno di area quadrata. */
+@media(max-width:480px){
+  .htx{ width:24px; height:30px; font-size:16px; }
+}
+
+/* ── La scala vera e propria ──
+   Elenco volutamente ESPLICITO: si scala ciò che si legge, non tutto.
+   Aggiungere qui eventuali classi di prosa nuove. */
+body.ts-on p,
+body.ts-on li,
+body.ts-on blockquote,
+body.ts-on .it-desc,
+body.ts-on .ef-ch-body,
+body.ts-on .ef-body,
+body.ts-on .ef-hero-lead,
+body.ts-on .rv-text,
+body.ts-on .ab-section-body,
+body.ts-on .ab-hd-feature-text,
+body.ts-on .cat-intro-lead,
+body.ts-on .cat-intro-text,
+body.ts-on .cat-body,
+body.ts-on .cp-es-block-body,
+body.ts-on .mx-acc-txt,
+body.ts-on .slr-para,
+body.ts-on .slr-mag-p,
+body.ts-on .slr-mag-body,
+body.ts-on .sp-intro-lead,
+body.ts-on .sp-body,
+body.ts-on .ppd-body,
+body.ts-on .pp-body,
+body.ts-on .ocinfo-body,
+body.ts-on .ncoll-body,
+body.ts-on .nt-body,
+body.ts-on .ct-body,
+body.ts-on .ct-dist-lead,
+body.ts-on .ckb-text{
+  zoom: var(--ts);
+}
+
+/* ── Zone franche ──
+   Header, menu, ticker e didascalie minute restano com'erano: sono
+   arredo fisso, ingrandirli sfonderebbe i layout. */
+body.ts-on header p,
+body.ts-on header li,
+body.ts-on #np p,
+body.ts-on #np li,
+body.ts-on .tbr p,
+body.ts-on footer li,
+body.ts-on .pp-draw-cap,
+body.ts-on .pp-pdf-viewer-label,
+body.ts-on .ts-skip,
+body.ts-on .ts-skip p,
+body.ts-on .ts-skip li{
+  zoom: 1;
+}
+
+/* ═══ RICHIAMO SULLA DIMENSIONE DEL TESTO · solo telefono ═══
+   Compare 10 secondi dopo l'apertura, UNA VOLTA SOLA per dispositivo, e solo
+   a chi non ha gia' scelto una dimensione.
+   ⚠️ Sta SOTTO l'intestazione (top = --hh + --bh), non sopra: cosi' non copre
+   ne' il logo ne' le lingue ne' il pulsante a cui si riferisce, che deve
+   restare visibile mentre la freccetta lo indica.
+   ⚠️ z-index 950: sopra le pagine modali (940) perche' deve comparire anche
+   mentre se ne sta guardando una, ma sotto la finestra distributori (960) e
+   la galleria a schermo intero (9500), che il visitatore apre di proposito. */
+#tspop{
+  position:fixed; z-index:950;
+  top:calc(var(--hh) + var(--bh) + 10px);
+  left:12px; right:12px;
+  background:rgba(14,14,14,.97);
+  border:1px solid rgba(184,150,90,.4);
+  padding:16px 16px 14px;
+  opacity:0; transform:translateY(-8px);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1);
+  pointer-events:none;
+}
+#tspop.on{ opacity:1; transform:translateY(0); pointer-events:auto; }
+/* La freccetta punta in alto a destra, dove sta il pulsante nell'intestazione. */
+#tspop::before{
+  content:''; position:absolute; top:-7px; right:52px;
+  width:12px; height:12px;
+  background:rgba(14,14,14,.97);
+  border-left:1px solid rgba(184,150,90,.4);
+  border-top:1px solid rgba(184,150,90,.4);
+  transform:rotate(45deg);
+}
+.tsp-x{
+  position:absolute; top:6px; right:8px;
+  width:30px; height:30px; padding:0;
+  background:none; border:none; cursor:pointer;
+  color:rgba(248,246,241,.45);
+  font-family:'Outfit',sans-serif; font-size:19px; line-height:1;
+}
+.tsp-txt{
+  margin:0 34px 12px 0;
+  font-family:'Outfit',sans-serif; font-size:13px; font-weight:300; line-height:1.55;
+  color:rgba(248,246,241,.9);
+}
+.tsp-row{ display:flex; gap:8px; align-items:stretch; }
+.tsp-b{
+  flex:1; padding:9px 4px 10px;
+  background:none; border:1px solid rgba(248,246,241,.22);
+  color:rgba(248,246,241,.85); cursor:pointer;
+  font-family:'Cormorant Garamond',serif; font-weight:500; line-height:1;
+  transition:border-color .3s, color .3s;
+}
+.tsp-b[data-lv="0"]{ font-size:15px; }
+.tsp-b[data-lv="1"]{ font-size:19px; }
+.tsp-b[data-lv="2"]{ font-size:24px; }
+.tsp-b.sel{ border-color:#b8965a; color:#b8965a; }
+.tsp-hint{
+  margin:11px 0 0;
+  font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:300;
+  letter-spacing:.06em; line-height:1.5;
+  color:rgba(184,150,90,.85);
+}
+/* Mentre il richiamo e' aperto il pulsante nell'intestazione respira: cambia
+   SOLO opacita' e colore, nessuna dimensione (trappola 3.12). */
+@keyframes tsPulse{ 0%,100%{opacity:1} 50%{opacity:.42} }
+/* La pulsazione vale solo per la comparsa AUTOMATICA: se e' il visitatore ad
+   aprire il pannello sa gia' dov'e' il pulsante, e vederlo lampeggiare sarebbe
+   un segnale senza destinatario. */
+body.tspop-auto .htx{ color:var(--gl); animation:tsPulse 1.7s ease-in-out infinite; }
+body.tspop-on .htx{ color:var(--gl); }
+@media(prefers-reduced-motion:reduce){
+  #tspop{ transition:none; }
+  body.tspop-auto .htx{ animation:none; }
+}
+/* Su desktop non esiste: li' il testo e' gia' grande e l'intestazione ampia. */
+/* Su schermo largo non e' una fascia da bordo a bordo ma un riquadro stretto
+   sotto l'intestazione, allineato a destra: resta vicino al pulsante che la
+   freccetta indica, e non attraversa tutta la pagina come un avviso di
+   sistema. */
+@media(min-width:769px){
+  #tspop{ left:auto; right:18px; width:340px; padding:18px 18px 16px; }
+  #tspop::before{ right:58px; }
+  .tsp-txt{ font-size:13.5px; }
+}
+
+
+/* ═══ CONTRASTO · TRE LIVELLI ═══
+   ⚠️ QUI NON C'E' UNA REGOLA DI COLORE, ED E' VOLUTO.
+   La versione precedente imponeva lo stesso colore chiaro a TUTTI i
+   paragrafi: dove il testo era scuro o dorato lo ribaltava, e in Chi siamo
+   il nero diventava crema. Un colore a tappeto non puo' funzionare su un
+   sito che alterna testo chiaro, testo dorato e testo scuro.
+   Il colore viene ora deciso dal codice ELEMENTO PER ELEMENTO, leggendo
+   quello che l'elemento ha gia' e spingendolo nella sua stessa direzione:
+   il chiaro diventa piu' chiaro, il dorato piu' luminoso, lo scuro piu'
+   scuro. Vedi la funzione hcApplica nello script isolato.
+   Qui restano solo le due cose che il codice non deve toccare a mano. */
+body.hc-2 p, body.hc-2 li, body.hc-2 blockquote{ font-weight:400 !important; }
+#tspop p, #tspop span{ font-weight:300 !important; }
+
+.tsp-lbl{
+  margin:13px 0 6px;
+  font-family:'Outfit',sans-serif; font-size:9.5px; font-weight:300;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(248,246,241,.42);
+}
+.tsp-c{
+  flex:1; display:flex; align-items:center; justify-content:center;
+  padding:11px 4px;
+  background:none; border:1px solid rgba(248,246,241,.22);
+  color:rgba(248,246,241,.85); cursor:pointer;
+  transition:border-color .3s, color .3s;
+}
+/* Il pallino e' mezzo pieno e mezzo vuoto: e' il contrasto disegnato, non una
+   spia accesa. Cresce di intensita' da sinistra a destra. */
+.tsp-hc-dot{
+  display:block; width:14px; height:14px; border-radius:50%;
+  border:1px solid currentColor;
+  background:linear-gradient(90deg, currentColor 0 50%, transparent 50% 100%);
+}
+.tsp-c[data-hc="0"] .tsp-hc-dot{ opacity:.45; }
+.tsp-c[data-hc="1"] .tsp-hc-dot{ opacity:.8; }
+.tsp-c[data-hc="2"] .tsp-hc-dot{ width:17px; height:17px; color:#fbeed0; }
+.tsp-c.sel{ border-color:#b8965a; color:#b8965a; }
+.tsp-c.sel .tsp-hc-dot{ opacity:1; }
 </style>
 <script>
 (function(){
@@ -22374,7 +23096,14 @@ body.bcon #catpage{ padding-top:var(--bh); }
      scroll. Era la causa per cui restava visibile troppo poco.
      Per disattivare tutto: AUTO = false. */
   var AUTO = true,      /* false per disattivare l'apertura automatica      */
-      RITARDO = 20000,  /* attesa prima dell'apertura                       */
+      /* ⚠️ 60 s, non 20: a 8 s compare il richiamo sulla dimensione del testo
+         (#tspop) e il pannello resta aperto finche' non lo si chiude: la
+         bustina gli sarebbe arrivata addosso. Due richiami ravvicinati non si
+         sommano, si annullano: il visitatore li scarta entrambi.
+         60 s e' anche un'attesa piu' onesta: a quel punto uno ha guardato
+         qualcosa e l'invito a scrivere ha un senso.
+         Se si cambia questo numero va ricontrollato il ritardo di #tspop. */
+      RITARDO = 60000,  /* attesa prima dell'apertura                       */
       DURATA  = 18000,  /* quanto resta aperto se nessuno lo tocca          */
       USCITA  = 900,    /* chiusura dopo che il cursore esce dal pannello   */
       chiuso = false, spegni = null;
@@ -22386,7 +23115,8 @@ body.bcon #catpage{ padding-top:var(--bh); }
        poter comparire, e' li' che serve di piu'. */
     return document.querySelector('#np.on')   !== null ||
            document.querySelector('#bd.on')   !== null ||
-           document.querySelector('#srch.on') !== null;
+           document.querySelector('#srch.on') !== null ||
+           document.body.classList.contains('tspop-on');   /* richiamo testo aperto */
   }
   function giaVisto(){
     try { return sessionStorage.getItem('hct_auto') === '1'; } catch(e){ return false; }
@@ -23085,6 +23815,376 @@ body.bcon #catpage{ padding-top:var(--bh); }
     init();
   }
 })();
+
+/* ═══ CONTROLLO DIMENSIONE TESTO · vedi il commento nel CSS ═══ */
 </script>
+<!-- ══════════════════════════════════════════════════════════════════
+     CONTROLLO DIMENSIONE TESTO  ·  BLOCCO DI PROVA · 2026-08-23
+     ------------------------------------------------------------------
+     Blocco COMPLETAMENTE ADDITIVO: non tocca una riga del markup né del
+     CSS esistente. Per rimuoverlo basta cancellare da questo commento
+     fino al commento di chiusura in fondo. Nessuna libreria esterna.
+
+     COME FUNZIONA
+     Un solo pulsante nell'header, accanto alla lente, che gira su tre
+     stati: A (100%) → A+ (112%) → A++ (125%) → A. La scelta si salva in
+     localStorage, quindi resta valida cambiando pagina e riaprendo il
+     sito.
+
+     PERCHÉ `zoom` E NON `font-size`
+     I corpi del sito sono in px dentro regole specifiche: cambiare il
+     font-size di un contenitore NON si propaga ai figli in px. `zoom`
+     invece scala l'elemento e tutta la sua discendenza, px compresi, e
+     (a differenza di `transform:scale`) rientra nel flusso, quindi il
+     testo più grande spinge in basso quello che segue invece di
+     sovrapporsi. È standardizzato e supportato ovunque.
+
+     COSA VIENE SCALATO
+     Solo la PROSA: paragrafi, elenchi e i contenitori di testo lungo
+     elencati sotto. NON titoli, NON etichette, NON griglie, NON tabelle
+     specifiche, NON header e menu. Se un blocco non deve scalare, gli si
+     mette la classe `ts-skip` e il gioco è fatto.
+     ══════════════════════════════════════════════════════════════════ -->
+
+
+
+
+
+<script>
+/* ═══ DIMENSIONE DEL TESTO · SCRIPT ISOLATO ═══
+   ⚠️ Sta in un blocco PROPRIO e non in fondo a un altro: prima era appeso a
+   uno script di novecento righe, e un qualunque errore a runtime piu' in alto
+   avrebbe impedito al pulsante e al richiamo di comparire, senza che nulla
+   lo segnalasse. `node --check` verifica la sintassi, non l'esecuzione.
+   Questo blocco non dipende da nessun altro codice del sito. */
+/* Controllo dimensione testo · vedi commento sopra per il razionale. */
+(function(){
+  var SCALE = [1, 1.12, 1.25];
+  /* Etichette dal dizionario: l'aria-label e' l'unica cosa che un lettore di
+     schermo pronuncia, e lasciarla in inglese su un sito in cinque lingue
+     vanifica proprio l'accessibilita' che il pulsante vuole offrire. */
+  function etichetta(){
+    var k = ['ts_lbl_0','ts_lbl_1','ts_lbl_2'][idx];
+    var d = ['Text size: normal','Text size: large','Text size: extra large'][idx];
+    return (window.__t ? window.__t(k, d) : d);
+  }
+  var idx = 0, btn = null;
+
+  try{
+    var salvato = localStorage.getItem('mc_ts');
+    if(salvato !== null){
+      var n = parseInt(salvato, 10);
+      if(n >= 0 && n < SCALE.length) idx = n;
+    }
+  }catch(e){ /* navigazione privata: si parte da 100% e amen */ }
+
+  function applica(){
+    document.documentElement.style.setProperty('--ts', SCALE[idx]);
+    document.body.classList.toggle('ts-on', idx > 0);
+    if(btn){
+      btn.setAttribute('data-ts', String(idx + 1));
+          /* Il glifo non cambia: cambia il corpo della A grande, via CSS. */
+    if(!btn.firstChild){ btn.innerHTML = '<span class="htx-s">A</span><span class="htx-l">A</span>'; }
+      btn.setAttribute('aria-label', etichetta());
+      btn.setAttribute('title', etichetta());
+    }
+    try{ localStorage.setItem('mc_ts', String(idx)); }catch(e){}
+  }
+  /* Via diretta per il pannello: imposta il livello senza passare per il
+     pulsante. ⚠️ Prima il pannello simulava clic sul pulsante; ora che il
+     pulsante APRE il pannello quella strada si morderebbe la coda. */
+  window.__tsLivello = function(n){
+    if(n < 0 || n >= SCALE.length) return;
+    idx = n; applica();
+  };
+
+  function init(){
+    var destra = document.querySelector('.hdr-right');
+    if(!destra) return;                    /* header assente: si esce in silenzio */
+    if(document.querySelector('.htx')) return;  /* già inserito */
+
+    btn = document.createElement('button');
+    btn.className = 'htx';
+    btn.type = 'button';
+    /* Prima dell'hamburger, che deve restare l'ultimo elemento a destra. */
+    var hbg = document.getElementById('hbg');
+    if(hbg) destra.insertBefore(btn, hbg); else destra.appendChild(btn);
+
+    /* ⚠️ Il pulsante APRE IL PANNELLO, non cicla piu' le dimensioni.
+       Ciclando, il contrasto restava raggiungibile solo dal richiamo
+       automatico, che compare una volta sola: chi lo chiudeva senza provarlo
+       non lo ritrovava piu'. Un comando solo, sempre a portata, con dentro
+       tutte e due le regolazioni. */
+    btn.addEventListener('click', function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof window.tsPopApri === 'function') window.tsPopApri();
+      else { idx = (idx + 1) % SCALE.length; applica(); }   /* rete di sicurezza */
+    });
+    btn.setAttribute('aria-haspopup','dialog');
+    btn.setAttribute('aria-expanded','false');
+
+    applica();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
+/* ═══ RICHIAMO SULLA DIMENSIONE DEL TESTO ═══
+   Solo telefono, 10 secondi dopo l'apertura, UNA VOLTA SOLA per dispositivo.
+   ⚠️ Non compare a chi ha gia' scelto una dimensione: sarebbe un consiglio
+   dato a chi l'ha gia' seguito.
+   ⚠️ Il timbro si scrive all'APERTURA, non alla chiusura: se il visitatore
+   se ne va senza toccarlo, il richiamo ha comunque fatto il suo lavoro e non
+   deve ricomparire alla visita successiva.
+   ⚠️ La larghezza si legge con matchMedia e NON con hover:hover, che sui
+   telefoni mente (trappola 3.7). */
+(function(){
+  /* Il timbro porta un numero di versione: quando il pannello cambia in modo
+     sostanziale si azzera da solo e torna a mostrarsi una volta.
+     ⚠️ Si azzera SOLO il timbro, mai la dimensione o il contrasto scelti: le
+     preferenze di un visitatore non si buttano via per un aggiornamento. */
+  /* ⚠️ DA ALZARE A OGNI MODIFICA SOSTANZIALE DEL PANNELLO.
+     Chi l'ha gia' visto non lo rivedrebbe mai piu', e non scoprirebbe le
+     regolazioni aggiunte dopo. Storia dei numeri:
+       1 = solo dimensione del testo
+       2 = aggiunto il contrasto, interruttore acceso/spento
+       3 = contrasto a tre livelli con tinta crema e carattere piu' spesso */
+  var VERSIONE = '3';
+  /* ⚠️⚠️ PRIMA DI PUBBLICARE METTERE A false ⚠️⚠️
+     Con true il pannello compare a OGNI caricamento, ignorando il timbro
+     «gia' visto». Serve solo alle prove: senza, dopo la prima comparsa non
+     torna piu' e sembra rotto quando invece funziona.
+     Lasciandolo a true in produzione, ogni visitatore se lo ritroverebbe
+     addosso a ogni pagina. */
+  var MOSTRA_SEMPRE = false;
+  var VISTO = 'mc_ts_pop';
+  try{
+    if(localStorage.getItem('mc_ts_ver') !== VERSIONE){
+      localStorage.removeItem(VISTO);
+      localStorage.setItem('mc_ts_ver', VERSIONE);
+    }
+  }catch(e){}
+  var el = null, timer = null;
+
+  /* Interruttore di collaudo: con ?ts=1 nell'indirizzo il richiamo compare
+     comunque, anche da computer e anche se e' gia' stato visto. Serve a
+     provarlo senza cercare un telefono e senza aprire una scheda in incognito
+     nuova ogni volta. In uso normale non cambia nulla. */
+  var FORZA = false;
+  try{ FORZA = /[?&]ts=1(&|$)/.test(location.search); }catch(e){}
+
+  /* Il richiamo vale su TUTTI gli schermi: la vista non cala solo sul
+     telefono, e un cliente di sessant'anni davanti al computer ha lo stesso
+     bisogno. Su schermo largo cambia solo la forma, non la sostanza. */
+  function mobile(){ return true; }
+  function livello(){
+    try{ return parseInt(localStorage.getItem('mc_ts') || '0', 10) || 0; }
+    catch(e){ return 0; }
+  }
+  function segna(){ try{ localStorage.setItem(VISTO,'1'); }catch(e){} }
+
+  /* Contrasto accresciuto: interruttore indipendente dalla dimensione, con
+     memoria propria. Chi ha la vista stanca spesso vuole l'uno o l'altro, non
+     per forza entrambi. */
+  /* Contrasto a tre livelli, memoria propria e indipendente dalla dimensione:
+     chi ha la vista stanca spesso vuole l'uno o l'altro, non per forza
+     entrambi. */
+  var HC = 'mc_hc';
+  /* ⚠️ NIENTE PIU' ELENCO DI CLASSI. Elencandole, ogni testo non previsto
+     restava fuori e il contrasto sembrava funzionare a macchia di leopardo.
+     Ora si prende OGNI elemento che contiene testo visibile, escluso solo
+     l'arredo fisso: intestazione, menu, ticker e il pannello stesso, che
+     ingrandirli o ricolorarli sfonderebbe i layout. */
+  var FUORI = 'header, #np, .tbr, #tspop, script, style, svg, noscript';
+  var toccati = [];
+
+  /* Vero solo se l'elemento ha testo PROPRIO, non ereditato dai figli: cosi'
+     si colora chi il testo lo mostra davvero, e non anche i contenitori. */
+  function haTesto(el){
+    for(var i=0;i<el.childNodes.length;i++){
+      var n = el.childNodes[i];
+      if(n.nodeType === 3 && n.nodeValue && n.nodeValue.trim().length) return true;
+    }
+    return false;
+  }
+
+
+  function hcLivello(){
+    try{ var n = parseInt(localStorage.getItem(HC) || '0', 10); return (n>=0 && n<=2) ? n : 0; }
+    catch(e){ return 0; }
+  }
+  function rgb(c){
+    var m = /rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/.exec(c || '');
+    return m ? [ +m[1], +m[2], +m[3] ] : null;
+  }
+  function luce(v){ return (0.2126*v[0] + 0.7152*v[1] + 0.0722*v[2]) / 255; }
+
+  function ripulisci(){
+    for(var i=0;i<toccati.length;i++){
+      toccati[i].style.color = '';
+      toccati[i].style.opacity = '';
+    }
+    toccati = [];
+  }
+  /* Il colore si decide dal colore che l'elemento HA GIA', e lo si spinge
+     nella sua stessa direzione. Niente e' mai ribaltato. */
+  function hcApplica(n){
+    var b = document.body;
+    b.classList.toggle('hc-1', n === 1);
+    b.classList.toggle('hc-2', n === 2);
+    try{ localStorage.setItem(HC, String(n)); }catch(e){}
+    ripulisci();
+    if(!n) return;
+    var nodi;
+    try{ nodi = document.body.querySelectorAll('*'); }catch(e){ return; }
+    for(var i=0;i<nodi.length;i++){
+      var el = nodi[i];
+      if(!haTesto(el)) continue;
+      if(el.closest && el.closest(FUORI)) continue;
+      var c;
+      try{ c = getComputedStyle(el).color; }catch(e){ continue; }
+      var v = rgb(c); if(!v) continue;
+      var L = luce(v);
+      var dorato = (v[0] > v[2] + 24) && L > .28 && L < .82;   /* oro: rosso > blu */
+      var col;
+      if(dorato){
+        col = (n === 2) ? '#f0cf94' : '#d4b07a';               /* oro piu' luminoso */
+      } else if(L >= .5){
+        col = (n === 2) ? '#fbeed0' : '#f8f6f1';               /* chiaro, poi crema */
+      } else {
+        col = (n === 2) ? '#000000' : '#141414';               /* scuro, piu' scuro */
+      }
+      el.style.color = col;
+      el.style.opacity = '1';
+      toccati.push(el);
+    }
+  }
+  /* Le pagine si aprono dopo: quando compaiono nuovi testi il contrasto va
+     riapplicato, altrimenti vale solo su cio' che c'era all'avvio. */
+  window.__hcRiapplica = function(){ var n = hcLivello(); if(n) hcApplica(n); };
+
+  window.tsHcScegli = function(n){
+    if(n < 0 || n > 2) return;
+    hcApplica(n);
+    sincronizza();
+  };
+  /* All'avvio si ripristina la scelta delle visite precedenti. */
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ hcApplica(hcLivello()); });
+  } else { hcApplica(hcLivello()); }
+
+  /* Le pagine interne si aprono dopo l'avvio: senza questo il contrasto
+     varrebbe solo sulla home. Si aggancia dove il sito segnala un'apertura. */
+  ['openEff','openOcean','openCustom','openSinks','openAcc','openAbout','openContact',
+   'openSpare','openCatalogues','goProd','openCat','openCatBySlug'].forEach(function(nome){
+    var f = window[nome];
+    if(typeof f !== 'function') return;
+    window[nome] = function(){
+      var r = f.apply(this, arguments);
+      setTimeout(window.__hcRiapplica, 60);
+      return r;
+    };
+  });
+
+  window.tsPopChiudi = function(){
+    if(!el) el = document.getElementById('tspop');
+    if(el) el.classList.remove('on');
+    document.body.classList.remove('tspop-on');
+    document.body.classList.remove('tspop-auto');
+    var b = document.querySelector('.htx');
+    if(b) b.setAttribute('aria-expanded','false');
+  };
+  /* Riusa il pulsante dell'intestazione: un solo punto che cambia lo stato,
+     altrimenti le due strade divergono alla prima modifica. */
+  window.tsPopScegli = function(n){
+    if(typeof window.__tsLivello === 'function') window.__tsLivello(n);
+    sincronizza();
+  };
+
+  /* Allinea il pannello a com'e' davvero il sito: si chiama all'apertura e
+     dopo ogni scelta, cosi' chi riapre trova selezionato cio' che ha gia'. */
+  function sincronizza(){
+    if(!el) el = document.getElementById('tspop');
+    if(!el) return;
+    var lv = livello();
+    var bb = el.querySelectorAll('.tsp-b');
+    for(var i=0;i<bb.length;i++){
+      bb[i].classList.toggle('sel', String(lv) === bb[i].getAttribute('data-lv'));
+    }
+    var hl = hcLivello();
+    var cc = el.querySelectorAll('.tsp-c');
+    for(var j=0;j<cc.length;j++){
+      cc[j].classList.toggle('sel', String(hl) === cc[j].getAttribute('data-hc'));
+    }
+  }
+
+  /* Apertura su richiesta dal pulsante dell'intestazione: ignora sia il
+     timbro «gia' visto» sia il livello corrente, perche' qui e' il visitatore
+     a chiederlo. */
+  window.tsPopApri = function(){
+    el = document.getElementById('tspop');
+    if(!el) return;
+    if(el.classList.contains('on')){ window.tsPopChiudi(); return; }
+    el.classList.add('on');
+    document.body.classList.add('tspop-on');
+    var b = document.querySelector('.htx');
+    if(b) b.setAttribute('aria-expanded','true');
+    sincronizza();
+  };
+
+  function mostra(){
+    el = document.getElementById('tspop');
+    /* ⚠️ NON si guarda piu' la dimensione gia' scelta. Prima chi aveva toccato
+       il pulsante non vedeva mai il pannello, e con esso non vedeva mai il
+       CONTRASTO, che e' una regolazione diversa e altrettanto utile.
+       L'unica cosa che lo sopprime e' averlo gia' visto. */
+    if(!el || !mobile()) return;
+    if(!FORZA && !MOSTRA_SEMPRE){ try{ if(localStorage.getItem(VISTO)) return; }catch(e){} }
+    /* ⚠️ NESSUN RIMANDO: il richiamo compare qualunque cosa il visitatore
+       stia facendo. La versione precedente aspettava se erano aperti una
+       pagina modale, la galleria, il menu o la bustina, e con un ritardo di
+       pochi secondi finiva per non comparire quasi mai.
+       Per restare visibile anche sopra le pagine interne il suo z-index e'
+       950: sopra i modali (940), sotto la finestra distributori (960) e la
+       galleria a schermo intero (9500). */
+    el.classList.add('on');
+    document.body.classList.add('tspop-on');
+    document.body.classList.add('tspop-auto');
+    segna();
+    sincronizza();
+  }
+
+  function avvia(){ timer = setTimeout(mostra, 8000); }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', avvia);
+  } else { avvia(); }
+})();
+</script>
+
+<!-- Richiamo sulla dimensione del testo · solo telefono, dopo 10s, una volta
+     sola. Markup statico e nascosto: costruirlo in JS avrebbe significato
+     ripetere le stringhe fuori dal dizionario. -->
+<div id="tspop" role="dialog" aria-live="polite" aria-labelledby="tsp-txt">
+  <button class="tsp-x" onclick="tsPopChiudi()" aria-label="Close">&times;</button>
+  <p class="tsp-txt" id="tsp-txt" data-i18n="ts_pop_txt">Is the text too small? You can enlarge it.</p>
+  <p class="tsp-lbl" data-i18n="ts_size">Text size</p>
+  <div class="tsp-row">
+    <button class="tsp-b" data-lv="0" onclick="tsPopScegli(0)">A</button>
+    <button class="tsp-b" data-lv="1" onclick="tsPopScegli(1)">A</button>
+    <button class="tsp-b" data-lv="2" onclick="tsPopScegli(2)">A</button>
+  </div>
+  <p class="tsp-lbl" data-i18n="ts_hc">Contrast</p>
+  <div class="tsp-row">
+    <button class="tsp-c" data-hc="0" onclick="tsHcScegli(0)"><span class="tsp-hc-dot" aria-hidden="true"></span></button>
+    <button class="tsp-c" data-hc="1" onclick="tsHcScegli(1)"><span class="tsp-hc-dot" aria-hidden="true"></span></button>
+    <button class="tsp-c" data-hc="2" onclick="tsHcScegli(2)"><span class="tsp-hc-dot" aria-hidden="true"></span></button>
+  </div>
+  <p class="tsp-hint" data-i18n="ts_pop_hint">You can reopen this panel at any time from the button in the header above.</p>
+</div>
 </body>
 </html>
