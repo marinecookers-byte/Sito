@@ -73,7 +73,10 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 }
 .lang-btn:hover{color:rgba(248,246,241,.7)}
 .lang-btn.active{color:rgba(184,150,90,.9)}
-.lang-btn.active::after{transform:scaleX(1)}
+/* Niente filo sotto la lingua scelta: basta il dorato. Il filetto resta
+   dichiarato (scaleX(0), invisibile) invece di essere cancellato, cosi' se
+   un domani lo si rivuole basta rimettere scaleX(1). */
+.lang-btn.active::after{transform:scaleX(0)}
 .lang-sep{
   width:1px;
   height:10px;
@@ -2638,10 +2641,10 @@ header.hide{transform:translateY(-100%);}
   /* Galleria prodotto su mobile: una sola colonna, foto grandi e in evidenza,
      meno spazio in alto così la foto non finisce troppo in basso. */
   .pp-section-header{margin-bottom:10px;padding-bottom:8px}
-  .pp-gallery-grid{grid-template-columns:1fr;gap:72px}
+  .pp-gallery-grid{grid-template-columns:1fr;gap:34px}
   /* Una foto per riga anche in galleria multipla. Serve la stessa specificita'
      della regola .pp-gallery-multi, altrimenti resta a due colonne. */
-  .pp-gallery-grid.pp-gallery-multi{grid-template-columns:1fr;gap:72px}
+  .pp-gallery-grid.pp-gallery-multi{grid-template-columns:1fr;gap:34px}
   .pp-gallery-grid.pp-gallery-multi .pp-gallery-item img{padding:10px}
   .pp-gallery-item img{aspect-ratio:4/3;padding:10px}
 
@@ -5009,7 +5012,10 @@ header.hide{transform:translateY(-100%);}
 .fl-btn::after{content:'';position:absolute;left:14px;right:14px;bottom:4px;height:1px;background:var(--go);transform:scaleX(0);transform-origin:left;transition:transform .35s cubic-bezier(.23,1,.32,1)}
 .fl-btn:hover{color:rgba(248,246,241,.8)}
 .fl-btn.active{color:var(--gl)}
-.fl-btn.active::after{transform:scaleX(1)}
+/* Come per le lingue: lo stato si dice col colore, mai con un filo sotto.
+   Dichiarato e spento (scaleX(0)) invece che cancellato, per poterlo
+   riaccendere in un attimo se un domani servisse. */
+.fl-btn.active::after{transform:scaleX(0)}
 .search-wrap{display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(184,150,90,.25);padding:6px 0;min-width:200px;transition:border-color .3s}
 .search-wrap:focus-within{border-color:var(--go)}
 .search-wrap svg{width:14px;height:14px;stroke:rgba(184,150,90,.6);flex-shrink:0}
@@ -6842,7 +6848,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
         <ul class="ef-list">
           <li data-i18n-html="eff_c3_l1"><strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.</li>
           <li data-i18n-html="eff_c3_l2"><strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.</li>
-          <li data-i18n-html="eff_c3_l3"><strong>Induction first (2015).</strong> The project was completed in 2015 and the line reached the market at the beginning of 2016: the very first cookers with tilting induction hobs for sailing and motor yachts.</li>
+          <li data-i18n-html="eff_c3_l3"><strong>Induction first (2015).</strong> The project was completed in 2015 and the line reached the market at the beginning of 2016: the very first gimballed induction cookers for sailing and motor yachts.</li>
         </ul>
       </div>
     </div>
@@ -6884,7 +6890,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     </div>
     <div class="ef-ms">
       <span class="ef-ms-num">2015</span>
-      <span class="ef-ms-label" data-i18n="eff_ms2">First tilting induction hobs for yachts</span>
+      <span class="ef-ms-label" data-i18n="eff_ms2">First gimballed induction cookers for yachts</span>
     </div>
     <div class="ef-ms">
       <span class="ef-ms-num">1 kW</span>
@@ -14344,7 +14350,7 @@ var DICT = {
     eff_c3_b1: "We don't just contain consumption: we maximise cooking performance to achieve the gastronomic results that made Italian cooking famous worldwide.",
     eff_c3_l1: "<strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.",
     eff_c3_l2: "<strong>Electric pioneers.</strong> We were the first company in the world in the marine sector to build a complete range of electric marine cookers.",
-    eff_c3_l3: "<strong>Induction first (2015).</strong> The project was completed in 2015 and the line reached the market at the beginning of 2016: the very first cookers with tilting induction hobs for sailing and motor yachts.",
+    eff_c3_l3: "<strong>Induction first (2015).</strong> The project was completed in 2015 and the line reached the market at the beginning of 2016: the very first gimballed induction cookers for sailing and motor yachts.",
     eff_c4_label: "Marine Induction",
     eff_c4_title: "Marine induction is not home induction",
     eff_c4_b1: "Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions, available in custom variants too.",
@@ -14356,7 +14362,7 @@ var DICT = {
     eff_c5_b1: "True energy efficiency is not limited to electronics: it extends to the very way food is prepared in demanding contexts. Our Research & Development department studied the culture of cooking away from home, going beyond mere technical performance.",
     eff_c5_b2: "We researched and refined a whole set of cooking techniques optimised for boats and off-grid vehicles, capable of drastically reducing the use of resources and energy during preparation. Being Italian, we took the research as far as the selection and combination of particular raw ingredients, chosen specifically to make thermal processes faster and more efficient. This union of gastronomic method and strategic ingredients cuts real consumption while elevating the final quality.",
     eff_ms1: "First in the world with a complete electric marine range",
-    eff_ms2: "First tilting induction hobs for yachts",
+    eff_ms2: "First gimballed induction cookers for yachts",
     eff_ms3: "An entire hob within one kilowatt",
     eff_quote: "A well-sized electrical system is an excellent starting point. Relying on those who design equipment that optimises energy, resists every stress and elevates the cooking method. That is the choice of professionals.",
     eff_cta: "Talk to our engineers",
@@ -15778,7 +15784,7 @@ var DICT = {
     eff_c3_b1: "Non ci limitiamo a contenere i consumi: massimizziamo la resa culinaria per ottenere quei risultati gastronomici che hanno reso celebre la cucina italiana nel mondo.",
     eff_c3_l1: "<strong>Sistemi a gas.</strong> I nostri modelli sono dotati di bruciatori ad alta efficienza realizzati in collaborazione con le primarie aziende della ristorazione professionale.",
     eff_c3_l2: "<strong>Pionieri dell'elettrico.</strong> Siamo stati la prima azienda al mondo nel settore nautico a realizzare una serie completa di cucine nautiche elettriche.",
-    eff_c3_l3: "<strong>Primato nell'induzione (2015).</strong> Il progetto è stato realizzato nel 2015 e la linea è arrivata sul mercato all'inizio del 2016: le primissime cucine con piani a induzione basculanti per imbarcazioni a vela e a motore.",
+    eff_c3_l3: "<strong>Primato nell'induzione (2015).</strong> Il progetto è stato realizzato nel 2015 e la linea è arrivata sul mercato all'inizio del 2016: le primissime cucine a induzione con sospensione cardanica per imbarcazioni a vela e a motore.",
     eff_c4_label: "Induzione Nautica",
     eff_c4_title: "L'induzione nautica non è quella di casa",
     eff_c4_b1: "Cucinare a induzione in mezzo all'oceano o nel deserto richiede accorgimenti specifici rispetto all'ambiente domestico. Forti di anni di esperienza e leadership, abbiamo stretto una partnership strategica con uno dei principali produttori europei di componenti per l'induzione, sviluppando soluzioni flessibili e uniche, realizzabili anche in varianti custom.",
@@ -15790,7 +15796,7 @@ var DICT = {
     eff_c5_b1: "La vera efficienza energetica non si limita all'elettronica, ma si estende al modo stesso in cui si affronta la preparazione del cibo in contesti sfidanti. Il nostro reparto di Ricerca e Sviluppo ha approfondito la cultura della cucina fuori casa, andando oltre la semplice performance tecnica.",
     eff_c5_b2: "Abbiamo studiato e messo a punto tutta una serie di tecniche di cottura ottimizzate per la barca e i veicoli off-grid, capaci di ridurre drasticamente l'uso di risorse ed energia durante la preparazione. Essendo italiani, la nostra ricerca si è spinta fino alla selezione e combinazione di particolari materie prime, individuate appositamente per efficientare e accelerare i processi termici. Questo connubio tra metodo gastronomico e ingredienti strategici taglia i consumi reali esaltando la qualità finale.",
     eff_ms1: "Primi al mondo con una gamma elettrica nautica completa",
-    eff_ms2: "Primi piani a induzione basculanti per yacht",
+    eff_ms2: "Prime cucine a induzione cardanica per yacht",
     eff_ms3: "Un intero piano cottura entro un kilowatt",
     eff_quote: "Avere a bordo un impianto elettrico ben dimensionato è un ottimo punto di partenza. Affidarsi a chi progetta strumenti capaci di ottimizzare l'energia, resistere a ogni sollecitazione e valorizzare il metodo di cottura è la scelta dei professionisti.",
     eff_cta: "Parla con i nostri tecnici",
@@ -17206,7 +17212,7 @@ var DICT = {
     eff_c3_b1: "Nous ne nous contentons pas de contenir la consommation : nous maximisons les performances de cuisson pour obtenir ces résultats gastronomiques qui ont rendu la cuisine italienne célèbre dans le monde.",
     eff_c3_l1: "<strong>Systèmes à gaz.</strong> Nos modèles sont dotés de brûleurs à haute efficacité développés avec les grands noms de la restauration professionnelle.",
     eff_c3_l2: "<strong>Pionniers de l'électrique.</strong> Nous avons été la première entreprise au monde du secteur nautique à réaliser une gamme complète de cuisinières marines électriques.",
-    eff_c3_l3: "<strong>Première dans l'induction (2015).</strong> Le projet a été réalisé en 2015 et la ligne est arrivée sur le marché au début de 2016 : les toutes premières cuisinières à plaques à induction basculantes pour voiliers et bateaux à moteur.",
+    eff_c3_l3: "<strong>Première dans l'induction (2015).</strong> Le projet a été réalisé en 2015 et la ligne est arrivée sur le marché au début de 2016 : les toutes premières cuisinières à induction à suspension cardanique pour voiliers et bateaux à moteur.",
     eff_c4_label: "Induction Marine",
     eff_c4_title: "L'induction marine n'est pas celle de la maison",
     eff_c4_b1: "Cuisiner à l'induction en plein océan ou dans le désert exige des précautions spécifiques par rapport à un environnement domestique. Forts d'années d'expérience et de leadership, nous avons noué un partenariat stratégique avec l'un des principaux fabricants européens de composants d'induction, développant des solutions flexibles et uniques, réalisables aussi en variantes sur mesure.",
@@ -17218,7 +17224,7 @@ var DICT = {
     eff_c5_b1: "La véritable efficacité énergétique ne se limite pas à l'électronique : elle s'étend à la manière même d'aborder la préparation des aliments dans des contextes exigeants. Notre département Recherche & Développement a approfondi la culture de la cuisine hors du foyer, allant au-delà de la simple performance technique.",
     eff_c5_b2: "Nous avons étudié et mis au point tout un ensemble de techniques de cuisson optimisées pour le bateau et les véhicules off-grid, capables de réduire drastiquement l'usage des ressources et de l'énergie pendant la préparation. Étant italiens, nous avons poussé la recherche jusqu'à la sélection et la combinaison de matières premières particulières, choisies spécifiquement pour rendre les processus thermiques plus rapides et efficaces. Cette union entre méthode gastronomique et ingrédients stratégiques réduit la consommation réelle tout en rehaussant la qualité finale.",
     eff_ms1: "Premiers au monde avec une gamme marine électrique complète",
-    eff_ms2: "Premières plaques à induction basculantes pour yachts",
+    eff_ms2: "Premières cuisinières à induction cardanique pour yachts",
     eff_ms3: "Une plaque entière en un seul kilowatt",
     eff_quote: "Disposer à bord d'une installation électrique bien dimensionnée est un excellent point de départ. S'en remettre à ceux qui conçoivent des équipements capables d'optimiser l'énergie, de résister à toute sollicitation et de valoriser la méthode de cuisson, c'est le choix des professionnels.",
     eff_cta: "Parlez à nos ingénieurs",
@@ -18634,7 +18640,7 @@ var DICT = {
     eff_c3_b1: "Wir begrenzen nicht nur den Verbrauch: Wir maximieren die Kochleistung, um jene gastronomischen Ergebnisse zu erzielen, die die italienische Küche weltberühmt gemacht haben.",
     eff_c3_l1: "<strong>Gassysteme.</strong> Unsere Modelle verfügen über Hochleistungsbrenner, die gemeinsam mit führenden Namen der professionellen Gastronomie entwickelt wurden.",
     eff_c3_l2: "<strong>Elektro-Pioniere.</strong> Wir waren das weltweit erste Unternehmen im Marinesektor, das eine komplette Serie elektrischer Bordküchen realisierte.",
-    eff_c3_l3: "<strong>Erste bei der Induktion (2015).</strong> Das Projekt entstand 2015, und die Linie kam Anfang 2016 auf den Markt: die allerersten Kocher mit schwenkbaren Induktionskochfeldern für Segel- und Motoryachten.",
+    eff_c3_l3: "<strong>Erste bei der Induktion (2015).</strong> Das Projekt entstand 2015, und die Linie kam Anfang 2016 auf den Markt: die allerersten Herde mit kardanisch aufgehängter Induktion für Segel- und Motoryachten.",
     eff_c4_label: "Marine-Induktion",
     eff_c4_title: "Marine-Induktion ist nicht die aus dem Haushalt",
     eff_c4_b1: "Das Kochen mit Induktion mitten im Ozean oder in der Wüste erfordert besondere Vorkehrungen gegenüber dem häuslichen Umfeld. Gestützt auf jahrelange Erfahrung und Führung haben wir eine strategische Partnerschaft mit einem der führenden europäischen Hersteller von Induktionskomponenten geschlossen und flexible, einzigartige Lösungen entwickelt, auch in Sonderanfertigungen.",
@@ -18646,7 +18652,7 @@ var DICT = {
     eff_c5_b1: "Wahre Energieeffizienz beschränkt sich nicht auf die Elektronik, sondern erstreckt sich auf die Art und Weise, wie die Zubereitung von Speisen in anspruchsvollen Kontexten angegangen wird. Unsere Forschungs- und Entwicklungsabteilung hat die Kultur des Kochens außer Haus vertieft und ist über die bloße technische Leistung hinausgegangen.",
     eff_c5_b2: "Wir haben eine ganze Reihe von Kochtechniken erforscht und verfeinert, die für Boote und Off-grid-Fahrzeuge optimiert sind und den Einsatz von Ressourcen und Energie bei der Zubereitung drastisch senken. Als Italiener haben wir die Forschung bis zur Auswahl und Kombination bestimmter Rohstoffe vorangetrieben, die gezielt ausgewählt wurden, um thermische Prozesse schneller und effizienter zu machen. Diese Verbindung aus gastronomischer Methode und strategischen Zutaten senkt den realen Verbrauch und hebt zugleich die Endqualität.",
     eff_ms1: "Weltweit Erste mit einer kompletten elektrischen Marine-Reihe",
-    eff_ms2: "Erste schwenkbare Induktionskochfelder für Yachten",
+    eff_ms2: "Erste Herde mit kardanischer Induktion für Yachten",
     eff_ms3: "Ein ganzes Kochfeld innerhalb eines Kilowatts",
     eff_quote: "Eine gut dimensionierte elektrische Anlage an Bord ist ein hervorragender Ausgangspunkt. Sich auf jene zu verlassen, die Geräte entwickeln, die Energie optimieren, jeder Belastung standhalten und die Kochmethode aufwerten. Das ist die Wahl der Profis.",
     eff_cta: "Sprechen Sie mit unseren Technikern",
@@ -20062,7 +20068,7 @@ var DICT = {
     eff_c3_b1: "No nos limitamos a contener el consumo: maximizamos el rendimiento de cocción para obtener esos resultados gastronómicos que han hecho célebre la cocina italiana en el mundo.",
     eff_c3_l1: "<strong>Sistemas de gas.</strong> Nuestros modelos cuentan con quemadores de alta eficiencia desarrollados junto a las principales empresas de la restauración profesional.",
     eff_c3_l2: "<strong>Pioneros de lo eléctrico.</strong> Fuimos la primera empresa del mundo en el sector náutico en realizar una serie completa de cocinas náuticas eléctricas.",
-    eff_c3_l3: "<strong>Primacía en la inducción (2015).</strong> El proyecto se realizó en 2015 y la línea llegó al mercado a principios de 2016: las primerísimas cocinas con placas de inducción basculantes para embarcaciones de vela y de motor.",
+    eff_c3_l3: "<strong>Primacía en la inducción (2015).</strong> El proyecto se realizó en 2015 y la línea llegó al mercado a principios de 2016: las primerísimas cocinas de inducción con suspensión cardánica para embarcaciones de vela y de motor.",
     eff_c4_label: "Inducción Náutica",
     eff_c4_title: "La inducción náutica no es la de casa",
     eff_c4_b1: "Cocinar con inducción en medio del océano o en el desierto exige precauciones específicas respecto al entorno doméstico. Con años de experiencia y liderazgo, hemos establecido una alianza estratégica con uno de los principales fabricantes europeos de componentes para inducción, desarrollando soluciones flexibles y únicas, realizables también en variantes a medida.",
@@ -20074,7 +20080,7 @@ var DICT = {
     eff_c5_b1: "La verdadera eficiencia energética no se limita a la electrónica, sino que se extiende al modo mismo de afrontar la preparación de los alimentos en contextos exigentes. Nuestro departamento de Investigación y Desarrollo ha profundizado en la cultura de la cocina fuera de casa, yendo más allá de la simple prestación técnica.",
     eff_c5_b2: "Hemos estudiado y puesto a punto toda una serie de técnicas de cocción optimizadas para el barco y los vehículos off-grid, capaces de reducir drásticamente el uso de recursos y energía durante la preparación. Al ser italianos, hemos llevado la investigación hasta la selección y combinación de determinadas materias primas, elegidas específicamente para hacer más rápidos y eficientes los procesos térmicos. Esta unión entre método gastronómico e ingredientes estratégicos recorta el consumo real y realza al mismo tiempo la calidad final.",
     eff_ms1: "Primeros en el mundo con una gama eléctrica náutica completa",
-    eff_ms2: "Primeras placas de inducción basculantes para yates",
+    eff_ms2: "Primeras cocinas de inducción cardánica para yates",
     eff_ms3: "Una placa entera dentro de un kilovatio",
     eff_quote: "Tener a bordo una instalación eléctrica bien dimensionada es un excelente punto de partida. Confiar en quien diseña equipos capaces de optimizar la energía, resistir cualquier solicitación y valorizar el método de cocción es la elección de los profesionales.",
     eff_cta: "Habla con nuestros técnicos",
@@ -21423,6 +21429,8 @@ window.PROD_3D = {
   'TINTORETTO':   [{k:'v3d_var1', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/6ftwnqeNWjtJjqB'}, {k:'v3d_var2', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/XJhIymbe4Xj4ZDU'}],
   'TIRRENO':      'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/OLiEFinPwunG3KZ',
   'TIZIANO':      'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/H0zjohRWDF1Gwu9',
+  /* Stesso modello di ORIZZONTE: stessa struttura, stesso ingombro. */
+  'TOLOMEO':      'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/AktPCi5STF06HZv',
   'TRE':          'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/iuYYmpkBGU8tJe5',
   'UNO':          'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/U2w7X4JlMnxMDGP',
   'VENTOTENE':    [{k:'v3d_std', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/BZZyypvAgXs9xiG'}, {k:'v3d_builtin', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/XFEB3ADWXWv3Qwo'}],
@@ -22744,13 +22752,20 @@ body.ts-on .ts-skip li{
   border-top:1px solid rgba(184,150,90,.4);
   transform:rotate(45deg);
 }
+/* La X e' il solo modo di chiudere il pannello, e il pannello nasce per chi
+   fatica a vedere: era grigia e minuta, cioe' proprio quello che quel
+   visitatore non riesce a trovare. Dorata e piu' grande, con un'area di tocco
+   di 40px (il minimo perche' un dito la prenda senza sbagliare). */
 .tsp-x{
-  position:absolute; top:6px; right:8px;
-  width:30px; height:30px; padding:0;
+  position:absolute; top:4px; right:5px;
+  width:40px; height:40px; padding:0;
+  display:flex; align-items:center; justify-content:center;
   background:none; border:none; cursor:pointer;
-  color:rgba(248,246,241,.45);
-  font-family:'Outfit',sans-serif; font-size:19px; line-height:1;
+  color:#b8965a;
+  font-family:'Outfit',sans-serif; font-size:27px; font-weight:300; line-height:1;
+  transition:color .3s;
 }
+@media(hover:hover){ .tsp-x:hover{ color:#d4b07a; } }
 .tsp-txt{
   margin:0 34px 12px 0;
   font-family:'Outfit',sans-serif; font-size:13px; font-weight:300; line-height:1.55;
@@ -22837,6 +22852,97 @@ body.hc-2 p, body.hc-2 li, body.hc-2 blockquote{ font-weight:400 !important; }
 .tsp-c[data-hc="2"] .tsp-hc-dot{ width:17px; height:17px; color:#fbeed0; }
 .tsp-c.sel{ border-color:#b8965a; color:#b8965a; }
 .tsp-c.sel .tsp-hc-dot{ opacity:1; }
+
+
+/* ═══ TESTO INGRANDITO · l'intestazione non deve piu' essere trasparente ═══
+   In cima alla pagina l'intestazione e' opaca solo al 35%: il testo che le
+   scorre sotto si vede attraverso, e con i caratteri ingranditi il
+   sovrapporsi delle due cose rende illeggibili entrambe. Con l'ingrandimento
+   attivo diventa piena da subito, come gia' fa scorrendo (classe .sc).
+   ⚠️ Non si tocca il caso normale: la trasparenza in cima e' una scelta di
+   stile e resta per chi non ha ingrandito nulla. */
+body.ts-on header{
+  background:rgba(10,10,10,.96) !important;
+  border-bottom:1px solid rgba(184,150,90,.15);
+}
+/* I salti agli ancoraggi devono fermarsi SOTTO l'intestazione, altrimenti la
+   prima riga finisce nascosta: con il testo grande sono due o tre righe. */
+body.ts-on{ scroll-padding-top:calc(var(--hh) + 16px); }
+/* 🔴 LA HERO HA ALTEZZA FISSA (100vh desktop, 64vh telefono) con il contenuto
+   ancorato in basso e `overflow:hidden`. Il testo che cresce spinge verso
+   l'ALTO: finisce sotto l'intestazione e viene tagliato. Era il difetto piu'
+   grave dell'ingrandimento, e si vedeva solo al terzo livello.
+   Con l'ingrandimento attivo la hero smette di avere un'altezza imposta e
+   cresce verso il basso: il contenuto resta tutto dentro e nulla passa sotto
+   l'intestazione.
+   ⚠️ Il video di fondo e' in posizione assoluta su tutti i lati, quindi
+   continua a coprire la hero qualunque altezza prenda. */
+body.ts-on .hero{
+  height:auto !important;
+  max-height:none !important;
+  min-height:100vh;
+  padding-top:calc(var(--hh) + 28px);
+}
+@media(max-width:768px){
+  body.ts-on .hero{ min-height:64vh; padding-top:calc(var(--hh) + 34px); }
+}
+/* Stessa cura per la testata delle pagine interne. */
+body.ts-on .mx-hero{ min-height:0; height:auto; }
+body.ts-on .mx-hero, body.ts-on .hero{ scroll-margin-top:calc(var(--hh) + 16px); }
+
+
+/* ═══ FASCIA DI NAVIGAZIONE E CONTRASTO ═══
+   🔴 La voce della pagina attuale si distingue SOLO per il colore: oro contro
+   bianco. Al contrasto 2 il bianco diventa crema e l'oro oro chiaro, due tinte
+   quasi identiche, e non si capisce piu' dove ci si trova.
+   La soluzione qui e' allontanare le due tinte invece di avvicinarle: le altre
+   voci vanno a BIANCO PIENO (neutro, senza traccia di giallo) e la voce attiva
+   al SENAPE, con un filo di corpo in piu'. Neutro contro giallo
+   saturo si distingue anche a vista stanca.
+   ⚠️ Niente sottolineatura: e' stata provata e scartata, appesantiva la
+   fascia. Se un domani non bastasse, prima di rimetterla si provi ad
+   accentuare ancora la differenza di tinta.
+   ⚠️ Servono !important: il colore lo scrive il codice negli stili in linea. */
+/* 🔴 LA FASCIA E' UN VELO, NON UN PANNELLO: se dietro passa una fotografia
+   chiara, l'oro della voce attiva finisce su fondo bianco e sparisce. Sul
+   telefono succede spesso, perche' le immagini occupano tutta la larghezza.
+   Con l'ingrandimento o il contrasto attivi diventa piena: a quel punto la
+   leggibilita' viene prima della trasparenza.
+   ⚠️ Resta SEMPRE SCURA, mai chiara: e' l'invariante della fascia. */
+body.ts-on #bcbar, body.hc-1 #bcbar, body.hc-2 #bcbar{
+  background:rgba(10,10,10,.97) !important;
+  backdrop-filter:none;
+}
+body.hc-1 #bcbar .bc-b, body.hc-2 #bcbar .bc-b{ color:#ffffff !important; }
+body.hc-1 #bcbar .bc-b-qui, body.hc-2 #bcbar .bc-b-qui,
+body.hc-1 #bcbar .bc-cur,   body.hc-2 #bcbar .bc-cur{
+  /* Senape, non oro chiaro: e' l'unica tinta che tiene su TUTTI E DUE i fondi.
+     L'oro chiaro (#e8bc63) si legge bene sul nero e sparisce sul bianco; il
+     senape ha luminosita' intermedia, quindi stacca sia dal chiaro sia dallo
+     scuro. Su un velo semitrasparente, dove non si sa cosa passera' dietro,
+     e' l'unica scelta prudente. */
+  color:#c9942f !important;
+  font-weight:500;
+  text-shadow:0 1px 3px rgba(0,0,0,.55);
+}
+body.hc-1 #bcbar .bc-sep, body.hc-2 #bcbar .bc-sep{ color:rgba(184,150,90,.9) !important; }
+
+
+/* ═══ FASCETTA DELLA SCHEDA PRODOTTO E CONTRASTO ═══
+   ⚠️ La scheda prodotto ha FONDO CHIARO: qui il testo va reso piu' SCURO, non
+   piu' chiaro. E' l'unico punto del sito dove il contrasto lavora al
+   contrario, ed e' la ragione per cui un colore imposto a tappeto non
+   funzionava.
+   La voce scelta resta senape: stacca dal grigio delle altre e dal bianco del
+   fondo. */
+body.hc-1 .pp-nav-btn, body.hc-2 .pp-nav-btn{ color:rgba(0,0,0,.62); }
+body.hc-2 .pp-nav-btn{ color:rgba(0,0,0,.78); font-weight:400; }
+body.hc-1 .pp-nav-btn.active, body.hc-2 .pp-nav-btn.active,
+body.hc-1 .pp-mob-btn.active, body.hc-2 .pp-mob-btn.active{
+  color:#a8791f;
+  font-weight:500;
+}
+body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
 </style>
 <script>
 (function(){
@@ -24000,7 +24106,15 @@ body.hc-2 p, body.hc-2 li, body.hc-2 blockquote{ font-weight:400 !important; }
      Ora si prende OGNI elemento che contiene testo visibile, escluso solo
      l'arredo fisso: intestazione, menu, ticker e il pannello stesso, che
      ingrandirli o ricolorarli sfonderebbe i layout. */
-  var FUORI = 'header, #np, .tbr, #tspop, script, style, svg, noscript';
+  /* 🔴 FUORI ANCHE GLI ELEMENTI INTERATTIVI. Il colore viene scritto negli
+     stili IN LINEA, che vincono sulle classi: colorando un pulsante, il suo
+     stato «attivo» non riesce piu' a cambiargli colore quando si preme
+     un'altra voce. Nella scheda prodotto restava selezionata Specs anche
+     dopo aver scelto Description.
+     Regola generale: il colore automatico tocca il TESTO DA LEGGERE, mai i
+     comandi. Per quelli si scrivono regole CSS esplicite (piu' sotto). */
+  var FUORI = 'header, #np, .tbr, #tspop, script, style, svg, noscript,' +
+              'button, a, select, input, textarea, label, [role="button"], .lang-btn';
   var toccati = [];
 
   /* Vero solo se l'elemento ha testo PROPRIO, non ereditato dai figli: cosi'
