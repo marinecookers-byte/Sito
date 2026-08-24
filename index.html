@@ -2859,10 +2859,14 @@ header.hide{transform:translateY(-100%);}
   text-align:center; line-height:1.5;
   font-size:7px; letter-spacing:.14em;
 }
+/* ⚠️ Oltre a opacity:0 anche visibility:hidden: l'opacita' da sola puo' essere
+   ribaltata da uno stile in linea (e' successo col contrasto), e questa
+   scritta e' larga e senza a capo, quindi ricomparendo si stende sopra il
+   resto della scheda. La visibilita' non e' ribaltabile per sbaglio. */
 .pcard-oc-full{
   position:absolute;
   font-size:8.5px; letter-spacing:.2em;
-  opacity:0;
+  opacity:0; visibility:hidden;
 }
 @media(hover:hover){
   .pcard-oc:hover{
@@ -2871,14 +2875,33 @@ header.hide{transform:translateY(-100%);}
     background:rgba(184,150,90,.16);
   }
   .pcard-oc:hover .pcard-oc-short{ opacity:0; }
-  .pcard-oc:hover .pcard-oc-full{ opacity:1; color:#d4b07a; }
+  .pcard-oc:hover .pcard-oc-full{ opacity:1; visibility:visible; color:#d4b07a; }
 }
+/* Col testo ingrandito il nome cresce e puo' arrivare sotto il bollino: qui
+   gli si allarga lo spazio a destra in proporzione. */
+body.ts-on .pnm, body.ts-on .pinf .pnm{ padding-right:78px; }
+
 @media(max-width:768px){
   .pcard-oc{ right:12px; top:8px; width:48px; height:48px; }
   .pcard-oc-short{ font-size:6.4px; letter-spacing:.1em; }
 }
 /* Il nome non deve finirci sotto quando e' lungo. */
 .pcard-oc ~ .pnm, .pinf .pnm{ padding-right:64px; }
+
+/* 🔴 E NEANCHE LA DESCRIZIONE. Lo spazio a destra era riservato al solo nome:
+   la descrizione andava a capo e la seconda riga finiva SOTTO il bollino, che
+   e' posizionato in assoluto e quindi non la spinge via. Si vedeva su MAREA
+   («Compact Gas Cooker · 2 Burners with Oven»), ma capita a ogni descrizione
+   lunga, in qualunque lingua.
+   ⚠️ Il rientro si applica SOLO alle schede che hanno il bollino, grazie al
+   selettore fratello: le altre restano a piena larghezza.
+   ⚠️ Risolto nella struttura e non accorciando i testi: abbreviare in inglese
+   avrebbe lasciato il difetto nelle altre quattro lingue. */
+.pcard-oc ~ .pdsc{ padding-right:64px; }
+@media(max-width:768px){
+  .pcard-oc ~ .pdsc, .pcard-oc ~ .pnm{ padding-right:60px; }
+}
+body.ts-on .pcard-oc ~ .pdsc{ padding-right:74px; }
 
 .pimg img {
   width: 100%;
@@ -6981,7 +7004,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <div class="ef-ch-main">
         <h2 class="ef-ch-title" data-i18n-html="oc_c2_title">The boats that <em>ask the most</em></h2>
         <p class="ef-ch-body" data-i18n-html="oc_c2_b1">Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor <span class="oc-lnk" onclick="ocSoldini()" role="link" tabindex="0">Giovanni Soldini</span>.</p>
-        <p class="ef-ch-body" data-i18n="oc_c2_b2">And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife & Son, she is counted among the finest the great Scottish designer ever drew, and by many as the finest of them all. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.</p>
+        <p class="ef-ch-body" data-i18n="oc_c2_b2">And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife & Son, she is counted among the finest the great Scottish designer ever drew, and by many as the finest of them all. For her refit we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.</p>
         <figure class="oc-fig">
           <img class="oc-fig-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg" alt="Techimpex cooker, Classic variant, built to measure for the ocean racer Latifa" loading="lazy" onclick="hdZoom(this.getAttribute('data-zoom')||this.src, this.alt)" data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg">
           <figcaption class="oc-fig-cap" data-i18n="oc_fig_cap">Latifa &middot; Classic variant, built entirely to measure</figcaption>
@@ -14586,7 +14609,7 @@ var DICT = {
     oc_c2_label: "At Sea",
     oc_c2_title: "The boats that <em>ask the most</em>",
     oc_c2_b1: "Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife & Son, she is counted among the finest the great Scottish designer ever drew, and by many as the finest of them all. For Latifa we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.",
+    oc_c2_b2: "And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife & Son, she is counted among the finest the great Scottish designer ever drew, and by many as the finest of them all. For her refit we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.",
     oc_c2_b3: "The XXL3 and the LATIFA model, which takes its name from the yacht herself, are only two examples of cookers reinforced or customised for extreme ocean use. The specification is the starting point, and from there the cooker is built around the boat it will live on.",
     oc_c3_label: "Structure",
     oc_c3_title: "Built as one piece",
@@ -14608,8 +14631,8 @@ var DICT = {
     oc_quote: "On a boat that sails far from help, the availability of a part counts as much as its quality. That is why spare parts are held in stock by our distributors in every principal market.",
     oc_brand_sub: "Bluewater Cookers",
     oc_ms1: "The molybdenum grade, against chlorides",
-    oc_ms3: "Latifa, William Fife III · a cooker built to measure",
-    oc_fig_cap: "Latifa · Classic variant, built entirely to measure",
+    oc_ms3: "Latifa, William Fife III · a cooker for her refit",
+    oc_fig_cap: "Latifa · refit: Classic variant, built entirely to measure",
     oc_btn: "Bluewater Passages",
     oc_ms2: "Thousands of cookers aboard boats that sail the world’s oceans",
     oc_badge: "Bluewater variant available",
@@ -14735,7 +14758,7 @@ var DICT = {
     ac_02_body: "Each cooker is born with the finest artisans of the Venetian cultural territory, in the broad sense of the Veneto: coloured steels, fire-resistant tempered glass, silk-screen printing done by hand in gilded purple, oven-baked lacquering and polishing by masters. Inside there is a great deal of technology: burners with solid brass flame-spreaders, a stainless static oven with precision thermostat and integrated safety features, to finish a squid-ink risotto or serve a Venetian-style liver just as if ashore.",
     ac_03_label: "Aboard the legends",
     ac_03_title: "Vintage and classic boats",
-    ac_03_body: "Our cookers live aboard many vintage and classic boats, from Lyman-Morse builds to a masterpiece by William Fife III such as Latifa, the 1936 yawl counted among the finest the great Scottish designer ever drew. For her we created a one-of-a-kind project with the Valdettaro shipyard, in the Gulf of Poets at Portovenere. And every cooker remains a bespoke jewel, customisable in its finishes and in its technical and dimensional characteristics, drawn together with the tastes of the owner, the shipyard and the architect.",
+    ac_03_body: "Our cookers live aboard many vintage and classic boats, from Lyman-Morse builds to a masterpiece by William Fife III such as Latifa, the 1936 yawl counted among the finest the great Scottish designer ever drew. For her refit we created a one-of-a-kind project with the Valdettaro shipyard, in the Gulf of Poets at Portovenere. And every cooker remains a bespoke jewel, customisable in its finishes and in its technical and dimensional characteristics, drawn together with the tastes of the owner, the shipyard and the architect.",
     ppd_principe_t: "Principe: the bespoke jewel for vintage yachts, where Italian fine cooking meets the artisan's art.",
     ppd_principe_k: "The Principe story",
     ppd_principe_p0: "Principe is not a production cooker: it is a jewel made entirely by hand, in a wholly artisanal way, by a team of craftsmen working together. Each piece takes no less than three months to build and is the only one in the world conceived for vintage yachts, sail or motor: a collection already installed in countless boats, where every model can be customised not only in its finishes but also in its technical and dimensional characteristics.",
@@ -16016,7 +16039,7 @@ var DICT = {
     oc_c2_label: "In mare",
     oc_c2_title: "Le barche che <em>chiedono di più</em>",
     oc_c2_b1: "Fra queste c'è la XXL3 realizzata su misura per Elmo's Fire, la barca del grande velista italiano <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "E c'è Latifa. Un ocean racer nel senso pieno del termine: progettata da William Fife III e varata in Scozia nel 1936 dal cantiere William Fife & Son, è annoverata fra le migliori barche che il grande progettista scozzese abbia mai disegnato, e da molti come la migliore in assoluto. Per Latifa abbiamo realizzato una cucina in variante Classic, interamente su misura: bruciatori speciali, forno maggiorato, griglia rinforzata in acciaio ricavata dal pieno in un pezzo unico e perni cardanici di eccezionale robustezza.",
+    oc_c2_b2: "E c'è Latifa. Un ocean racer nel senso pieno del termine: progettata da William Fife III e varata in Scozia nel 1936 dal cantiere William Fife & Son, è annoverata fra le migliori barche che il grande progettista scozzese abbia mai disegnato, e da molti come la migliore in assoluto. Per il suo refit abbiamo realizzato una cucina in variante Classic, interamente su misura: bruciatori speciali, forno maggiorato, griglia rinforzata in acciaio ricavata dal pieno in un pezzo unico e perni cardanici di eccezionale robustezza.",
     oc_c2_b3: "La XXL3 e il modello LATIFA, che prende il nome dalla barca stessa, sono solo due esempi di cucine implementate o personalizzate per impieghi oceanici estremi. Le specifiche sono il punto di partenza, e da lì la cucina si costruisce intorno alla barca che la ospiterà.",
     oc_c3_label: "Struttura",
     oc_c3_title: "Costruita come un pezzo solo",
@@ -16038,8 +16061,8 @@ var DICT = {
     oc_quote: "Su una barca che naviga lontano dai soccorsi, la disponibilità di un pezzo conta quanto la sua qualità. Per questo i ricambi sono a magazzino presso i nostri distributori nei principali mercati.",
     oc_brand_sub: "Cucine bluewater",
     oc_ms1: "L'acciaio al molibdeno, contro i cloruri",
-    oc_ms3: "Latifa, William Fife III · una cucina su misura",
-    oc_fig_cap: "Latifa · variante Classic, interamente su misura",
+    oc_ms3: "Latifa, William Fife III · una cucina per il refit",
+    oc_fig_cap: "Latifa · refit: variante Classic, interamente su misura",
     oc_btn: "Cucine oceaniche",
     oc_ms2: "Migliaia di cucine installate su barche che solcano gli oceani di tutto il mondo",
     oc_badge: "Variante Bluewater disponibile",
@@ -16163,7 +16186,7 @@ var DICT = {
     ac_02_body: "Ogni cucina nasce con i migliori artigiani della cultura del territorio veneziano, nel senso esteso del Veneto: acciai colorati, vetri temperati resistenti al fuoco, serigrafie eseguite a mano con porpora dorata, verniciature a forno e lucidature da maestri. Dentro c'è tanta tecnologia: bruciatori con spartifiamma in ottone massiccio, forno statico in acciaio con termostato di precisione e sicurezze integrate, per mantecare un risotto al nero di seppia o portare in tavola un fegato alla veneziana come a terra.",
     ac_03_label: "A bordo delle leggende",
     ac_03_title: "Barche d'epoca e classiche",
-    ac_03_body: "Le nostre cucine vivono a bordo di moltissime imbarcazioni d'epoca e classiche, dalle costruzioni Lyman-Morse fino a un capolavoro di William Fife III come Latifa, lo yawl del 1936 annoverato fra i migliori che il grande progettista scozzese abbia mai disegnato. Per lei abbiamo firmato un progetto unico nel suo genere con il cantiere Valdettaro, nel Golfo dei Poeti a Portovenere. E ogni cucina resta un gioiello su misura, personalizzabile nelle finiture e nelle caratteristiche tecniche e dimensionali, disegnato insieme ai gusti dell'armatore, del cantiere e dell'architetto.",
+    ac_03_body: "Le nostre cucine vivono a bordo di moltissime imbarcazioni d'epoca e classiche, dalle costruzioni Lyman-Morse fino a un capolavoro di William Fife III come Latifa, lo yawl del 1936 annoverato fra i migliori che il grande progettista scozzese abbia mai disegnato. Per il suo refit abbiamo firmato un progetto unico nel suo genere con il cantiere Valdettaro, nel Golfo dei Poeti a Portovenere. E ogni cucina resta un gioiello su misura, personalizzabile nelle finiture e nelle caratteristiche tecniche e dimensionali, disegnato insieme ai gusti dell'armatore, del cantiere e dell'architetto.",
     ppd_principe_t: "Principe: il gioiello su misura per gli yacht d'epoca, dove l'alta cucina italiana incontra l'arte artigiana.",
     ppd_principe_k: "Il racconto di Principe",
     ppd_principe_p0: "Principe non è una cucina di serie: è un gioiello realizzato in modo totalmente artigianale, interamente a mano, dalla collaborazione di una squadra di artigiani. Ogni esemplare richiede non meno di tre mesi di lavorazione ed è l'unico al mondo pensato per gli yacht d'epoca, a vela o a motore: una collezione già installata in innumerevoli barche, dove ogni modello può essere personalizzato non solo nelle finiture, ma anche nelle caratteristiche tecniche e dimensionali.",
@@ -17444,7 +17467,7 @@ var DICT = {
     oc_c2_label: "En mer",
     oc_c2_title: "Les bateaux qui <em>exigent le plus</em>",
     oc_c2_b1: "Parmi elles, la XXL3 réalisée sur mesure pour Elmo's Fire, le bateau du grand navigateur italien <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "Et il y a Latifa. Un ocean racer au sens plein du terme : dessinée par William Fife III et lancée en Écosse en 1936 par le chantier William Fife & Son, elle compte parmi les plus belles que le grand architecte écossais ait jamais dessinées, et pour beaucoup comme la plus belle de toutes. Pour Latifa nous avons réalisé une cuisinière en version Classic, entièrement sur mesure : brûleurs spéciaux, four surdimensionné, grille renforcée en acier taillée dans la masse d'une seule pièce et axes de cardan d'une robustesse exceptionnelle.",
+    oc_c2_b2: "Et il y a Latifa. Un ocean racer au sens plein du terme : dessinée par William Fife III et lancée en Écosse en 1936 par le chantier William Fife & Son, elle compte parmi les plus belles que le grand architecte écossais ait jamais dessinées, et pour beaucoup comme la plus belle de toutes. Pour son refit nous avons réalisé une cuisinière en version Classic, entièrement sur mesure : brûleurs spéciaux, four surdimensionné, grille renforcée en acier taillée dans la masse d'une seule pièce et axes de cardan d'une robustesse exceptionnelle.",
     oc_c2_b3: "La XXL3 et le modèle LATIFA, qui tient son nom du bateau lui-même, ne sont que deux exemples de cuisinières renforcées ou personnalisées pour des usages océaniques extrêmes. Les spécifications sont le point de départ, et à partir de là la cuisinière se construit autour du bateau qui l'accueillera.",
     oc_c3_label: "Structure",
     oc_c3_title: "Construite d'une seule pièce",
@@ -17466,8 +17489,8 @@ var DICT = {
     oc_quote: "Sur un bateau qui navigue loin des secours, la disponibilité d'une pièce compte autant que sa qualité. C'est pourquoi les pièces détachées sont en stock chez nos distributeurs sur les principaux marchés.",
     oc_brand_sub: "Cuisinières bluewater",
     oc_ms1: "L'acier au molybdène, contre les chlorures",
-    oc_ms3: "Latifa, William Fife III · une cuisinière sur mesure",
-    oc_fig_cap: "Latifa · variante Classic, entièrement sur mesure",
+    oc_ms3: "Latifa, William Fife III · une cuisinière pour son refit",
+    oc_fig_cap: "Latifa · refit : variante Classic, entièrement sur mesure",
     oc_btn: "Cuisines océaniques",
     oc_ms2: "Des milliers de cuisinières installées sur des bateaux qui sillonnent les océans du monde entier",
     oc_badge: "Variante Bluewater disponible",
@@ -17591,7 +17614,7 @@ var DICT = {
     ac_02_body: "Chaque cuisinière naît avec les meilleurs artisans de la culture du territoire vénitien, au sens large de la Vénétie : aciers colorés, verres trempés résistants au feu, sérigraphies réalisées à la main en pourpre doré, laquages au four et polissages de maîtres. À l'intérieur, beaucoup de technologie : brûleurs à répartiteurs de flamme en laiton massif, four statique en acier à thermostat de précision et sécurités intégrées, pour lier un risotto à l'encre de seiche ou servir un foie à la vénitienne comme à terre.",
     ac_03_label: "À bord des légendes",
     ac_03_title: "Bateaux d'époque et classiques",
-    ac_03_body: "Nos cuisinières vivent à bord de très nombreux bateaux d'époque et classiques, des constructions Lyman-Morse jusqu'à un chef-d'œuvre de William Fife III comme Latifa, le yawl de 1936 compté parmi les plus beaux que le grand architecte écossais ait jamais dessinés. Pour elle nous avons signé un projet unique en son genre avec le chantier Valdettaro, dans le Golfe des Poètes à Portovenere. Et chaque cuisinière reste un bijou sur mesure, personnalisable dans ses finitions et dans ses caractéristiques techniques et dimensionnelles, dessiné avec les goûts de l'armateur, du chantier et de l'architecte.",
+    ac_03_body: "Nos cuisinières vivent à bord de très nombreux bateaux d'époque et classiques, des constructions Lyman-Morse jusqu'à un chef-d'œuvre de William Fife III comme Latifa, le yawl de 1936 compté parmi les plus beaux que le grand architecte écossais ait jamais dessinés. Pour son refit nous avons signé un projet unique en son genre avec le chantier Valdettaro, dans le Golfe des Poètes à Portovenere. Et chaque cuisinière reste un bijou sur mesure, personnalisable dans ses finitions et dans ses caractéristiques techniques et dimensionnelles, dessiné avec les goûts de l'armateur, du chantier et de l'architecte.",
     ppd_principe_t: "Principe : le bijou sur mesure pour yachts d'époque, où la grande cuisine italienne rencontre l'art artisanal.",
     ppd_principe_k: "Le récit de Principe",
     ppd_principe_p0: "Principe n'est pas une cuisinière de série : c'est un bijou réalisé entièrement à la main, de façon totalement artisanale, par une équipe d'artisans. Chaque exemplaire demande au moins trois mois de fabrication et est le seul au monde conçu pour les yachts d'époque, à voile ou à moteur : une collection déjà installée dans d'innombrables bateaux, où chaque modèle peut être personnalisé non seulement dans ses finitions, mais aussi dans ses caractéristiques techniques et dimensionnelles.",
@@ -18872,7 +18895,7 @@ var DICT = {
     oc_c2_label: "Auf See",
     oc_c2_title: "Die Boote, die <em>am meisten verlangen</em>",
     oc_c2_b1: "Darunter die XXL3, nach Maß gefertigt für Elmo's Fire, das Boot des großen italienischen Hochseeseglers <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "Und da ist Latifa. Ein Ocean Racer im vollen Sinne des Wortes: entworfen von William Fife III und 1936 in Schottland bei der Werft William Fife & Son vom Stapel gelaufen, zählt sie zu den schönsten Yachten, die der große schottische Konstrukteur je gezeichnet hat, und für viele zur schönsten überhaupt. Für Latifa haben wir einen Herd in der Variante Classic gefertigt, vollständig nach Maß: besondere Brenner, ein übergroßer Backofen, ein verstärkter, aus dem Vollen gefräster einteiliger Stahlrost und Kardanzapfen von außergewöhnlicher Robustheit.",
+    oc_c2_b2: "Und da ist Latifa. Ein Ocean Racer im vollen Sinne des Wortes: entworfen von William Fife III und 1936 in Schottland bei der Werft William Fife & Son vom Stapel gelaufen, zählt sie zu den schönsten Yachten, die der große schottische Konstrukteur je gezeichnet hat, und für viele zur schönsten überhaupt. Für ihr Refit haben wir einen Herd in der Variante Classic gefertigt, vollständig nach Maß: besondere Brenner, ein übergroßer Backofen, ein verstärkter, aus dem Vollen gefräster einteiliger Stahlrost und Kardanzapfen von außergewöhnlicher Robustheit.",
     oc_c2_b3: "Die XXL3 und das Modell LATIFA, das seinen Namen vom Boot selbst trägt, sind nur zwei Beispiele für Herde, die für extreme Ozeaneinsätze verstärkt oder angepasst wurden. Die Spezifikation ist der Ausgangspunkt, und von dort wird der Herd um das Boot herum gebaut, auf dem er leben wird.",
     oc_c3_label: "Struktur",
     oc_c3_title: "Gebaut wie aus einem Stück",
@@ -18894,8 +18917,8 @@ var DICT = {
     oc_quote: "Auf einem Boot, das fernab jeder Hilfe fährt, zählt die Verfügbarkeit eines Teils so viel wie seine Qualität. Deshalb halten unsere Händler in allen wichtigen Märkten Ersatzteile auf Lager.",
     oc_brand_sub: "Bluewater-Herde",
     oc_ms1: "Der Molybdän-Stahl, gegen Chloride",
-    oc_ms3: "Latifa, William Fife III · ein Herd nach Maß",
-    oc_fig_cap: "Latifa · Variante Classic, vollständig nach Maß",
+    oc_ms3: "Latifa, William Fife III · ein Herd für ihr Refit",
+    oc_fig_cap: "Latifa · Refit: Variante Classic, vollständig nach Maß",
     oc_btn: "Hochsee-Herde",
     oc_ms2: "Tausende Kocher an Bord von Booten, die die Ozeane der Welt durchqueren",
     oc_badge: "Bluewater-Variante verfügbar",
@@ -19019,7 +19042,7 @@ var DICT = {
     ac_02_body: "Jeder Kocher entsteht mit den besten Kunsthandwerkern der venezianischen Kulturlandschaft, im weiten Sinne des Veneto: farbige Edelstähle, feuerfestes gehärtetes Glas, von Hand ausgeführte Siebdrucke in vergoldetem Purpur, Ofenlackierungen und Polituren von Meistern. Im Inneren steckt viel Technik: Brenner mit Flammenverteilern aus massivem Messing, ein statischer Edelstahlofen mit Präzisionsthermostat und integrierten Sicherheitsvorkehrungen, um ein Risotto mit Tintenfischtinte zu binden oder eine Leber nach venezianischer Art wie an Land zu servieren.",
     ac_03_label: "An Bord der Legenden",
     ac_03_title: "Oldtimer- und Klassikboote",
-    ac_03_body: "Unsere Herde leben an Bord zahlreicher Oldtimer und klassischer Boote, von Lyman-Morse-Bauten bis zu einem Meisterwerk von William Fife III wie Latifa, dem Yawl von 1936, das zu den schönsten zählt, die der große schottische Konstrukteur je gezeichnet hat. Für sie haben wir gemeinsam mit der Werft Valdettaro im Golf der Dichter bei Portovenere ein einzigartiges Projekt gezeichnet. Und jeder Herd bleibt ein maßgefertigtes Schmuckstück, anpassbar in Ausführung sowie in technischen und maßlichen Eigenschaften, entworfen zusammen mit dem Geschmack des Eigners, der Werft und des Architekten.",
+    ac_03_body: "Unsere Herde leben an Bord zahlreicher Oldtimer und klassischer Boote, von Lyman-Morse-Bauten bis zu einem Meisterwerk von William Fife III wie Latifa, dem Yawl von 1936, das zu den schönsten zählt, die der große schottische Konstrukteur je gezeichnet hat. Für ihr Refit haben wir gemeinsam mit der Werft Valdettaro im Golf der Dichter bei Portovenere ein einzigartiges Projekt gezeichnet. Und jeder Herd bleibt ein maßgefertigtes Schmuckstück, anpassbar in Ausführung sowie in technischen und maßlichen Eigenschaften, entworfen zusammen mit dem Geschmack des Eigners, der Werft und des Architekten.",
     ppd_principe_t: "Principe: das maßgefertigte Schmuckstück für Oldtimer-Yachten, wo die italienische Spitzenküche auf die Handwerkskunst trifft.",
     ppd_principe_k: "Die Geschichte von Principe",
     ppd_principe_p0: "Principe ist kein Serienherd: Es ist ein Schmuckstück, das vollständig von Hand und rein handwerklich von einem Team von Kunsthandwerkern gefertigt wird. Jedes Exemplar braucht mindestens drei Monate Fertigung und ist das einzige weltweit, das für Oldtimer-Yachten, unter Segel oder Motor, entworfen wurde: eine Kollektion, die bereits in unzähligen Booten verbaut ist, bei der jedes Modell nicht nur in den Oberflächen, sondern auch in den technischen und dimensionalen Eigenschaften individualisiert werden kann.",
@@ -20300,7 +20323,7 @@ var DICT = {
     oc_c2_label: "En el mar",
     oc_c2_title: "Los barcos que <em>más exigen</em>",
     oc_c2_b1: "Entre ellas está la XXL3 realizada a medida para Elmo's Fire, el barco del gran navegante italiano <span class=\"oc-lnk\" onclick=\"ocSoldini()\" role=\"link\" tabindex=\"0\">Giovanni Soldini</span>.",
-    oc_c2_b2: "Y está Latifa. Un ocean racer en el sentido pleno del término: proyectada por William Fife III y botada en Escocia en 1936 por el astillero William Fife & Son, está considerada entre las mejores embarcaciones que el gran proyectista escocés haya dibujado nunca, y para muchos como la mejor de todas. Para Latifa realizamos una cocina en variante Classic, enteramente a medida: quemadores especiales, horno sobredimensionado, parrilla reforzada de acero obtenida de una sola pieza maciza y pernos cardánicos de excepcional robustez.",
+    oc_c2_b2: "Y está Latifa. Un ocean racer en el sentido pleno del término: proyectada por William Fife III y botada en Escocia en 1936 por el astillero William Fife & Son, está considerada entre las mejores embarcaciones que el gran proyectista escocés haya dibujado nunca, y para muchos como la mejor de todas. Para su refit realizamos una cocina en variante Classic, enteramente a medida: quemadores especiales, horno sobredimensionado, parrilla reforzada de acero obtenida de una sola pieza maciza y pernos cardánicos de excepcional robustez.",
     oc_c2_b3: "La XXL3 y el modelo LATIFA, que toma su nombre del propio barco, son solo dos ejemplos de cocinas reforzadas o personalizadas para usos oceánicos extremos. Las especificaciones son el punto de partida, y desde ahí la cocina se construye en torno al barco que la acogerá.",
     oc_c3_label: "Estructura",
     oc_c3_title: "Construida como una sola pieza",
@@ -20322,8 +20345,8 @@ var DICT = {
     oc_quote: "En un barco que navega lejos de los auxilios, la disponibilidad de una pieza cuenta tanto como su calidad. Por eso los recambios están en almacén en nuestros distribuidores de los principales mercados.",
     oc_brand_sub: "Cocinas bluewater",
     oc_ms1: "El acero al molibdeno, contra los cloruros",
-    oc_ms3: "Latifa, William Fife III · una cocina a medida",
-    oc_fig_cap: "Latifa · variante Classic, enteramente a medida",
+    oc_ms3: "Latifa, William Fife III · una cocina para su refit",
+    oc_fig_cap: "Latifa · refit: variante Classic, enteramente a medida",
     oc_btn: "Cocinas oceánicas",
     oc_ms2: "Miles de cocinas instaladas en barcos que surcan los océanos de todo el mundo",
     oc_badge: "Variante Bluewater disponible",
@@ -20447,7 +20470,7 @@ var DICT = {
     ac_02_body: "Cada cocina nace con los mejores artesanos de la cultura del territorio veneciano, en el sentido amplio del Véneto: aceros de colores, vidrios templados resistentes al fuego, serigrafías realizadas a mano en púrpura dorada, barnizados al horno y pulidos de maestros. Dentro hay mucha tecnología: quemadores con difusores de llama en latón macizo, un horno estático de acero con termostato de precisión y seguridades integradas, para ligar un risotto al negro de sepia o llevar a la mesa un hígado a la veneciana como en tierra.",
     ac_03_label: "A bordo de las leyendas",
     ac_03_title: "Barcos de época y clásicos",
-    ac_03_body: "Nuestras cocinas viven a bordo de muchísimas embarcaciones de época y clásicas, desde las construcciones Lyman-Morse hasta una obra maestra de William Fife III como Latifa, el yawl de 1936 contado entre los mejores que el gran proyectista escocés haya dibujado nunca. Para ella firmamos un proyecto único en su género con el astillero Valdettaro, en el Golfo de los Poetas en Portovenere. Y cada cocina sigue siendo una joya a medida, personalizable en los acabados y en las características técnicas y dimensionales, dibujada junto a los gustos del armador, del astillero y del arquitecto.",
+    ac_03_body: "Nuestras cocinas viven a bordo de muchísimas embarcaciones de época y clásicas, desde las construcciones Lyman-Morse hasta una obra maestra de William Fife III como Latifa, el yawl de 1936 contado entre los mejores que el gran proyectista escocés haya dibujado nunca. Para su refit firmamos un proyecto único en su género con el astillero Valdettaro, en el Golfo de los Poetas en Portovenere. Y cada cocina sigue siendo una joya a medida, personalizable en los acabados y en las características técnicas y dimensionales, dibujada junto a los gustos del armador, del astillero y del arquitecto.",
     ppd_principe_t: "Principe: la joya a medida para yates de época, donde la alta cocina italiana se encuentra con el arte artesanal.",
     ppd_principe_k: "El relato de Principe",
     ppd_principe_p0: "Principe no es una cocina de serie: es una joya realizada enteramente a mano, de forma totalmente artesanal, por un equipo de artesanos. Cada ejemplar requiere no menos de tres meses de fabricación y es la única en el mundo concebida para los yates de época, de vela o de motor: una colección ya instalada en innumerables barcos, en la que cada modelo puede personalizarse no solo en los acabados, sino también en las características técnicas y dimensionales.",
@@ -24138,6 +24161,29 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
   }
   function luce(v){ return (0.2126*v[0] + 0.7152*v[1] + 0.0722*v[2]) / 255; }
 
+  /* 🔴 Luminosita' del FONDO su cui l'elemento sta davvero, risalendo i
+     contenitori fino al primo che ha un colore non trasparente.
+     ⚠️ Serve perche' l'ORO ha luminosita' intermedia: schiarirlo migliora il
+     contrasto sul nero e lo PEGGIORA sul bianco. La scheda prodotto ha fondo
+     chiaro, e li' l'oro schiarito si avvicinava al bianco invece di staccarsi.
+     Il sito e' scuro quasi ovunque, quindi in caso di dubbio si assume scuro. */
+  function fondo(el){
+    var n = el;
+    for(var g=0; n && g<12; g++){
+      var bg;
+      try{ bg = getComputedStyle(n).backgroundColor; }catch(e){ return 0.05; }
+      if(bg && bg.indexOf('rgba(0, 0, 0, 0)') === -1 && bg !== 'transparent'){
+        var a = /rgba?\([^)]*,\s*([\d.]+)\s*\)/.exec(bg);
+        if(!a || parseFloat(a[1]) > 0.35){
+          var v = rgb(bg);
+          if(v) return luce(v);
+        }
+      }
+      n = n.parentElement;
+    }
+    return 0.05;
+  }
+
   function ripulisci(){
     for(var i=0;i<toccati.length;i++){
       toccati[i].style.color = '';
@@ -24160,21 +24206,37 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
       var el = nodi[i];
       if(!haTesto(el)) continue;
       if(el.closest && el.closest(FUORI)) continue;
-      var c;
-      try{ c = getComputedStyle(el).color; }catch(e){ continue; }
+      var cs;
+      try{ cs = getComputedStyle(el); }catch(e){ continue; }
+      /* 🔴 NON SI TOCCA CIO' CHE E' NASCOSTO. Il codice alzava l'opacita' a 1
+         su ogni testo: le scritte tenute invisibili con opacity:0 - le
+         etichette delle varianti sui bollini, i testi che entrano in
+         dissolvenza - comparivano tutte insieme appena si alzava il
+         contrasto. Sotto 0.25 l'elemento e' nascosto di proposito: si lascia
+         stare. Fra 0.25 e 1 e' solo attenuato, e li' l'opacita' si alza. */
+      if(cs.display === 'none' || cs.visibility === 'hidden') continue;
+      var op = parseFloat(cs.opacity);
+      if(!isNaN(op) && op < 0.25) continue;
+      var c = cs.color;
       var v = rgb(c); if(!v) continue;
       var L = luce(v);
       var dorato = (v[0] > v[2] + 24) && L > .28 && L < .82;   /* oro: rosso > blu */
+      var chiaroSotto = fondo(el) > .5;                        /* fondo chiaro? */
       var col;
       if(dorato){
-        col = (n === 2) ? '#f0cf94' : '#d4b07a';               /* oro piu' luminoso */
+        /* L'oro segue il fondo: sul nero si schiarisce, sul bianco si carica
+           di senape. Schiarirlo su fondo chiaro peggiorava il contrasto. */
+        col = chiaroSotto ? ((n === 2) ? '#8f6414' : '#a8791f')
+                          : ((n === 2) ? '#f0cf94' : '#d4b07a');
+      } else if(chiaroSotto){
+        col = (n === 2) ? '#000000' : '#141414';               /* fondo chiaro: piu' scuro */
       } else if(L >= .5){
-        col = (n === 2) ? '#fbeed0' : '#f8f6f1';               /* chiaro, poi crema */
+        col = (n === 2) ? '#fbeed0' : '#f8f6f1';               /* fondo scuro: piu' chiaro */
       } else {
-        col = (n === 2) ? '#000000' : '#141414';               /* scuro, piu' scuro */
+        col = (n === 2) ? '#000000' : '#141414';
       }
       el.style.color = col;
-      el.style.opacity = '1';
+      if(!isNaN(op) && op < 1) el.style.opacity = '1';
       toccati.push(el);
     }
   }
