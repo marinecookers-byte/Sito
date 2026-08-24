@@ -6181,7 +6181,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
     <span class="hctp-lbl" data-i18n="hc_label">Get in touch</span>
-    <p class="hctp-lead" id="hctp-lead" data-i18n="hc_lead">Tell us what you need: we answer shipyards and private owners alike.</p>
+    <p class="hctp-lead" id="hctp-lead" data-i18n="hc_lead">Tell us what you need: we answer owners, shipyards, designers, dealers and distributors.</p>
     <a class="hctp-row" href="mailto:info@marinecookers.com">
       <span class="hctp-k" data-i18n="ct_email">Email</span>
       <span class="hctp-v">info@marinecookers.com</span>
@@ -14641,7 +14641,7 @@ var DICT = {
     ct_open_maps: "Open in Google Maps",
     ct_form_label: "Write to us",
     hc_label: "Get in touch",
-    hc_lead: "Tell us what you need: we answer shipyards and private owners alike.",
+    hc_lead: "Tell us what you need: we answer owners, shipyards, designers, dealers and distributors.",
     /* Electric Cookers */
     elec_hero_title: "Electric Cookers<br><em>for the Sea</em>",
     elec_hero_sub: "Precision engineering and artisanal craft · designed to perform at the highest level on the world's finest yachts.",
@@ -16071,7 +16071,7 @@ var DICT = {
     ct_open_maps: "Apri in Google Maps",
     ct_form_label: "Scriveteci",
     hc_label: "Scrivici",
-    hc_lead: "Dicci di cosa hai bisogno: rispondiamo ai cantieri come ai singoli armatori.",
+    hc_lead: "Dicci di cosa hai bisogno: rispondiamo ad armatori, cantieri, progettisti, rivenditori e distributori.",
     elec_hero_title: "Cucine Elettriche<br><em>per il Mare</em>",
     elec_hero_sub: "Ingegneria di precisione e artigianato · progettate per le prestazioni più elevate sugli yacht più pregiati al mondo.",
     elec_es_tag: "La Collezione · Cucine Elettriche con Forno",
@@ -17499,7 +17499,7 @@ var DICT = {
     ct_open_maps: "Ouvrir dans Google Maps",
     ct_form_label: "Écrivez-nous",
     hc_label: "Nous contacter",
-    hc_lead: "Dites-nous ce dont vous avez besoin : nous répondons aux chantiers comme aux armateurs particuliers.",
+    hc_lead: "Dites-nous ce dont vous avez besoin : nous répondons aux armateurs, chantiers, architectes navals, revendeurs et distributeurs.",
     elec_hero_title: "Cuisinières Électriques<br><em>pour la Mer</em>",
     elec_hero_sub: "Ingénierie de précision et artisanat · conçues pour performer au plus haut niveau sur les plus beaux yachts du monde.",
     elec_es_tag: "La Collection · Cuisinières Électriques avec Four",
@@ -18927,7 +18927,7 @@ var DICT = {
     ct_open_maps: "In Google Maps öffnen",
     ct_form_label: "Schreiben Sie uns",
     hc_label: "Kontakt",
-    hc_lead: "Sagen Sie uns, was Sie brauchen: Wir antworten Werften ebenso wie privaten Eignern.",
+    hc_lead: "Sagen Sie uns, was Sie brauchen: Wir antworten Eignern, Werften, Konstrukteuren, Händlern und Vertriebspartnern.",
     elec_hero_title: "Elektroherde<br><em>für das Meer</em>",
     elec_hero_sub: "Präzisionstechnik und handwerkliche Kunst · entwickelt für höchste Leistungen auf den feinsten Yachten der Welt.",
     elec_es_tag: "Die Kollektion · Elektroherde mit Backofen",
@@ -20355,7 +20355,7 @@ var DICT = {
     ct_open_maps: "Abrir en Google Maps",
     ct_form_label: "Escríbanos",
     hc_label: "Escríbenos",
-    hc_lead: "Díganos qué necesita: respondemos tanto a los astilleros como a los armadores particulares.",
+    hc_lead: "Díganos qué necesita: respondemos a armadores, astilleros, proyectistas, revendedores y distribuidores.",
     elec_hero_title: "Cocinas Eléctricas<br><em>para el Mar</em>",
     elec_hero_sub: "Ingeniería de precisión y artesanía · diseñadas para el máximo rendimiento en los yates más selectos del mundo.",
     elec_es_tag: "La Colección · Cocinas Eléctricas con Horno",
@@ -22949,6 +22949,19 @@ body.hc-1 #bcbar .bc-cur,   body.hc-2 #bcbar .bc-cur{
   text-shadow:0 1px 3px rgba(0,0,0,.55);
 }
 body.hc-1 #bcbar .bc-sep, body.hc-2 #bcbar .bc-sep{ color:rgba(184,150,90,.9) !important; }
+
+/* 🔴 IL PASSAGGIO DEL MOUSE DEVE CONTINUARE A FUNZIONARE.
+   Le regole del contrasto usano !important, e senza queste righe
+   sovrascriverebbero anche il colore di :hover: le voci restavano spente al
+   passaggio, e il visitatore non capiva piu' cosa fosse cliccabile.
+   ⚠️ Regola generale: ogni volta che si scrive un colore con !important, va
+   riscritto con !important anche lo stato acceso corrispondente. */
+@media(hover:hover){
+  body.hc-1 #bcbar .bc-b:hover, body.hc-2 #bcbar .bc-b:hover{ color:#e8bc63 !important; }
+  body.hc-1 .pp-nav-btn:hover, body.hc-2 .pp-nav-btn:hover{ color:#0a0a0a; }
+  body.hc-1 .pp-mob-btn:hover, body.hc-2 .pp-mob-btn:hover{ color:#0a0a0a; }
+}
+body.hc-1 #bcbar .bc-b:focus-visible, body.hc-2 #bcbar .bc-b:focus-visible{ color:#e8bc63 !important; }
 
 
 /* ═══ FASCETTA DELLA SCHEDA PRODOTTO E CONTRASTO ═══
