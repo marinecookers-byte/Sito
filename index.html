@@ -9430,6 +9430,9 @@ function openCat(name,models){
         ?'<div class="pimg"><img'+_za+' src="'+src+'" alt="'+dm+'"></div>'
         :'<div class="pimg"><div class="pph"><svg viewBox="0 0 40 40" fill="none"><rect x="6" y="10" width="28" height="22" rx="1" stroke="currentColor" stroke-width=".8"/><circle cx="20" cy="21" r="7" stroke="currentColor" stroke-width=".8"/></svg><span>Photo coming soon</span></div></div>';
       var desc=window.PROD_DESCS&&window.PROD_DESCS[m]?window.PROD_DESCS[m]:'';
+      /* Didascalia tradotta nella lingua attiva; l'inglese resta in data-dsc
+         per poterla ritradurre al cambio lingua (window.__subRetr). */
+      var descTr=(window.__subTr?window.__subTr(desc):desc);
       /* L'invito sotto la foto cambia col dispositivo: col mouse si apre col
          doppio clic, col dito con un tocco solo. Chiave diversa, cosi' il
          cambio lingua continua a funzionare via data-i18n. */
@@ -9441,7 +9444,7 @@ function openCat(name,models){
       var _hk=_tap?'pcard_hint_tap':'pcard_hint_desk';
       var _hf=_tap?'Tap twice to open':'Double click to open';
       var _ht=window.__t?window.__t(_hk,_hf):_hf;
-      card.innerHTML=imgBox+'<div class="pinf">'+_ocB+'<span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc">'+desc+'</span>':'')+'<span class="pcard-hint" data-i18n="'+_hk+'">'+_ht+'</span></div>';
+      card.innerHTML=imgBox+'<div class="pinf">'+_ocB+'<span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc" data-dsc="'+desc+'">'+descTr+'</span>':'')+'<span class="pcard-hint" data-i18n="'+_hk+'">'+_ht+'</span></div>';
       g.appendChild(card);
     }
     
@@ -13541,6 +13544,19 @@ window.SRCH_CATKEY = {
     for(var i=0;i<tab.length;i++){ out=out.split(tab[i][0]).join(tab[i][1]); }
     return out;
   }
+  /* ⚠️ SUB_TR nasce per la ricerca con la lente, ma le stesse didascalie
+     compaiono SOTTO LE FOTO della griglia di categoria, dove restavano in
+     inglese: nella pagina tedesca si leggeva «Induction Electric Cooker ·
+     3 Burners · formerly Horizon». Esposto qui perche' la griglia (riga
+     ~9.430) possa usarlo, invece di duplicare la tabella in due punti.
+     E' la trappola §3.4 applicata ai dati: una stringa, un solo posto. */
+  window.__subTr = subTr;
+  /* L'inglese di partenza resta in data-dsc, cosi' al cambio lingua si
+     ritraduce dall'originale e non da una traduzione gia' fatta. */
+  window.__subRetr = function(){
+    var n=document.querySelectorAll('.pdsc[data-dsc]');
+    for(var i=0;i<n.length;i++){ n[i].textContent = subTr(n[i].getAttribute('data-dsc')); }
+  };
 
   function render(){
     var box=$('srch-res'), cnt=$('srch-count'), quick=$('srch-quick');
@@ -23577,6 +23593,9 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
     window.setLang = function(){
       var r = _setLang.apply(this, arguments);
       refresh();
+      /* Le didascalie sotto le foto non hanno data-i18n (sono generate da
+         PROD_DESCS): setLang non le tocca, vanno ritradotte a mano. */
+      if(window.__subRetr){ try{ window.__subRetr(); }catch(e){} }
       return r;
     };
   }
