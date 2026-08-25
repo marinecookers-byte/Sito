@@ -3,8 +3,22 @@
   sitemap.xml - Marine Cookers / Techimpex
   Dominio canonico: www.techimpex.tv (www, HTTPS).
   Contiene SOLO pagine reali e crawlabili (home + categorie CATS + pagine interne + legali).
-  NON contiene gli alias di redirect dei vecchi URL Wix (horizon, barbecues, products, ecc.):
+  NON contiene gli alias di redirect dei vecchi URL Wix (horizon, barbecues, ecc.):
   quelli rimbalzano sulle categorie e non devono comparire come URL propri.
+
+  AGGIORNATO 25/08/2026 - aggiunti /products, /oceano, /energy-efficiency.
+  ATTENZIONE: /products NON e' piu' un alias Wix. Dal 25/08 apre la matrice
+  comparativa (openMatrix) ed ha titolo, descrizione e canonical propri in
+  cinque lingue: e' una pagina vera e va indicizzata. Vale 121 clic storici.
+  Verificato che nessuno dei tre abbia un 301 in _redirects.
+
+  Gli hreflang NON sono ripetuti qui: stanno nel <head> di ogni pagina, che e'
+  la fonte che Google usa. Metterli anche qui richiederebbe il namespace xhtml
+  sul tag <urlset>, e un errore li' fa scartare la sitemap INTERA.
+
+  NOTA su /panholders e /manuali: hanno models:[] ma NON sono pagine vuote.
+  window.CAT_INTRO mostra un blocco di presentazione al posto della griglia.
+  Restano in sitemap a ragione: non toglierli.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
@@ -103,6 +117,21 @@
   </url>
 
   <!-- ===== Pagine interne ===== -->
+  <url>
+    <loc>https://www.techimpex.tv/products</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.techimpex.tv/oceano</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.techimpex.tv/energy-efficiency</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://www.techimpex.tv/about</loc>
     <changefreq>yearly</changefreq>
