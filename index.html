@@ -23317,6 +23317,33 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
         '{m} de Techimpex, familia {n}. Acero inox trabajado a mano para veleros y barcos a motor: ficha técnica, planos y descargas.']
   };
 
+  /* ── OVERRIDE PER LINGUA · categorie bersaglio degli annunci ─────────
+     Stessa idea degli override inglesi qui sotto, ma per le altre lingue:
+     serve quando si compra una parola che lo schema generato NON contiene.
+
+     🔴 IL MOTIVO, che vale per ogni annuncio futuro: Google confronta la
+     parola pagata con il TITOLO della pagina di atterraggio. Se non
+     coincidono il punteggio di qualita' scende e OGNI CLIC COSTA DI PIU'.
+
+     Caso tedesco (25/08): la campagna Germania punta sulle cucine
+     basculanti a induzione. Lo schema generato produceva
+     «Elektroherde mit Backofen fur Boote», che non contiene ne'
+     'Induktion' ne' 'kardanisch', cioe' le due parole che il tedesco
+     digita davvero.
+
+     ⚠️ La categoria contiene sia elettrico sia induzione: il titolo dice
+     «Elektro- und Induktionsherde», non solo induzione. Un titolo che
+     promette meno di quello che la pagina mostra e' un titolo onesto;
+     uno che promette di piu' fa scendere lo stesso punteggio di qualita'
+     che si voleva alzare. */
+  var CAT_SEO_OVERRIDE_LANG = {
+    de: {
+      'electric-cookers-with-oven':{
+        title:'Elektro- und Induktionsherde mit Backofen | '+BRAND,
+        desc:'Kardanisch aufgehängte Elektro- und Induktionsherde mit Backofen für Segel- und Motoryachten. In Handarbeit aus Edelstahl gefertigt in Italien.' }
+    }
+  };
+
   /* ── OVERRIDE INGLESE DELLE CATEGORIE CON TRAFFICO STORICO ───────────
      Scritti a mano per catturare i vecchi termini di ricerca del sito Wix
      (Horizon, Barbecues, Glass Ceramic Hobs, Mariner, Top3, XL2) e
@@ -23403,6 +23430,9 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
 
   function catSEO(slug){
     var L = lang();
+    /* Prima gli override per lingua (mai 'en'), poi quelli storici inglesi. */
+    var ovl = (CAT_SEO_OVERRIDE_LANG[L] || {})[slug];
+    if(ovl){ return { path:'/'+slug, title:ovl.title, desc:ovl.desc }; }
     if(L === 'en' && CAT_SEO_OVERRIDE_EN[slug]){
       return { path:'/'+slug, title:CAT_SEO_OVERRIDE_EN[slug].title, desc:CAT_SEO_OVERRIDE_EN[slug].desc };
     }
