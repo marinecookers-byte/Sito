@@ -10596,7 +10596,11 @@ function applyProdDescFull(m){
       (byAfter[a]=byAfter[a]||[]).push({video:true, embed:ph.embed||'', url:ph.poster||ph.url||'', span:!!ph.span, cap:ph.cap||''});
       return;
     }
-    var url=ph.url?ph.url:((typeof ph.img==='number'&&gal[ph.img])?gal[ph.img]:'');
+    /* Stessa avvertenza: gal[ph.img] oggi e' un oggetto {src, alt}, non una
+       stringa. Si accettano entrambi i formati. */
+    var _gv=(typeof ph.img==='number')?gal[ph.img]:null;
+    var _gu=_gv?((typeof _gv==='string')?_gv:(_gv.src||'')):'';
+    var url=ph.url?ph.url:_gu;
     if(!url)return;
     (byAfter[a]=byAfter[a]||[]).push({url:url, span:!!ph.span, cap:ph.cap||''});
   });
@@ -12396,7 +12400,12 @@ function ocSoldini(){
   var g=(window.PROD_GALLERY||{})['ESPRESSO12']||[];
   if(g.length && typeof window.ppGalleryOpen==='function'){
     window.ppGalleryOpen(g.map(function(u){
-      return {src:u, alt:"Techimpex ESPRESSO12 · Giovanni Soldini, Elmo's Fire"};
+      /* Le voci di PROD_GALLERY possono essere una stringa (URL) oppure un
+         oggetto {src, alt, cap}: dal 26 agosto sono oggetti. Va letto il src,
+         altrimenti all'immagine arriva un oggetto e la galleria resta vuota. */
+      var _s=(typeof u==='string')?u:((u&&u.src)||'');
+      var _a=(u&&typeof u==='object'&&u.alt)?u.alt:"Techimpex ESPRESSO12 · Giovanni Soldini, Elmo's Fire";
+      return {src:_s, alt:_a};
     }), 0);
     return;
   }
@@ -14693,7 +14702,7 @@ var DICT = {
     elec_footer_quote: "\"Trusted by Ferretti, Sunseeker, Sanlorenzo, and Cantiere del Pardo · because when excellence is the standard, the galley cannot be an afterthought.\"",
     /* Gas Cookers with Oven */
     gasoven_hero_title: "Gas Cookers<br><em>with Oven</em>",
-    gasoven_hero_sub: "Gimballed gas cookers with oven · engineered to perform flawlessly at sea, aboard the world's finest yachts.",
+    gasoven_hero_sub: "Gimbaled gas cookers with oven · marine gas stoves engineered to perform flawlessly at sea, aboard the world's finest yachts.",
     gasoven_es_tag: "The Collection · Gas Cookers with Oven",
     gasoven_es_headline: "Gimballed Gas Cooking<br><em>Perfected for the Sea</em>",
     gasoven_01_label: "01 · A Marine Tradition",
