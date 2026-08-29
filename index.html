@@ -22905,8 +22905,16 @@ window.OC_MODELS = [
   try{
     var q=new URLSearchParams(location.search);
     var id=q.get('gclid')||q.get('wbraid')||q.get('gbraid');
-    if(id){
-      valore='Google Ads · '+id;
+    /* src e' il suffisso URL impostato campagna per campagna in Google Ads.
+       Il gclid identifica il CLIC ma non dice da quale campagna arriva: con
+       dodici campagne attive era impossibile sapere chi avesse portato una
+       richiesta. Le sigle sono volutamente opache (k1, g1, e1...) perche' il
+       parametro si vede nella barra degli indirizzi: scriverci il nome di un
+       concorrente lo mostrerebbe al visitatore.
+       La corrispondenza sigla-campagna sta nel file di stato del progetto. */
+    var src=q.get('src');
+    if(id||src){
+      valore='Google Ads'+(src?' · '+src:'')+(id?' · '+id:'');
     }else{
       var s=q.get('utm_source');
       if(s){
