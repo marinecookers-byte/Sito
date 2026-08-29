@@ -392,13 +392,14 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
 .twrap::before,.twrap::after{content:"";position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
 .twrap::before{left:0;background:linear-gradient(to right,#0a0a0a,transparent)}
 .twrap::after{right:0;background:linear-gradient(to left,#0a0a0a,transparent)}
-.tinn{display:flex;align-items:center;width:max-content;padding:26px 0;animation:tick 70s linear infinite}
+.tinn{display:flex;align-items:center;width:max-content;padding:26px 0;animation:tick 73s linear infinite}
 /* ⚠️ La durata NON e' arbitraria: in quel tempo il nastro percorre meta' della
    propria larghezza (translateX(-50%), cioe' il punto in cui la seconda copia
    della lista si sovrappone alla prima). La distanza cresce con il numero di
    cantieri, quindi A DURATA FISSA OGNI NOME AGGIUNTO ACCELERA IL NASTRO.
    Storico: 26 nomi per copia a 55s; con 28 la stessa animazione andava l'8%
-   piu' veloce. Portata a 68s, che e' anche piu' lenta di prima come richiesto.
+   piu' veloce. Portata a 68s, poi 70s. Con 30 nomi (Zuanelli, 28/08) la
+   larghezza cresce del 4,5% circa: 73s tiene la stessa velocita' percepita.
    Regola: aggiungendo cantieri, alzare la durata in proporzione. */
 .tinn:hover{animation-play-state:paused}
 @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -532,7 +533,14 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
     min-height:520px;
     max-height:640px;
     padding:calc(var(--hh) + 34px) 24px 40px;
-    justify-content:flex-end;
+    /* ATTENZIONE: NON rimettere justify-content:flex-end.
+       Con flex-end, se il blocco di testo e' piu' alto dello spazio libero
+       l'eccedenza esce dal lato OPPOSTO, cioe' in alto, e ignora il
+       padding-top: il tag "Cucine Marine d'Autore" finiva sotto l'header
+       fisso. Con flex-start piu' margin-top:auto sul solo figlio in flusso
+       (.hco) il risultato e' identico quando lo spazio c'e', e quando non
+       c'e' il testo parte sotto l'header invece di attraversarlo. */
+    justify-content:flex-start;
   }
   /* ── IL VIDEO SI VEDE INTERO IN LARGHEZZA ──
      object-fit:cover riempie il contenitore TAGLIANDO i lati: e' il suo
@@ -608,7 +616,7 @@ header.dark{background:rgba(10,10,10,.95);border-bottom:1px solid rgba(184,150,9
     text-shadow:0 1px 12px rgba(0,0,0,.5);
   }
   .hey{ text-shadow:0 1px 8px rgba(0,0,0,.55); }
-  .hco{max-width:100%;width:100%}
+  .hco{max-width:100%;width:100%;margin-top:auto}
   /* I due pulsanti sono ancorati al FONDO della hero (justify-content:flex-end):
      per abbassarli si riduce il padding inferiore, aggiungere spazio sopra li
      stacca soltanto dalla descrizione senza spostarli.
@@ -2479,6 +2487,53 @@ header.hide{transform:translateY(-100%);}
   pointer-events: none;
 }
 .pp-scroll-hint.visible { opacity: 1; }
+/* Sulla home va in basso a destra, non al centro: al centro cadeva sopra i
+   pulsanti della hero. La classe la mette setTheme() quando la pagina
+   attiva e' la home. */
+.pp-scroll-hint.hp-right { left: auto; right: 60px; transform: none; align-items: flex-end; }
+/* Sulla home la scritta SCROLL resta anche sul telefono: senza etichetta la
+   sola lineetta si legge come un elemento decorativo, non come un invito.
+   Sulle altre pagine il display:none della media query piu' sotto continua a
+   valere: li' l'invito compare durante la lettura e una parola in piu'
+   distrarrebbe. */
+.pp-scroll-hint.hp-right .pp-scroll-hint-label{
+  display: block;
+  font-size: 8px;
+  letter-spacing: .34em;
+  color: rgba(212,176,122,.95);
+  text-shadow: 0 0 8px rgba(0,0,0,.7);
+}
+.pp-scroll-hint.hp-right.light .pp-scroll-hint-label{
+  color: rgba(96,72,32,1);
+  text-shadow: 0 0 8px rgba(255,255,255,.6);
+}
+@media (max-width: 768px){
+  .pp-scroll-hint.hp-right { right: 22px; gap: 7px; }
+  .pp-scroll-hint.hp-right .pp-scroll-hint-label{ font-size: 7.5px; letter-spacing: .3em; }
+}
+/* SCHERMI BASSI: l'invito sale e si rimpicciolisce.
+   Sotto i 620px di altezza la fascia inferiore e' tutta occupata: il ticker
+   dei cantieri e' fisso a 25px dal fondo ed e' alto una settantina, e sopra
+   di lui stanno la barra 1st / 40yr / Global a destra e la riga dei tre link
+   a sinistra. A bottom:80px l'invito cadeva dentro il ticker.
+   Sale quindi sopra tutto quel gruppo, resta a destra dove il video e'
+   sgombro, e si riduce perche' a quell'altezza lo spazio e' poco.
+   ATTENZIONE: non rimetterlo a bottom:80px e non nasconderlo. Nasconderlo
+   e' gia' stato provato ed e' sbagliato: e' proprio sugli schermi bassi che
+   la prima schermata sembra finita li'. */
+@media (max-height: 620px){
+  .pp-scroll-hint.hp-right{
+    bottom: 170px;
+    gap: 5px;
+  }
+  .pp-scroll-hint.hp-right .pp-scroll-hint-label{
+    font-size: 7px;
+    letter-spacing: .28em;
+  }
+  .pp-scroll-hint.hp-right .pp-scroll-hint-line{
+    height: 32px;
+  }
+}
 .pp-scroll-hint-label {
   font-size: 9px;
   font-weight: 400;
@@ -2488,9 +2543,17 @@ header.hide{transform:translateY(-100%);}
   font-family: "Outfit", sans-serif;
 }
 .pp-scroll-hint-line {
-  width: 1px;
-  height: 60px;
-  background: linear-gradient(to bottom, rgba(184,150,90,0), rgba(184,150,90,.7), rgba(184,150,90,0));
+  /* Contrasto: a un pixel, con il dorato smorzato, sopra un video che si
+     muove la lineetta spariva. Ora e' spessa 2px, arriva al dorato chiaro
+     pieno e ha un alone scuro che la stacca anche quando passa un'onda
+     chiara. Le estremita' restano sfumate: e' quello che la fa leggere
+     come un raggio invece che come un trattino. */
+  width: 2px;
+  height: 66px;
+  border-radius: 2px;
+  background: linear-gradient(to bottom,
+    rgba(212,176,122,0), rgba(212,176,122,1) 42%, rgba(212,176,122,1) 58%, rgba(212,176,122,0));
+  box-shadow: 0 0 10px rgba(0,0,0,.55);
   animation: scrollPulse 2s ease-in-out infinite;
   transform-origin: top center;
 }
@@ -2511,7 +2574,9 @@ header.hide{transform:translateY(-100%);}
    mancavano. Non togliere le classi dal JS senza togliere anche queste. */
 .pp-scroll-hint.light .pp-scroll-hint-label{ color:rgba(96,72,32,.95); }
 .pp-scroll-hint.light .pp-scroll-hint-line{
-  background:linear-gradient(to bottom, rgba(96,72,32,0), rgba(96,72,32,.75), rgba(96,72,32,0));
+  background:linear-gradient(to bottom,
+    rgba(96,72,32,0), rgba(96,72,32,1) 42%, rgba(96,72,32,1) 58%, rgba(96,72,32,0));
+  box-shadow:0 0 10px rgba(255,255,255,.5);
 }
 
 @media(max-width:768px){
@@ -2527,9 +2592,10 @@ header.hide{transform:translateY(-100%);}
      Il centro del gradiente e' piu' acceso (.85 contro .7): con una linea
      corta le due sfumature ai capi si mangiavano quasi tutto il tratto. */
   .pp-scroll-hint-line{
+    /* Qui si cambia SOLO l'altezza: il gradiente e l'alone stanno nella
+       regola di base. Riscrivere il background da capo, come faceva prima
+       questa riga, annullava il contrasto aggiunto li'. */
     height: clamp(42px, 6vh, 56px);
-    background: linear-gradient(to bottom,
-      rgba(184,150,90,0), rgba(184,150,90,.85), rgba(184,150,90,0));
   }
 }
 @keyframes scrollPulse {
@@ -5366,6 +5432,168 @@ body.hct-open header.hide{transform:none}
 
 @media print{ .hct,#hctp{display:none !important} }
 
+
+/* ═══ SEZIONE PRODUZIONE (home) ═══
+   Fondo CHIARO, al contrario del resto della home: un blocco lungo su nero
+   non lo legge nessuno. Il contrasto serve anche a staccarla dalle
+   testimonianze che la precedono.
+   ⚠ L'ingresso usa gli stessi valori di .rise-up e della galleria prodotto
+   (translateY 92px, 1.2s cubic-bezier(.42,0,.25,1), dissolvenza .8s lineare):
+   se un giorno si cambia l'andatura, si cambia in TUTTI i punti insieme. */
+/* FASCIA DI TRANSIZIONE IN CIMA
+   Il ticker dei cantieri e' fixed a bottom:25px, quindi sotto di lui restano
+   25px in cui si vede la pagina. Su finestre basse la hero e' alta esattamente
+   quanto il viewport, e quei 25px cadono gia' su questa sezione: con il fondo
+   chiaro si vedeva una fascetta bianca sotto la hero scura.
+   La fascia e' NETTA: 64px di nero pieno, poi stacco secco sul bianco caldo.
+   Niente sfumatura, per scelta.
+   ATTENZIONE: il padding superiore deve restare maggiore dei 64px della
+   fascia, altrimenti il testo cade sopra la parte scura. */
+.pr-section {
+  padding: 128px 24px 104px;
+  background: linear-gradient(to bottom, #0a0a0a 0px, #0a0a0a 64px, #f8f6f1 64px, #f8f6f1 100%);
+  color: #0a0a0a;
+}
+.pr-header { margin-bottom: 64px; max-width: 800px; }
+.pr-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: .4em;
+  text-transform: uppercase;
+  color: rgba(140,108,52,.95);
+  font-family: "Outfit", sans-serif;
+  margin-bottom: 16px;
+}
+.pr-title {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 300;
+  color: #0a0a0a;
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+.pr-title em { font-style: italic; color: rgba(10,10,10,.62); }
+.pr-intro {
+  margin-top: 22px;
+  font-family: "Outfit", sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.85;
+  color: rgba(10,10,10,.66);
+}
+.pr-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(10,10,10,.10);
+}
+.pr-card {
+  background: #f8f6f1;
+  padding: 0 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  transition: background .3s;
+}
+.pr-card:hover { background: #fdfcf9; }
+/* Parallasse leggero: la cornice ritaglia, la foto dentro e' piu' alta e
+   scorre di ~26px mentre la sezione attraversa lo schermo. Il movimento lo
+   scrive il JS come --pr-y, quindi niente listener di scroll che ricalcolano
+   il layout.
+   ATTENZIONE: volutamente contenuto. Sopra i ~50px si nota il taglio. */
+.pr-shot {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 3/2;
+  overflow: hidden;
+  margin-bottom: 14px;
+  background: rgba(10,10,10,.05);
+}
+.pr-img {
+  position: absolute;
+  inset: -8% 0;
+  display: block;
+  width: 100%;
+  height: 116%;
+  object-fit: cover;
+  transform: translate3d(0, var(--pr-y, 0px), 0);
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pr-img { transform: none; }
+}
+.pr-num, .pr-h, .pr-b, .pr-link { padding: 0 34px; }
+.pr-num {
+  font-family: "Outfit", sans-serif;
+  font-size: 10px;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  color: rgba(140,108,52,.95);
+}
+.pr-h {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(21px, 1.9vw, 28px);
+  font-weight: 300;
+  color: #0a0a0a;
+  line-height: 1.15;
+  letter-spacing: -.01em;
+  margin: 0;
+}
+.pr-b {
+  font-family: "Outfit", sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(10,10,10,.62);
+  margin: 0;
+}
+.pr-link {
+  margin-top: 8px;
+  font-family: "Outfit", sans-serif;
+  font-size: 11px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(140,108,52,.95);
+  text-decoration: none;
+  align-self: flex-start;
+  border-bottom: 1px solid rgba(140,108,52,.3);
+  padding-bottom: 3px;
+  transition: color .3s, border-color .3s;
+}
+.pr-link:hover { color: #8c6c34; border-color: rgba(140,108,52,.75); }
+.pr-foot {
+  margin-top: 64px;
+  max-width: 840px;
+  font-family: "Outfit", sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.9;
+  color: rgba(10,10,10,.55);
+}
+.pr-foot .pr-a { color: rgba(140,108,52,.95); text-decoration: none; border-bottom: 1px solid rgba(140,108,52,.28); cursor: pointer; }
+.pr-foot .pr-a:hover { color: #8c6c34; }
+/* Ingresso graduale · identico a .rise-up */
+.pr-rise {
+  opacity: 0;
+  transform: translateY(92px);
+  transition: opacity .8s linear, transform 1.2s cubic-bezier(.42,0,.25,1);
+  will-change: transform, opacity;
+}
+.pr-rise.in { opacity: 1; transform: none; will-change: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .pr-rise { opacity: 1; transform: none; transition: none; }
+}
+@media (max-width: 1100px) { .pr-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px) {
+  .pr-grid { grid-template-columns: 1fr; }
+  .pr-section { padding: 104px 0 72px; }
+  .pr-header { padding: 0 22px; margin-bottom: 44px; }
+  .pr-foot { padding: 0 22px; }
+  .pr-num, .pr-h, .pr-b, .pr-link { padding: 0 22px; }
+  .pr-card { padding-bottom: 34px; }
+}
 </style>
 
 <style id="ab-magazine">
@@ -6228,6 +6456,19 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <label class="hctf-k" for="hctf-mail" data-i18n="hcf_email">Email</label>
       <input class="hctf-in" id="hctf-mail" name="email" type="email" required autocomplete="email">
 
+      <!-- Nazione e citta' sono obbligatorie: senza, ogni richiesta va
+           smistata a mano chiedendo da dove scrive. Il distributore
+           competente dipende dal Paese, e il preventivo dalla spedizione.
+           Campi liberi e non tendine: una tendina di duecento nazioni e'
+           lenta da usare sul telefono e obbliga a tradurre duecento nomi
+           in cinque lingue. autocomplete lascia che sia il browser a
+           suggerire quello che l'utente ha gia' scritto altrove. -->
+      <label class="hctf-k" for="hctf-country" data-i18n="hcf_country">Country</label>
+      <input class="hctf-in" id="hctf-country" name="paese" type="text" required autocomplete="country-name">
+
+      <label class="hctf-k" for="hctf-city" data-i18n="hcf_city">City</label>
+      <input class="hctf-in" id="hctf-city" name="citta" type="text" required autocomplete="address-level2">
+
       <!-- Il privato e' la PRIMA voce, non un ripiego in fondo: chi possiede
            una barca deve capire subito che puo' scrivere anche senza essere
            un cantiere o un rivenditore. -->
@@ -6388,7 +6629,9 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
   <div class="hco">
     <p class="hey" data-i18n="hero_tag">Artisan Marine Cooking Equipment</p>
     <h1 class="hti" data-i18n-html="hero_title">Alta cucina italiana,<br><em>anywhere</em></h1>
-    <p class="hde" data-i18n="hero_desc">Professional gimballed cookers, cooktops, ovens and grills · from dayboats to vintage yachts, from charter to ocean passages. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.</p>
+  </div>
+  <div class="hco-more">
+    <p class="hde" data-i18n="hero_desc">Professional gimballed induction and gas cookers with oven · cooktops, ovens, grills and barbecues · from dayboats to vintage yachts, from charter to ocean passages. Handmade in the Inox Valley, Conegliano - Venezia · components machined from solid stainless steel.</p>
     <!-- LA RIGA DELLE BUYER PERSONA · le quattro figure che il sito serve
          erano nominate solo dentro il modulo di contatto, cioe' alla FINE del
          percorso. Qui il visitatore si riconosce in una parola prima ancora di
@@ -6406,6 +6649,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
     </div>
     <a href="#" class="bte" onclick="openEff();return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4.5 13.5H11L10 22L18.5 10.5H12L13 2Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span data-i18n="eff_btn">Energy Efficiency</span></a>
     <a href="#" class="bte" onclick="openOcean();return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M2 16c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 10c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg><span data-i18n="oc_btn">Bluewater Passages</span></a>
+    <a href="#testimonianze" class="bte" onclick="var t=document.getElementById('testimonianze');if(t){t.scrollIntoView({behavior:'smooth',block:'start'});}return false;"><svg viewBox="0 0 24 24" fill="none"><path d="M21 11.6a8.4 8.4 0 0 1-9 8.4L7 22l1-3.6A8.4 8.4 0 1 1 21 11.6Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg><span data-i18n="rv_btn">What our customers say</span></a>
   </div>
   <div class="hsb">
     <div class="hsi"><span class="hsn">1st</span><span class="hsl" data-i18n="stat_craft">Complete electric marine range</span></div>
@@ -6416,6 +6660,119 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 
 
 <!-- REVIEWS SECTION -->
+<!-- ===== Sezione produzione ===== -->
+<section class="pr-section" id="produzione">
+
+  <div class="pr-header">
+    <span class="pr-label" data-i18n="pr_label">What we make</span>
+    <h2 class="pr-title" data-i18n-html="pr_title">Everything a galley needs,<br><em>made by hand in Italy</em></h2>
+    <p class="pr-intro" data-i18n="pr_intro">Marine Cookers · Techimpex has been building galley appliances in Conegliano, near Venice, for three generations. Gimbaled gas stoves and cookers, induction and radiant electric ranges, built-in hobs and cooktops, ovens, electric grills and barbecues, coffee makers and sinks. Every unit is assembled one at a time in 304 or 316 stainless steel, for sailing yachts, motor yachts and expedition vessels.</p>
+  </div>
+
+  <div class="pr-grid">
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285764/HERO2_CUCINE_CON_FORNO_A_GAS_sqhzck.png" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1786285764/HERO2_CUCINE_CON_FORNO_A_GAS_sqhzck.png 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1786285764/HERO2_CUCINE_CON_FORNO_A_GAS_sqhzck.png 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285764/HERO2_CUCINE_CON_FORNO_A_GAS_sqhzck.png 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1786285764/HERO2_CUCINE_CON_FORNO_A_GAS_sqhzck.png 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Gimbaled marine gas cooker with oven" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_01_n">01 · Gas</span>
+      <h3 class="pr-h" data-i18n="pr_01_t">Gimbaled gas cookers with oven</h3>
+      <p class="pr-b" data-i18n="pr_01_b">The heart of the range: marine gas stoves with a full oven, gimballed so that the pans stay level while the boat moves. Two, three and four burners, thermocouple safety on every burner, oven doors that stay shut under way. The models known today as Marea, Maris, Nauta, Lux and Marina were the Classic, XL2, XL3, Top and Mariner of the past twenty years.</p>
+      <a class="pr-link" href="/gas-cookers-with-oven" onclick="openCatBySlug('gas-cookers-with-oven');return false;" data-i18n="pr_01_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1785398452/MARETTIMO_FOTO_HERO_pgnpke.jpg" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1785398452/MARETTIMO_FOTO_HERO_pgnpke.jpg 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1785398452/MARETTIMO_FOTO_HERO_pgnpke.jpg 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1785398452/MARETTIMO_FOTO_HERO_pgnpke.jpg 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1785398452/MARETTIMO_FOTO_HERO_pgnpke.jpg 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Compact gimbaled marine gas cooker" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_02_n">02 · Gas</span>
+      <h3 class="pr-h" data-i18n="pr_02_t">Compact gas cookers</h3>
+      <p class="pr-b" data-i18n="pr_02_b">For small galleys and tenders, where every centimetre counts. Compact gimballed stoves with one or two burners, built to the same standard as the larger units: marine-grade steel, hand assembly, spare parts available for decades.</p>
+      <a class="pr-link" href="/gas-cookers" onclick="openCatBySlug('gas-cookers');return false;" data-i18n="pr_02_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,e_saturation:-80,f_auto,q_auto:good,w_1200/v1786027890/ORIZZONTE_BOOT_-_CNB_62_HORIZON3_INDUCTION_1_1_u5twan.jpg" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,e_saturation:-80,f_auto,q_auto:good,w_600/v1786027890/ORIZZONTE_BOOT_-_CNB_62_HORIZON3_INDUCTION_1_1_u5twan.jpg 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,e_saturation:-80,f_auto,q_auto:good,w_900/v1786027890/ORIZZONTE_BOOT_-_CNB_62_HORIZON3_INDUCTION_1_1_u5twan.jpg 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,e_saturation:-80,f_auto,q_auto:good,w_1200/v1786027890/ORIZZONTE_BOOT_-_CNB_62_HORIZON3_INDUCTION_1_1_u5twan.jpg 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,e_saturation:-80,f_auto,q_auto:good,w_1600/v1786027890/ORIZZONTE_BOOT_-_CNB_62_HORIZON3_INDUCTION_1_1_u5twan.jpg 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Marine induction cooker with oven aboard a CNB 62" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_03_n">03 · Electric & Induction</span>
+      <h3 class="pr-h" data-i18n="pr_03_t">Electric and induction cookers with oven</h3>
+      <p class="pr-b" data-i18n="pr_03_b">We were the first Italian manufacturer to put a complete range of radiant electric cookers on the European market, at a time when cooking aboard meant gas and nothing else. We then did it again with induction, building the first complete collection of gimballed induction cookers with oven designed for the sea rather than adapted from a domestic kitchen. Eleven models, from Orizzonte and Tolomeo to Nobilis, Altalux and Granlux.</p>
+      <a class="pr-link" href="/electric-cookers-with-oven" onclick="openCatBySlug('electric-cookers-with-oven');return false;" data-i18n="pr_03_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1784657173/ADRIATICO_-_CRYSTAL2_INDUCTION_ls4uv1.jpg" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1784657173/ADRIATICO_-_CRYSTAL2_INDUCTION_ls4uv1.jpg 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1784657173/ADRIATICO_-_CRYSTAL2_INDUCTION_ls4uv1.jpg 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1784657173/ADRIATICO_-_CRYSTAL2_INDUCTION_ls4uv1.jpg 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1784657173/ADRIATICO_-_CRYSTAL2_INDUCTION_ls4uv1.jpg 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Built-in marine induction cooktop" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_04_n">04 · Electric & Induction</span>
+      <h3 class="pr-h" data-i18n="pr_04_t">Built-in electric cooktops</h3>
+      <p class="pr-b" data-i18n="pr_04_b">The widest collection of built-in marine cooktops in Europe: induction and glass-ceramic, one to four zones, flush into the worktop. Patented cooking systems that draw less from the batteries and hold temperature while the vessel moves, which is why owners on long passages choose them over domestic hobs.</p>
+      <a class="pr-link" href="/built-in-electric-cooktops" onclick="openCatBySlug('built-in-electric-cooktops');return false;" data-i18n="pr_04_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285762/HERO_PIANI_INCASSO_GASCopia_wgqxpq.png" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1786285762/HERO_PIANI_INCASSO_GASCopia_wgqxpq.png 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1786285762/HERO_PIANI_INCASSO_GASCopia_wgqxpq.png 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285762/HERO_PIANI_INCASSO_GASCopia_wgqxpq.png 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1786285762/HERO_PIANI_INCASSO_GASCopia_wgqxpq.png 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Built-in marine gas cooktop" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_05_n">05 · Gas</span>
+      <h3 class="pr-h" data-i18n="pr_05_t">Built-in gas cooktops</h3>
+      <p class="pr-b" data-i18n="pr_05_b">The pure flame, flush into the galley. Marine gas hobs in one, two, three and four burners, with safety valves and pan holders designed to grip in a seaway. For galleys where the oven sits separately, or where the flame is simply preferred.</p>
+      <a class="pr-link" href="/built-in-gas-cooktops" onclick="openCatBySlug('built-in-gas-cooktops');return false;" data-i18n="pr_05_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285772/ROMA_HEROCopia_nsgahh.png" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1786285772/ROMA_HEROCopia_nsgahh.png 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1786285772/ROMA_HEROCopia_nsgahh.png 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285772/ROMA_HEROCopia_nsgahh.png 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1786285772/ROMA_HEROCopia_nsgahh.png 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Built-in marine oven in stainless steel" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_06_n">06 · Ovens</span>
+      <h3 class="pr-h" data-i18n="pr_06_t">Built-in gas and electric ovens</h3>
+      <p class="pr-b" data-i18n="pr_06_b">Ovens that bake at sea, in a range of sizes, in gas or electric. Built to be installed on their own, above or below the cooktop, in stainless steel throughout, with doors and seals engineered for the movement and the salt.</p>
+      <a class="pr-link" href="/built-in-gas-ovens" onclick="openCatBySlug('built-in-gas-ovens');return false;" data-i18n="pr_06_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285765/IMAGE2_vhpg4u.png" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1786285765/IMAGE2_vhpg4u.png 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1786285765/IMAGE2_vhpg4u.png 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285765/IMAGE2_vhpg4u.png 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1786285765/IMAGE2_vhpg4u.png 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Built-in marine electric grill in stainless steel" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_07_n">07 · Grills</span>
+      <h3 class="pr-h" data-i18n="pr_07_t">Marine electric grills</h3>
+      <p class="pr-b" data-i18n="pr_07_b">Electric grills for boats, built in or rail mounted, with armoured or glass-ceramic elements in marine-grade 304 or 316 stainless steel. Flameless cooking on deck, with no gas bottle and no charcoal: what most modern yards now specify, and what a growing number of marinas require.</p>
+      <a class="pr-link" href="/electric-grills" onclick="openCatBySlug('electric-grills');return false;" data-i18n="pr_07_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285771/PERFETTO_hjaysq.jpg" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1786285771/PERFETTO_hjaysq.jpg 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1786285771/PERFETTO_hjaysq.jpg 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1786285771/PERFETTO_hjaysq.jpg 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1786285771/PERFETTO_hjaysq.jpg 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Marine electric barbecue and BBQ with cooking lid" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_08_n">08 · Grills</span>
+      <h3 class="pr-h" data-i18n="pr_08_t">Marine electric barbecues</h3>
+      <p class="pr-b" data-i18n="pr_08_b">Electric barbecues and BBQs with a cooking lid, for the cockpit and the flybridge, rail mounted or built in on a boat. The lid holds the heat and the smoke where they belong, so that a barbecue at anchor does not become a problem for the boat alongside.</p>
+      <a class="pr-link" href="/electric-bbqs" onclick="openCatBySlug('electric-bbqs');return false;" data-i18n="pr_08_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1784910309/CAPITANO_-_bargas1_b1f2bq.jpg" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1784910309/CAPITANO_-_bargas1_b1f2bq.jpg 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1784910309/CAPITANO_-_bargas1_b1f2bq.jpg 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1784910309/CAPITANO_-_bargas1_b1f2bq.jpg 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1784910309/CAPITANO_-_bargas1_b1f2bq.jpg 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Marine gas grill in stainless steel" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_09_n">09 · Grills</span>
+      <h3 class="pr-h" data-i18n="pr_09_t">Gas grills</h3>
+      <p class="pr-b" data-i18n="pr_09_b">For owners who want the flame on deck. Marine gas grills in stainless steel, with the same safety systems as the galley appliances and the same finish, so that the boat reads as one piece.</p>
+      <a class="pr-link" href="/gas-grills" onclick="openCatBySlug('gas-grills');return false;" data-i18n="pr_09_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1785246952/PRINCIPE1_DSC_3932_pcbxs6.jpg" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1785246952/PRINCIPE1_DSC_3932_pcbxs6.jpg 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1785246952/PRINCIPE1_DSC_3932_pcbxs6.jpg 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1785246952/PRINCIPE1_DSC_3932_pcbxs6.jpg 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1785246952/PRINCIPE1_DSC_3932_pcbxs6.jpg 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="PRINCIPE gimballed galley stove for classic and vintage yachts" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_10_n">10 · Classic</span>
+      <h3 class="pr-h" data-i18n="pr_10_t">Antiche Cambuse · galleys for classic yachts</h3>
+      <p class="pr-b" data-i18n="pr_10_b">Bespoke stoves and galleys for vintage and classic yachts, made one at a time by hand. Brass, copper and polished steel, drawn from the original plans or from photographs, with modern safety hidden inside a period form. Restoration work that the yards bring to us because almost nobody still does it.</p>
+      <a class="pr-link" href="/antiche-cambuse" onclick="openCatBySlug('antiche-cambuse');return false;" data-i18n="pr_10_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1785405492/EPRESSO12_bk29lb.webp" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1785405492/EPRESSO12_bk29lb.webp 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1785405492/EPRESSO12_bk29lb.webp 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1785405492/EPRESSO12_bk29lb.webp 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1785405492/EPRESSO12_bk29lb.webp 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Espresso12 marine espresso coffee maker in stainless steel" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_11_n">11 · Galley</span>
+      <h3 class="pr-h" data-i18n="pr_11_t">Coffee makers</h3>
+      <p class="pr-b" data-i18n="pr_11_b">The Italian espresso ritual carried to the open sea. Built for the movement and for the electrical system of a boat, because a proper coffee at anchor is not a detail for the people who live aboard.</p>
+      <a class="pr-link" href="/coffee-makers" onclick="openCatBySlug('coffee-makers');return false;" data-i18n="pr_11_l">See the collection</a>
+    </div>
+
+    <div class="pr-card pr-rise">
+      <span class="pr-shot"><img class="pr-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1787389502/SINK_SINGOLO_ORIZZONTALE_wlpwgl.jpg" srcset="https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_600/v1787389502/SINK_SINGOLO_ORIZZONTALE_wlpwgl.jpg 600w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_900/v1787389502/SINK_SINGOLO_ORIZZONTALE_wlpwgl.jpg 900w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1200/v1787389502/SINK_SINGOLO_ORIZZONTALE_wlpwgl.jpg 1200w, https://res.cloudinary.com/dseiw9ndw/image/upload/c_limit,f_auto,q_auto:good,w_1600/v1787389502/SINK_SINGOLO_ORIZZONTALE_wlpwgl.jpg 1600w" sizes="(max-width:700px) 100vw, (max-width:1100px) 50vw, 33vw" alt="Marine sink in stainless steel" width="900" height="600" loading="lazy" decoding="async"></span>
+      <span class="pr-num" data-i18n="pr_12_n">12 · Galley</span>
+      <h3 class="pr-h" data-i18n="pr_12_t">Sinks and accessories</h3>
+      <p class="pr-b" data-i18n="pr_12_b">Stainless steel marine sinks, pan holders that hold a pot at thirty degrees of heel, and the accessories that turn a set of appliances into a galley that works.</p>
+      <a class="pr-link" href="/sinks" onclick="openCatBySlug('sinks');return false;" data-i18n="pr_12_l">See the collection</a>
+    </div>
+
+  </div>
+
+  <p class="pr-foot" data-i18n-html="pr_foot">Every appliance is built to be serviced for decades: exploded views, manuals and spare parts are available for models sold twenty years ago. We also build to order, with <span class="pr-a" onclick="openCustom()" role="button" tabindex="0">custom projects</span> developed with shipyards and naval architects, sized and finished to a specific galley. For parts, send us a photograph of the unit you own: we will identify the model and confirm what it needs. <span class="pr-a" onclick="openSpare()" role="button" tabindex="0">Spare parts and manuals</span>.</p>
+
+</section>
+
 <section class="rv-section" id="testimonianze">
 
   <div class="rv-header">
@@ -8144,7 +8501,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 </div><!-- /matrixpage -->
 
 
-<div class="twrap"><div class="tinn"><div class="tbr"><span>Ferretti Yachts</span></div><div class="tbr"><span>Azimut Yachts</span></div><div class="tbr"><span>Solaris Yachts</span></div><div class="tbr"><span>Sunseeker</span></div><div class="tbr"><span>Neo Yachts</span></div><div class="tbr"><span>Ice Yachts</span></div><div class="tbr"><span>Cantiere del Pardo</span></div><div class="tbr"><span>Carbon Yachts</span></div><div class="tbr"><span>Bavaria Yachts</span></div><div class="tbr"><span>Axopar</span></div><div class="tbr"><span>Lyman Morse</span></div><div class="tbr"><span>Heesen Yachts</span></div><div class="tbr"><span>Pegasus Yachts</span></div><div class="tbr"><span>Maxi Dolphin</span></div><div class="tbr"><span>Nautor's Swan</span></div><div class="tbr"><span>X-Yachts</span></div><div class="tbr"><span>Aschenez</span></div><div class="tbr"><span>Baglietto</span></div><div class="tbr"><span>Italia Yachts</span></div><div class="tbr"><span>Rossi Navi</span></div><div class="tbr"><span>Cantieri Capelli</span></div><div class="tbr"><span>Turquoise Yachts</span></div><div class="tbr"><span>CNB</span></div><div class="tbr"><span>ITA Catamarans</span></div><div class="tbr"><span>Sunreef</span></div><div class="tbr"><span>Dragonfly</span></div><div class="tbr"><span>Vismara</span></div><div class="tbr"><span>Persico</span><span>Gianetti Yachts</span></div><div class="tbr"><span>Ferretti Yachts</span></div><div class="tbr"><span>Azimut Yachts</span></div><div class="tbr"><span>Solaris Yachts</span></div><div class="tbr"><span>Sunseeker</span></div><div class="tbr"><span>Neo Yachts</span></div><div class="tbr"><span>Ice Yachts</span></div><div class="tbr"><span>Cantiere del Pardo</span></div><div class="tbr"><span>Carbon Yachts</span></div><div class="tbr"><span>Bavaria Yachts</span></div><div class="tbr"><span>Axopar</span></div><div class="tbr"><span>Lyman Morse</span></div><div class="tbr"><span>Heesen Yachts</span></div><div class="tbr"><span>Pegasus Yachts</span></div><div class="tbr"><span>Maxi Dolphin</span></div><div class="tbr"><span>Nautor's Swan</span></div><div class="tbr"><span>X-Yachts</span></div><div class="tbr"><span>Aschenez</span></div><div class="tbr"><span>Baglietto</span></div><div class="tbr"><span>Italia Yachts</span></div><div class="tbr"><span>Rossi Navi</span></div><div class="tbr"><span>Cantieri Capelli</span></div><div class="tbr"><span>Turquoise Yachts</span></div><div class="tbr"><span>CNB</span></div><div class="tbr"><span>ITA Catamarans</span></div><div class="tbr"><span>Sunreef</span></div><div class="tbr"><span>Dragonfly</span></div><div class="tbr"><span>Vismara</span></div><div class="tbr"><span>Persico</span><span>Gianetti Yachts</span></div></div></div>
+<div class="twrap"><div class="tinn"><div class="tbr"><span>Ferretti Yachts</span></div><div class="tbr"><span>Azimut Yachts</span></div><div class="tbr"><span>Solaris Yachts</span></div><div class="tbr"><span>Sunseeker</span></div><div class="tbr"><span>Neo Yachts</span></div><div class="tbr"><span>Ice Yachts</span></div><div class="tbr"><span>Cantiere del Pardo</span></div><div class="tbr"><span>Carbon Yachts</span></div><div class="tbr"><span>Bavaria Yachts</span></div><div class="tbr"><span>Axopar</span></div><div class="tbr"><span>Lyman Morse</span></div><div class="tbr"><span>Heesen Yachts</span></div><div class="tbr"><span>Pegasus Yachts</span></div><div class="tbr"><span>Maxi Dolphin</span></div><div class="tbr"><span>Nautor's Swan</span></div><div class="tbr"><span>X-Yachts</span></div><div class="tbr"><span>Aschenez</span></div><div class="tbr"><span>Baglietto</span></div><div class="tbr"><span>Italia Yachts</span></div><div class="tbr"><span>Rossi Navi</span></div><div class="tbr"><span>Cantieri Capelli</span></div><div class="tbr"><span>Turquoise Yachts</span></div><div class="tbr"><span>CNB</span></div><div class="tbr"><span>ITA Catamarans</span></div><div class="tbr"><span>Sunreef</span></div><div class="tbr"><span>Dragonfly</span></div><div class="tbr"><span>Vismara</span></div><div class="tbr"><span>Persico</span></div><div class="tbr"><span>Gianetti Yachts</span></div><div class="tbr"><span>Zuanelli</span></div><div class="tbr"><span>Ferretti Yachts</span></div><div class="tbr"><span>Azimut Yachts</span></div><div class="tbr"><span>Solaris Yachts</span></div><div class="tbr"><span>Sunseeker</span></div><div class="tbr"><span>Neo Yachts</span></div><div class="tbr"><span>Ice Yachts</span></div><div class="tbr"><span>Cantiere del Pardo</span></div><div class="tbr"><span>Carbon Yachts</span></div><div class="tbr"><span>Bavaria Yachts</span></div><div class="tbr"><span>Axopar</span></div><div class="tbr"><span>Lyman Morse</span></div><div class="tbr"><span>Heesen Yachts</span></div><div class="tbr"><span>Pegasus Yachts</span></div><div class="tbr"><span>Maxi Dolphin</span></div><div class="tbr"><span>Nautor's Swan</span></div><div class="tbr"><span>X-Yachts</span></div><div class="tbr"><span>Aschenez</span></div><div class="tbr"><span>Baglietto</span></div><div class="tbr"><span>Italia Yachts</span></div><div class="tbr"><span>Rossi Navi</span></div><div class="tbr"><span>Cantieri Capelli</span></div><div class="tbr"><span>Turquoise Yachts</span></div><div class="tbr"><span>CNB</span></div><div class="tbr"><span>ITA Catamarans</span></div><div class="tbr"><span>Sunreef</span></div><div class="tbr"><span>Dragonfly</span></div><div class="tbr"><span>Vismara</span></div><div class="tbr"><span>Persico</span></div><div class="tbr"><span>Gianetti Yachts</span></div><div class="tbr"><span>Zuanelli</span></div></div></div>
 
 <!-- Cursore galleria orizzontale -->
 <div id="pg-cursor">
@@ -8263,6 +8620,17 @@ function tm(){
   NP.classList.toggle('on',mO);
   BD.classList.toggle('on',mO);
   document.body.style.overflow=mO?'hidden':'';
+
+  /* L'INTESTAZIONE TORNA VISIBILE QUANDO SI APRE IL MENU.
+     L'intestazione si nasconde scorrendo verso il basso oltre gli 80px.
+     Da quando i pulsanti della hero, sul telefono, stanno sotto la piega,
+     chi preme "Esplora i prodotti" ha per forza gia' scorso: l'intestazione
+     era quindi in stato "hide" e il menu si apriva senza di essa, cioe'
+     senza la X per chiudere. Riappariva solo risalendo. */
+  if(mO){
+    var _h=document.getElementById('hdr');
+    if(_h) _h.classList.remove('hide');
+  }
 
   if(!mO)cDrop();
 }
@@ -10453,6 +10821,101 @@ window.PROD_DESC_FULL = {
   }
 };
 
+
+/* ══ SEZIONE PRODUZIONE (home) · ingresso graduale delle schede ══
+   Stesso comportamento di .rise-up delle pagine interne, ma la sezione sta
+   nella home ed e' sempre nel DOM: non serve il giro di riattivazione.
+   ⚠ Se IntersectionObserver manca, o se l'utente ha chiesto meno movimento,
+   le schede restano semplicemente visibili. */
+(function(){
+  function avviaProduzione(){
+    var cards = document.querySelectorAll('#produzione .pr-rise');
+    if(!cards.length) return;
+    var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(reduce || !('IntersectionObserver' in window)){
+      for(var i=0;i<cards.length;i++) cards[i].classList.add('in');
+      return;
+    }
+    var mo = new IntersectionObserver(function(entries){
+      var dentro = [], k;
+      for(k=0;k<entries.length;k++){
+        if(entries[k].isIntersecting){ dentro.push(entries[k].target); mo.unobserve(entries[k].target); }
+      }
+      dentro.sort(function(x,y){
+        var p = x.compareDocumentPosition(y);
+        return (p & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+      });
+      for(k=0;k<dentro.length;k++){
+        dentro[k].style.transitionDelay = (k*90) + 'ms';
+        dentro[k].classList.add('in');
+      }
+    }, {rootMargin:'0px 0px -12% 0px', threshold:0.08});
+    for(var j=0;j<cards.length;j++) mo.observe(cards[j]);
+  }
+  /* Parallasse: un solo requestAnimationFrame, attivo solo quando la sezione
+     e' in vista. Scrive una variabile CSS, non tocca il layout. */
+  function avviaParallasse(){
+    var sez = document.getElementById('produzione');
+    if(!sez) return;
+    if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    var shots = sez.querySelectorAll('.pr-img');
+    if(!shots.length) return;
+    var attivo = false, ticking = false;
+    function passo(){
+      ticking = false;
+      var h = window.innerHeight || document.documentElement.clientHeight;
+      for(var i=0;i<shots.length;i++){
+        var r = shots[i].getBoundingClientRect();
+        if(r.bottom < -200 || r.top > h + 200) continue;
+        var centro = (r.top + r.height/2 - h/2) / h;
+        shots[i].style.setProperty('--pr-y', (centro * -26).toFixed(1) + 'px');
+      }
+    }
+    function chiedi(){
+      if(!attivo || ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(passo);
+    }
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(e){
+        attivo = e[0].isIntersecting;
+        if(attivo) chiedi();
+      }, {rootMargin:'200px 0px'}).observe(sez);
+    } else {
+      attivo = true;
+    }
+    window.addEventListener('scroll', chiedi, {passive:true});
+    window.addEventListener('resize', chiedi, {passive:true});
+    passo();
+  }
+
+  /* Il blocco sotto il titolo della hero, sul telefono, entra quando
+     compare invece che al caricamento. Nessun controllo su matchMedia:
+     su desktop la classe .in non ha alcuna regola associata, quindi
+     aggiungerla e' innocuo, e cosi' non ci sono casi limite se qualcuno
+     ruota il telefono o ridimensiona la finestra dopo il caricamento. */
+  function avviaHeroMore(){
+    var el = document.querySelector('.hco-more');
+    if(!el) return;
+    if(!('IntersectionObserver' in window)){ el.classList.add('in'); return; }
+    var mo = new IntersectionObserver(function(entries){
+      if(entries[0].isIntersecting){
+        el.classList.add('in');
+        mo.disconnect();
+      }
+    }, {rootMargin:'0px 0px -14% 0px', threshold:0.05});
+    mo.observe(el);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ avviaProduzione(); avviaParallasse(); avviaHeroMore(); });
+  } else {
+    avviaProduzione();
+    avviaParallasse();
+    avviaHeroMore();
+  }
+})();
+
 // ── DESCRIPTION COMPATTA · apri/chiudi + scroll interno ──
 // Niente reveal lettera per lettera: il testo e' nero e leggibile da subito,
 // il riquadro scorre e basta. Nessun rapporto con il motore .slr-* della
@@ -11746,6 +12209,10 @@ window.PROD_SPECS={
   var lastY=0, ticking=false;
   var innerPages=['aboutpage','catpage','contactpage','sparepage','prodpage','cp'];
   function anyPageOpen(){
+    /* Anche il menu di navigazione conta come pagina aperta: con il menu in
+       campo l'intestazione deve restare, contiene la X per chiudere. */
+    var np=document.getElementById('np');
+    if(np && np.classList.contains('on')) return true;
     return innerPages.some(function(id){
       var el=document.getElementById(id);
       return el && el.classList.contains('show');
@@ -12231,6 +12698,26 @@ function openAbout(){
      senso, si rimette il loop nativo e non succede nulla di strano. */
   var FADE = 2.0;                 /* secondi · deve combaciare con il CSS */
   var MIN_DUR = 3 * FADE;         /* sotto i 6 s la dissolvenza mangia il video */
+
+  /* ── SECONDO FILMATO, SOLO SU TELEFONO ──
+     Il ciclo qui sotto e' nato per togliere lo stacco del riavvolgimento:
+     due elementi con lo STESSO filmato che si scambiano l'opacita'. Se al
+     secondo si da' un filmato diverso, la stessa meccanica diventa un
+     montaggio: casa, oceano, casa, senza una riga di logica nuova.
+     Su desktop resta tutto com'era: la hero e' alta e il filmato di casa
+     e' montato per quello schermo.
+     ⚠ COSTO: su telefono si scarica un secondo filmato. Vale la pena solo
+     perche' parte DOPO che il primo e' gia' in campo, quindi non tocca ne'
+     l'LCP ne' il primo disegno. Se un giorno la hero mobile diventasse
+     pesante, questa e' la prima cosa da togliere. */
+  var SRC_SECONDO_MOBILE =
+    'https://res.cloudinary.com/dseiw9ndw/video/upload/v1787132477/iStock-1371179858_1_gcghfr.mp4';
+
+  function srcSecondo(src){
+    var piccolo = window.matchMedia && window.matchMedia('(max-width:768px)').matches;
+    return piccolo ? SRC_SECONDO_MOBILE : src;
+  }
+
   function crossfade(first, src){
     var b = document.getElementById('heroVid2');
     if(!b || b.dataset.ready) return;
@@ -12254,10 +12741,10 @@ function openAbout(){
        e 200 ms dopo l'elemento viene comunque messo in pausa e azzerato. */
     b.loop = true;
     var s2 = document.createElement('source');
-    s2.src = src; s2.type = 'video/mp4';
+    s2.src = srcSecondo(src); s2.type = 'video/mp4';
     b.insertBefore(s2, b.firstChild);
     b.preload = 'auto';
-    b.load();                                       /* stessa URL: arriva dalla cache */
+    b.load();   /* su desktop stessa URL, dalla cache · su telefono e' il secondo filmato */
     arm(first, b); arm(b, first);
   }
   function arm(a, b){
@@ -13929,6 +14416,9 @@ function ppGalleryOpenFromGrid(startIdx){
 
   function setTheme(pageId){
     var h=getHint();if(!h)return;
+    /* Sulla home l'invito sta in basso a destra: al centro finiva sopra i
+       pulsanti della hero, che sul telefono occupano tutta la larghezza. */
+    h.classList.toggle('hp-right', pageId==='home');
     if(lightPages.indexOf(pageId)!==-1){h.classList.add('light');h.classList.remove('dark');}
     else{h.classList.add('dark');h.classList.remove('light');}
   }
@@ -14308,7 +14798,7 @@ var DICT = {
     /* Hero */
     hero_tag: "Marine Cooking, Crafted in Italy",
     hero_title: "Alta cucina italiana,<br><em>anywhere</em>",
-    hero_desc: "Professional gimballed cookers, cooktops, ovens and grills · from dayboats to vintage yachts, from charter to ocean passages. Handmade in the Inox Valley, Conegliano - Venezia · built with components turned and milled from solid stainless steel.",
+    hero_desc: "Professional gimballed induction and gas cookers with oven · cooktops, ovens, grills and barbecues · from dayboats to vintage yachts, from charter to ocean passages. Handmade in the Inox Valley, Conegliano - Venezia · components machined from solid stainless steel.",
     acc_cap4: "Lava flow",
     acc_brand: "SOAPSTONE",
     acc_sub: "Valtellina",
@@ -14580,6 +15070,8 @@ var DICT = {
     ct_email: "Email",
     hcf_name: "Name",
     hcf_email: "Email",
+    hcf_country: "Country",
+    hcf_city: "City",
     hcf_who: "I am",
     hcf_who_0: "Please choose",
     hcf_who_1: "An owner or owner's representative",
@@ -14674,6 +15166,7 @@ var DICT = {
     oc_ms3: "Latifa, William Fife III · a cooker for her refit",
     oc_fig_cap: "Latifa · refit: Classic variant, built entirely to measure",
     oc_btn: "Bluewater Passages",
+    rv_btn: "What our customers say",
     oc_ms2: "Thousands of cookers aboard boats that sail the world’s oceans",
     oc_badge: "Bluewater variant available",
     ct_hours_label: "Hours",
@@ -15581,7 +16074,60 @@ var DICT = {
     rv11: "\"I was looking for spare parts for my twenty-year-old gas cooker. The exploded views were right there on the home page, and the advice I received was excellent. Five stars from me.\"",
     rv12: "\"Never had I received such excellent service from an Italian company, and I say that as the owner of an Italian boat. It is in these small things, in the attention and the willingness to help, that you see the true face of a company.\"",
     rv13: "\"I had already bought burners and other parts from you for my old cooker. When the time came for a new one, I chose a Techimpex again. Thank you for the speed and the seriousness you show.\"",
-    rv14: "\"This is the second time I have ordered spare parts for my cooker. What struck me most is the after-sales service: prompt assistance, support with the installation and real technical competence. It is rare to find something so complete.\""
+    rv14: "\"This is the second time I have ordered spare parts for my cooker. What struck me most is the after-sales service: prompt assistance, support with the installation and real technical competence. It is rare to find something so complete.\"",
+    /* Sezione produzione (home) */
+    pr_label: "What we make",
+    pr_title: "Everything a galley needs,<br><em>made by hand in Italy</em>",
+    pr_intro: "Marine Cookers \u00b7 Techimpex has been building galley appliances in Conegliano, near Venice, for three generations. Gimbaled gas stoves and cookers, induction and radiant electric ranges, built-in hobs and cooktops, ovens, electric grills and barbecues, coffee makers and sinks. Every unit is assembled one at a time in 304 or 316 stainless steel, for sailing yachts, motor yachts and expedition vessels.",
+    pr_01_n: "01 \u00b7 Gas",
+    pr_01_t: "Gimbaled gas cookers with oven",
+    pr_01_b: "The heart of the range: marine gas stoves with a full oven, gimballed so that the pans stay level while the boat moves. Two, three and four burners, thermocouple safety on every burner, oven doors that stay shut under way. The models known today as Marea, Maris, Nauta, Lux and Marina were the Classic, XL2, XL3, Top and Mariner of the past twenty years.",
+    pr_01_l: "See the collection",
+    pr_02_n: "02 \u00b7 Gas",
+    pr_02_t: "Compact gas cookers",
+    pr_02_b: "For small galleys and tenders, where every centimetre counts. Compact gimballed stoves with one or two burners, built to the same standard as the larger units: marine-grade steel, hand assembly, spare parts available for decades.",
+    pr_02_l: "See the collection",
+    pr_03_n: "03 \u00b7 Electric & Induction",
+    pr_03_t: "Electric and induction cookers with oven",
+    pr_03_b: "We were the first Italian manufacturer to put a complete range of radiant electric cookers on the European market, at a time when cooking aboard meant gas and nothing else. We then did it again with induction, building the first complete collection of gimballed induction cookers with oven designed for the sea rather than adapted from a domestic kitchen. Eleven models, from Orizzonte and Tolomeo to Nobilis, Altalux and Granlux.",
+    pr_03_l: "See the collection",
+    pr_04_n: "04 \u00b7 Electric & Induction",
+    pr_04_t: "Built-in electric cooktops",
+    pr_04_b: "The widest collection of built-in marine cooktops in Europe: induction and glass-ceramic, one to four zones, flush into the worktop. Patented cooking systems that draw less from the batteries and hold temperature while the vessel moves, which is why owners on long passages choose them over domestic hobs.",
+    pr_04_l: "See the collection",
+    pr_05_n: "05 \u00b7 Gas",
+    pr_05_t: "Built-in gas cooktops",
+    pr_05_b: "The pure flame, flush into the galley. Marine gas hobs in one, two, three and four burners, with safety valves and pan holders designed to grip in a seaway. For galleys where the oven sits separately, or where the flame is simply preferred.",
+    pr_05_l: "See the collection",
+    pr_06_n: "06 \u00b7 Ovens",
+    pr_06_t: "Built-in gas and electric ovens",
+    pr_06_b: "Ovens that bake at sea, in a range of sizes, in gas or electric. Built to be installed on their own, above or below the cooktop, in stainless steel throughout, with doors and seals engineered for the movement and the salt.",
+    pr_06_l: "See the collection",
+    pr_07_n: "07 \u00b7 Grills",
+    pr_07_t: "Marine electric grills",
+    pr_07_b: "Electric grills for boats, built in or rail mounted, with armoured or glass-ceramic elements in marine-grade 304 or 316 stainless steel. Flameless cooking on deck, with no gas bottle and no charcoal: what most modern yards now specify, and what a growing number of marinas require.",
+    pr_07_l: "See the collection",
+    pr_08_n: "08 \u00b7 Grills",
+    pr_08_t: "Marine electric barbecues",
+    pr_08_b: "Electric barbecues and BBQs with a cooking lid, for the cockpit and the flybridge, rail mounted or built in on a boat. The lid holds the heat and the smoke where they belong, so that a barbecue at anchor does not become a problem for the boat alongside.",
+    pr_08_l: "See the collection",
+    pr_09_n: "09 \u00b7 Grills",
+    pr_09_t: "Gas grills",
+    pr_09_b: "For owners who want the flame on deck. Marine gas grills in stainless steel, with the same safety systems as the galley appliances and the same finish, so that the boat reads as one piece.",
+    pr_09_l: "See the collection",
+    pr_10_n: "10 \u00b7 Classic",
+    pr_10_t: "Antiche Cambuse \u00b7 galleys for classic yachts",
+    pr_10_b: "Bespoke stoves and galleys for vintage and classic yachts, made one at a time by hand. Brass, copper and polished steel, drawn from the original plans or from photographs, with modern safety hidden inside a period form. Restoration work that the yards bring to us because almost nobody still does it.",
+    pr_10_l: "See the collection",
+    pr_11_n: "11 \u00b7 Galley",
+    pr_11_t: "Coffee makers",
+    pr_11_b: "The Italian espresso ritual carried to the open sea. Built for the movement and for the electrical system of a boat, because a proper coffee at anchor is not a detail for the people who live aboard.",
+    pr_11_l: "See the collection",
+    pr_12_n: "12 \u00b7 Galley",
+    pr_12_t: "Sinks and accessories",
+    pr_12_b: "Stainless steel marine sinks, pan holders that hold a pot at thirty degrees of heel, and the accessories that turn a set of appliances into a galley that works.",
+    pr_12_l: "See the collection",
+    pr_foot: "Every appliance is built to be serviced for decades: exploded views, manuals and spare parts are available for models sold twenty years ago. We also build to order, with <span class=\"pr-a\" onclick=\"openCustom()\" role=\"button\" tabindex=\"0\">custom projects</span> developed with shipyards and naval architects, sized and finished to a specific galley. For parts, send us a photograph of the unit you own: we will identify the model and confirm what it needs. <span class=\"pr-a\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Spare parts and manuals</span>.",
   },
 
   it: {
@@ -15744,7 +16290,7 @@ var DICT = {
     cs2_eoven_points: "<li>Resistenze corazzate potenti e di alta qualità.</li><li>Termostati precisi, per un controllo fine della temperatura.</li><li>Griglie forno capienti e porte con vetri doppi di sicurezza, per una facciata più fresca.</li><li>Leccarde smaltate, per una diffusione del calore uniforme ed efficiente.</li><li>Interni in smalto ad alto spessore o acciaio inox lucidato a specchio, per igiene e resistenza alla corrosione.</li><li>Ogni pezzo realizzato a mano a Conegliano.</li>",
     hero_tag: "Cucine Marine d'Autore",
     hero_title: "Alta cucina italiana,<br><em>ovunque</em>",
-    hero_desc: "Cucine basculanti, piani cottura, forni e grill professionali · dai day cruiser agli yacht d'epoca, dal charter alle traversate oceaniche. Fatti a mano nell'Inox Valley, Conegliano - Venezia · costruiti con elementi torniti e fresati dal pieno acciaio inox.",
+    hero_desc: "Cucine nautiche basculanti a induzione e a gas con forno · piani cottura, forni, grill e barbecue professionali · dai day cruiser agli yacht d'epoca, dal charter alle traversate oceaniche. Fatte a mano nell'Inox Valley, Conegliano - Venezia · elementi torniti e fresati dal pieno acciaio inox.",
     acc_cap4: "Colata lavica",
     acc_brand: "PIETRA OLLARE",
     acc_sub: "Valtellina",
@@ -16010,6 +16556,8 @@ var DICT = {
     ct_email: "Email",
     hcf_name: "Nome",
     hcf_email: "Email",
+    hcf_country: "Paese",
+    hcf_city: "Citt\u00e0",
     hcf_who: "Sono",
     hcf_who_0: "Seleziona",
     hcf_who_1: "Un armatore o suo rappresentante",
@@ -16104,6 +16652,7 @@ var DICT = {
     oc_ms3: "Latifa, William Fife III · una cucina per il refit",
     oc_fig_cap: "Latifa · refit: variante Classic, interamente su misura",
     oc_btn: "Cucine oceaniche",
+    rv_btn: "Cosa dicono di noi",
     oc_ms2: "Migliaia di cucine installate su barche che solcano gli oceani di tutto il mondo",
     oc_badge: "Variante Bluewater disponibile",
     ct_hours_label: "Orari",
@@ -17009,7 +17558,60 @@ var DICT = {
     rv11: "\"Cercavo ricambi per la mia cucina a gas di vent'anni. Gli esplosi erano già lì, sulla home page, e la consulenza che ho ricevuto è stata eccellente. Cinque stelle.\"",
     rv12: "\"Non mi era mai capitato di ricevere un servizio così eccellente da un'azienda italiana, e lo dico da proprietario di una barca italiana. È proprio in queste piccole cose, nell'attenzione e nella disponibilità, che si vede il vero volto di un'azienda.\"",
     rv13: "\"Avevo già acquistato da voi bruciatori e altri articoli per la mia vecchia cucina. Dovendone comprare una nuova, ho voluto scegliere ancora una Techimpex. Grazie per la tempistica e la serietà che dimostrate.\"",
-    rv14: "\"È già la seconda volta che ordino ricambi per la mia cucina. Ciò che mi ha colpito di più è il servizio post-vendita: assistenza puntuale, supporto nell'installazione e una competenza tecnica elevata. È raro trovare un servizio così completo.\""
+    rv14: "\"È già la seconda volta che ordino ricambi per la mia cucina. Ciò che mi ha colpito di più è il servizio post-vendita: assistenza puntuale, supporto nell'installazione e una competenza tecnica elevata. È raro trovare un servizio così completo.\"",
+    /* Sezione produzione (home) */
+    pr_label: "Cosa produciamo",
+    pr_title: "Tutto quello che serve a una cucina di bordo,<br><em>fatto a mano in Italia</em>",
+    pr_intro: "Marine Cookers \u00b7 Techimpex costruisce apparecchi per la cucina di bordo a Conegliano, vicino a Venezia, da tre generazioni. Cucine a gas basculanti, cucine elettriche e a induzione, piani cottura da incasso, forni, grill e barbecue elettrici, macchine per il caff\u00e8 e lavelli. Ogni pezzo \u00e8 montato a mano in acciaio inox 304 o 316, per barche a vela, yacht a motore e navi da spedizione.",
+    pr_01_n: "01 \u00b7 Gas",
+    pr_01_t: "Cucine a gas basculanti con forno",
+    pr_01_b: "Il cuore della gamma: cucine nautiche a gas con forno, cardaniche, perch\u00e9 le pentole restino in piano mentre la barca si muove. Due, tre e quattro fuochi, termocoppia di sicurezza su ogni fuoco, porte del forno che restano chiuse in navigazione. I modelli che oggi si chiamano Marea, Maris, Nauta, Lux e Marina erano la Classic, la XL2, la XL3, la Top e la Mariner degli ultimi vent'anni.",
+    pr_01_l: "Vedi la collezione",
+    pr_02_n: "02 \u00b7 Gas",
+    pr_02_t: "Cucine a gas compatte",
+    pr_02_b: "Per cucine di bordo piccole e tender, dove ogni centimetro conta. Fornelli e cucine basculanti compatte a uno o due fuochi, costruite con lo stesso standard delle unit\u00e0 maggiori: acciaio marino, montaggio a mano, ricambi disponibili per decenni.",
+    pr_02_l: "Vedi la collezione",
+    pr_03_n: "03 \u00b7 Elettrico e induzione",
+    pr_03_t: "Cucine elettriche e a induzione con forno",
+    pr_03_b: "Siamo stati il primo produttore italiano a portare sul mercato europeo una gamma completa di cucine elettriche radianti, quando cucinare a bordo voleva dire gas e nient'altro. L'abbiamo poi rifatto con l'induzione, costruendo la prima collezione completa di cucine a induzione basculanti con forno pensata per il mare, non adattata da una cucina di casa. Undici modelli, da Orizzonte e Tolomeo a Nobilis, Altalux e Granlux.",
+    pr_03_l: "Vedi la collezione",
+    pr_04_n: "04 \u00b7 Elettrico e induzione",
+    pr_04_t: "Piani cottura elettrici da incasso",
+    pr_04_b: "La collezione pi\u00f9 ampia d'Europa di piani cottura nautici da incasso: a induzione e in vetroceramica, da una a quattro zone, a filo del piano di lavoro. Sistemi di cottura brevettati che assorbono meno dalle batterie e tengono la temperatura mentre la barca si muove: il motivo per cui gli armatori in navigazione lunga li scelgono al posto dei piani domestici.",
+    pr_04_l: "Vedi la collezione",
+    pr_05_n: "05 \u00b7 Gas",
+    pr_05_t: "Piani cottura a gas da incasso",
+    pr_05_b: "La fiamma pura, a filo del piano di lavoro. Piani cottura nautici a gas da uno, due, tre e quattro fuochi, con valvole di sicurezza e griglie disegnate per trattenere le pentole con il mare formato. Per cucine di bordo dove il forno \u00e8 separato, o dove semplicemente si preferisce la fiamma.",
+    pr_05_l: "Vedi la collezione",
+    pr_06_n: "06 \u00b7 Forni",
+    pr_06_t: "Forni da incasso a gas ed elettrici",
+    pr_06_b: "Forni che cuociono davvero in mare, in diverse misure, a gas o elettrici. Costruiti per essere installati da soli, sopra o sotto il piano cottura, interamente in acciaio inox, con porte e guarnizioni pensate per il movimento e per la salsedine.",
+    pr_06_l: "Vedi la collezione",
+    pr_07_n: "07 \u00b7 Grill",
+    pr_07_t: "Grill elettrici nautici",
+    pr_07_b: "Grill elettrici per barca, da incasso o a pulpito, con resistenze corazzate o in vetroceramica, in acciaio inox marino 304 o 316. Cottura in coperta senza fiamma, senza bombola e senza carbonella: quello che oggi la maggior parte dei cantieri chiede e che sempre pi\u00f9 marina impongono.",
+    pr_07_l: "Vedi la collezione",
+    pr_08_n: "08 \u00b7 Grill",
+    pr_08_t: "Barbecue elettrici nautici",
+    pr_08_b: "Barbecue e bbq elettrici con coperchio di cottura, per il pozzetto e il flybridge, a pulpito o da incasso in barca. Il coperchio trattiene calore e fumo dove devono stare, cos\u00ec che una grigliata alla fonda non diventi un problema per la barca accanto.",
+    pr_08_l: "Vedi la collezione",
+    pr_09_n: "09 \u00b7 Grill",
+    pr_09_t: "Grill a gas",
+    pr_09_b: "Per chi la fiamma la vuole anche in coperta. Grill nautici a gas in acciaio inox, con gli stessi sistemi di sicurezza degli apparecchi di bordo e la stessa finitura, perch\u00e9 la barca si legga come un pezzo solo.",
+    pr_09_l: "Vedi la collezione",
+    pr_10_n: "10 \u00b7 Classiche",
+    pr_10_t: "Antiche Cambuse \u00b7 cucine per yacht d'epoca",
+    pr_10_b: "Cucine di bordo su misura per yacht d'epoca e classici, fatte una alla volta a mano. Ottone, rame e acciaio lucidato, ricavate dai disegni originali o dalle fotografie, con la sicurezza moderna nascosta dentro una forma d'epoca. Un lavoro di restauro che i cantieri portano a noi perch\u00e9 non lo fa quasi pi\u00f9 nessuno.",
+    pr_10_l: "Vedi la collezione",
+    pr_11_n: "11 \u00b7 Bordo",
+    pr_11_t: "Macchine per il caff\u00e8",
+    pr_11_b: "Il rito dell'espresso italiano portato in mare aperto. Costruite per il movimento e per l'impianto elettrico di una barca, perch\u00e9 un caff\u00e8 fatto bene alla fonda non \u00e8 un dettaglio per chi vive a bordo.",
+    pr_11_l: "Vedi la collezione",
+    pr_12_n: "12 \u00b7 Bordo",
+    pr_12_t: "Lavelli e accessori",
+    pr_12_b: "Lavelli nautici in acciaio inox, ferma-pentole che tengono una casseruola a trenta gradi di sbandamento, e gli accessori che trasformano un insieme di apparecchi in una cucina di bordo che funziona.",
+    pr_12_l: "Vedi la collezione",
+    pr_foot: "Ogni apparecchio \u00e8 costruito per essere assistito per decenni: esplosi, manuali e ricambi sono disponibili anche per modelli venduti vent'anni fa. Costruiamo anche su commessa, con <span class=\"pr-a\" onclick=\"openCustom()\" role=\"button\" tabindex=\"0\">progetti su misura</span> sviluppati con cantieri e studi di architettura navale, dimensionati e rifiniti su una cambusa specifica. Per i ricambi, mandateci una foto dell'apparecchio che avete a bordo: individuiamo il modello e confermiamo cosa serve. <span class=\"pr-a\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ricambi e manuali</span>.",
   },
 
   fr: {
@@ -17172,7 +17774,7 @@ var DICT = {
     cs2_eoven_points: "<li>Résistances blindées puissantes et de haute qualité.</li><li>Thermostats précis, pour un contrôle fin de la température.</li><li>Grilles de four spacieuses et portes à double vitrage de sécurité, pour une façade plus fraîche.</li><li>Lèchefrites émaillées, pour une diffusion de la chaleur uniforme et efficace.</li><li>Intérieurs en émail épais ou acier inox poli miroir, pour l'hygiène et la résistance à la corrosion.</li><li>Chaque pièce fabriquée à la main à Conegliano.</li>",
     hero_tag: "Cuisines Marines d'Exception",
     hero_title: "Alta cucina italiana,<br><em>partout</em>",
-    hero_desc: "Cuisinières à cardan, plans de cuisson, fours et grils professionnels · des day cruisers aux yachts d'époque, du charter aux traversées océaniques. Fabriqués à la main dans l'Inox Valley, Conegliano - Venezia · construits avec des pièces tournées et fraisées dans l'inox massif.",
+    hero_desc: "Cuisinières marines à cardan, à induction et à gaz avec four · plans de cuisson, fours, grils et barbecues professionnels · des day cruisers aux yachts d'époque, du charter aux traversées océaniques. Fabriquées à la main dans l'Inox Valley, Conegliano - Venezia · pièces usinées dans l'inox massif.",
     acc_cap4: "Coulée de lave",
     acc_brand: "PIERRE OLLAIRE",
     acc_sub: "Valteline",
@@ -17438,6 +18040,8 @@ var DICT = {
     ct_email: "E-mail",
     hcf_name: "Nom",
     hcf_email: "Email",
+    hcf_country: "Pays",
+    hcf_city: "Ville",
     hcf_who: "Je suis",
     hcf_who_0: "Sélectionnez",
     hcf_who_1: "Un armateur ou son représentant",
@@ -17532,6 +18136,7 @@ var DICT = {
     oc_ms3: "Latifa, William Fife III · une cuisinière pour son refit",
     oc_fig_cap: "Latifa · refit : variante Classic, entièrement sur mesure",
     oc_btn: "Cuisines océaniques",
+    rv_btn: "Ce qu'ils disent de nous",
     oc_ms2: "Des milliers de cuisinières installées sur des bateaux qui sillonnent les océans du monde entier",
     oc_badge: "Variante Bluewater disponible",
     ct_hours_label: "Horaires",
@@ -18437,7 +19042,60 @@ var DICT = {
     rv11: "\"Je cherchais des pièces détachées pour ma cuisinière à gaz de vingt ans. Les vues éclatées étaient déjà là, sur la page d'accueil, et les conseils reçus ont été excellents. Cinq étoiles.\"",
     rv12: "\"Je n'avais jamais reçu un service aussi excellent de la part d'une entreprise italienne, et je le dis en tant que propriétaire d'un bateau italien. C'est dans ces petites choses, dans l'attention et la disponibilité, que l'on voit le vrai visage d'une entreprise.\"",
     rv13: "\"J'avais déjà acheté chez vous des brûleurs et d'autres pièces pour mon ancienne cuisinière. Au moment d'en acheter une neuve, j'ai de nouveau choisi une Techimpex. Merci pour la rapidité et le sérieux dont vous faites preuve.\"",
-    rv14: "\"C'est déjà la deuxième fois que je commande des pièces détachées pour ma cuisinière. Ce qui m'a le plus frappée, c'est le service après-vente : une assistance ponctuelle, un accompagnement pour l'installation et une vraie compétence technique. Il est rare de trouver un service aussi complet.\""
+    rv14: "\"C'est déjà la deuxième fois que je commande des pièces détachées pour ma cuisinière. Ce qui m'a le plus frappée, c'est le service après-vente : une assistance ponctuelle, un accompagnement pour l'installation et une vraie compétence technique. Il est rare de trouver un service aussi complet.\"",
+    /* Sezione produzione (home) */
+    pr_label: "Ce que nous fabriquons",
+    pr_title: "Tout ce qu'une cuisine du bord exige,<br><em>fait \u00e0 la main en Italie</em>",
+    pr_intro: "Marine Cookers \u00b7 Techimpex fabrique des appareils de cuisine du bord \u00e0 Conegliano, pr\u00e8s de Venise, depuis trois g\u00e9n\u00e9rations. Cuisini\u00e8res \u00e0 gaz sur cardan, cuisini\u00e8res \u00e9lectriques et \u00e0 induction, plaques encastrables, fours, grils et barbecues \u00e9lectriques, machines \u00e0 caf\u00e9 et \u00e9viers. Chaque pi\u00e8ce est assembl\u00e9e \u00e0 la main en acier inox 304 ou 316, pour voiliers, yachts \u00e0 moteur et navires d'exp\u00e9dition.",
+    pr_01_n: "01 \u00b7 Gaz",
+    pr_01_t: "Cuisini\u00e8res \u00e0 gaz sur cardan avec four",
+    pr_01_b: "Le c\u0153ur de la gamme : cuisini\u00e8res marines \u00e0 gaz avec four complet, sur cardan, pour que les casseroles restent \u00e0 plat quand le bateau bouge. Deux, trois et quatre feux, s\u00e9curit\u00e9 par thermocouple sur chaque feu, portes de four qui restent ferm\u00e9es en navigation. Les mod\u00e8les appel\u00e9s aujourd'hui Marea, Maris, Nauta, Lux et Marina \u00e9taient les Classic, XL2, XL3, Top et Mariner de ces vingt derni\u00e8res ann\u00e9es.",
+    pr_01_l: "Voir la collection",
+    pr_02_n: "02 \u00b7 Gaz",
+    pr_02_t: "Cuisini\u00e8res \u00e0 gaz compactes",
+    pr_02_b: "Pour les petites cuisines du bord et les annexes, o\u00f9 chaque centim\u00e8tre compte. R\u00e9chauds et cuisini\u00e8res sur cardan compacts \u00e0 un ou deux feux, construits selon le m\u00eame standard que les mod\u00e8les plus grands : acier marin, assemblage \u00e0 la main, pi\u00e8ces d\u00e9tach\u00e9es disponibles pendant des d\u00e9cennies.",
+    pr_02_l: "Voir la collection",
+    pr_03_n: "03 \u00b7 \u00c9lectrique et induction",
+    pr_03_t: "Cuisini\u00e8res \u00e9lectriques et \u00e0 induction avec four",
+    pr_03_b: "Nous avons \u00e9t\u00e9 le premier fabricant italien \u00e0 proposer sur le march\u00e9 europ\u00e9en une gamme compl\u00e8te de cuisini\u00e8res \u00e9lectriques radiantes, \u00e0 une \u00e9poque o\u00f9 cuisiner \u00e0 bord voulait dire gaz et rien d'autre. Nous l'avons refait avec l'induction, en construisant la premi\u00e8re collection compl\u00e8te de cuisini\u00e8res \u00e0 induction sur cardan avec four, pens\u00e9e pour la mer et non adapt\u00e9e d'une cuisine domestique. Onze mod\u00e8les, d'Orizzonte et Tolomeo \u00e0 Nobilis, Altalux et Granlux.",
+    pr_03_l: "Voir la collection",
+    pr_04_n: "04 \u00b7 \u00c9lectrique et induction",
+    pr_04_t: "Plaques \u00e9lectriques encastrables",
+    pr_04_b: "La plus large collection d'Europe de plaques marines encastrables : induction et vitroc\u00e9ramique, d'une \u00e0 quatre zones, affleurantes au plan de travail. Des syst\u00e8mes de cuisson brevet\u00e9s qui sollicitent moins les batteries et tiennent la temp\u00e9rature quand le bateau bouge : c'est pourquoi les propri\u00e9taires en navigation hauturi\u00e8re les pr\u00e9f\u00e8rent aux plaques domestiques.",
+    pr_04_l: "Voir la collection",
+    pr_05_n: "05 \u00b7 Gaz",
+    pr_05_t: "Plaques \u00e0 gaz encastrables",
+    pr_05_b: "La flamme pure, affleurante dans le plan de travail. Plaques marines \u00e0 gaz d'un, deux, trois et quatre feux, avec vannes de s\u00e9curit\u00e9 et supports de casseroles con\u00e7us pour tenir par mer form\u00e9e. Pour les cuisines du bord o\u00f9 le four est s\u00e9par\u00e9, ou l\u00e0 o\u00f9 l'on pr\u00e9f\u00e8re simplement la flamme.",
+    pr_05_l: "Voir la collection",
+    pr_06_n: "06 \u00b7 Fours",
+    pr_06_t: "Fours encastrables \u00e0 gaz et \u00e9lectriques",
+    pr_06_b: "Des fours qui cuisent vraiment en mer, en plusieurs tailles, \u00e0 gaz ou \u00e9lectriques. Con\u00e7us pour \u00eatre install\u00e9s seuls, au-dessus ou en dessous de la plaque, enti\u00e8rement en acier inox, avec des portes et des joints \u00e9tudi\u00e9s pour le mouvement et pour le sel.",
+    pr_06_l: "Voir la collection",
+    pr_07_n: "07 \u00b7 Grils",
+    pr_07_t: "Grils \u00e9lectriques marins",
+    pr_07_b: "Grils \u00e9lectriques pour bateaux, encastr\u00e9s ou sur balcon, \u00e0 r\u00e9sistances blind\u00e9es ou vitroc\u00e9ramiques, en acier inox marin 304 ou 316. Cuisson sans flamme sur le pont, sans bouteille de gaz et sans charbon : ce que la plupart des chantiers modernes demandent aujourd'hui et que de plus en plus de marinas imposent.",
+    pr_07_l: "Voir la collection",
+    pr_08_n: "08 \u00b7 Grils",
+    pr_08_t: "Barbecues \u00e9lectriques marins",
+    pr_08_b: "Barbecues et bbq \u00e9lectriques avec couvercle de cuisson, pour le cockpit et le flybridge, sur balcon ou encastr\u00e9s \u00e0 bord. Le couvercle retient la chaleur et la fum\u00e9e l\u00e0 o\u00f9 elles doivent rester, pour qu'un barbecue au mouillage ne devienne pas un probl\u00e8me pour le bateau voisin.",
+    pr_08_l: "Voir la collection",
+    pr_09_n: "09 \u00b7 Grils",
+    pr_09_t: "Grils \u00e0 gaz",
+    pr_09_b: "Pour ceux qui veulent la flamme aussi sur le pont. Grils marins \u00e0 gaz en acier inox, avec les m\u00eames syst\u00e8mes de s\u00e9curit\u00e9 que les appareils du bord et la m\u00eame finition, pour que le bateau se lise d'un seul tenant.",
+    pr_09_l: "Voir la collection",
+    pr_10_n: "10 \u00b7 Classiques",
+    pr_10_t: "Antiche Cambuse \u00b7 cuisines du bord pour yachts classiques",
+    pr_10_b: "Cuisini\u00e8res et cuisines du bord sur mesure pour yachts d'\u00e9poque et classiques, faites une \u00e0 une \u00e0 la main. Laiton, cuivre et acier poli, reprises des plans d'origine ou de photographies, avec la s\u00e9curit\u00e9 moderne cach\u00e9e dans une forme d'\u00e9poque. Un travail de restauration que les chantiers nous confient parce que presque personne ne le fait plus.",
+    pr_10_l: "Voir la collection",
+    pr_11_n: "11 \u00b7 Bord",
+    pr_11_t: "Machines \u00e0 caf\u00e9",
+    pr_11_b: "Le rituel de l'espresso italien port\u00e9 au grand large. Con\u00e7ues pour le mouvement et pour l'installation \u00e9lectrique d'un bateau, parce qu'un caf\u00e9 bien fait au mouillage n'est pas un d\u00e9tail pour ceux qui vivent \u00e0 bord.",
+    pr_11_l: "Voir la collection",
+    pr_12_n: "12 \u00b7 Bord",
+    pr_12_t: "\u00c9viers et accessoires",
+    pr_12_b: "\u00c9viers marins en acier inox, supports de casseroles qui tiennent une marmite \u00e0 trente degr\u00e9s de g\u00eete, et les accessoires qui transforment un ensemble d'appareils en une cuisine du bord qui fonctionne.",
+    pr_12_l: "Voir la collection",
+    pr_foot: "Chaque appareil est con\u00e7u pour \u00eatre entretenu pendant des d\u00e9cennies : vues \u00e9clat\u00e9es, manuels et pi\u00e8ces d\u00e9tach\u00e9es sont disponibles m\u00eame pour des mod\u00e8les vendus il y a vingt ans. Nous construisons aussi sur commande, avec des <span class=\"pr-a\" onclick=\"openCustom()\" role=\"button\" tabindex=\"0\">projets sur mesure</span> d\u00e9velopp\u00e9s avec des chantiers et des architectes navals, dimensionn\u00e9s et finis pour une cambuse pr\u00e9cise. Pour les pi\u00e8ces, envoyez-nous une photo de l'appareil que vous avez \u00e0 bord : nous identifions le mod\u00e8le et confirmons ce qu'il faut. <span class=\"pr-a\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Pi\u00e8ces d\u00e9tach\u00e9es et manuels</span>.",
   },
 
   de: {
@@ -18600,7 +19258,7 @@ var DICT = {
     cs2_eoven_points: "<li>Kräftige, hochwertige gepanzerte Heizelemente.</li><li>Präzise Thermostate für feine Temperaturkontrolle.</li><li>Geräumige Backroste und doppelt verglaste Sicherheitstüren, für eine kühlere Front.</li><li>Emaillierte Fettpfannen, für gleichmäßige, effiziente Wärmeverteilung.</li><li>Innenräume aus dickem Email oder spiegelpoliertem Edelstahl, für Hygiene und Korrosionsbeständigkeit.</li><li>Jedes Stück in Conegliano von Hand gefertigt.</li>",
     hero_tag: "Handgefertigte Marine-Küchen",
     hero_title: "Alta cucina italiana,<br><em>überall</em>",
-    hero_desc: "Kardanisch aufgehängte Kocher, Kochfelder, Backöfen und professionelle Grills · vom Dayboat bis zur historischen Yacht, vom Charter bis zur Ozeanpassage. Handgefertigt im Inox Valley, Conegliano - Venezia · gebaut mit gedrehten und gefrästen Teilen aus massivem Edelstahl.",
+    hero_desc: "Kardanisch aufgehängte Induktions- und Gasherde mit Backofen · Kochfelder, Backöfen, Grills und Barbecues in Profiqualität · vom Dayboat bis zur historischen Yacht, vom Charter bis zur Ozeanpassage. Handgefertigt im Inox Valley, Conegliano - Venezia · Bauteile aus dem vollen Edelstahl gefertigt.",
     acc_cap4: "Lavastrom",
     acc_brand: "SPECKSTEIN",
     acc_sub: "Veltlin",
@@ -18866,6 +19524,8 @@ var DICT = {
     ct_email: "E-Mail",
     hcf_name: "Name",
     hcf_email: "E-Mail",
+    hcf_country: "Land",
+    hcf_city: "Stadt",
     hcf_who: "Ich bin",
     hcf_who_0: "Bitte wählen",
     hcf_who_1: "Ein Eigner oder Eignervertreter",
@@ -18960,6 +19620,7 @@ var DICT = {
     oc_ms3: "Latifa, William Fife III · ein Herd für ihr Refit",
     oc_fig_cap: "Latifa · Refit: Variante Classic, vollständig nach Maß",
     oc_btn: "Hochsee-Herde",
+    rv_btn: "Was unsere Kunden sagen",
     oc_ms2: "Tausende Kocher an Bord von Booten, die die Ozeane der Welt durchqueren",
     oc_badge: "Bluewater-Variante verfügbar",
     ct_hours_label: "Öffnungszeiten",
@@ -19865,7 +20526,60 @@ var DICT = {
     rv11: "\"Ich suchte Ersatzteile für meinen zwanzig Jahre alten Gasherd. Die Explosionszeichnungen waren gleich auf der Startseite, und die Beratung war ausgezeichnet. Fünf Sterne von mir.\"",
     rv12: "\"Noch nie hatte ich von einem italienischen Unternehmen einen so hervorragenden Service erhalten, und das sage ich als Eigner eines italienischen Bootes. Gerade in diesen Kleinigkeiten, in der Aufmerksamkeit und der Hilfsbereitschaft, zeigt sich das wahre Gesicht eines Unternehmens.\"",
     rv13: "\"Ich hatte bei Ihnen bereits Brenner und andere Teile für meinen alten Herd gekauft. Als ein neuer fällig war, habe ich mich wieder für einen Techimpex entschieden. Danke für Ihre Schnelligkeit und Ihre Zuverlässigkeit.\"",
-    rv14: "\"Es ist bereits das zweite Mal, dass ich Ersatzteile für meinen Herd bestelle. Am meisten beeindruckt hat mich der Kundendienst: pünktliche Betreuung, Unterstützung beim Einbau und echte technische Kompetenz. Ein so umfassender Service ist selten.\""
+    rv14: "\"Es ist bereits das zweite Mal, dass ich Ersatzteile für meinen Herd bestelle. Am meisten beeindruckt hat mich der Kundendienst: pünktliche Betreuung, Unterstützung beim Einbau und echte technische Kompetenz. Ein so umfassender Service ist selten.\"",
+    /* Sezione produzione (home) */
+    pr_label: "Was wir bauen",
+    pr_title: "Alles, was eine Komb\u00fcse braucht,<br><em>von Hand gefertigt in Italien</em>",
+    pr_intro: "Marine Cookers \u00b7 Techimpex baut seit drei Generationen Komb\u00fcsenger\u00e4te in Conegliano bei Venedig. Kardanische Gasherde, elektrische und Induktionsherde, Einbaukochfelder, Backr\u00f6hren, elektrische Grills und Barbecues, Kaffeemaschinen und Sp\u00fclen. Jedes St\u00fcck wird einzeln von Hand aus Edelstahl 304 oder 316 gefertigt, f\u00fcr Segelyachten, Motoryachten und Expeditionsschiffe.",
+    pr_01_n: "01 \u00b7 Gas",
+    pr_01_t: "Kardanische Gasherde mit Backofen",
+    pr_01_b: "Das Herz der Reihe: Marine-Gasherde mit vollwertigem Backofen, kardanisch aufgeh\u00e4ngt, damit die T\u00f6pfe waagerecht bleiben, wenn das Boot arbeitet. Zwei, drei und vier Brenner, Thermoelement-Sicherung an jedem Brenner, Ofent\u00fcren, die unterwegs geschlossen bleiben. Die Modelle, die heute Marea, Maris, Nauta, Lux und Marina hei\u00dfen, waren die Classic, XL2, XL3, Top und Mariner der vergangenen zwanzig Jahre.",
+    pr_01_l: "Zur Kollektion",
+    pr_02_n: "02 \u00b7 Gas",
+    pr_02_t: "Kompakte Gasherde",
+    pr_02_b: "F\u00fcr kleine Komb\u00fcsen und Beiboote, wo jeder Zentimeter z\u00e4hlt. Kompakte kardanische Kocher mit einem oder zwei Brennern, nach demselben Standard gebaut wie die gr\u00f6\u00dferen Ger\u00e4te: Marine-Edelstahl, Handmontage, Ersatzteile \u00fcber Jahrzehnte verf\u00fcgbar.",
+    pr_02_l: "Zur Kollektion",
+    pr_03_n: "03 \u00b7 Elektro und Induktion",
+    pr_03_t: "Elektro- und Induktionsherde mit Backofen",
+    pr_03_b: "Wir waren der erste italienische Hersteller, der eine komplette Reihe elektrischer Strahlungsherde auf den europ\u00e4ischen Markt brachte, zu einer Zeit, als Kochen an Bord gleichbedeutend mit Gas war. Mit der Induktion haben wir es wiederholt und die erste vollst\u00e4ndige Kollektion kardanisch aufgeh\u00e4ngter Induktionsherde mit Backofen gebaut, f\u00fcr die See entworfen und nicht aus einer Hausk\u00fcche abgeleitet. Elf Modelle, von Orizzonte und Tolomeo bis Nobilis, Altalux und Granlux.",
+    pr_03_l: "Zur Kollektion",
+    pr_04_n: "04 \u00b7 Elektro und Induktion",
+    pr_04_t: "Elektrische Einbaukochfelder",
+    pr_04_b: "Die breiteste Kollektion von Marine-Einbaukochfeldern in Europa: Induktion und Glaskeramik, ein bis vier Zonen, b\u00fcndig in der Arbeitsplatte. Patentierte Kochsysteme, die die Batterien weniger belasten und die Temperatur halten, w\u00e4hrend das Schiff arbeitet: der Grund, warum Eigner auf langen T\u00f6rns sie den Hausger\u00e4ten vorziehen.",
+    pr_04_l: "Zur Kollektion",
+    pr_05_n: "05 \u00b7 Gas",
+    pr_05_t: "Gas-Einbaukochfelder",
+    pr_05_b: "Die reine Flamme, b\u00fcndig in der Komb\u00fcse. Marine-Gaskochfelder mit einem, zwei, drei und vier Brennern, mit Sicherheitsventilen und Topfhaltern, die bei Seegang greifen. F\u00fcr Komb\u00fcsen, in denen der Backofen getrennt sitzt, oder wo man die Flamme schlicht bevorzugt.",
+    pr_05_l: "Zur Kollektion",
+    pr_06_n: "06 \u00b7 Backr\u00f6hren",
+    pr_06_t: "Einbaubackr\u00f6hren mit Gas und Elektro",
+    pr_06_b: "\u00d6fen, die auf See wirklich backen, in mehreren Gr\u00f6\u00dfen, mit Gas oder Strom. Gebaut f\u00fcr den Einzeleinbau, \u00fcber oder unter dem Kochfeld, durchgehend aus Edelstahl, mit T\u00fcren und Dichtungen f\u00fcr Bewegung und Salz.",
+    pr_06_l: "Zur Kollektion",
+    pr_07_n: "07 \u00b7 Grills",
+    pr_07_t: "Elektrische Marine-Grills",
+    pr_07_b: "Elektrische Grills f\u00fcr Boote, eingebaut oder an der Reling, mit Rohrheizk\u00f6rpern oder Glaskeramik, aus Marine-Edelstahl 304 oder 316. Flammenloses Kochen an Deck, ohne Gasflasche und ohne Kohle: was die meisten modernen Werften heute verlangen und immer mehr Marinas vorschreiben.",
+    pr_07_l: "Zur Kollektion",
+    pr_08_n: "08 \u00b7 Grills",
+    pr_08_t: "Elektrische Marine-Barbecues",
+    pr_08_b: "Elektrische Barbecues und BBQ mit Garhaube, f\u00fcr Cockpit und Flybridge, an der Reling oder an Bord eingebaut. Der Deckel h\u00e4lt Hitze und Rauch dort, wo sie hingeh\u00f6ren, damit ein Grillabend vor Anker nicht zum Problem f\u00fcr das Nachbarboot wird.",
+    pr_08_l: "Zur Kollektion",
+    pr_09_n: "09 \u00b7 Grills",
+    pr_09_t: "Gasgrills",
+    pr_09_b: "F\u00fcr Eigner, die die Flamme auch an Deck wollen. Marine-Gasgrills aus Edelstahl, mit denselben Sicherheitssystemen wie die Komb\u00fcsenger\u00e4te und derselben Oberfl\u00e4che, damit das Boot als ein St\u00fcck wirkt.",
+    pr_09_l: "Zur Kollektion",
+    pr_10_n: "10 \u00b7 Klassisch",
+    pr_10_t: "Antiche Cambuse \u00b7 Komb\u00fcsen f\u00fcr klassische Yachten",
+    pr_10_b: "Ma\u00dfgefertigte Herde und Komb\u00fcsen f\u00fcr Oldtimer- und klassische Yachten, einzeln von Hand gebaut. Messing, Kupfer und polierter Stahl, nach Originalpl\u00e4nen oder Fotografien, mit moderner Sicherheit verborgen in historischer Form. Restaurierungsarbeit, die die Werften zu uns bringen, weil sie fast niemand mehr macht.",
+    pr_10_l: "Zur Kollektion",
+    pr_11_n: "11 \u00b7 Komb\u00fcse",
+    pr_11_t: "Kaffeemaschinen",
+    pr_11_b: "Das italienische Espressoritual, hinausgetragen auf die offene See. Gebaut f\u00fcr die Bewegung und f\u00fcr die Bordelektrik, denn ein richtig gemachter Kaffee vor Anker ist f\u00fcr die Menschen an Bord kein Detail.",
+    pr_11_l: "Zur Kollektion",
+    pr_12_n: "12 \u00b7 Komb\u00fcse",
+    pr_12_t: "Sp\u00fclen und Zubeh\u00f6r",
+    pr_12_b: "Marine-Sp\u00fclen aus Edelstahl, Topfhalter, die einen Topf bei drei\u00dfig Grad Kr\u00e4ngung halten, und das Zubeh\u00f6r, das aus einer Reihe von Ger\u00e4ten eine funktionierende Komb\u00fcse macht.",
+    pr_12_l: "Zur Kollektion",
+    pr_foot: "Jedes Ger\u00e4t ist daf\u00fcr gebaut, \u00fcber Jahrzehnte gewartet zu werden: Explosionszeichnungen, Handb\u00fccher und Ersatzteile gibt es auch f\u00fcr Modelle, die vor zwanzig Jahren verkauft wurden. Wir bauen auch auf Bestellung, mit <span class=\"pr-a\" onclick=\"openCustom()\" role=\"button\" tabindex=\"0\">Sonderprojekten</span>, die mit Werften und Schiffsarchitekten entwickelt und f\u00fcr eine bestimmte Komb\u00fcse dimensioniert und ausgef\u00fchrt werden. F\u00fcr Ersatzteile schicken Sie uns ein Foto Ihres Ger\u00e4ts: wir bestimmen das Modell und best\u00e4tigen, was es braucht. <span class=\"pr-a\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Ersatzteile und Handb\u00fccher</span>.",
   },
 
   es: {
@@ -20028,7 +20742,7 @@ var DICT = {
     cs2_eoven_points: "<li>Resistencias blindadas potentes y de alta calidad.</li><li>Termostatos precisos, para un control fino de la temperatura.</li><li>Parrillas de horno amplias y puertas con doble cristal de seguridad, para un frontal más fresco.</li><li>Bandejas esmaltadas, para una difusión del calor uniforme y eficiente.</li><li>Interiores en esmalte de alto espesor o acero inox pulido a espejo, para higiene y resistencia a la corrosión.</li><li>Cada pieza hecha a mano en Conegliano.</li>",
     hero_tag: "Cocinas Marinas de Autor",
     hero_title: "Alta cucina italiana,<br><em>donde sea</em>",
-    hero_desc: "Cocinas basculantes, encimeras, hornos y parrillas profesionales · de los day cruisers a los yates de época, del charter a las travesías oceánicas. Hechos a mano en el Inox Valley, Conegliano - Venezia · construidos con elementos torneados y fresados en acero inoxidable macizo.",
+    hero_desc: "Cocinas náuticas basculantes de inducción y de gas con horno · encimeras, hornos, parrillas y barbacoas profesionales · de los day cruisers a los yates de época, del charter a las travesías oceánicas. Hechas a mano en el Inox Valley, Conegliano - Venezia · piezas mecanizadas en acero inoxidable macizo.",
     acc_cap4: "Colada de lava",
     acc_brand: "PIEDRA OLLAR",
     acc_sub: "Valtelina",
@@ -20294,6 +21008,8 @@ var DICT = {
     ct_email: "Correo electrónico",
     hcf_name: "Nombre",
     hcf_email: "Email",
+    hcf_country: "Pa\u00eds",
+    hcf_city: "Ciudad",
     hcf_who: "Soy",
     hcf_who_0: "Seleccione",
     hcf_who_1: "Un armador o su representante",
@@ -20388,6 +21104,7 @@ var DICT = {
     oc_ms3: "Latifa, William Fife III · una cocina para su refit",
     oc_fig_cap: "Latifa · refit: variante Classic, enteramente a medida",
     oc_btn: "Cocinas oceánicas",
+    rv_btn: "Lo que dicen de nosotros",
     oc_ms2: "Miles de cocinas instaladas en barcos que surcan los océanos de todo el mundo",
     oc_badge: "Variante Bluewater disponible",
     ct_hours_label: "Horario",
@@ -21293,7 +22010,60 @@ var DICT = {
     rv11: "\"Buscaba recambios para mi cocina de gas de veinte años. Los despieces estaban allí mismo, en la página de inicio, y el asesoramiento fue excelente. Cinco estrellas.\"",
     rv12: "\"Nunca había recibido un servicio tan excelente por parte de una empresa italiana, y lo digo como propietario de un barco italiano. Es precisamente en estas pequeñas cosas, en la atención y la disponibilidad, donde se ve el verdadero rostro de una empresa.\"",
     rv13: "\"Ya había comprado en su empresa quemadores y otras piezas para mi vieja cocina. Cuando tuve que comprar una nueva, volví a elegir una Techimpex. Gracias por la rapidez y la seriedad que demuestran.\"",
-    rv14: "\"Es ya la segunda vez que pido recambios para mi cocina. Lo que más me ha impresionado es el servicio posventa: asistencia puntual, apoyo en la instalación y una gran competencia técnica. Es raro encontrar un servicio tan completo.\""
+    rv14: "\"Es ya la segunda vez que pido recambios para mi cocina. Lo que más me ha impresionado es el servicio posventa: asistencia puntual, apoyo en la instalación y una gran competencia técnica. Es raro encontrar un servicio tan completo.\"",
+    /* Sezione produzione (home) */
+    pr_label: "Lo que fabricamos",
+    pr_title: "Todo lo que una cocina de a bordo necesita,<br><em>hecho a mano en Italia</em>",
+    pr_intro: "Marine Cookers \u00b7 Techimpex fabrica aparatos para la cocina de a bordo en Conegliano, cerca de Venecia, desde hace tres generaciones. Cocinas de gas cardanizadas, cocinas el\u00e9ctricas y de inducci\u00f3n, placas encastrables, hornos, parrillas y barbacoas el\u00e9ctricas, cafeteras y fregaderos. Cada pieza se monta a mano en acero inoxidable 304 o 316, para veleros, yates a motor y buques de expedici\u00f3n.",
+    pr_01_n: "01 \u00b7 Gas",
+    pr_01_t: "Cocinas de gas cardanizadas con horno",
+    pr_01_b: "El coraz\u00f3n de la gama: cocinas n\u00e1uticas de gas con horno completo, cardanizadas para que las ollas se mantengan a nivel mientras el barco se mueve. Dos, tres y cuatro fuegos, seguridad por termopar en cada fuego, puertas de horno que permanecen cerradas en navegaci\u00f3n. Los modelos que hoy se llaman Marea, Maris, Nauta, Lux y Marina fueron la Classic, la XL2, la XL3, la Top y la Mariner de los \u00faltimos veinte a\u00f1os.",
+    pr_01_l: "Ver la colecci\u00f3n",
+    pr_02_n: "02 \u00b7 Gas",
+    pr_02_t: "Cocinas de gas compactas",
+    pr_02_b: "Para cocinas peque\u00f1as y auxiliares, donde cada cent\u00edmetro cuenta. Hornillos y cocinas cardanizadas compactas de uno o dos fuegos, construidos con el mismo est\u00e1ndar que las unidades mayores: acero marino, montaje a mano, recambios disponibles durante d\u00e9cadas.",
+    pr_02_l: "Ver la colecci\u00f3n",
+    pr_03_n: "03 \u00b7 El\u00e9ctrico e inducci\u00f3n",
+    pr_03_t: "Cocinas el\u00e9ctricas y de inducci\u00f3n con horno",
+    pr_03_b: "Fuimos el primer fabricante italiano en llevar al mercado europeo una gama completa de cocinas el\u00e9ctricas radiantes, cuando cocinar a bordo significaba gas y nada m\u00e1s. Lo repetimos con la inducci\u00f3n, construyendo la primera colecci\u00f3n completa de cocinas de inducci\u00f3n basculantes con horno pensada para el mar, no adaptada de una cocina dom\u00e9stica. Once modelos, de Orizzonte y Tolomeo a Nobilis, Altalux y Granlux.",
+    pr_03_l: "Ver la colecci\u00f3n",
+    pr_04_n: "04 \u00b7 El\u00e9ctrico e inducci\u00f3n",
+    pr_04_t: "Placas el\u00e9ctricas encastrables",
+    pr_04_b: "La colecci\u00f3n m\u00e1s amplia de Europa de placas n\u00e1uticas encastrables: inducci\u00f3n y vitrocer\u00e1mica, de una a cuatro zonas, enrasadas en la encimera. Sistemas de cocci\u00f3n patentados que exigen menos a las bater\u00edas y mantienen la temperatura mientras el barco se mueve: el motivo por el que los armadores en navegaci\u00f3n larga las prefieren a las placas dom\u00e9sticas.",
+    pr_04_l: "Ver la colecci\u00f3n",
+    pr_05_n: "05 \u00b7 Gas",
+    pr_05_t: "Placas de gas encastrables",
+    pr_05_b: "La llama pura, enrasada en la cocina de a bordo. Placas n\u00e1uticas de gas de uno, dos, tres y cuatro fuegos, con v\u00e1lvulas de seguridad y parrillas dise\u00f1adas para sujetar con mar formada. Para cocinas donde el horno va aparte, o donde sencillamente se prefiere la llama.",
+    pr_05_l: "Ver la colecci\u00f3n",
+    pr_06_n: "06 \u00b7 Hornos",
+    pr_06_t: "Hornos encastrables de gas y el\u00e9ctricos",
+    pr_06_b: "Hornos que cuecen de verdad en el mar, en varias medidas, de gas o el\u00e9ctricos. Construidos para instalarse solos, encima o debajo de la placa, enteramente en acero inoxidable, con puertas y juntas pensadas para el movimiento y para la sal.",
+    pr_06_l: "Ver la colecci\u00f3n",
+    pr_07_n: "07 \u00b7 Parrillas",
+    pr_07_t: "Parrillas el\u00e9ctricas n\u00e1uticas",
+    pr_07_b: "Parrillas el\u00e9ctricas para barcos, encastradas o en candelero, con resistencias blindadas o de vitrocer\u00e1mica, en acero inoxidable marino 304 o 316. Cocinar sin llama en cubierta, sin bombona y sin carb\u00f3n: lo que hoy piden la mayor\u00eda de los astilleros modernos y lo que cada vez m\u00e1s marinas exigen.",
+    pr_07_l: "Ver la colecci\u00f3n",
+    pr_08_n: "08 \u00b7 Parrillas",
+    pr_08_t: "Barbacoas el\u00e9ctricas n\u00e1uticas",
+    pr_08_b: "Barbacoas y bbq el\u00e9ctricos con tapa de cocci\u00f3n, para la ba\u00f1era y el flybridge, en candelero o encastrados a bordo. La tapa retiene el calor y el humo donde deben estar, para que una parrillada fondeados no se convierta en un problema para el barco de al lado.",
+    pr_08_l: "Ver la colecci\u00f3n",
+    pr_09_n: "09 \u00b7 Parrillas",
+    pr_09_t: "Parrillas de gas",
+    pr_09_b: "Para quien quiere la llama tambi\u00e9n en cubierta. Parrillas n\u00e1uticas de gas en acero inoxidable, con los mismos sistemas de seguridad que los aparatos de cocina y el mismo acabado, para que el barco se lea como una sola pieza.",
+    pr_09_l: "Ver la colecci\u00f3n",
+    pr_10_n: "10 \u00b7 Cl\u00e1sicas",
+    pr_10_t: "Antiche Cambuse \u00b7 cocinas para yates cl\u00e1sicos",
+    pr_10_b: "Cocinas a medida para yates de \u00e9poca y cl\u00e1sicos, hechas una a una a mano. Lat\u00f3n, cobre y acero pulido, recuperadas de los planos originales o de fotograf\u00edas, con la seguridad moderna escondida dentro de una forma de \u00e9poca. Un trabajo de restauraci\u00f3n que los astilleros nos traen porque ya casi nadie lo hace.",
+    pr_10_l: "Ver la colecci\u00f3n",
+    pr_11_n: "11 \u00b7 Cocina",
+    pr_11_t: "Cafeteras",
+    pr_11_b: "El rito del espresso italiano llevado a mar abierto. Construidas para el movimiento y para la instalaci\u00f3n el\u00e9ctrica de un barco, porque un caf\u00e9 bien hecho fondeados no es un detalle para quien vive a bordo.",
+    pr_11_l: "Ver la colecci\u00f3n",
+    pr_12_n: "12 \u00b7 Cocina",
+    pr_12_t: "Fregaderos y accesorios",
+    pr_12_b: "Fregaderos n\u00e1uticos en acero inoxidable, sujeta-ollas que aguantan una cazuela a treinta grados de escora, y los accesorios que convierten un conjunto de aparatos en una cocina que funciona.",
+    pr_12_l: "Ver la colecci\u00f3n",
+    pr_foot: "Cada aparato est\u00e1 construido para recibir servicio durante d\u00e9cadas: despieces, manuales y recambios est\u00e1n disponibles incluso para modelos vendidos hace veinte a\u00f1os. Tambi\u00e9n construimos por encargo, con <span class=\"pr-a\" onclick=\"openCustom()\" role=\"button\" tabindex=\"0\">proyectos a medida</span> desarrollados con astilleros y estudios de arquitectura naval, dimensionados y acabados para una cocina concreta. Para los recambios, env\u00edenos una foto del aparato que tiene a bordo: identificamos el modelo y confirmamos lo que necesita. <span class=\"pr-a\" onclick=\"openSpare()\" role=\"button\" tabindex=\"0\">Recambios y manuales</span>.",
   }
 };
 
@@ -22160,7 +22930,7 @@ function hctSend(f){
      sola in tutto il documento. Con la ricerca globale la seconda copia
      avrebbe validato i campi della prima. */
   var bad=null;
-  [['nome',0],['email',1],['profilo',0],['messaggio',0]].forEach(function(c){
+  [['nome',0],['email',1],['paese',0],['citta',0],['profilo',0],['messaggio',0]].forEach(function(c){
     var el=f.querySelector('[name="'+c[0]+'"]'); if(!el) return;
     var v=(el.value||'').trim();
     var ko=!v;
@@ -23067,6 +23837,315 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
      Resta il pulsante «Scarica», che e' quello che serve davvero. */
   #pp-pdf-viewer-wrap{ display:none !important; }
   #pp-pdf-toggle-label, a[onclick*="ppPdfToggle"]{ display:none !important; }
+}
+
+/* HERO SU SCHERMI BASSI, QUALUNQUE LARGHEZZA
+   =========================================
+   IL PROBLEMA. L'header e' fixed e alto 72px. La hero e' un flex in colonna
+   con il testo allineato in basso. Quando il blocco di testo e' piu' alto
+   dello spazio libero, l'eccedenza di un flex esce dal lato OPPOSTO
+   all'allineamento: con il testo in basso, esce IN ALTO, e il padding
+   superiore non la trattiene. Risultato: "Cucine Marine d'Autore" finiva
+   sotto l'header, o a cavallo.
+
+   ATTENZIONE: la correzione precedente stava dentro @media(max-width:768px)
+   e quindi NON copriva gli schermi bassi ma LARGHI: telefono in orizzontale,
+   tablet, portatili piccoli. Li' valeva la regola base, che ha padding-top:0.
+
+   LA CURA. Sotto i 620px di altezza la hero smette di essere alta quanto lo
+   schermo e cresce quanto il suo contenuto: niente altezza forzata, niente
+   eccedenza, quindi nessuna sovrapposizione possibile. Il padding superiore
+   tiene comunque l'header fuori e i corpi del testo scendono un poco.
+
+   NON rimettere qui justify-content:flex-end e non rimettere
+   min-height/max-height: sono esattamente le due cose che riaprono il
+   difetto. Se un giorno il testo della hero si allunga ancora, si accorcia
+   il testo, non si tocca questa regola. */
+@media (max-height: 620px){
+  .hero{
+    height:auto;
+    min-height:0;
+    max-height:none;
+    justify-content:flex-start;
+    padding-top:calc(var(--hh) + 20px);
+    padding-bottom:56px;
+  }
+  .hco{ margin-top:0; }
+  .hey{ margin-bottom:8px; }
+  .hti{ font-size:clamp(24px,4.6vw,40px); margin-bottom:10px; line-height:1; }
+  .hde{ font-size:12px; line-height:1.6; margin-bottom:20px; }
+  .hyr{ display:none; }
+}
+@media (max-height: 620px) and (max-width: 768px){
+  .hero{ padding-left:24px; padding-right:24px; }
+}
+
+/* HERO SU MOBILE, PRIMA SCHERMATA PULITA
+   ======================================
+   IL MOTIVO. Sul telefono sopra il video stavano undici blocchi: occhiello,
+   titolo, descrizione, riga delle figure, tre pulsanti, tre link, piu' gli
+   elementi decorativi e il ticker. Troppi.
+
+   LA SOLUZIONE. Il contenuto e' diviso in due fratelli, .hco e .hco-more.
+   Sotto i 768px la hero cresce quanto serve: .hco riempie la prima
+   schermata con occhiello, titolo e indicatore di scorrimento, mentre
+   .hco-more scorre sotto, su nero pieno. I media di sfondo (video, foto,
+   velatura) vengono fermati a 100svh, cosi' la parte inferiore non e' piu'
+   sopra la foto.
+
+   ATTENZIONE, e' il punto che conta: NIENTE display:none. Il testo non e'
+   nascosto ne' duplicato, e' lo stesso elemento spostato piu' in basso.
+   Google indicizza in modalita' mobile-first e svaluta il contenuto
+   nascosto: se un giorno si volesse "semplificare" togliendo .hde dal
+   telefono, si perderebbe l'unica riga di prodotto sopra la piega.
+
+   Su DESKTOP non cambia nulla: i due blocchi restano incolonnati come i
+   loro contenuti erano prima dentro un unico contenitore. */
+/* z-index senza position: .hco-more e' un elemento flex della hero, e per
+   gli elementi flex lo z-index vale anche da statici. DEVE restare statico,
+   altrimenti diventa il riferimento del posizionamento assoluto di .btm, che
+   invece si ancora alla hero. */
+.hco-more{ z-index:3; max-width:600px; }
+/* NOTA: qui c'era un secondo indicatore di scorrimento, .hsp. E' stato
+   tolto perche' ne esisteva gia' uno globale, .pp-scroll-hint, che
+   attachTo(window,'home') accende anche sulla home: se ne vedevano due, uno
+   al centro e uno a destra. Prima di aggiungerne uno nuovo, cercare
+   "pp-scroll-hint". */
+
+@media(max-width:768px){
+  .hero{
+    height:auto;
+    min-height:0;
+    max-height:none;
+    padding-bottom:0;
+    background:#0a0a0a;
+    justify-content:flex-start;
+  }
+  /* I media di sfondo hanno lo stile IN LINEA con inset:0, quindi servono
+     le sovrascritture. Si fermano alla prima schermata. */
+  #heroVid, #heroVid2, .hero picture, .hero picture img, .hovl{
+    height:100vh !important;
+    height:100svh !important;
+    bottom:auto !important;
+  }
+  /* Il secondo filmato del ciclo, sul telefono, e' quello di Oceano:
+     completamente desaturato, cosi' il montaggio si legge come un unico
+     racconto e non come due riprese diverse incollate. */
+  #heroVid2{ filter:grayscale(1) brightness(.82) !important; }
+  .hci{ top:50vh; top:50svh; }
+  .hco{
+    margin-top:0;
+    min-height:calc(100vh - var(--hh) - 34px);
+    min-height:calc(100svh - var(--hh) - 34px);
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    /* Lo spazio che occupava l'indicatore di scorrimento quando stava qui
+       dentro. Togliendolo da .hco il titolo e' sceso di colpo fino al bordo
+       inferiore della prima schermata, perche' i figli sono allineati in
+       basso e non c'era piu' niente in coda a tenerlo su.
+       Ora l'indicatore e' fisso a 96px dal fondo della finestra: questo
+       margine lascia libera quella fascia. */
+    padding-bottom:88px;
+  }
+  .hco-more{
+    max-width:100%;
+    width:100%;
+    padding-top:34px;
+    padding-bottom:56px;
+  }
+
+
+  /* INGRESSO SCAGLIONATO DEL BLOCCO SOTTO IL TITOLO
+     Le animazioni fiu dei singoli elementi partono al caricamento della
+     pagina: sul telefono questo blocco e' sotto la piega, quindi la loro
+     corsa finisce prima che qualcuno la veda, e il testo compariva di
+     colpo. Qui vengono spente (animation:none) e sostituite da una
+     salita legata alla comparsa, con 90ms di sfasamento fra una riga e
+     l'altra.
+     ATTENZIONE: il ritardo e' sul figlio, non sul contenitore. Mettendolo
+     sul contenitore salirebbero tutti insieme, che e' proprio quello che
+     si vuole evitare. */
+  .hco-more > *{
+    opacity:0;
+    transform:translateY(34px);
+    animation:none !important;
+    transition:opacity .7s linear, transform 1.1s cubic-bezier(.42,0,.25,1);
+    will-change:transform,opacity;
+  }
+  .hco-more.in > *{ opacity:1; transform:none; will-change:auto; }
+
+  /* ORDINE E RESPIRO DEL BLOCCO SOTTO IL TITOLO
+     =========================================
+     I valori di prima erano tarati su una hero stretta, dove questo testo
+     stava sopra la foto insieme a tutto il resto: corpi minuscoli,
+     interlinee compresse e perfino un margine negativo su .hwho-sm per
+     recuperare quattordici pixel. Ora il blocco ha una schermata tutta sua.
+
+     L'ORDINE sul telefono e' diverso da quello del markup:
+       descrizione, figure, ESPLORA I PRODOTTI a tutta larghezza,
+       la nostra storia, i tre link, e in fondo, piccolo,
+       PANORAMICA PRODOTTI.
+
+     COME. .hac diventa display:contents, cioe' smette di generare un
+     riquadro e i suoi tre pulsanti diventano figli diretti di .hco-more:
+     da li' si possono ordinare insieme ai link con la proprieta' order.
+     ATTENZIONE: con display:contents .hac non ha piu' un riquadro, quindi
+     opacita' e trasformazioni su di lui non hanno alcun effetto. Per
+     questo l'ingresso e' scritto anche su .hac > *, e i ritardi sono
+     assegnati per classe e non per nth-child: seguono l'ordine VISIVO,
+     non quello del markup. */
+  .hco-more{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    padding-top:44px;
+    padding-bottom:18px;
+  }
+  .hac{ display:contents; }
+
+  /* I paragrafi occupano tutta la larghezza: con align-items:flex-start
+     un elemento flex si dimensiona sul contenuto, e una riga corta come
+     quella delle figure resterebbe piu' stretta della colonna. */
+  .hde, .hwho{ align-self:stretch; }
+  .hde        { order:1; }
+  .hwho-sm    { order:2; }
+  .hac .btp   { order:3; }
+  .hac .btg   { order:4; }
+  .bte        { order:5; }
+  .hac .btm   { order:6; }
+
+  .hde{
+    font-size:13px;
+    line-height:1.9;
+    margin-bottom:28px;
+    letter-spacing:.015em;
+  }
+  .hwho-sm{
+    font-size:10px;
+    line-height:1.85;
+    letter-spacing:.09em;
+    margin:0 0 34px;
+  }
+  /* Il pulsante principale prende tutta la larghezza ed e' il piu' grande
+     elemento cliccabile della schermata: sul telefono e' la sola azione
+     che conta davvero. */
+  /* Stessa veste di Panoramica prodotti: oro su trasparente con cornice.
+     Il rettangolo pieno pesava troppo su una colonna stretta. Resta il
+     pulsante piu' grande della schermata, ma per larghezza e corpo, non
+     per colore. */
+  .hac .btp{
+    align-self:stretch;
+    width:100%;
+    text-align:center;
+    background:transparent;
+    color:var(--go);
+    border:1px solid rgba(184,150,90,.55);
+    font-size:10.5px;
+    letter-spacing:.24em;
+    padding:18px 24px;
+    margin:0;
+  }
+  .hac .btg{
+    align-self:flex-start;
+    margin:24px 0 0;
+    font-size:9px;
+    letter-spacing:.18em;
+  }
+  .bte{ margin-top:40px; font-size:10.5px; letter-spacing:.16em; gap:11px; }
+  .bte + .bte{ margin-top:24px; }
+  .bte svg{ width:17px; height:17px; }
+  /* Panoramica prodotti: in fondo e in punta di piedi, e' una scorciatoia
+     per chi sa gia' cosa cerca. */
+  /* Panoramica prodotti sta in fondo, vicino al bordo ma non appiccicata:
+     il distacco lo fa il margine superiore, il respiro sotto lo fa il
+     padding ridotto di .hco-more. Sommati restano meno di prima, quindi la
+     sezione nera si accorcia invece di allungarsi. */
+  .hac .btm{
+    align-self:flex-start;
+    width:auto;
+    margin:72px 0 0;
+    font-size:7px;
+    letter-spacing:.14em;
+    padding:8px 14px;
+    border-color:rgba(184,150,90,.35);
+  }
+
+  /* Ingresso: i ritardi seguono l'ordine visivo di sopra. */
+  .hco-more .hac > *{
+    opacity:0;
+    transform:translateY(34px);
+    animation:none !important;
+    transition:opacity .7s linear, transform 1.1s cubic-bezier(.42,0,.25,1);
+    will-change:transform,opacity;
+  }
+  .hco-more.in .hac > *{ opacity:1; transform:none; will-change:auto; }
+  .hco-more.in .hde                 { transition-delay:0ms; }
+  .hco-more.in .hwho-sm             { transition-delay:90ms; }
+  .hco-more.in .hac .btp            { transition-delay:180ms; }
+  .hco-more.in .hac .btg            { transition-delay:270ms; }
+  .hco-more.in .bte:nth-of-type(1)  { transition-delay:360ms; }
+  .hco-more.in .bte:nth-of-type(2)  { transition-delay:450ms; }
+  .hco-more.in .bte:nth-of-type(3)  { transition-delay:540ms; }
+  .hco-more.in .hac .btm            { transition-delay:630ms; }
+}
+/* PANORAMICA PRODOTTI IN BASSO, SU DESKTOP
+   ========================================
+   Tolta dalla riga dei pulsanti e appoggiata in fondo a sinistra, alla
+   stessa altezza dei riquadri 1st / 40yr / Global di destra. Come quelli,
+   all'apertura della home resta coperta dalla fascia dei cantieri.
+
+   RIFERIMENTO: la HERO, che e' position:relative e sta ferma. NON .hco-more.
+   Un primo tentativo la ancorava a .hco-more calcolando la distanza dal
+   fondo come min(100px,8vh), cioe' il padding inferiore della hero. Quel
+   calcolo saltava sugli schermi alti, dove @media(min-height:900px) mette
+   justify-content:center e padding-bottom:0: li' .hco-more non sta piu' in
+   fondo e il pulsante finiva in mezzo alle altre scritte.
+
+   left:60px e' il padding orizzontale della hero su desktop, cosi' il
+   pulsante e' incolonnato con il testo. bottom:20px lo porta a meta' altezza
+   dei riquadri di destra, alti circa 76px.
+
+   ATTENZIONE: con position:absolute esce dal flusso, quindi la riga .hac
+   resta con due soli elementi. Se un giorno lo si rimettesse in riga, va
+   tolto anche questo blocco.
+
+   ATTENZIONE 2: sugli schermi bassi la hero e' alta quanto il contenuto,
+   non quanto la finestra. Il pulsante resta comunque in fondo alla hero,
+   ma serve il margine inferiore maggiorato del blocco qui sotto, altrimenti
+   si sovrappone ai tre link. */
+@media (min-width:769px){
+  /* LA TRASFORMAZIONE VA TOLTA, ALTRIMENTI IL PULSANTE SBAGLIA POSTO.
+     L'animazione fiu finisce con transform:translateY(0), e con "forwards"
+     quel valore resta applicato. Un elemento con una transform diventa il
+     riferimento del posizionamento assoluto dei suoi discendenti: .btm si
+     ancorava a .hac invece che alla hero, e finiva un centinaio di pixel
+     piu' in alto, sopra gli altri pulsanti.
+     "fi" e' l'animazione di sola dissolvenza gia' usata dai riquadri delle
+     statistiche: stessa entrata, senza scivolata e senza transform. */
+  .hac{ animation:fi 1s ease .9s forwards; }
+  .hac .btm{
+    position:absolute;
+    left:60px;
+    bottom:18px;
+    margin:0;
+    /* Piccolo come sul telefono: in fondo alla hero e' una scorciatoia per
+       chi torna, non un invito. La cornice e' attenuata perche' su un
+       riquadro piccolo un bordo pieno pesa piu' del testo. */
+    font-size:7.5px;
+    letter-spacing:.16em;
+    padding:9px 16px;
+    border-color:rgba(184,150,90,.35);
+  }
+}
+/* Sugli schermi bassi la hero e' alta quanto il contenuto: senza un po' di
+   margine in fondo la Panoramica finirebbe sopra i tre link. */
+@media (min-width:769px) and (max-height:620px){
+  .hero{ padding-bottom:88px; }
+}
+
+@media (max-width:768px) and (prefers-reduced-motion: reduce){
+  .hco-more > *, .hco-more .hac > *{ opacity:1; transform:none; transition:none; }
 }
 </style>
 <script>
