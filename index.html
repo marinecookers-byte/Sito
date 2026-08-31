@@ -5718,11 +5718,18 @@ body.hct-open header.hide{transform:none}
 .ncat-sub-link{cursor:pointer;transition:padding-left .35s ease}
 .ncat-sub-link:hover{padding-left:16px}
 .ncoll-head{cursor:pointer;position:relative}
+.ncoll-nostromo{margin-top:16px;padding-top:19px;
+  border-top:1px solid rgba(184,115,51,.34)}
+.ncoll-nostromo .ncat-sub-name{color:rgba(184,115,51,.92)}
+.ncoll-nostromo .ncat-sub-tag{color:rgba(248,246,241,.42)}
 .ncoll-plus{position:absolute;right:2px;top:50%;transform:translateY(-50%);font-size:15px;font-weight:300;color:rgba(184,150,90,.6);transition:transform .4s ease}
 .ncoll.open .ncoll-plus{transform:translateY(-50%) rotate(45deg)}
 .ncoll-body{max-height:0;overflow:hidden;transition:max-height .95s cubic-bezier(.22,1,.36,1)}
 .ncoll.open .ncoll-body{max-height:800px}
 .ncat-sub-link:hover .ncat-sub-name{color:var(--gl)}
+/* Nostromo resta rame anche al passaggio del mouse: questa regola sta DOPO
+   quella generica, che altrimenti la riporterebbe all'oro. */
+.ncoll-nostromo:hover .ncat-sub-name{color:rgba(200,132,66,1)}
 .ncat-lock{position:absolute;right:2px;top:17px;color:rgba(184,150,90,.55);transition:color .35s}
 .ncat-sub-link:hover .ncat-lock{color:var(--gl)}
 .ncat-sub-soon{opacity:.5}
@@ -5969,10 +5976,37 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
           <svg class="ncat-lock" width="9" height="11" viewBox="0 0 9 11" fill="none" aria-hidden="true"><path d="M2 5V3.3A2.3 2.3 0 0 1 6.6 3.3V5M1 5h7v5.4H1z" stroke="currentColor" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <!-- ⚠️ RIMOSSA TEMPORANEAMENTE il 22/08/2026 - Galileo Collection.
-             Nascosta perche' non porta a nulla: il visitatore cliccava e non
-             trovava niente. Il markup esatto per il ripristino sta in
-             RIPRISTINO_VOCI_SIDEBAR.md, sezione 1. -->
+        <!-- GALILEO RIPRISTINATA: era stata nascosta il 22/08/2026 perche' non
+             portava a nulla. Ora la collezione ha un prodotto vero (SIDEREUS)
+             con scheda, disegno tecnico e modello 3D, quindi la voce ha senso.
+             ⚠️ Il nome passato a openCat deve coincidere CARATTERE PER
+             CARATTERE con quello scritto in window.CATS, altrimenti
+             catByName() torna null e la fascia del percorso sparisce. -->
+        <div class="ncoll" id="ncoll-ga">
+          <span class="ncat-sub ncat-sub-link ncoll-head" onclick="toggleColl('ga')">
+            <span class="ncat-sub-name" data-i18n="coll_ga_name">Galileo Collection</span>
+            <span class="ncat-sub-tag" data-i18n="coll_ga_tag">Monolithic culinary solutions</span>
+            <span class="ncoll-plus">+</span>
+          </span>
+          <div class="ncoll-body">
+            <a class="ncat" href="/galileo-electric-cookers" onclick="openCat('Galileo \u00b7 Electric Cookers with Oven',['SIDEREUS']);return false" data-i18n="cat_electric_oven">Electric Cookers with Oven</a>
+          </div>
+        </div>
+
+        <!-- NOSTROMO: ultima e volutamente staccata dalle altre. Non e' una
+             collezione di alta gamma ma la linea piu' diffusa, quindi filetto
+             piu' marcato sopra e colore rame invece dell'oro.
+             ⚠️ Lo slash iniziale non e' facoltativo: senza, da un indirizzo
+             con la barra finale il file verrebbe cercato nella cartella
+             sbagliata, e per via del fallback SPA un file mancante non da'
+             404 ma apre LA HOME in una scheda nuova. Errore silenzioso.
+             Il file scheda-nostromo-essential.html deve stare accanto a
+             index.html. -->
+        <a class="ncat-sub ncat-sub-link ncoll-nostromo" href="/scheda-nostromo-essential.html" target="_blank" rel="noopener"
+           onclick="this.href='/scheda-nostromo-essential.html?lang='+(window.curLang||'en')">
+          <span class="ncat-sub-name" data-i18n="coll_qu_name">Nostromo Collection</span>
+          <span class="ncat-sub-tag" data-i18n="coll_qu_tag">Essential culinary solutions</span>
+        </a>
 
         <!-- ⚠️ RIMOSSA TEMPORANEAMENTE il 22/08/2026 - Collezioni Overland Luxury.
              Nascosta perche' non porta a nulla: il visitatore cliccava e non
@@ -8489,13 +8523,21 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </span>
       <svg class="mx-coll-lock" width="11" height="13" viewBox="0 0 11 13" fill="none" aria-hidden="true"><path d="M2.6 5.5V3.6A2.9 2.9 0 0 1 8.4 3.6V5.5M1.3 5.5h8.4v6.4H1.3z" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
-    <span class="mx-acc mx-acc-soon">
-      <span class="mx-acc-txt">
-        <span class="mx-acc-name" data-i18n="coll_ga_name">Galileo Collection</span>
-        <span class="mx-acc-tag" data-i18n="coll_ga_tag">Monolithic culinary solutions</span>
-      </span>
-      <span class="mx-coll-badge" data-i18n="coming_soon">Coming soon</span>
-    </span>
+    <!-- GALILEO NON E' PIU' IN ATTESA: la collezione ora ha un prodotto vero.
+         Accordion gemello di quello Vespucci, riempito da
+         buildProductMatrix(). PER RIMETTERLA IN ATTESA: ripristinare lo span
+         con classi mx-acc e mx-acc-soon col bollino coming_soon, e togliere
+         la riga Galileo da CATS e la voce dalla sidebar. -->
+    <div class="mx-acc" id="mx-acc-ga">
+      <button class="mx-acc-head" onclick="toggleGalileo()" aria-expanded="false">
+        <span class="mx-acc-txt">
+          <span class="mx-acc-name" data-i18n="coll_ga_name">Galileo Collection</span>
+          <span class="mx-acc-tag" data-i18n="coll_ga_tag">Monolithic culinary solutions</span>
+        </span>
+        <span class="mx-acc-ind" aria-hidden="true"></span>
+      </button>
+      <div class="mx-acc-panel"><div class="mx-acc-clip"><div class="mx-acc-panel-inner" id="mx-body-ga"><!-- generato da JS: Galileo --></div></div></div>
+    </div>
   </div>
 
 </div><!-- /matrixpage -->
@@ -8754,6 +8796,10 @@ function goHome(){
 // vivono in DICT, così il cambio lingua continua a funzionare.
 // Aggiungere una categoria = una voce qui + le relative chiavi in DICT.
 window.CAT_HERO = {
+  /* Galileo · stessa impalcatura delle altre categorie: senza questa voce la
+     pagina non riceve hero, titolo e barra di navigazione. Riusa i testi
+     delle cucine elettriche, il video e' quello di Oceano. */
+  'Galileo \u00b7 Electric Cookers with Oven': { media:'video', title:'elec_hero_title', sub:'elec_hero_sub', estag:'elec_es_tag', hl:'elec_es_headline', b1l:'elec_01_label', b1t:'elec_01_title', b1b:'elec_01_body', b2l:'elec_02_label', b2t:'elec_02_title', b2b:'elec_02_body', b3l:'elec_03_label', b3t:'elec_03_title', b3b:'elec_03_body' },
   'Built-in Gas Cooktops': {
     media:'image',
     title:'bgc_hero_title', sub:'bgc_hero_sub', estag:'bgc_es_tag', hl:'bgc_es_headline',
@@ -8870,6 +8916,7 @@ window.CAT_HERO_MEDIA = {
 // scheda prodotto (#prodpage). Chi non e' elencato qui eredita l'hero della
 // propria categoria, esattamente come prima.
 window.PROD_HERO_MEDIA = {
+  'SIDEREUS': {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1787132477/iStock-1371179858_1_gcghfr.mp4'},
   'VENTOTENE':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786285763/HERO_VENTOTENE_59_GRILLCopia_msfszg.png', pos:'center 72%'},
   'MARETTIMO':  {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1785398452/MARETTIMO_FOTO_HERO_pgnpke.jpg'},
   'VIRTUS':     {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1280/v1786293432/VIRTUSHERO_mzmoeh.jpg', pos:'center 72%'},
@@ -8889,6 +8936,7 @@ window.PROD_HERO_MEDIA = {
 // solo per i disegni chiari su fondo scuro (come HORIZON2); i disegni normali
 // (linee scure su fondo chiaro) NON vanno invertiti.
 window.PROD_DRAWING = {
+  'SIDEREUS': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787754881/Assieme_GALILEO_corazzate_sito_l8ajkh.jpg', invert:false},
   'DUE': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786643424/DUE_DISEGNO_S2F0199_rev01_zaxqym.jpg', invert:false},
   'COMPACTA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786643420/COMPACTA_DISEGNO_Cucina_elettrica_450__yvtckl.jpg', invert:false},
   'MAGNUS': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784992791/MAGNUS_DISEGNO_nv8jqg.jpg', invert:false},
@@ -8949,6 +8997,8 @@ window.PROD_DRAWING = {
 // prodotto basta aggiungere una voce con 'ds' qui sotto (procedura nel checkpoint).
 // Modi alternativi: 'gdriveId' (PDF su Drive) o 'preview'/'download' (URL diretti).
 window.PROD_DATASHEET = {
+  'SIDEREUS': { label:'SIDEREUS · Technical Datasheet', kickerKey:'ppd_sidereus_k', name:'SIDEREUS', taglineKey:'ppd_sidereus_t', cat1:'Bluewater Cooker', cat2:'Induction with Oven', photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787763547/GALILEO_OCEANICA_cqy45q.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787754881/Assieme_GALILEO_corazzate_sito_l8ajkh.jpg', specs:[['Type','Bluewater cooker with oven'],['Hob','Induction + emergency zone \u00b7 a system exclusive to us'],['Hob power','Induction, settable via PMS below 3.0 kW'],['Oven','Multifunction \u00b7 triple heater plus optional convection'],['Oven minimum power','0.75 kW'],['Twin top grill','1.5 kW'],['Oven modes','Static base \u00b7 twin grill \u00b7 base + top \u00b7 convection (optional)'],['Total power','Variable, according to the many possible configurations'],['Door','Multiple special glass panes \u00b7 state-of-the-art muffle insulation'],['Safety','Reinforced door lock and latch, as standard'],['Pot holders','Several optional systems \u00b7 solid stainless steel 8 mm'],['Gimbals','Ultra-reinforced'],['Controls','Front \u00b7 forced-air cooled'],['Lighting','Twin high-efficiency lamps'],['Oven cavity','Mirror-polished stainless steel'],['Construction','Solid stainless steel']], specText:['Solid stainless steel throughout, front controls, induction hob with an emergency zone: a system exclusive to us.','Hob power is set through the PMS and can be held below 3.0 kW when the boat needs it.','Multifunction oven: static base, twin top grill, base plus top, convection as an option. Minimum oven power 0.75 kW.','Reinforced door lock and safety latch as standard. Several pot holder systems available.','Total power varies with the configuration chosen, and the configurations are many.'],
+    paras:['ppd_sidereus_p0','ppd_sidereus_p1','ppd_sidereus_p2','ppd_sidereus_p3'] },
   'DUE': { label:'DUE · Technical Datasheet',
     kickerKey:'ppd_due_k', name:'DUE', taglineKey:'ppd_due_t',
     cat1:'Induction Cooktop', cat2:'2 Burners',
@@ -10417,6 +10467,7 @@ window.PROD_SPEC_LAYOUT = {
 window.PROD_DESC_SHORT_DEFAULT = ['ppd_mega_l0','ppd_mega_l1','ppd_mega_l2','ppd_mega_l3','ppd_mega_l4','ppd_mega_l5','ppd_mega_l6','ppd_mega_l7'];
 
 window.PROD_DESC_SHORT = {
+  'SIDEREUS': ['ppd_sidereus_s0','ppd_sidereus_s1','ppd_sidereus_s2','ppd_sidereus_s3','ppd_sidereus_s4'],
   'MEGA GRILL': ['ppd_megag_s0','ppd_megag_s1','ppd_megag_s2','ppd_megag_s3','ppd_megag_s4','ppd_megag_s5'],
   'MAGNUS':     ['ppd_magnus_s0','ppd_magnus_s1','ppd_magnus_s2','ppd_magnus_s3'],
   'MARETTIMO': ['ppd_maret_s0','ppd_maret_s1','ppd_maret_s2','ppd_maret_s3','ppd_maret_s4','ppd_maret_s5'],
@@ -10483,6 +10534,8 @@ window.PROD_DESC_SHORT = {
 //   photos : indici in PROD_GALLERY[modello] delle foto da intercalare
 //   after  : dopo quale paragrafo (0-based) inserire ciascuna foto
 window.PROD_DESC_FULL = {
+  'SIDEREUS': { title: 'ppd_sidereus_t', kicker: 'ppd_sidereus_k',
+    paras: ['ppd_sidereus_p0','ppd_sidereus_p1','ppd_sidereus_p2','ppd_sidereus_p3'] },
   'ESPRESSO12': {
     title:  'ppd_esp_l0',
     kicker: 'ppd_esp_k',
@@ -11732,6 +11785,7 @@ document.addEventListener('keydown',function(e){
 
 // Immagini prodotti
 window.PROD_DESCS={
+  'SIDEREUS':    'Bluewater Induction Cooker with Oven',
   'PRINCIPE':'Gas Cooker with Oven · Bespoke for Vintage Yachts',
   'MADDALENA':'Gas Cooktop · 2 Burners',
   'CAPRERA':'Gas Cooktop · 3 Burners',
@@ -11798,6 +11852,7 @@ window.PROD_DESCS={
   'ESPRESSO12':  'Espresso Coffee Maker · 12V'
 };
 window.PROD_IMGS={
+  'SIDEREUS':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787763547/GALILEO_OCEANICA_cqy45q.jpg',
   'PRINCIPE':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785247399/PRINCIPE30_kjdbxz.jpg',
   'MADDALENA':  'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785230935/SEAFARER2_PER_SITO_qo6bed.jpg',
   'CAPRERA':  'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785230975/SEAFARER3_PER_SITO_fqarym.jpg',
@@ -11883,6 +11938,7 @@ window.PROD_IMG_SHIFT={
 // Galleria multi-foto per prodotto (usata da #prodpage · sezione Gallery).
 // Se un modello e' qui, la sua galleria mostra queste foto invece della singola.
 window.PROD_ALT={
+  'SIDEREUS':'bluewater marine induction cooker with extra-large multifunction oven, solid stainless steel, for ocean crossings',
   'PRINCIPE':'handmade gas cooker with oven for classic and vintage yachts',
   'ORIZZONTE':'gimballed marine induction cooker with oven for yacht galleys, bluewater version available',
   'GRANLUX':'large gimballed marine induction cooker with oven for yacht galleys',
@@ -12147,6 +12203,7 @@ function prodDisp(m){ return (window.PROD_DISPLAY && window.PROD_DISPLAY[m]) ? w
 // ── SPECIFICHE PER PRODOTTO (valori dal PDF Marco Polo) ──
 // Ogni riga: [chiave_i18n_etichetta, valore]. Le etichette sono tradotte in 5 lingue.
 window.PROD_SPECS={
+  'SIDEREUS':[['spec_type','Bluewater cooker with oven'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','max 3,0 <span class="pct-val-unit">kW</span> \u00b7 PMS'], ['specs_oven_power','0,75 - 1,5 <span class="pct-val-unit">kW</span>'], ['spec_oven','Multifunction \u00b7 triple heater \u00b7 optional convection'], ['spec_supply','220-240 V \u00b7 50/60 <span class="pct-val-unit">Hz</span>'], ['spec_construction','Solid stainless steel \u00b7 ultra-reinforced gimbals']],
   // Electric Cookers with Oven
   // 3° elemento (facoltativo) = chiave i18n del VALORE, per tradurlo nelle 5 lingue.
   'ORIZZONTE':[['spec_dimensions','52.5 x 55 x 50h <span class="pct-val-unit">cm</span>'], ['specs_technology','Electric Induction','specs_technology_val_ind'], ['specs_hob_power','adjustable 1 to 5.2 <span class="pct-val-unit">kW</span>','specs_hob_power_val_oriz'], ['specs_oven_power','1.6 <span class="pct-val-unit">kW</span>'], ['specs_total_power','adjustable from just 1.75 up to 6.8 <span class="pct-val-unit">kW</span>','specs_total_power_val_oriz'], ['specs_certified','Yes','specs_certified_val'], ['specs_steel_plain','Standard','specs_steel_val_std'], ['specs_safety','Integrated','specs_safety_val']],
@@ -13741,6 +13798,12 @@ window.openSpare=openSpare;window.closeSpare=closeSpare;
 // cosi' "cucina", "forno", "four", "Herd", "cocina", "hornillo", "piano cottura",
 // "lavello", "caffe", ecc. portano al risultato giusto. Solo dati, nessuna logica.
 window.SRCH_KW = {
+  'galileo-electric-cookers':
+    'galileo sidereus cucina oceanica traversata induzione forno bluewater '+
+    'galileo sidereus bluewater ocean crossing induction cooker oven offshore '+
+    'galileo sidereus cuisiniere induction four hauturier traversee '+
+    'galileo sidereus induktion backofen hochsee blauwasser '+
+    'galileo sidereus cocina induccion horno travesia oceanica',
   'electric-cookers-with-oven':
     'cucine elettriche cucina elettrica con forno induzione piano cottura fornello '+
     'electric cookers cooker oven induction stove range '+
@@ -13848,6 +13911,9 @@ window.SRCH_KW = {
 // Mappa slug categoria -> chiave i18n del nome, cosi' nella ricerca il nome
 // della categoria appare TRADOTTO nella lingua attiva (non piu' solo in EN).
 window.SRCH_CATKEY = {
+  /* Senza questa riga la fascia del percorso scriverebbe il nome della
+     categoria Galileo in inglese in tutte e cinque le lingue. */
+  'galileo-electric-cookers':'cat_electric_oven',
   'electric-cookers-with-oven':'cat_electric_oven',
   'gas-cookers-with-oven':'cat_gas_oven',
   'gas-cookers':'cat_gas',
@@ -14940,7 +15006,8 @@ var DICT = {
     gate_err: "Incorrect password.",
 
     /* Category names */
-    cat_electric_oven: "Electric Cookers with Oven",
+    /* Galileo/SIDEREUS e Nostromo */ ppd_sidereus_k:"The story of Sidereus", ppd_sidereus_t:"Sidereus: Italian fine dining where the routes run out.", ppd_sidereus_p0:"We have been building induction cookers for more than ten years, and the engineers who build them are the same ones who developed a range of electric cookers for sailing yachts in the early 2000s, over twenty years ago. We have not only believed in electrification for decades: we have put it to sea, and those cookers are aboard a great many yachts around the world. Sidereus is the furthest point of that road: born for ocean passages, where the nearest port is days away. The zones respond instantly, and our own power management system distributes the load without ever asking the boat for more than she can give. On this hob a seafood risotto comes together perfectly, and a ragu simmers for hours while you sail.", ppd_sidereus_p1:"The hob carries an exclusive safety system that has no equivalent today in offshore yachting. It comes from a concrete question: what happens if a fault stops the cooker when you are at Point Nemo. The answer is an architecture designed so that cooking on board continues until landfall. Around it, extreme efficiency: state-of-the-art insulation with latest-generation materials and a door with multiple special glass panes keep the heat inside the oven, where it is needed, and every watt saved is range that stays in the batteries.", ppd_sidereus_p2:"The oven carries a heating element system new to the marine world, with many combinations from static to optional fan-assisted: every dish in our tradition finds its own. Top and base also work together and surround the food from both sides, the heat the most demanding Italian cooking asks for: a roast veal stays juicy inside while a crust forms outside, a lasagna alla bolognese bakes evenly and gratinates on the surface at the same time, an aubergine parmigiana dries without drying out. On static, a long-fermentation bread rises evenly; with the fan, a tart stays crisp while vegetables brown on the second level; under the grill, a tagliata is finished in minutes. The interior is mirror-polished stainless steel: it reflects heat onto the food, offers no grain for residue to lodge in, resists salt air and cleans in a single pass.", ppd_sidereus_p3:"The hinges are exceptionally sturdy and carry a closing system new to the marine world. It is the culture of the professional kitchen, the culture of the Inox Valley that surrounds us in Conegliano, taken to sea. Steel and clean proportions do the rest: Sidereus speaks with the design of whoever drew the boat, instead of imposing itself.", ppd_sidereus_s0:"Induction hob + emergency zone: a system exclusive to us.", ppd_sidereus_s1:"Hob power set through the PMS, can be held below 3.0 kW.", ppd_sidereus_s2:"Multifunction triple-heater oven, optional fan. Twin grill 1.5 kW.", ppd_sidereus_s3:"Multiple-glazed door, reinforced door lock and latch as standard.", ppd_sidereus_s4:"Solid stainless steel, ultra-reinforced gimbals, 8 mm pot holders.", coll_ga_note:"Ocean crossings are the hardest test a galley can face: weeks at sea, no port, no spare shop. The Galileo Collection is our answer. Built entirely from solid stainless steel, with front controls, an induction hob with power modulation and an extra-large oven, it is made for those who cook properly a thousand miles from anywhere.", coll_qu_name:"Nostromo Collection", coll_qu_tag:"Essential culinary solutions", coll_qu_note:"The most widely used range, and the one we keep most up to date. Essential, robust, made in Italy: the same marine engineering as the other collections, in its most direct form. Sold by us and by many distributors worldwide, with spare parts available for years.",
+  cat_electric_oven: "Electric Cookers with Oven",
     cat_gas_oven: "Gas Cookers with Oven",
     cat_gas: "Gas Cookers",
     cat_gas_builtin: "Built-in Gas Cooktops",
@@ -16429,7 +16496,8 @@ var DICT = {
     gate_btn: "Accedi",
     gate_err: "Password non corretta.",
 
-    cat_electric_oven: "Cucine Elettriche con Forno",
+    /* Galileo/SIDEREUS e Nostromo */ ppd_sidereus_k:"Il racconto di Sidereus", ppd_sidereus_t:"Sidereus: l'alta cucina italiana là dove finiscono le rotte.", ppd_sidereus_p0:"Costruiamo cucine a induzione da più di dieci anni, e i tecnici che le realizzano sono gli stessi che hanno messo a punto una serie di cucine elettriche per yacht a vela agli inizi degli anni Duemila, oltre vent'anni fa. Non solo crediamo nell'elettrificazione da decenni: l'abbiamo messa in pratica, e quelle cucine sono a bordo di moltissimi yacht in tutto il mondo. Sidereus è il punto più avanzato di quella strada: nata per le traversate oceaniche, dove il porto più vicino è a giorni di distanza. Le zone rispondono all'istante e il sistema proprietario di gestione dell'energia distribuisce la potenza senza mai chiedere alla barca più di quanto possa dare. Su questo piano un risotto ai frutti di mare si manteca alla perfezione e un ragù sobbolle per ore mentre si naviga.", ppd_sidereus_p1:"Sul piano cottura Sidereus monta un sistema di sicurezza esclusivo, che non ha oggi equivalenti nella nautica d'altura. Nasce da una domanda concreta: cosa succede se un guasto ferma la cucina quando siete al Punto Nemo. La risposta è un'architettura pensata perché a bordo si continui a cucinare fino all'approdo. Attorno, un'efficienza estrema: isolamento allo stato dell'arte con materiali di ultima generazione e porta a cristalli speciali multipli trattengono il calore nel forno, dove serve, e ogni watt risparmiato è autonomia che resta nelle batterie.", ppd_sidereus_p2:"Il forno monta un sistema di resistenze inedito nel mondo nautico, con molteplici combinazioni che vanno dallo statico al ventilato opzionale: ogni cottura della nostra tradizione trova la sua. Superiore e inferiore lavorano anche insieme e avvolgono il cibo dai due lati, il calore che serve alle cotture italiane più esigenti: un arrosto di vitello resta succoso dentro mentre fuori si forma la crosta, una lasagna alla bolognese cuoce uniforme e gratina in superficie nello stesso tempo, una parmigiana di melanzane si asciuga senza seccarsi. In statico un pane a lunga lievitazione cresce regolare; con il ventilato una crostata resta friabile mentre sul secondo livello dorano le verdure; sotto il grill una tagliata si rifinisce in pochi minuti. L'interno è in acciaio inox lucidato a specchio: riflette il calore sui cibi, non offre grana in cui i residui possano annidarsi, resiste alla salsedine e si pulisce con un solo gesto.", ppd_sidereus_p3:"Le cerniere sono robustissime e montano un sistema di chiusura inedito nel mondo nautico. È la cultura della cucina professionale, quella dell'Inox Valley che ci circonda a Conegliano, portata per mare. Acciaio e proporzioni pulite fanno il resto: Sidereus dialoga con il progetto di chi ha disegnato la barca, invece di imporsi.", ppd_sidereus_s0:"Piano a induzione + zona di emergenza: sistema esclusivo nostro.", ppd_sidereus_s1:"Potenza del piano settabile via PMS, mantenibile sotto 3,0 kW.", ppd_sidereus_s2:"Forno multifunzione a tripla resistenza, ventilato opzionale. Doppio grill 1,5 kW.", ppd_sidereus_s3:"Porta a cristalli multipli, bloccaporta e chiavistello rinforzato di serie.", ppd_sidereus_s4:"Acciaio inox massiccio, basculanti ultra rinforzati, fermapentole da 8 mm.", coll_ga_note:"Le traversate oceaniche sono la prova più dura per una cambusa: settimane in mare, nessun porto, nessun ricambio a portata di mano. La Collezione Galileo è la nostra risposta. Interamente in acciaio inox massiccio, con comandi frontali, piano a induzione con modulazione della potenza e forno ultra capiente, è fatta per chi cucina davvero a mille miglia da tutto.", coll_qu_name:"Collezione Nostromo", coll_qu_tag: "Soluzioni culinarie essenziali", coll_qu_note:"La linea piu diffusa, e quella che teniamo piu aggiornata. Essenziale, robusta, costruita in Italia: la stessa ingegneria marina delle altre collezioni, nella sua forma piu diretta. Venduta da noi e da molti distributori nel mondo, con ricambi disponibili per anni.",
+  cat_electric_oven: "Cucine Elettriche con Forno",
     cat_gas_oven: "Cucine a Gas con Forno",
     cat_gas: "Cucine a Gas",
     cat_gas_builtin: "Piani Cottura a Gas da Incasso",
@@ -17913,7 +17981,8 @@ var DICT = {
     gate_btn: "Entrer",
     gate_err: "Mot de passe incorrect.",
 
-    cat_electric_oven: "Cuisinières Électriques avec Four",
+    /* Galileo/SIDEREUS e Nostromo */ ppd_sidereus_k:"Le récit de Sidereus", ppd_sidereus_t:"Sidereus : la grande cuisine italienne là où s'achèvent les routes.", ppd_sidereus_p0:"Nous construisons des cuisinières à induction depuis plus de dix ans, et les techniciens qui les réalisent sont ceux-là mêmes qui ont mis au point une série de cuisinières électriques pour voiliers au début des années 2000, il y a plus de vingt ans. Nous ne croyons pas seulement à l'électrification depuis des décennies : nous l'avons mise en pratique, et ces cuisinières sont à bord d'un grand nombre de yachts dans le monde entier. Sidereus est le point le plus avancé de cette route : née pour les traversées océaniques, là où le port le plus proche est à plusieurs jours. Les zones répondent à l'instant et notre système propriétaire de gestion de l'énergie répartit la puissance sans jamais demander au bateau plus qu'il ne peut donner. Sur ce plan de cuisson, un risotto aux fruits de mer se lie à la perfection et un ragù mijote pendant des heures tandis que l'on navigue.", ppd_sidereus_p1:"Sur le plan de cuisson, Sidereus intègre un système de sécurité exclusif, qui n'a aujourd'hui aucun équivalent dans la navigation hauturière. Il naît d'une question concrète : que se passe-t-il si une panne arrête la cuisinière quand vous êtes au Point Nemo. La réponse est une architecture conçue pour que l'on continue à cuisiner à bord jusqu'à l'escale. Autour, une efficacité extrême : une isolation à l'état de l'art avec des matériaux de dernière génération et une porte à vitrages spéciaux multiples retiennent la chaleur dans le four, là où elle est utile, et chaque watt économisé est de l'autonomie qui reste dans les batteries.", ppd_sidereus_p2:"Le four intègre un système de résistances inédit dans le monde nautique, avec de multiples combinaisons qui vont du statique au ventilé en option : chaque cuisson de notre tradition trouve la sienne. La voûte et la sole travaillent aussi ensemble et enveloppent les aliments des deux côtés, la chaleur qu'exigent les cuissons italiennes les plus délicates : un rôti de veau reste juteux à l'intérieur tandis que la croûte se forme à l'extérieur, une lasagne à la bolognaise cuit uniformément et gratine en surface en même temps, une parmigiana d'aubergines s'assèche sans se dessécher. En statique, un pain à longue fermentation lève régulièrement ; en ventilé, une tarte reste friable pendant que les légumes dorent sur le deuxième niveau ; sous le gril, une tagliata se termine en quelques minutes. L'intérieur est en acier inoxydable poli miroir : il réfléchit la chaleur sur les aliments, n'offre aucun grain où les résidus puissent se loger, résiste aux embruns et se nettoie d'un seul geste.", ppd_sidereus_p3:"Les charnières sont extrêmement robustes et portent un système de fermeture inédit dans le monde nautique. C'est la culture de la cuisine professionnelle, celle de l'Inox Valley qui nous entoure à Conegliano, portée en mer. L'acier et des proportions nettes font le reste : Sidereus dialogue avec le projet de celui qui a dessiné le bateau, au lieu de s'imposer.", ppd_sidereus_s0:"Plan à induction + zone de secours : système exclusif.", ppd_sidereus_s1:"Puissance du plan réglable via le PMS, maintenue sous 3,0 kW.", ppd_sidereus_s2:"Four multifonction à triple résistance, ventilé en option. Double gril 1,5 kW.", ppd_sidereus_s3:"Porte à vitrages multiples, verrou et loquet renforcés de série.", ppd_sidereus_s4:"Acier inoxydable massif, cardans ultra renforcés, cale-casseroles de 8 mm.", coll_ga_note:"Les traversées océaniques sont l'épreuve la plus dure pour une cambuse : des semaines en mer, aucun port, aucune pièce détachée à portée. La Collection Galileo est notre réponse. Entièrement en acier inoxydable massif, avec commandes frontales, plan à induction à modulation de puissance et four très spacieux, elle est faite pour ceux qui cuisinent vraiment à mille milles de tout.", coll_qu_name:"Collection Nostromo", coll_qu_tag: "Solutions culinaires essentielles", coll_qu_note:"La gamme la plus repandue, et celle que nous tenons le plus a jour. Essentielle, robuste, fabriquee en Italie : la meme ingenierie marine que les autres collections, sous sa forme la plus directe. Vendue par nous et par de nombreux distributeurs, avec des pieces detachees disponibles pendant des annees.",
+  cat_electric_oven: "Cuisinières Électriques avec Four",
     cat_gas_oven: "Cuisinières à Gaz avec Four",
     cat_gas: "Cuisinières à Gaz",
     cat_gas_builtin: "Tables de Cuisson Gaz Encastrées",
@@ -19397,7 +19466,8 @@ var DICT = {
     gate_btn: "Öffnen",
     gate_err: "Falsches Passwort.",
 
-    cat_electric_oven: "Elektroherde mit Backofen",
+    /* Galileo/SIDEREUS e Nostromo */ ppd_sidereus_k:"Die Geschichte von Sidereus", ppd_sidereus_t:"Sidereus: die italienische Spitzenküche dort, wo die Routen enden.", ppd_sidereus_p0:"Wir bauen seit mehr als zehn Jahren Induktionsherde, und die Techniker, die sie fertigen, sind dieselben, die Anfang der 2000er Jahre – vor über zwanzig Jahren – eine Reihe von Elektroherden für Segelyachten entwickelt haben. Wir glauben nicht nur seit Jahrzehnten an die Elektrifizierung: wir haben sie umgesetzt, und diese Herde sind an Bord sehr vieler Yachten in aller Welt. Sidereus ist der weiteste Punkt dieses Weges: entstanden für Ozeanpassagen, wo der nächste Hafen Tage entfernt liegt. Die Zonen reagieren augenblicklich, und unser eigenes Energiemanagement verteilt die Leistung, ohne dem Schiff je mehr abzuverlangen, als es geben kann. Auf diesem Kochfeld wird ein Meeresfrüchte-Risotto perfekt cremig, und ein Ragù köchelt stundenlang, während man segelt.", ppd_sidereus_p1:"Auf dem Kochfeld trägt Sidereus ein exklusives Sicherheitssystem, das in der Hochseeschifffahrt heute ohne Entsprechung ist. Es entstand aus einer konkreten Frage: Was geschieht, wenn ein Defekt den Herd stoppt, während Sie am Point Nemo stehen. Die Antwort ist eine Architektur, die dafür sorgt, dass an Bord bis zum Anlaufen des Hafens weitergekocht wird. Darum herum äußerste Effizienz: eine Isolierung auf dem Stand der Technik mit Materialien neuester Generation und eine Tür mit mehreren Spezialgläsern halten die Wärme im Ofen, wo sie gebraucht wird, und jedes gesparte Watt ist Reichweite, die in den Batterien bleibt.", ppd_sidereus_p2:"Der Backofen trägt ein in der Yachtwelt neuartiges Heizelementsystem mit vielfältigen Kombinationen von der Ober- und Unterhitze bis zur optionalen Umluft: Jede Zubereitung unserer Tradition findet die ihre. Ober- und Unterhitze arbeiten auch gemeinsam und umschließen die Speisen von beiden Seiten, jene Wärme, die die anspruchsvollsten italienischen Gerichte verlangen: Ein Kalbsbraten bleibt innen saftig, während sich außen eine Kruste bildet, eine Lasagne alla bolognese gart gleichmäßig und überbäckt zugleich an der Oberfläche, eine Auberginen-Parmigiana trocknet ab, ohne auszutrocknen. Bei Ober- und Unterhitze geht ein lang geführtes Brot gleichmäßig auf; mit Umluft bleibt eine Tarte mürbe, während auf der zweiten Ebene Gemüse bräunt; unter dem Grill ist eine Tagliata in wenigen Minuten fertig. Der Innenraum ist spiegelpolierter Edelstahl: Er reflektiert die Hitze auf die Speisen, bietet keine Struktur, in der sich Rückstände festsetzen, widersteht der Salzluft und lässt sich in einem Zug reinigen.", ppd_sidereus_p3:"Die Scharniere sind außerordentlich robust und tragen ein in der Yachtwelt neuartiges Verschlusssystem. Es ist die Kultur der Profiküche, jene der Inox Valley, die uns in Conegliano umgibt, aufs Meer gebracht. Stahl und klare Proportionen tun das Übrige: Sidereus tritt in einen Dialog mit dem Entwurf dessen, der das Boot gezeichnet hat, statt sich aufzudrängen.", ppd_sidereus_s0:"Induktionskochfeld + Notzone: exklusives eigenes System.", ppd_sidereus_s1:"Kochfeldleistung über das PMS einstellbar, unter 3,0 kW haltbar.", ppd_sidereus_s2:"Multifunktionsofen mit dreifachem Heizelement, Umluft optional. Doppelgrill 1,5 kW.", ppd_sidereus_s3:"Tür mit mehreren Spezialgläsern, verstärkte Türverriegelung serienmäßig.", ppd_sidereus_s4:"Massiver Edelstahl, ultraverstärkte Kardanaufhängung, 8-mm-Topfhalter.", coll_ga_note:"Ozeanpassagen sind die härteste Prüfung für eine Kombüse: Wochen auf See, kein Hafen, kein Ersatzteil in Reichweite. Die Galileo Kollektion ist unsere Antwort. Vollständig aus massivem Edelstahl, mit Frontbedienung, Induktionskochfeld mit Leistungsmodulation und besonders großem Backofen, für alle, die tausend Meilen von allem entfernt wirklich kochen.", coll_qu_name:"Nostromo Kollektion", coll_qu_tag: "Essenzielle Küchenlösungen", coll_qu_note:"Die meistverbreitete Baureihe und die, die wir am aktuellsten halten. Essenziell, robust, in Italien gebaut: dieselbe Marine-Technik wie in den anderen Kollektionen, in ihrer direktesten Form. Von uns und von vielen Distributoren verkauft, mit jahrelang verfuegbaren Ersatzteilen.",
+  cat_electric_oven: "Elektroherde mit Backofen",
     cat_gas_oven: "Gasherde mit Backofen",
     cat_gas: "Gasherde",
     cat_gas_builtin: "Einbau-Gaskochfelder",
@@ -20881,7 +20951,8 @@ var DICT = {
     gate_btn: "Entrar",
     gate_err: "Contraseña incorrecta.",
 
-    cat_electric_oven: "Cocinas Eléctricas con Horno",
+    /* Galileo/SIDEREUS e Nostromo */ ppd_sidereus_k:"El relato de Sidereus", ppd_sidereus_t:"Sidereus: la alta cocina italiana allí donde terminan las rutas.", ppd_sidereus_p0:"Fabricamos cocinas de inducción desde hace más de diez años, y los técnicos que las construyen son los mismos que pusieron a punto una serie de cocinas eléctricas para veleros a principios de los años 2000, hace más de veinte años. No solo creemos en la electrificación desde hace décadas: la hemos llevado a la práctica, y esas cocinas están a bordo de muchísimos yates en todo el mundo. Sidereus es el punto más avanzado de ese camino: nacida para las travesías oceánicas, donde el puerto más cercano está a días de distancia. Las zonas responden al instante y nuestro sistema propio de gestión de la energía distribuye la potencia sin pedirle nunca al barco más de lo que puede dar. Sobre esta placa un risotto de marisco se manteca a la perfección y un ragù cuece a fuego lento durante horas mientras se navega.", ppd_sidereus_p1:"En la placa, Sidereus monta un sistema de seguridad exclusivo, que hoy no tiene equivalente en la navegación de altura. Nace de una pregunta concreta: qué ocurre si una avería detiene la cocina cuando están en el Punto Nemo. La respuesta es una arquitectura pensada para que a bordo se siga cocinando hasta la llegada a puerto. Alrededor, una eficiencia extrema: aislamiento a la última con materiales de nueva generación y una puerta de cristales especiales múltiples retienen el calor en el horno, donde hace falta, y cada vatio ahorrado es autonomía que se queda en las baterías.", ppd_sidereus_p2:"El horno monta un sistema de resistencias inédito en el mundo náutico, con múltiples combinaciones que van del estático al ventilado opcional: cada cocción de nuestra tradición encuentra la suya. Superior e inferior trabajan también juntas y envuelven los alimentos por ambos lados, el calor que exigen las cocciones italianas más delicadas: un asado de ternera queda jugoso por dentro mientras fuera se forma la costra, una lasaña a la boloñesa cuece uniforme y gratina en superficie al mismo tiempo, una parmigiana de berenjenas se seca sin resecarse. En estático, un pan de larga fermentación crece regular; con el ventilado, una tarta queda quebradiza mientras en el segundo nivel se doran las verduras; bajo el gril, una tagliata se termina en pocos minutos. El interior es de acero inoxidable pulido a espejo: refleja el calor sobre los alimentos, no ofrece grano donde puedan alojarse los residuos, resiste la salinidad y se limpia de un solo gesto.", ppd_sidereus_p3:"Las bisagras son extraordinariamente robustas y montan un sistema de cierre inédito en el mundo náutico. Es la cultura de la cocina profesional, la de la Inox Valley que nos rodea en Conegliano, llevada al mar. El acero y unas proporciones limpias hacen el resto: Sidereus dialoga con el proyecto de quien ha diseñado el barco, en lugar de imponerse.", ppd_sidereus_s0:"Placa de inducción + zona de emergencia: sistema exclusivo propio.", ppd_sidereus_s1:"Potencia de la placa ajustable vía PMS, mantenible por debajo de 3,0 kW.", ppd_sidereus_s2:"Horno multifunción de triple resistencia, ventilado opcional. Doble gril 1,5 kW.", ppd_sidereus_s3:"Puerta de cristales múltiples, bloqueo y pestillo reforzados de serie.", ppd_sidereus_s4:"Acero inoxidable macizo, balancines ultrarreforzados, sujetaollas de 8 mm.", coll_ga_note:"Las travesías oceánicas son la prueba más dura para una cocina de a bordo: semanas en el mar, ningún puerto, ningún recambio a mano. La Colección Galileo es nuestra respuesta. Enteramente de acero inoxidable macizo, con mandos frontales, placa de inducción con modulación de potencia y horno de gran capacidad, está hecha para quien cocina de verdad a mil millas de todo.", coll_qu_name:"Coleccion Nostromo", coll_qu_tag: "Soluciones culinarias esenciales", coll_qu_note:"La linea mas difundida y la que mantenemos mas actualizada. Esencial, robusta, fabricada en Italia: la misma ingenieria marina que las demas colecciones, en su forma mas directa. Vendida por nosotros y por muchos distribuidores, con recambios disponibles durante anos.",
+  cat_electric_oven: "Cocinas Eléctricas con Horno",
     cat_gas_oven: "Cocinas de Gas con Horno",
     cat_gas: "Cocinas de Gas",
     cat_gas_builtin: "Encimeras de Gas Empotradas",
@@ -22069,10 +22140,13 @@ var DICT = {
 
 
 var curLang = 'en';
+/* esposta su window: la voce Nostromo della sidebar la legge per aprire la
+   scheda gia' nella lingua che il visitatore sta usando. */
+window.curLang = curLang;
 
 function setLang(lang) {
   if (!DICT[lang]) return;
-  curLang = lang;
+  curLang = lang; window.curLang = lang;
 
   /* Update button active states */
   ['en','it','fr','de','es'].forEach(function(l){
@@ -22188,6 +22262,12 @@ window.setLang = setLang;
     {slug:'built-in-gas-ovens',         name:'Built-in Gas Ovens',         models:['ROMA','FIRENZE']},
     {slug:'built-in-electric-ovens',    name:'Built-in Electric Ovens',    models:['NAPOLI']},
     {slug:'antiche-cambuse',            name:'Antiche Cambuse - Cucine per yachts d\'Epoca', models:['PRINCIPE']},
+    /* SENZA QUESTA RIGA GALILEO NON ESISTE PER IL SITO: da CATS dipendono la
+       rotta /galileo-electric-cookers, l'ingresso di SIDEREUS in
+       PRODUCTS/PRODMAP (link /sidereus e tasto Indietro), la fascia del
+       percorso e la ricerca interna. Il nome deve coincidere CARATTERE PER
+       CARATTERE con quello passato a openCat() dalla sidebar. */
+    {slug:'galileo-electric-cookers',   name:'Galileo \u00b7 Electric Cookers with Oven', models:['SIDEREUS']},
     {slug:'accessori-per-la-cottura',  name:'Accessori per la cottura',   models:[]},
     {slug:'manuali',                   name:'Manuali',                    models:[]},
     {slug:'custom-projects',           name:'Custom Projects',            models:[]},
@@ -22228,6 +22308,10 @@ window.PROD_GIMBAL = [
 ];
 
 window.PROD_3D = {
+  /* SIDEREUS (Galileo). L'indirizzo porta ?settings=true, unico caso fra i
+     modelli: apre il visualizzatore col pannello impostazioni disponibile.
+     Per uniformarlo agli altri basta togliere quel pezzo dopo il codice. */
+  'SIDEREUS':     'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/XpkSxhgZ6XiksSl?settings=true',
   'ADRIATICO':    'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/BZaV9oMANEwlbxd',
   'ALTALUX':      'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/gp034hPDyiN0uAc',
   'ALTAMAREA':    'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/iAo12L4NCgfDdjV',
@@ -22666,8 +22750,18 @@ window.OC_MODELS = [
       var seen={}, cats=[];
       ORDER.forEach(function(nm){ var c=catByName(nm); if(c && c.models && c.models.length){ cats.push(c); seen[c.name]=1; } });
       var VESPUCCI_NAME="Antiche Cambuse - Cucine per yachts d'Epoca";
-      (window.CATS||[]).forEach(function(c){ if(!seen[c.name] && c.name!==VESPUCCI_NAME && c.models && c.models.length){ cats.push(c); } });
+      /* ANCHE GALILEO VA ESCLUSA, non solo Vespucci: questo ciclo raccoglie
+         tutto cio' che avanza, e senza questa riga SIDEREUS finirebbe
+         nell'accordion di MARCO POLO, cioe' nella collezione sbagliata. */
+      var GALILEO_NAME='Galileo \u00b7 Electric Cookers with Oven';
+      (window.CATS||[]).forEach(function(c){ if(!seen[c.name] && c.name!==VESPUCCI_NAME && c.name!==GALILEO_NAME && c.models && c.models.length){ cats.push(c); } });
       host.innerHTML=renderCats(cats);
+    }
+    // Galileo: solo la categoria galileo-electric-cookers (SIDEREUS)
+    var hostGa=document.getElementById('mx-body-ga');
+    if(hostGa){
+      var cGa=catByName('Galileo \u00b7 Electric Cookers with Oven');
+      hostGa.innerHTML = (cGa && cGa.models && cGa.models.length) ? renderCats([cGa]) : '';
     }
     // Vespucci: solo la categoria antiche-cambuse (Classic Cookers with Oven)
     var hostVe=document.getElementById('mx-body-ve');
@@ -23152,6 +23246,12 @@ window.hdZoom=function(url,alt,maxw){
   };
   window.toggleMarcoPolo=function(){
     var el=document.getElementById('mx-acc-mp'); if(!el)return;
+    var open=el.classList.toggle('open');
+    var btn=el.querySelector('.mx-acc-head'); if(btn)btn.setAttribute('aria-expanded',open?'true':'false');
+    setTimeout(function(){ try{window.dispatchEvent(new Event('resize'));}catch(e){} },620);
+  };
+  window.toggleGalileo=function(){
+    var el=document.getElementById('mx-acc-ga'); if(!el)return;
     var open=el.classList.toggle('open');
     var btn=el.querySelector('.mx-acc-head'); if(btn)btn.setAttribute('aria-expanded',open?'true':'false');
     setTimeout(function(){ try{window.dispatchEvent(new Event('resize'));}catch(e){} },620);
@@ -25010,7 +25110,9 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
 
       if(modo === 'pulito'){
         if(disteso && typeof window.cDrop === 'function') window.cDrop();
-        ['mp', 've'].forEach(function(c){
+        /* 'ga' aggiunta: senza, tornando a Collezioni il pannello Galileo
+           restava aperto e ci si ritrovava un gradino piu' in basso. */
+        ['mp', 've', 'ga'].forEach(function(c){
           var el = document.getElementById('ncoll-' + c);
           if(el) el.classList.remove('open');
         });
@@ -25026,7 +25128,7 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
          e solo dopo si riapre quella eventualmente richiesta.
          ⚠ Si toglie la classe direttamente invece di chiamare toggleColl:
          quella e' un interruttore e su un pannello gia' chiuso lo aprirebbe. */
-      ['mp', 've'].forEach(function(c){
+      ['mp', 've', 'ga'].forEach(function(c){
         if(c === coll) return;
         var el = document.getElementById('ncoll-' + c);
         if(el) el.classList.remove('open');
