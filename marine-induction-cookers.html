@@ -64,7 +64,7 @@ section{padding:74px 0}
 .toc-l li{flex:0 0 auto}
 .toc-l a{display:block;padding:11px 0 12px;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:#f8f6f1;text-decoration:none;opacity:.58;border-bottom:1px solid transparent;transition:opacity .3s,border-color .3s}
 .toc-l a:hover{opacity:1;border-bottom-color:var(--go)}
-h2[id]{scroll-margin-top:96px}
+h2[id]{scroll-margin-top:calc(var(--barh,104px) + 46px)}
 /* Comparsa graduale allo scorrimento. La classe .rv-on la mette il
    JavaScript: senza JS, o con prefers-reduced-motion, NIENTE si nasconde e
    la pagina resta esattamente com'era. Nessuna libreria esterna. */
@@ -111,6 +111,10 @@ h2[id]{scroll-margin-top:96px}
 .duo{display:grid;gap:26px;margin-top:44px}
 @media(min-width:700px){.duo{grid-template-columns:1fr 1fr}}
 .duo img{aspect-ratio:4/3}
+/* ⚠️ Ogni immagine DEVE riservare il suo spazio prima di caricarsi: sono
+   tutte lazy, e senza altezza nota la pagina si allunga mentre scorre,
+   mandando fuori bersaglio i collegamenti dell'indice. */
+.shot-solo img{aspect-ratio:3/2}
 
 /* ── USCITA ANTICIPATA ───────────────────────────────────────────── */
 .early{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;margin-top:30px;padding:20px 0 22px;border-top:1px solid var(--ln);border-bottom:1px solid var(--ln);text-decoration:none}
@@ -616,6 +620,11 @@ footer a{color:rgba(248,246,241,.80)}
     <p class="tx">An oven that is efficient <em>and</em> cooks everything well is a harder thing to build, and it costs more than one that is efficient and cooks a narrower range well. Both are legitimate answers. Which is why there is a range rather than a model: what it comes down to is what an owner actually cooks aboard, and what they are prepared to spend. Nobody should assume that efficient and good are the same word.</p>
     <p class="tx">That said, the recipes you cook at home are not always the ones that matter a thousand miles from anywhere. Sometimes what counts is cooking fast, or cooking frugally. The two are not in conflict: across the range, and across its variants, there are ovens meant to cook well and ovens meant to cook economically, and some that do a fair amount of both. A microwave is one of the variants we offer, for the owners who want one. It is also the plainest illustration of the point above: nothing in a boat heats faster than a microwave, and nobody has ever called it the best way to cook. Speed and quality are simply not the same measurement. It is unbeatable for heating liquids and reheating a quick plate, and unsuited to a great deal else. Others will not hear of it. Which is rather the point: what suits an owner depends on how they actually cook aboard, and on whether they are after speed, economy or the quality of the result. It is why we have never offered a single technology.</p>
     <p class="tx">We took the same approach to the hobs, with cooking systems of our own design and the same concern for what the supply can carry. None of it arrived at once. We have been building electric marine cookers for a very long time, and induction for more than ten years, and the range that came out of it is a wide one, developed with the shipyards that fit our cookers as original equipment and with owners sailing in every part of the world. Each generation was shaped by what came back from boats that had been out a long time: ocean passages, an Atlantic crossing, weeks between marinas, where the cooker works every day on what the boat can generate.</p>
+    <figure class="shot shot-solo" style="margin-top:42px">
+      <img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787394746/PIZZA_ORIZZONTALE_pkfivl.jpg"
+           alt="Pizza baked in a Techimpex marine oven aboard a boat" loading="lazy" decoding="async">
+      <figcaption>Baked on board</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -642,6 +651,11 @@ footer a{color:rgba(248,246,241,.80)}
     <p class="tx">There is also a third way. Some of our hobs use a cooking technology that is exclusive to us, developed in-house together with our partners from the professional catering world, and it draws less than either induction or radiant. It is not a simple system to explain in a paragraph, and our engineers would rather talk it through than summarise it here.</p>
     <p class="tx">All of which matters most when the electrical system is the obstacle. Leaving gas behind does not have to mean rebuilding the boat's electrics at a cost that makes the whole idea collapse. Often there is a solution that works with what is already installed. A high-performance glass-ceramic hob, or one of our own systems, will take a boat off gas on a supply that induction would find tight.</p>
     <p class="tx">It is why the range is as wide as it is. At one end there are cookers meant to be affordable; at the other, uncompromising cookers for boats where nothing is being economised. We can build across that span because cookers, hobs and ovens are all we build, and we build them in volume as well as one at a time, and the series production is what keeps the accessible end of the range genuinely accessible. Tell us the boat, the electrical system and the budget, and we will tell you which part of the range you are actually looking at.</p>
+    <figure class="shot shot-solo" style="margin-top:42px">
+      <img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1784785109/VERA7_cucina03-16_vvmlmn.jpg"
+           alt="Marine cooker with radiant glass-ceramic hob installed in a yacht" loading="lazy" decoding="async">
+      <figcaption>Radiant glass-ceramic, installed</figcaption>
+    </figure>
   </div>
 </section>
 
@@ -938,6 +952,56 @@ function lpSend(f){
       if(r.top<window.innerHeight)n.classList.add('rv-in');
     });
   },3000);
+})();
+</script>
+
+<script>
+/* ── ANCORE DELL'INDICE ────────────────────────────────────────────────
+   Il margine calcolato a mano non bastava: l'altezza delle due fascette
+   cambia fra telefono e desktop, e con le immagini a caricamento differito
+   la pagina puo' allungarsi DURANTE lo scorrimento, spostando il bersaglio.
+   Qui l'altezza si misura al momento del clic e la posizione si ricontrolla
+   due volte a scorrimento finito, correggendola se e' fuori di piu' di 3px.
+   Senza JavaScript restano le ancore normali e il margine CSS di riserva. */
+(function(){
+  var bar=document.querySelector('.brandmark');
+  if(!bar)return;
+  function alt(){ return bar.getBoundingClientRect().height+12; }
+  function aggiorna(){ document.documentElement.style.setProperty('--barh',alt()+'px'); }
+  aggiorna();
+  window.addEventListener('resize',aggiorna);
+  window.addEventListener('orientationchange',aggiorna);
+
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[href^="#"]'):null;
+    if(!a)return;
+    var id=a.getAttribute('href').slice(1);
+    if(!id)return;
+    var t=document.getElementById(id);
+    if(!t)return;
+    e.preventDefault();
+    /* Il bersaglio dichiarato e' il titolo, ma sopra il titolo c'e'
+       l'occhiello della sezione: se si punta al titolo, l'occhiello finisce
+       sotto la fascetta o tagliato a meta'. Si risale quindi all'occhiello,
+       quando c'e', e si lascia un po' d'aria sopra. */
+    var cima=t;
+    var pre=t.previousElementSibling;
+    if(pre&&pre.className&&pre.className.indexOf('eyebrow')>-1)cima=pre;
+    var vai=function(morbido){
+      var y=cima.getBoundingClientRect().top+(window.pageYOffset||document.documentElement.scrollTop)-alt()-18;
+      window.scrollTo({top:Math.max(0,y),behavior:morbido?'smooth':'auto'});
+    };
+    vai(true);
+    if(history.replaceState)history.replaceState(null,'','#'+id);
+    /* due ricontrolli: se nel frattempo un'immagine si e' caricata e ha
+       spostato il bersaglio, si rimette a posto senza che si veda. */
+    var n=0,iv=setInterval(function(){
+      n++;
+      var d=cima.getBoundingClientRect().top-alt()-18;
+      if(Math.abs(d)>3)vai(false);
+      if(n>=2)clearInterval(iv);
+    },600);
+  },false);
 })();
 </script>
 
