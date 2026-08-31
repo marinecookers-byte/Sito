@@ -133,11 +133,16 @@ h2[id]{scroll-margin-top:calc(var(--barh,104px) + 46px)}
 .early:hover .early-g,.early:focus-visible .early-g{border-bottom-color:var(--gl)}
 
 /* ── VINCOLI ─────────────────────────────────────────────────────── */
-.cons{display:grid;gap:28px;margin-top:34px}
+.cons{display:grid;gap:22px;margin-top:32px}
 @media(min-width:760px){.cons{grid-template-columns:repeat(3,1fr);gap:32px}}
 .cons-i{border-top:1px solid var(--ln);padding-top:16px}
 .cons-i h3{margin:8px 0 9px}
-.cons-i p{font-size:14px;color:rgba(10,10,10,.72)}
+/* ⚠️ Il colore va dichiarato per ENTRAMBI i fondi. Nella pagina inglese
+   questo blocco stava in una sezione chiara, qui sta in una scura: con
+   il solo colore scuro il testo spariva e restavano i titoli lontani
+   fra loro con il vuoto sotto. */
+.cons-i p{font-size:14px;color:rgba(248,246,241,.74)}
+.s-light .cons-i p{color:rgba(10,10,10,.72)}
 
 /* ── TRE MODELLI ─────────────────────────────────────────────────── */
 .trio{display:grid;gap:44px;margin-top:34px}
@@ -206,7 +211,10 @@ h2[id]{scroll-margin-top:calc(var(--barh,104px) + 46px)}
    l'etichetta sopra e il nome in Cormorant. Niente frecce. */
 .more{display:grid;gap:1px;margin-top:34px;background:var(--ln)}
 @media(min-width:700px){.more{grid-template-columns:1fr 1fr}}
-.more a{position:relative;display:block;background:var(--bl);padding:30px 26px 34px;text-decoration:none;transition:background .4s}
+/* ⚠️ Il colore del testo va imposto QUI. I riquadri hanno fondo nero anche
+   dentro una sezione chiara (.s-light), dove il testo eredita il nero:
+   nero su nero, invisibile. Successo con gli esplosi dei ricambi. */
+.more a{position:relative;display:block;background:var(--bl);color:var(--wh);padding:30px 26px 34px;text-decoration:none;transition:background .4s}
 .more a:hover,.more a:focus-visible{background:#111}
 .more-s{display:block;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--go);margin-bottom:11px}
 .more-t{display:block;font-family:"Cormorant Garamond",serif;font-size:clamp(21px,3.4vw,25px);line-height:1.2;max-width:20ch;transition:color .4s}
@@ -478,7 +486,7 @@ footer a{color:rgba(248,246,241,.80)}
     <p class="eyebrow">Il sito</p>
     <h2 id="models">Misure, disegni e <em>tutto il resto</em></h2>
     <div class="rule"></div>
-    <p class="tx">Tocca uno dei quattro riquadri per aprire la parte corrispondente del sito, dove ci sono le misure complete, i disegni tecnici e <b>anche le linee pi&ugrave; recenti e aggiornate</b>: cucine elettriche e a induzione, piani cottura da incasso, forni.</p>
+    <p class="tx">Tocca uno dei quattro riquadri per aprire la parte corrispondente del sito, dove trovi le misure complete, i disegni tecnici e <b>anche le linee pi&ugrave; recenti e aggiornate</b>: cucine elettriche e a induzione, piani cottura da incasso, forni.</p>
     <nav class="more">
       <a href="https://www.techimpex.tv/gas-cookers-with-oven?lang=it">
         <span class="more-s">XL2 &middot; XL3 &middot; Mariner &middot; Classic</span>
@@ -495,10 +503,10 @@ footer a{color:rgba(248,246,241,.80)}
         <span class="more-t">Cucine elettriche e piani cottura a induzione</span>
         <span class="more-go">Vedi la collezione</span>
       </a>
-      <a class="more-bw" href="https://www.techimpex.tv/price-list?lang=it">
-        <span class="more-s">Tutti i modelli in una pagina</span>
-        <span class="more-t">Listino</span>
-        <span class="more-go">Apri il listino</span>
+      <a href="https://www.techimpex.tv/gas-cookers?lang=it">
+        <span class="more-s">Fornelli e piani a gas</span>
+        <span class="more-t">Piani cottura a gas da incasso</span>
+        <span class="more-go">Vedi la collezione</span>
       </a>
     </nav>
   </div>
@@ -1073,18 +1081,29 @@ function lpSend(f){
 </script>
 
 <!-- ══ CLOUDFLARE WEB ANALYTICS ══════════════════════════════════════
-     Token del progetto, stessa posizione che ha in index.html.
-     ⚠️ NON DUPLICARE: il beacon esiste anche come Snippet Injection su
-     Netlify (Project configuration > Build & deploy > Post processing,
-     posizione: prima della chiusura di body). Su questa pagina non ha
-     agito, ma se
-     l'iniezione dovesse riattivarsi si avrebbero DUE beacon e le visite
-     contate doppie: prima di pubblicare, cercare 'cloudflareinsights'
-     nel sorgente della pagina pubblicata.
-     ⚠️ PRECEDENTE: il beacon era gia' sparito una volta da index.html in
-     una rigenerazione. Regola a verbale nello STATO 78: ogni
-     rigenerazione deve preservare tutto cio' che esiste. -->
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "154bf64865b349428d1eebebe8878b9b"}'></script>
+     ⚠️ NON e' un beacon fisso: e' un beacon CONDIZIONATO.
+     Netlify inietta gia' il beacon su tutto il sito (Project configuration
+     > Build & deploy > Post processing, posizione before </body>, dal
+     07/08/2026). Un secondo beacon scritto qui dentro farebbe contare OGNI
+     VISITA DUE VOLTE. Ma se un domani quell'iniezione venisse tolta o non
+     agisse su questa pagina, senza niente qui la pagina sarebbe muta.
+     Questo codice risolve tutti e due i casi: a caricamento finito guarda
+     se il beacon c'e' gia'. Se c'e', non fa nulla. Se manca, lo aggiunge.
+     Token del progetto: 154bf64865b349428d1eebebe8878b9b -->
+<script>
+(function(){
+  function attiva(){
+    if(document.querySelector('script[src*="cloudflareinsights.com"]'))return;
+    var b=document.createElement('script');
+    b.defer=true;
+    b.src='https://static.cloudflareinsights.com/beacon.min.js';
+    b.setAttribute('data-cf-beacon','{"token": "154bf64865b349428d1eebebe8878b9b"}');
+    document.body.appendChild(b);
+  }
+  if(document.readyState==='complete')attiva();
+  else window.addEventListener('load',attiva);
+})();
+</script>
 
 </body>
 </html>
