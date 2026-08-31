@@ -1026,5 +1026,19 @@ function lpSend(f){
 })();
 </script>
 
+<!-- ══ CLOUDFLARE WEB ANALYTICS ══════════════════════════════════════
+     Token del progetto, stessa posizione che ha in index.html.
+     ⚠️ NON DUPLICARE: il beacon esiste anche come Snippet Injection su
+     Netlify (Project configuration > Build & deploy > Post processing,
+     posizione: prima della chiusura di body). Su questa pagina non ha
+     agito, ma se
+     l'iniezione dovesse riattivarsi si avrebbero DUE beacon e le visite
+     contate doppie: prima di pubblicare, cercare 'cloudflareinsights'
+     nel sorgente della pagina pubblicata.
+     ⚠️ PRECEDENTE: il beacon era gia' sparito una volta da index.html in
+     una rigenerazione. Regola a verbale nello STATO 78: ogni
+     rigenerazione deve preservare tutto cio' che esiste. -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "154bf64865b349428d1eebebe8878b9b"}'></script>
+
 </body>
 </html>
