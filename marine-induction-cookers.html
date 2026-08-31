@@ -1027,18 +1027,29 @@ function lpSend(f){
 </script>
 
 <!-- ══ CLOUDFLARE WEB ANALYTICS ══════════════════════════════════════
-     Token del progetto, stessa posizione che ha in index.html.
-     ⚠️ NON DUPLICARE: il beacon esiste anche come Snippet Injection su
-     Netlify (Project configuration > Build & deploy > Post processing,
-     posizione: prima della chiusura di body). Su questa pagina non ha
-     agito, ma se
-     l'iniezione dovesse riattivarsi si avrebbero DUE beacon e le visite
-     contate doppie: prima di pubblicare, cercare 'cloudflareinsights'
-     nel sorgente della pagina pubblicata.
-     ⚠️ PRECEDENTE: il beacon era gia' sparito una volta da index.html in
-     una rigenerazione. Regola a verbale nello STATO 78: ogni
-     rigenerazione deve preservare tutto cio' che esiste. -->
-<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "154bf64865b349428d1eebebe8878b9b"}'></script>
+     ⚠️ NON e' un beacon fisso: e' un beacon CONDIZIONATO.
+     Netlify inietta gia' il beacon su tutto il sito (Project configuration
+     > Build & deploy > Post processing, posizione before </body>, dal
+     07/08/2026). Un secondo beacon scritto qui dentro farebbe contare OGNI
+     VISITA DUE VOLTE. Ma se un domani quell'iniezione venisse tolta o non
+     agisse su questa pagina, senza niente qui la pagina sarebbe muta.
+     Questo codice risolve tutti e due i casi: a caricamento finito guarda
+     se il beacon c'e' gia'. Se c'e', non fa nulla. Se manca, lo aggiunge.
+     Token del progetto: 154bf64865b349428d1eebebe8878b9b -->
+<script>
+(function(){
+  function attiva(){
+    if(document.querySelector('script[src*="cloudflareinsights.com"]'))return;
+    var b=document.createElement('script');
+    b.defer=true;
+    b.src='https://static.cloudflareinsights.com/beacon.min.js';
+    b.setAttribute('data-cf-beacon','{"token": "154bf64865b349428d1eebebe8878b9b"}');
+    document.body.appendChild(b);
+  }
+  if(document.readyState==='complete')attiva();
+  else window.addEventListener('load',attiva);
+})();
+</script>
 
 </body>
 </html>
