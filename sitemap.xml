@@ -164,6 +164,16 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+  <!-- Pagina di atterraggio della campagna italiana, pubblicata il 31/08/2026.
+       Non e' nel menu del sito: ci si arriva dagli annunci e da qui. In
+       sitemap perche' l'obiettivo e' che Google la indicizzi sulle parole
+       italiane (cucine a gas per barche, cucina basculante, fornelli). -->
+  <url>
+    <loc>https://www.techimpex.tv/cucine-a-gas-per-barche</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <url>
     <loc>https://www.techimpex.tv/privacy-policy</loc>
     <changefreq>yearly</changefreq>
