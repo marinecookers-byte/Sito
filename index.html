@@ -4853,12 +4853,21 @@ body.ts-on .pcard-oc ~ .pdsc{ padding-right:74px; }
 .cp-electric-hero.cat-media-vid #cp-hero-video-2{display:block!important;}
 /* Dissolvenza morbida del crossfade tra i due layer video (nessun rewind visibile). */
 .cp-electric-hero #cp-hero-video,
-.cp-electric-hero #cp-hero-video-2{transition:opacity 2.2s ease;}
+.cp-electric-hero #cp-hero-video-2{transition:opacity 1.1s ease;}
 /* Stesso principio per la hero della scheda prodotto. */
 .pp-hero.hero-media-img #pp-herovid{display:none!important;}
 .pp-hero.hero-media-img #pp-heroimg{display:block!important;}
 .pp-hero.hero-media-vid #pp-heroimg{display:none!important;}
 .pp-hero.hero-media-vid #pp-herovid{display:block!important;}
+/* GALILEO · il video quasi privo di colore e piu' scuro. Il velo si somma
+   a .cp-electric-hero-overlay: insieme fanno un fondo su cui il titolo si
+   legge sempre, qualunque fotogramma passi. */
+/* ⚠️ GALILEO SENZA DESATURAZIONE (02/09/2026): l'immagine va a colori pieni,
+   al contrario del resto del sito. Resta solo il velo scuro qui sotto, che
+   serve a far leggere il titolo sopra la foto.
+   Per rimetterla basta aggiungere:
+   .cp-electric-hero.cat-ga #cp-hero-img{filter:grayscale(.72) contrast(1.04)} */
+.cp-electric-hero.cat-ga .cp-electric-hero-overlay{ background:rgba(6,6,6,0.46); }
 .cp-electric-hero-overlay{
   position:absolute;
   inset:0;
@@ -8888,7 +8897,7 @@ window.CAT_HERO = {
      Galileo e Marco Polo aprirebbero con la stessa identica riga. I tre
      blocchi di storia restano quelli delle elettriche, che raccontano la
      stessa vicenda. Il video e' quello di Oceano. */
-  'Galileo \u00b7 Electric Cookers with Oven': { media:'video', htag:'ga_hero_tag', title:'ga_hero_title', sub:'ga_hero_sub', estag:'elec_es_tag', hl:'elec_es_headline', b1l:'elec_01_label', b1t:'elec_01_title', b1b:'elec_01_body', b2l:'elec_02_label', b2t:'elec_02_title', b2b:'elec_02_body', b3l:'elec_03_label', b3t:'elec_03_title', b3b:'elec_03_body' },
+  'Galileo \u00b7 Electric Cookers with Oven': { media:'image', htag:'ga_hero_tag', title:'ga_hero_title', sub:'ga_hero_sub', estag:'elec_es_tag', hl:'elec_es_headline', b1l:'elec_01_label', b1t:'elec_01_title', b1b:'elec_01_body', b2l:'elec_02_label', b2t:'elec_02_title', b2b:'elec_02_body', b3l:'elec_03_label', b3t:'elec_03_title', b3b:'elec_03_body' },
   'Built-in Gas Cooktops': {
     media:'image',
     title:'bgc_hero_title', sub:'bgc_hero_sub', estag:'bgc_es_tag', hl:'bgc_es_headline',
@@ -8989,6 +8998,11 @@ window.CAT_HERO_VIDEO_CATEGORY = 'https://res.cloudinary.com/dseiw9ndw/video/upl
 window.CAT_HERO_MEDIA = {
   'Built-in Gas Cooktops': {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786285762/HERO_PIANI_INCASSO_GASCopia_wgqxpq.png'},
   'Electric Cookers with Oven': {video: window.CAT_HERO_VIDEO_ELECTRIC},
+  /* Galileo: hero a IMMAGINE, non a video (02/09/2026). Il video precedente
+     resta qui accanto, commentato, se un domani si volesse tornare indietro:
+     v1788341663/202609021118_gtw1yu.mp4
+     Desaturazione e velo restano quelli della regola .cat-ga piu' sotto. */
+  'Galileo \u00b7 Electric Cookers with Oven': {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1788343003/SIDEREUS_r6yj2l.jpg'},
   'Gas Cookers with Oven':      {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1786285764/HERO2_CUCINE_CON_FORNO_A_GAS_sqhzck.png', pos:'center 20%'},
   'Gas Cookers':                {image: 'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1784739539/HERO_59_GRILL_qs77cf.jpg'},
   'Built-in Electric Cooktops': {video: 'https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/v1786295974/SOLCANDOLEONDE_ajpdet.mp4'},
@@ -9793,7 +9807,10 @@ function openCat(name,models){
       if(imgEl){ if(imgEl.getAttribute('src')!==media.image) imgEl.setAttribute('src',media.image); imgEl.style.display='block'; }
     } else {
       // HERO a VIDEO nativo (object-fit:cover, piena larghezza)
-      if(heroEl){heroEl.classList.add('cat-media-vid');heroEl.classList.remove('cat-media-img');}
+      if(heroEl){heroEl.classList.add('cat-media-vid');heroEl.classList.remove('cat-media-img');
+            /* Galileo: video quasi in bianco e nero e piu' velato. Classe
+               dedicata, cosi' le altre categorie restano come sono. */
+            heroEl.classList.toggle('cat-ga', name==='Galileo \u00b7 Electric Cookers with Oven');}
       if(imgEl){imgEl.style.display='none';}
       if(vidEl){
         // LOOP SENZA SCATTO · crossfade tra due layer video gemelli.
@@ -9811,7 +9828,8 @@ function openCat(name,models){
         // il valore aggiornato ogni volta che si cambia categoria.
         window._catHeroRate = (name && name.indexOf('Antiche Cambuse')!==-1) ? 0.4 : 1.0;
         var RATE = window._catHeroRate;
-        var FADE = 2200; // durata crossfade, combacia con la transition CSS
+        var FADE = 1100; // durata di UNA meta': prima si spegne, poi si riaccende.
+            //                Combacia con la transition CSS.
 
         function prep(v){ v.loop=false;v.muted=true;v.removeAttribute('loop');
           v.setAttribute('playsinline','');v.setAttribute('muted','');
@@ -9845,6 +9863,10 @@ function openCat(name,models){
               if(window._catHeroActive!==which)return; // non è più l'attivo
               if(!cur.duration||cur._xfading)return;
               // Quando manca ~FADE alla fine, preparo l'altro layer e sfumo.
+              /* ⚠️ Senza il controllo sulla durata, finche' il browser non l'ha
+                 letta il confronto poteva risultare vero subito, e il video
+                 sembrava lungo pochi secondi invece che intero. */
+              if(!isFinite(cur.duration) || cur.duration<5) return;
               if(cur.currentTime>=cur.duration-(FADE/1000)-0.15){
                 cur._xfading=true;
                 cur.removeEventListener('timeupdate',onTU);
@@ -9852,26 +9874,28 @@ function openCat(name,models){
                 var nxt=el(other);
                 try{nxt.playbackRate=window._catHeroRate||1.0;}catch(e){}
                 // L'altro layer parte da zero e diventa stabile PRIMA di apparire.
-                function goFade(){
-                  nxt.style.opacity='1';   // sale l'altro
-                  cur.style.opacity='0';    // scende questo
-                  window._catHeroActive=other;
-                  armFade(other);           // armo il prossimo giro
-                  // reset del vecchio layer, ora invisibile: nessuno vede il rewind
-                  setTimeout(function(){
-                    cur._xfading=false;
-                    try{cur.pause();cur.currentTime=0;}catch(e){}
-                  },FADE+200);
-                }
-                var started=false;
-                function onNxtPlaying(){
-                  if(started)return;started=true;
-                  nxt.removeEventListener('playing',onNxtPlaying);
-                  goFade();
-                }
-                nxt.addEventListener('playing',onNxtPlaying);
-                try{nxt.currentTime=0;nxt.play();}catch(e){}
-                setTimeout(onNxtPlaying,600); // fallback se 'playing' non arriva
+                /* SPEGNI E RIACCENDI, senza sovrapporre.
+                   1 · il video visibile scende a zero (FADE ms)
+                   2 · solo allora l'altro riparte da capo
+                   3 · quando e' partito davvero, sale (FADE ms)
+                   Fra i due passa il fondo scuro della hero: mai due
+                   immagini una sopra l'altra. */
+                window._catHeroActive=other;
+                cur.style.opacity='0';                    // 1 · si spegne
+                setTimeout(function(){
+                  try{cur.pause();cur.currentTime=0;}catch(e){}
+                  cur._xfading=false;
+                  var acceso=false;
+                  function accendi(){                     // 3 · si riaccende
+                    if(acceso)return; acceso=true;
+                    nxt.removeEventListener('playing',accendi);
+                    nxt.style.opacity='1';
+                    armFade(other);                       // armo il giro dopo
+                  }
+                  nxt.addEventListener('playing',accendi);
+                  try{ nxt.currentTime=0; nxt.play(); }catch(e){}   // 2 · riparte
+                  setTimeout(accendi,700);                // riserva
+                }, FADE+60);
               }
             });
           }
