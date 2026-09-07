@@ -10737,6 +10737,20 @@ window.ledRise=function(host){
    decisa dal browser, non in quella in cui l'utente stava guardando. */
 window.ledWide=function(img){
   if(!img) return false;
+  /* ⚠️ SUL TELEFONO NON C'E' NIENTE DA ALLARGARE. La fotografia occupa
+     gia' quasi tutta la larghezza dello schermo: aprendo il blocco a
+     tutto vivo si guadagnerebbero 24px per lato, cioe' niente, e il
+     tocco sembrerebbe non aver fatto nulla. Li' vale la lightbox, che
+     usa tutto lo schermo, esattamente come per il ritratto del designer
+     e per le fotografie di Remer. */
+  var mob = (window.matchMedia && window.matchMedia('(max-width:768px)').matches)
+            || window.innerWidth <= 768;
+  if(mob){
+    if(typeof window.hdZoom === 'function'){
+      window.hdZoom(img.getAttribute('data-zoom') || img.getAttribute('src') || '', img.alt || '');
+    }
+    return false;
+  }
   var box=img.parentNode;
   while(box && !(box.classList && box.classList.contains('led-stack'))) box=box.parentNode;
   if(!box) return false;
