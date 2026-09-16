@@ -4336,6 +4336,118 @@ body.ts-on .pcard-oc ~ .pdsc{ padding-right:74px; }
   transition:color .3s ease, border-color .3s ease;
 }
 .ocinfo-link.on{ display:inline-block; }
+
+/* ═══ Bollino ECO · versione a risparmio energetico ═══
+   Gemello del bollino OCEANO (.pcard-oc / .pp-oc-badge / #ocinfo): stessa
+   meccanica, stesse misure, colore verde salvia invece dell'oro.
+   Elenco modelli: window.ECO_MODELS, in un posto solo.
+   ⚠️ Nella scheda sta nel DOM DOPO .pcard-oc e PRIMA di .pnm: il selettore
+   fratello ~ serve sia al rientro del nome sia a nasconderlo quando il
+   bollino Oceano si allunga sopra di lui (lo sfondo dell'Oceano e'
+   semitrasparente, e senza questo la scritta ECO si vedrebbe attraverso).
+   Con entrambi i bollini (.pair) l'ECO si sposta a sinistra dell'Oceano. */
+.pcard-eco{
+  position:absolute;
+  right:16px; top:8px;
+  z-index:2;
+  width:54px; height:54px;
+  border-radius:999px;
+  overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(128,172,122,.55);
+  background:rgba(128,172,122,.06);
+  cursor:pointer;
+  transition:width .5s cubic-bezier(.16,1,.3,1),
+             border-color .35s ease, background .35s ease,
+             opacity .3s ease, visibility .3s ease;
+}
+.pcard-eco.pair{ right:78px; }
+.pcard-eco-short,.pcard-eco-full{
+  font-family:'Outfit',sans-serif;
+  text-transform:uppercase;
+  color:rgba(143,190,136,.95);
+  white-space:nowrap;
+  transition:opacity .3s ease;
+}
+.pcard-eco-short{
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+  font-size:8px; letter-spacing:.2em; line-height:1;
+  padding-left:.2em;
+}
+.pcard-eco-short svg{ width:12px; height:12px; }
+.pcard-eco-full{
+  position:absolute;
+  font-size:8.5px; letter-spacing:.2em;
+  opacity:0; visibility:hidden;
+}
+@media(hover:hover){
+  .pcard-eco:hover{
+    width:236px;
+    border-color:rgba(128,172,122,1);
+    background:rgba(20,32,20,.92);
+  }
+  .pcard-eco:hover .pcard-eco-short{ opacity:0; }
+  .pcard-eco:hover .pcard-eco-full{ opacity:1; visibility:visible; color:#a9d0a2; }
+  .pcard-oc:hover ~ .pcard-eco{ opacity:0; visibility:hidden; }
+}
+.pcard-eco ~ .pnm, .pcard-eco ~ .pdsc{ padding-right:64px; }
+.pcard-eco.pair ~ .pnm, .pcard-eco.pair ~ .pdsc{ padding-right:126px; }
+body.ts-on .pcard-eco.pair ~ .pnm, body.ts-on .pcard-eco.pair ~ .pdsc{ padding-right:140px; }
+@media(max-width:768px){
+  .pcard-eco{ right:12px; top:8px; width:48px; height:48px; }
+  .pcard-eco.pair{ right:66px; }
+  .pcard-eco-short{ font-size:7px; letter-spacing:.16em; }
+  .pcard-eco-short svg{ width:11px; height:11px; }
+  .pcard-eco ~ .pnm, .pcard-eco ~ .pdsc{ padding-right:60px; }
+  .pcard-eco.pair ~ .pnm, .pcard-eco.pair ~ .pdsc{ padding-right:108px; }
+}
+
+.pp-eco-badge{
+  display:none;
+  align-items:center; gap:7px;
+  margin-top:12px;
+  padding:6px 13px;
+  border:1px solid rgba(128,172,122,.5);
+  border-radius:999px;
+  background:rgba(10,10,10,.35);
+  font-family:'Outfit',sans-serif;
+  font-size:9px; letter-spacing:.2em; text-transform:uppercase;
+  color:rgba(143,190,136,.95);
+  cursor:pointer;
+  transition:border-color .35s ease, background .35s ease, color .35s ease;
+}
+.pp-eco-badge.on{ display:inline-flex; }
+/* Il margine sta sull'Oceano e non sull'ECO: su telefono i due bollini
+   vanno a capo, e un margine sinistro rientrerebbe la seconda riga. */
+.pp-oc-badge.on{ margin-right:8px; }
+.pp-eco-badge svg{ width:13px; height:13px; flex-shrink:0; }
+@media(hover:hover){
+  .pp-eco-badge:hover{ border-color:rgba(128,172,122,.95); background:rgba(128,172,122,.12); color:#a9d0a2; }
+}
+@media(max-width:768px){
+  .pp-eco-badge{ font-size:8px; letter-spacing:.16em; padding:5px 11px; }
+}
+
+/* Popup ECO: riusa le classi .ocinfo-* del popup Oceano, cambia l'accento. */
+#ecoinfo{
+  position:fixed; inset:0;
+  z-index:960;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  background:rgba(6,6,6,.82);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
+}
+#ecoinfo.show{ opacity:1; pointer-events:all; }
+#ecoinfo.show .ocinfo-box{ transform:translateY(0); }
+#ecoinfo .ocinfo-box{ border-color:rgba(128,172,122,.3); }
+#ecoinfo .ocinfo-ttl{ color:rgba(143,190,136,.95); }
+#ecoinfo .ocinfo-link{ display:inline-block; color:#8fbe88; border-bottom-color:rgba(128,172,122,.35); }
+@media(hover:hover){
+  #ecoinfo .ocinfo-x:hover{ color:#8fbe88; }
+  #ecoinfo .ocinfo-link:hover{ color:#a9d0a2; border-color:rgba(128,172,122,.9); }
+}
 @media(hover:hover){
   .ocinfo-x:hover{ color:#b8965a; }
   .ocinfo-link:hover{ color:#d4b07a; border-color:rgba(184,150,90,.9); }
@@ -6789,7 +6901,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
           </span>
           <div class="ncoll-body">
             <a class="ncat" href="/electric-cookers-with-oven" onclick="openCat('Electric Cookers with Oven',['ORIZZONTE','TOLOMEO','NOBILIS','ALTALUX','FORMA','VERA','MARINA E','NAUTICA','COMPACTA','GRANLUX','MODULAR']);return false" data-i18n="cat_electric_oven">Electric Cookers with Oven</a>
-            <a class="ncat" href="/gas-cookers-with-oven" onclick="openCat('Gas Cookers with Oven',['MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','MAXIMA','MAREA','LUX','ALTAMAREA']);return false" data-i18n="cat_gas_oven">Gas Cookers with Oven</a>
+            <a class="ncat" href="/gas-cookers-with-oven" onclick="openCat('Gas Cookers with Oven',['MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','MAXIMA','MAREA','LUX','VESTA','ALTAMAREA']);return false" data-i18n="cat_gas_oven">Gas Cookers with Oven</a>
             <a class="ncat" href="/gas-cookers" onclick="openCat('Gas Cookers',['VENTOTENE','MARETTIMO','FAVIGNANA','LIPARI']);return false" data-i18n="cat_gas">Gas Cookers</a>
             <a class="ncat" href="/built-in-gas-cooktops" onclick="openCat('Built-in Gas Cooktops',['BAIA','MADDALENA','CAPRERA','GRANDE']);return false" data-i18n="cat_gas_builtin">Built-in Gas Cooktops</a>
             <a class="ncat" href="/built-in-electric-cooktops" onclick="openCat('Built-in Electric Cooktops',['DUE','TRE','UNO','MEDITERRANEO','TIRRENO','ADRIATICO']);return false" data-i18n="cat_elec_builtin">Built-in Electric Cooktops</a>
@@ -6923,6 +7035,12 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       <span class="pp-oc-badge" id="pp-oc-badge" onclick="ocInfo(this.getAttribute('data-m')||'')" role="button" tabindex="0">
         <svg viewBox="0 0 24 24" fill="none"><path d="M2 16c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2M2 10c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
         <span data-i18n="oc_badge">Bluewater variant available</span>
+      </span>
+      <!-- Bollino ECO. Nascosto per difetto: goProd lo accende solo per i
+           modelli dell'elenco ECO_MODELS. -->
+      <span class="pp-eco-badge" id="pp-eco-badge" onclick="ecoInfo()" role="button" tabindex="0">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14M5 19l7-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-i18n="eco_badge">ECO version available</span>
       </span>
     </div>
     <button class="pp-back" onclick="ppBack()">
@@ -9192,6 +9310,20 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 </div>
 
 
+<!-- Popup del bollino ECO. Gemello di #ocinfo: rimanda alla pagina
+     Efficienza energetica, che parla sia di gas sia di elettrico. -->
+<div id="ecoinfo" onclick="if(event.target===this)closeEcoInfo()">
+  <div class="ocinfo-box">
+    <button class="ocinfo-x" onclick="closeEcoInfo()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </button>
+    <span class="ocinfo-ttl" data-i18n="eco_pop_ttl">ECO version</span>
+    <p class="ocinfo-body" data-i18n="eco_pop_body">This model is also available with our new energy-saving technology. Get in touch with us for details on availability and configuration.</p>
+    <a class="ocinfo-link" onclick="closeEcoInfo();openEff();" data-i18n="eco_pop_link">Discover energy efficiency</a>
+  </div>
+</div>
+
+
 <!-- CONTACT PAGE -->
 <div id="contactpage">
 
@@ -9915,6 +10047,8 @@ window.PROD_DRAWING = {
   'VERA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582623/VERA_auvjyq.jpg', invert:false},
   'ALTAMAREA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582621/ALTAMAREA_pscxck.jpg', invert:false},
   'LUX': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582618/LUX_eggutu.jpg', invert:false},
+  /* VESTA: stesso corpo di LUX, stesso disegno. */
+  'VESTA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582618/LUX_eggutu.jpg', invert:false},
   'PRINCIPE': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582618/LUX_eggutu.jpg', invert:false},
   'ALTURA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582602/ALTURA_o1n05f.jpg', invert:false},
   'MAREA': {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582600/MAREA_aqim6d.jpg', invert:false},
@@ -10166,6 +10300,17 @@ window.PROD_DATASHEET = {
     paras:['Lux is dedicated to those who cook with passion and want the space to stay impeccable. Its exclusive three-piece side heat shield comes apart in a few seconds without tools and washes conveniently in the dishwasher: so after frying courgettes in carpione or sautéing garlic prawns, cleaning is immediate.','The hob grate in solid stainless steel bars of 8 mm holds without vibration the pot of a seafood risotto that must be stirred energetically, while the pot-holder arms, adjustable in height too, lock the pan when you make a fish soup at sea. The Italian-style static oven, insulated with a metal-sandwich system and closed by the double tempered glass, ensures the even cooking needed for a tall, fragrant Genoese focaccia or a macaroni timballo. And when the evening ends with a tiramisù, everything is already ready to come clean in a moment.','The care for cleaning goes with a clean design: washable heat shields, a solid stainless grate and mirror-finish surfaces give Lux a tidy, elegant look, designed to blend discreetly into the interiors and to stay beautiful over time.'],
     specKeys:['ppd_lux_s0','ppd_lux_s1','ppd_lux_s2','ppd_lux_s3','ppd_lux_s4','ppd_lux_s5','ppd_lux_s6','ppd_lux_s7','ppd_lux_s8','ppd_lux_s9'],
     paraKeys:['ppd_lux_p0','ppd_lux_p1','ppd_lux_p2'] },
+  /* VESTA · gemella di LUX con un bruciatore in meno (il piccolo da 1 kW):
+     2 fuochi, 6.25 kW. Elenchi tecnici condivisi con LUX (ppd_lux_s*). */
+  'VESTA': { label:'VESTA · Technical Datasheet',
+    kickerKey:'ppd_vesta_k', name:'VESTA', taglineKey:'ppd_vesta_t',
+    cat1:'Gas Cooker', cat2:'2 Burners with Oven',
+    photo:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1789534855/VESTA_-_17_High-End_2-Burner_Range_rlg1pl.jpg', drawing:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785582618/LUX_eggutu.jpg',
+    specs:[['Type','Gas cooker with oven'],['Burners','2'],['Power','6.25 kW'],['Gas · pressure','Butane / Propane · 30 mbar (I3 B/P)'],['Ignition','Electronic'],['Oven','St. steel · thermostatic · optional grill'],['Dimensions (W×D×H)','52.5 × 48.5 × 51h cm']],
+    specText:['Three-piece side heat-shield system, tool-free removal and dishwasher-safe.','Hob grate in solid stainless steel bars, Ø 8 mm.','Space-saving one-piece grate that folds open for cleaning.','Pot-holder arms adjustable lengthways and in height.','Static gas oven over 30 litres, Italian-style static burner.','Hob burners with differentiated power, caps enamelled at 800°.','Oven-cavity insulation in rock wool/glass fibre, metal sandwich system.','Double tempered-glass door; thermometer or automatic thermostat (depending on version).','Oven drip tray in steel fire-enamelled at over 800°; deep-drawn cooking top.','Valves calibrated from minimum (simmering) to maximum; AA-battery ignition.'],
+    paras:['Vesta is dedicated to those who cook with passion and want the space to stay impeccable. Its exclusive three-piece side heat shield comes apart in a few seconds without tools and washes conveniently in the dishwasher: so after frying courgettes in carpione or sautéing garlic prawns, cleaning is immediate.','The hob grate in solid stainless steel bars of 8 mm holds without vibration the pot of a seafood risotto that must be stirred energetically, while the pot-holder arms, adjustable in height too, lock the pan when you make a fish soup at sea. The Italian-style static oven, insulated with a metal-sandwich system and closed by the double tempered glass, ensures the even cooking needed for a tall, fragrant Genoese focaccia or a macaroni timballo. And when the evening ends with a tiramisù, everything is already ready to come clean in a moment.','The care for cleaning goes with a clean design: washable heat shields, a solid stainless grate and mirror-finish surfaces give Vesta a tidy, elegant look, designed to blend discreetly into the interiors and to stay beautiful over time.'],
+    specKeys:['ppd_lux_s0','ppd_lux_s1','ppd_lux_s2','ppd_lux_s3','ppd_lux_s4','ppd_lux_s5','ppd_lux_s6','ppd_lux_s7','ppd_lux_s8','ppd_lux_s9'],
+    paraKeys:['ppd_vesta_p0','ppd_vesta_p1','ppd_vesta_p2'] },
   'MADDALENA': { label:'MADDALENA · Technical Datasheet',
     kickerKey:'ppd_maddalena_k', name:'MADDALENA', taglineKey:'ppd_maddalena_t',
     cat1:'Gas Cooktop', cat2:'2 Burners',
@@ -11018,6 +11163,16 @@ function openCat(name,models){
           +'<span class="pcard-oc-full">'+_ocTip+'</span>'
           +'</span>'
         :'';
+      /* Bollino ECO: stessa logica, elenco window.ECO_MODELS. Con entrambi i
+         bollini prende la classe pair e si sposta a sinistra dell'Oceano. */
+      var _ecoOn=(window.ECO_MODELS||[]).indexOf(m)!==-1;
+      var _ecoTip=window.__t?window.__t('eco_badge','ECO version available'):'ECO version available';
+      var _ecoB=_ecoOn
+        ?'<span class="pcard-eco'+(_ocOn?' pair':'')+'" onclick="event.stopPropagation();ecoInfo();">'
+          +'<span class="pcard-eco-short"><svg viewBox="0 0 24 24" fill="none"><path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14M5 19l7-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Eco</span></span>'
+          +'<span class="pcard-eco-full">'+_ecoTip+'</span>'
+          +'</span>'
+        :'';
       var imgBox=src
         ?'<div class="pimg"><img'+_za+' src="'+src+'" alt="'+dm+'"></div>'
         :'<div class="pimg"><div class="pph"><svg viewBox="0 0 40 40" fill="none"><rect x="6" y="10" width="28" height="22" rx="1" stroke="currentColor" stroke-width=".8"/><circle cx="20" cy="21" r="7" stroke="currentColor" stroke-width=".8"/></svg><span>Photo coming soon</span></div></div>';
@@ -11033,7 +11188,7 @@ function openCat(name,models){
       var _hk=_tap?'pcard_hint_tap':'pcard_hint_desk';
       var _hf=_tap?'Tap twice to open':'Double click to open';
       var _ht=window.__t?window.__t(_hk,_hf):_hf;
-      card.innerHTML=imgBox+'<div class="pinf">'+_ocB+'<span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc">'+desc+'</span>':'')+'<span class="pcard-hint" data-i18n="'+_hk+'">'+_ht+'</span></div>';
+      card.innerHTML=imgBox+'<div class="pinf">'+_ocB+_ecoB+'<span class="pnm">'+dm+'</span>'+(desc?'<span class="pdsc">'+desc+'</span>':'')+'<span class="pcard-hint" data-i18n="'+_hk+'">'+_ht+'</span></div>';
       g.appendChild(card);
     }
     
@@ -11127,6 +11282,12 @@ window.__initPgridHint=function(){
     if(Math.abs(t.clientX-x0)>10 || Math.abs(t.clientY-y0)>10) return;
     /* Il bollino OCEANO e' dentro la scheda: senza questa uscita, toccarlo
        aprirebbe il prodotto invece della pagina Oceano. */
+    /* Stessa uscita per il bollino ECO. */
+    if(t.target.closest('.pcard-eco')){
+      e.preventDefault();
+      if(window.ecoInfo) window.ecoInfo();
+      return;
+    }
     var _ocEl=t.target.closest('.pcard-oc');
     if(_ocEl){
       e.preventDefault();
@@ -11272,6 +11433,9 @@ function goProd(m){
     _ocb.classList.toggle('on', (window.OC_MODELS||[]).indexOf(m)!==-1);
     _ocb.setAttribute('data-m', m);
   }
+  /* Bollino ECO: stesso principio, sempre acceso O spento. */
+  var _ecb=document.getElementById('pp-eco-badge');
+  if(_ecb){ _ecb.classList.toggle('on', (window.ECO_MODELS||[]).indexOf(m)!==-1); }
   // Hero prodotto: porta DENTRO la scheda l'hero della categoria, usando lo
   // stesso media (video o immagine) della categoria a cui il prodotto appartiene.
   var ppVid=document.getElementById('pp-herovid');
@@ -11658,6 +11822,7 @@ window.PROD_DESC_SHORT = {
   'MAXIMA': ['ppd_maxima_s0','ppd_maxima_s1','ppd_maxima_s2','ppd_maxima_s3','ppd_maxima_s4','ppd_maxima_s5','ppd_maxima_s6','ppd_maxima_s7','ppd_maxima_s8','ppd_maxima_s9','ppd_maxima_s10','ppd_maxima_s11','ppd_maxima_s12'],
   'MAREA': ['ppd_marea_s0','ppd_marea_s1','ppd_marea_s2','ppd_marea_s3','ppd_marea_s4','ppd_marea_s5','ppd_marea_s6','ppd_marea_s7','ppd_marea_s8','ppd_marea_s9','ppd_marea_s10','ppd_marea_s11'],
   'LUX': ['ppd_lux_s0','ppd_lux_s1','ppd_lux_s2','ppd_lux_s3','ppd_lux_s4','ppd_lux_s5','ppd_lux_s6','ppd_lux_s7','ppd_lux_s8','ppd_lux_s9','ppd_lux_s10','ppd_lux_s11','ppd_lux_s12'],
+  'VESTA': ['ppd_lux_s0','ppd_lux_s1','ppd_lux_s2','ppd_lux_s3','ppd_lux_s4','ppd_lux_s5','ppd_lux_s6','ppd_lux_s7','ppd_lux_s8','ppd_lux_s9','ppd_lux_s10','ppd_lux_s11','ppd_lux_s12'],
   'ALTAMAREA': ['ppd_altamarea_s0','ppd_altamarea_s1','ppd_altamarea_s2','ppd_altamarea_s3','ppd_altamarea_s4','ppd_altamarea_s5','ppd_altamarea_s6','ppd_altamarea_s7','ppd_altamarea_s8','ppd_altamarea_s9','ppd_altamarea_s10','ppd_altamarea_s11','ppd_altamarea_s12'],
   'GIORGIONE': ['ppd_giorgione_s0','ppd_giorgione_s1','ppd_giorgione_s2','ppd_giorgione_s3','ppd_giorgione_s4'],
   'BELLINI': ['ppd_bellini_s0','ppd_bellini_s1','ppd_bellini_s2','ppd_bellini_s3','ppd_bellini_s4'],
@@ -11827,6 +11992,12 @@ window.PROD_DESC_FULL = {
     title:  'ppd_lux_t',
     kicker: 'ppd_lux_k',
     paras:  ['ppd_lux_p0','ppd_lux_p1','ppd_lux_p2'],
+    photos: []
+  },
+  'VESTA': {
+    title:  'ppd_vesta_t',
+    kicker: 'ppd_vesta_k',
+    paras:  ['ppd_vesta_p0','ppd_vesta_p1','ppd_vesta_p2'],
     photos: []
   },
   'ALTAMAREA': {
@@ -12569,6 +12740,8 @@ document.addEventListener('keydown',function(e){
   var _ef=document.getElementById('effpage');
   var _oci=document.getElementById('ocinfo');
   if(_oci&&_oci.classList.contains('show')){closeOcInfo();return;}
+  var _eci=document.getElementById('ecoinfo');
+  if(_eci&&_eci.classList.contains('show')){closeEcoInfo();return;}
   if(_ef&&_ef.classList.contains('show')){closeEff();return;}
   var _oc=document.getElementById('oceanpage');
   if(_oc&&_oc.classList.contains('show')){closeOcean();return;}
@@ -13045,6 +13218,7 @@ window.PROD_DESCS={
   'MAXIMA':'Gas Cooker · 4-5 Burners with Oven',
   'MAREA':'Compact Gas Cooker · 2 Burners with Oven',
   'LUX':'Gas Cooker · 2-3 Burners with Oven',
+  'VESTA':'Gas Cooker · 2 Burners with Oven',
   'ALTAMAREA':'Gas Cooker · 2 Burners · Separate Grill',
   // Gas Cookers (freestanding)
   'CAPITANO':    'Gas Grill · 2 Burners',
@@ -13108,6 +13282,7 @@ window.PROD_IMGS={
   'MAXIMA':       'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657261/MAXIMA_-_LT4GL2-2_lwxf0d.jpg',
   'MAREA':        'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657253/MAREA_-_CLASSIC_yono1c.jpg',
   'LUX':          'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657263/LUX_-_top3_gv1jtr.jpg',
+  'VESTA':        'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1789534855/VESTA_-_17_High-End_2-Burner_Range_rlg1pl.jpg',
   'ALTAMAREA':    'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657169/ALTAMAREA_-_mastergrill_wuezek.jpg',
   // Gas Cookers (freestanding)
   'CAPITANO':     'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784910309/CAPITANO_-_bargas1_b1f2bq.jpg',
@@ -13184,7 +13359,8 @@ window.PROD_ALT={
   'NOBILIS':'gimballed marine induction cooker with three zones and multifunction oven with microwave',
   'FIRENZE':'compact LP gas built-in oven for boat galleys',
   'MAXIMA':'extra-large gimballed marine gas cooker with oven, heavy-duty build for yacht galleys',
-  'LUX':'luxury gimballed marine gas cooker with oven, hand-turned and hand-milled solid stainless steel details'
+  'LUX':'luxury gimballed marine gas cooker with oven, hand-turned and hand-milled solid stainless steel details',
+  'VESTA':'high-end two-burner gimballed marine gas cooker with oven, solid stainless steel details'
 };
 window.PROD_GALLERY={
   'NAUTICA':[
@@ -13374,6 +13550,27 @@ window.PROD_GALLERY={
   ],
   'LUX':[
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787324397/top3_interni_bzyoax.png', alt:'LUX luxury gimballed marine gas cooker with oven, hand-turned solid stainless steel details, engineered for the Italian way of cooking at sea'}
+  ],
+  'VESTA':[
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534855/VESTA_-_17_High-End_2-Burner_Range_rlg1pl.jpg', alt:'VESTA high-end two-burner gimballed marine gas cooker with oven, handmade in solid stainless steel in Conegliano, Italy'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534832/VESTA_-_4_High-End_2-Burner_Range_kxw9ak.jpg', alt:'VESTA gimballed gas cooker with oven for sailing and motor yachts, two burners and Italian-style static oven'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534832/VESTA_-_6_High-End_2-Burner_Range_cac3zo.jpg', alt:'VESTA marine gas range with two burners, compact and elegant, for the yacht galley'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534836/VESTA_-_9_High-End_2-Burner_Range_vax18x.jpg', alt:'Detail of the VESTA two-burner marine gas cooker, solid stainless steel construction'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534854/VESTA_-_12_High-End_2-Burner_Range_m2t5q3.jpg', alt:'VESTA gimballed marine gas cooker, hand-finished stainless steel for yacht interiors'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534856/VESTA_-_13_High-End_2-Burner_Range_r1fod1.jpg', alt:'VESTA marine gas stove with oven, engineered for the Italian way of cooking at sea'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534856/VESTA_-_15_High-End_2-Burner_Range_zsczd5.jpg', alt:'Detail of the VESTA gas cooker for boats, with thermocouple safety on every burner'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534858/VESTA_-_19_High-End_2-Burner_Range_ei4wfo.jpg', alt:'VESTA two-burner gas cooker with oven, gimballed to keep pans level under way'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534859/VESTA_-_14_High-End_2-Burner_Range_h2keel.jpg', alt:'VESTA marine gas cooker, detail of the solid stainless steel hob grate'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534859/VESTA_-_11_High-End_2-Burner_Range_bkjd4d.jpg', alt:'VESTA high-end marine gas range, detail of the pot-holder arms adjustable lengthways and in height'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534877/VESTA_-_25_High-End_2-Burner_Range_w6s9fg.jpg', alt:'VESTA gimballed gas cooker with double tempered-glass oven door'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534879/VESTA_-_20_High-End_2-Burner_Range_gmamhj.jpg', alt:'VESTA marine gas cooker, detail of the oven for real cooking on board'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534880/VESTA_-_27_High-End_2-Burner_Range_iwoffd.jpg', alt:'VESTA two-burner marine gas stove with dishwasher-safe side heat shields'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534880/VESTA_-_26_High-End_2-Burner_Range_doqhjc.jpg', alt:'VESTA gimballed marine gas cooker, detail of the controls and knobs'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534882/VESTA_-_28_High-End_2-Burner_Range_bzhtou.jpg', alt:'VESTA gas cooker with oven for yachts, detail of the stainless steel finish'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534883/VESTA_-_22_High-End_2-Burner_Range_wgzhu8.jpg', alt:'VESTA marine gas cooker, detail of the solid stainless steel gimbal brackets'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534899/VESTA_-_29_High-End_2-Burner_Range_pazxjy.jpg', alt:'VESTA two-burner gimballed gas range, handcrafted in the Inox Valley, Italy'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534900/VESTA_-_30_High-End_2-Burner_Range_mqjsmj.jpg', alt:'VESTA marine gas cooker with oven, a compact high-end cooker that fits into the galley worktop'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534900/VESTA_-_31_High-End_2-Burner_Range_ii83rw.jpg', alt:'VESTA high-end two-burner gimballed marine gas cooker, overall view'}
   ],
   'ALTALUX':[
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787324094/wally_80_RYOKAN_2_1_km9fmv.jpg', alt:'ALTALUX gimballed marine electric cooker with large 30-litre oven installed on the Wally 80 Ryokan'},
@@ -13622,6 +13819,7 @@ window.PROD_SPECS={
   'MAXIMA':[['spec_type','Gas cooker with oven'], ['spec_burners','4 or 5'], ['spec_power','6.25 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Battery electronic'], ['spec_oven','Thermostatic · optional grill'], ['spec_dimensions','64.6 × 51.5 × 49.5h <span class="pct-val-unit">cm</span>']],
   'MAREA':[['spec_type','Compact gas cooker with oven'], ['spec_burners','2'], ['spec_power','5.5 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_oven','Enamelled cavity'], ['spec_dimensions','47.5 × 44 × 46h <span class="pct-val-unit">cm</span>']],
   'LUX':[['spec_type','Gas cooker with oven'], ['spec_burners','2 or 3'], ['spec_power','7.25 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Electronic'], ['spec_oven','St. steel · thermostatic · optional grill'], ['spec_dimensions','52.5 × 48.5 × 51h <span class="pct-val-unit">cm</span>']],
+  'VESTA':[['spec_type','Gas cooker with oven'], ['spec_burners','2'], ['spec_power','6.25 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Electronic'], ['spec_oven','St. steel · thermostatic · optional grill'], ['spec_dimensions','52.5 × 48.5 × 51h <span class="pct-val-unit">cm</span>']],
   'PRINCIPE':[['spec_type','Gas cooker with oven'], ['spec_burners','2 or 3'], ['spec_power','7.25 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_ignition','Electronic'], ['spec_oven','St. steel · thermostatic · optional grill'], ['spec_dimensions','52.5 × 48.5 × 51h <span class="pct-val-unit">cm</span>']],
   'ALTAMAREA':[['spec_type','Gas cooker · separate grill chamber'], ['spec_burners','2'], ['spec_power','7.0 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar (I3 B/P)'], ['spec_oven','Enamelled or st. steel cavity'], ['spec_dimensions','47.5 × 44 × 52h <span class="pct-val-unit">cm</span>']],
   'CAPITANO':[['spec_type','Gas grill'], ['spec_burners','2'], ['spec_power','3.4 <span class="pct-val-unit">kW</span>'], ['spec_gas','Butane / Propane · 30 mbar'], ['spec_dimensions','52.0 × 30 <span class="pct-val-unit">cm</span>']],
@@ -14619,6 +14817,15 @@ function closeOcInfo(){
   if(box) box.classList.remove('show');
 }
 window.ocInfo=ocInfo; window.closeOcInfo=closeOcInfo;
+function ecoInfo(){
+  var box=document.getElementById('ecoinfo');
+  if(box) box.classList.add('show');
+}
+function closeEcoInfo(){
+  var box=document.getElementById('ecoinfo');
+  if(box) box.classList.remove('show');
+}
+window.ecoInfo=ecoInfo; window.closeEcoInfo=closeEcoInfo;
 
 /* Dissolvenza incrociata fine/inizio, 2 secondi.
    Un elemento video non puo' dissolversi su se stesso: negli ultimi 2 secondi
@@ -15259,7 +15466,7 @@ window.SRCH_KW = {
     'elektroherd herd backofen induktion kochfeld '+
     'cocina electrica horno induccion',
   'gas-cookers-with-oven':
-    'cucine a gas cucina gas con forno fornello piano cottura '+
+    'cucine a gas cucina gas con forno fornello piano cottura vesta top2 '+
     'gas cookers cooker oven stove range hob '+
     'cuisiniere a gaz four rechaud '+
     'gasherd herd backofen gaskocher '+
@@ -16729,6 +16936,10 @@ var DICT = {
     rv_btn: "What our customers say",
     oc_ms2: "Thousands of cookers aboard boats that sail the world’s oceans",
     oc_badge: "Bluewater variant available",
+    eco_badge: "ECO version available",
+    eco_pop_ttl: "ECO version",
+    eco_pop_body: "This model is also available with our new energy-saving technology. Get in touch with us for details on availability and configuration.",
+    eco_pop_link: "Discover energy efficiency",
     ct_hours_label: "Hours",
     ct_hours_val: "Monday - Friday<br>08:30 - 17:30 CET",
     ct_open_maps: "Open in Google Maps",
@@ -17324,6 +17535,11 @@ var DICT = {
     ppd_lux_p0: "Lux is dedicated to those who cook with passion and want the space to stay impeccable. Its exclusive three-piece side heat shield comes apart in a few seconds without tools and washes conveniently in the dishwasher: so after frying courgettes in carpione or sautéing garlic prawns, cleaning is immediate.",
     ppd_lux_p1: "The hob grate in solid stainless steel bars of 8 mm holds without vibration the pot of a seafood risotto that must be stirred energetically, while the pot-holder arms, adjustable in height too, lock the pan when you make a fish soup at sea. The Italian-style static oven, insulated with a metal-sandwich system and closed by the double tempered glass, ensures the even cooking needed for a tall, fragrant Genoese focaccia or a macaroni timballo. And when the evening ends with a tiramisù, everything is already ready to come clean in a moment.",
     ppd_lux_p2: "The care for cleaning goes with a clean design: washable heat shields, a solid stainless grate and mirror-finish surfaces give Lux a tidy, elegant look, designed to blend discreetly into the interiors and to stay beautiful over time.",
+    ppd_vesta_t: "Vesta: impeccable cooking, dishwasher-safe heat shields and an 8 mm stainless grate.",
+    ppd_vesta_k: "The Vesta story",
+    ppd_vesta_p0: "Vesta is dedicated to those who cook with passion and want the space to stay impeccable. Its exclusive three-piece side heat shield comes apart in a few seconds without tools and washes conveniently in the dishwasher: so after frying courgettes in carpione or sautéing garlic prawns, cleaning is immediate.",
+    ppd_vesta_p1: "The hob grate in solid stainless steel bars of 8 mm holds without vibration the pot of a seafood risotto that must be stirred energetically, while the pot-holder arms, adjustable in height too, lock the pan when you make a fish soup at sea. The Italian-style static oven, insulated with a metal-sandwich system and closed by the double tempered glass, ensures the even cooking needed for a tall, fragrant Genoese focaccia or a macaroni timballo. And when the evening ends with a tiramisù, everything is already ready to come clean in a moment.",
+    ppd_vesta_p2: "The care for cleaning goes with a clean design: washable heat shields, a solid stainless grate and mirror-finish surfaces give Vesta a tidy, elegant look, designed to blend discreetly into the interiors and to stay beautiful over time.",
     ppd_lux_s0: "Three-piece side heat-shield system, tool-free removal and dishwasher-safe.",
     ppd_lux_s1: "Hob grate in solid stainless steel bars, Ø 8 mm.",
     ppd_lux_s2: "Space-saving one-piece grate that folds open for cleaning.",
@@ -18242,6 +18458,10 @@ var DICT = {
     rv_btn: "Cosa dicono di noi",
     oc_ms2: "Migliaia di cucine installate su barche che solcano gli oceani di tutto il mondo",
     oc_badge: "Variante Bluewater disponibile",
+    eco_badge: "Versione ECO disponibile",
+    eco_pop_ttl: "Versione ECO",
+    eco_pop_body: "Questo modello è disponibile anche con la nuova tecnologia a risparmio energetico. Contattateci per i dettagli su disponibilità e configurazione.",
+    eco_pop_link: "Scopri l'efficienza energetica",
     ct_hours_label: "Orari",
     ct_hours_val: "Lunedì - Venerdì<br>08:30 - 17:30 CET",
     ct_open_maps: "Apri in Google Maps",
@@ -18835,6 +19055,11 @@ var DICT = {
     ppd_lux_p0: "Lux è dedicata a chi cucina con passione e vuole che l'ambiente resti impeccabile. Il suo esclusivo paracalore laterale in tre pezzi si smonta in pochi secondi senza attrezzi e si lava comodamente in lavastoviglie: così, dopo aver fritto delle zucchine in carpione o saltato dei gamberi all'aglio, la pulizia è immediata.",
     ppd_lux_p1: "La griglia del piano in barre di acciaio inox massiccio da 8 mm regge senza vibrazioni la pentola di un risotto alla pescatora che va mantecato con energia, mentre i braccetti ferma-pentole regolabili anche in altezza bloccano il tegame quando in mare preparate una zuppa di pesce. Il forno statico all'italiana, isolato con sistema a sandwich metallico e chiuso dal doppio vetro temperato, garantisce la cottura uniforme necessaria a una focaccia genovese alta e fragrante o a un timballo di maccheroni. E quando la serata si chiude con un tiramisù, tutto è già pronto a tornare pulito in un attimo.",
     ppd_lux_p2: "La cura per la pulizia si accompagna a un design pulito: paracalore lavabili, griglia in inox massiccio e superfici a specchio danno a Lux un aspetto ordinato ed elegante, pensato per integrarsi con discrezione negli interni e restare bello nel tempo.",
+    ppd_vesta_t: "Vesta: cucina impeccabile, paracalore lavabili in lavastoviglie e griglia in inox da 8 mm.",
+    ppd_vesta_k: "Il racconto di Vesta",
+    ppd_vesta_p0: "Vesta è dedicata a chi cucina con passione e vuole che l'ambiente resti impeccabile. Il suo esclusivo paracalore laterale in tre pezzi si smonta in pochi secondi senza attrezzi e si lava comodamente in lavastoviglie: così, dopo aver fritto delle zucchine in carpione o saltato dei gamberi all'aglio, la pulizia è immediata.",
+    ppd_vesta_p1: "La griglia del piano in barre di acciaio inox massiccio da 8 mm regge senza vibrazioni la pentola di un risotto alla pescatora che va mantecato con energia, mentre i braccetti ferma-pentole regolabili anche in altezza bloccano il tegame quando in mare preparate una zuppa di pesce. Il forno statico all'italiana, isolato con sistema a sandwich metallico e chiuso dal doppio vetro temperato, garantisce la cottura uniforme necessaria a una focaccia genovese alta e fragrante o a un timballo di maccheroni. E quando la serata si chiude con un tiramisù, tutto è già pronto a tornare pulito in un attimo.",
+    ppd_vesta_p2: "La cura per la pulizia si accompagna a un design pulito: paracalore lavabili, griglia in inox massiccio e superfici a specchio danno a Vesta un aspetto ordinato ed elegante, pensato per integrarsi con discrezione negli interni e restare bello nel tempo.",
     ppd_lux_s0: "Sistema paracalore laterale in 3 pezzi, smontabile senza attrezzi e lavabile in lavastoviglie.",
     ppd_lux_s1: "Griglia piano in barre di acciaio inox massiccio Ø 8 mm.",
     ppd_lux_s2: "Griglia salvaspazio monopezzo ripiegabile da aperta per la pulizia.",
@@ -19753,6 +19978,10 @@ var DICT = {
     rv_btn: "Ce qu'ils disent de nous",
     oc_ms2: "Des milliers de cuisinières installées sur des bateaux qui sillonnent les océans du monde entier",
     oc_badge: "Variante Bluewater disponible",
+    eco_badge: "Version ECO disponible",
+    eco_pop_ttl: "Version ECO",
+    eco_pop_body: "Ce modèle est également disponible avec notre nouvelle technologie à économie d'énergie. Contactez-nous pour connaître la disponibilité et la configuration.",
+    eco_pop_link: "Découvrir l'efficacité énergétique",
     ct_hours_label: "Horaires",
     ct_hours_val: "Lundi - Vendredi<br>08h30 - 17h30 CET",
     ct_open_maps: "Ouvrir dans Google Maps",
@@ -20341,11 +20570,16 @@ var DICT = {
     ppd_marea_s9: "Thermocouples de sécurité ; loquet et verrou de porte automatique.",
     ppd_marea_s10: "Intérieur du four émaillé à 800° ou acier inoxydable poli miroir ; étriers de cardan en acier inoxydable massif.",
     ppd_marea_s11: "En option : pierre ollaire, pare-chaleur latéraux, panneaux extérieurs miroir, réglage cardanique breveté.",
-    ppd_lux_t: "Lux : une cuisine impeccable, des pare-chaleur lavables au lave-vaisselle et une grille inox de 8 mm.",
+    ppd_lux_t: "Lux : une cuisinière impeccable, des pare-chaleur lavables au lave-vaisselle et une grille inox de 8 mm.",
     ppd_lux_k: "Le récit de Lux",
     ppd_lux_p0: "Lux est dédiée à qui cuisine avec passion et veut que l'espace reste impeccable. Son pare-chaleur latéral exclusif en trois pièces se démonte en quelques secondes sans outils et se lave facilement au lave-vaisselle : ainsi, après avoir frit des courgettes in carpione ou sauté des crevettes à l'ail, le nettoyage est immédiat.",
     ppd_lux_p1: "La grille de table en barres d'acier inoxydable massif de 8 mm supporte sans vibration la casserole d'un risotto alla pescatora qu'il faut lier avec énergie, tandis que les bras porte-casseroles, réglables aussi en hauteur, bloquent le récipient quand vous préparez une soupe de poisson en mer. Le four statique à l'italienne, isolé par un système sandwich métallique et fermé par le double vitrage trempé, garantit la cuisson uniforme nécessaire à une focaccia génoise haute et parfumée ou à un timballo de macaroni. Et quand la soirée se termine par un tiramisù, tout est déjà prêt à redevenir propre en un instant.",
     ppd_lux_p2: "Le soin du nettoyage s'accompagne d'un design épuré : pare-chaleur lavables, grille en inox massif et surfaces miroir donnent à Lux une allure ordonnée et élégante, pensée pour s'intégrer avec discrétion aux intérieurs et rester belle dans le temps.",
+    ppd_vesta_t: "Vesta : une cuisinière impeccable, des pare-chaleur lavables au lave-vaisselle et une grille inox de 8 mm.",
+    ppd_vesta_k: "Le récit de Vesta",
+    ppd_vesta_p0: "Vesta est dédiée à qui cuisine avec passion et veut que l'espace reste impeccable. Son pare-chaleur latéral exclusif en trois pièces se démonte en quelques secondes sans outils et se lave facilement au lave-vaisselle : ainsi, après avoir frit des courgettes in carpione ou sauté des crevettes à l'ail, le nettoyage est immédiat.",
+    ppd_vesta_p1: "La grille de table en barres d'acier inoxydable massif de 8 mm supporte sans vibration la casserole d'un risotto alla pescatora qu'il faut lier avec énergie, tandis que les bras porte-casseroles, réglables aussi en hauteur, bloquent le récipient quand vous préparez une soupe de poisson en mer. Le four statique à l'italienne, isolé par un système sandwich métallique et fermé par le double vitrage trempé, garantit la cuisson uniforme nécessaire à une focaccia génoise haute et parfumée ou à un timballo de macaroni. Et quand la soirée se termine par un tiramisù, tout est déjà prêt à redevenir propre en un instant.",
+    ppd_vesta_p2: "Le soin du nettoyage s'accompagne d'un design épuré : pare-chaleur lavables, grille en inox massif et surfaces miroir donnent à Vesta une allure ordonnée et élégante, pensée pour s'intégrer avec discrétion aux intérieurs et rester belle dans le temps.",
     ppd_lux_s0: "Système pare-chaleur latéral en 3 pièces, démontable sans outils et lavable au lave-vaisselle.",
     ppd_lux_s1: "Grille de table en barres d'acier inoxydable massif Ø 8 mm.",
     ppd_lux_s2: "Grille gain de place monobloc qui se replie en position ouverte pour le nettoyage.",
@@ -21264,6 +21498,10 @@ var DICT = {
     rv_btn: "Was unsere Kunden sagen",
     oc_ms2: "Tausende Kocher an Bord von Booten, die die Ozeane der Welt durchqueren",
     oc_badge: "Bluewater-Variante verfügbar",
+    eco_badge: "ECO-Version verfügbar",
+    eco_pop_ttl: "ECO-Version",
+    eco_pop_body: "Dieses Modell ist auch mit unserer neuen energiesparenden Technologie erhältlich. Sprechen Sie uns an für Details zu Verfügbarkeit und Konfiguration.",
+    eco_pop_link: "Energieeffizienz entdecken",
     ct_hours_label: "Öffnungszeiten",
     ct_hours_val: "Montag - Freitag<br>08:30 - 17:30 Uhr MEZ",
     ct_open_maps: "In Google Maps öffnen",
@@ -21852,11 +22090,16 @@ var DICT = {
     ppd_marea_s9: "Sicherheitsthermoelemente; Riegel und automatische Türverriegelung.",
     ppd_marea_s10: "Ofeninnenraum bei 800° emailliert oder spiegelpolierter Edelstahl; Kardanbügel aus massivem Edelstahl.",
     ppd_marea_s11: "Optional: Speckstein, seitliche Hitzeschutzblenden, spiegelnde Außenpaneele, patentierte Kardanverstellung.",
-    ppd_lux_t: "Lux: makellose Küche, spülmaschinenfeste Hitzeschutzblenden und ein 8-mm-Edelstahlrost.",
+    ppd_lux_t: "Lux: ein makelloser Herd, spülmaschinenfeste Hitzeschutzblenden und ein 8-mm-Edelstahlrost.",
     ppd_lux_k: "Die Geschichte von Lux",
     ppd_lux_p0: "Lux ist all jenen gewidmet, die mit Leidenschaft kochen und wollen, dass der Raum makellos bleibt. Ihre exklusive dreiteilige seitliche Hitzeschutzblende lässt sich in wenigen Sekunden ohne Werkzeug abnehmen und bequem in der Spülmaschine reinigen: So ist nach frittierten Zucchini in Carpione oder sautierten Knoblauchgarnelen die Reinigung sofort erledigt.",
     ppd_lux_p1: "Der Kochstellenrost aus massiven Edelstahlstäben von 8 mm hält ohne Vibration den Topf eines Meeresfrüchte-Risottos, das kräftig gerührt werden muss, während die auch in der Höhe verstellbaren Topfhalterarme den Topf arretieren, wenn Sie auf See eine Fischsuppe zubereiten. Der statische Ofen nach italienischer Art, mit einem Metall-Sandwich-System isoliert und durch das doppelte Sicherheitsglas geschlossen, sichert das gleichmäßige Garen, das eine hohe, aromatische genuesische Focaccia oder ein Makkaroni-Timballo braucht. Und wenn der Abend mit einem Tiramisù endet, ist alles schon bereit, im Nu wieder sauber zu werden.",
     ppd_lux_p2: "Die Sorgfalt für die Reinigung geht mit einem klaren Design einher: waschbare Hitzeschutzblenden, ein massiver Edelstahlrost und spiegelnde Oberflächen verleihen Lux ein aufgeräumtes, elegantes Aussehen, gestaltet, um sich dezent in die Innenräume einzufügen und über die Zeit schön zu bleiben.",
+    ppd_vesta_t: "Vesta: ein makelloser Herd, spülmaschinenfeste Hitzeschutzblenden und ein 8-mm-Edelstahlrost.",
+    ppd_vesta_k: "Die Geschichte von Vesta",
+    ppd_vesta_p0: "Vesta ist all jenen gewidmet, die mit Leidenschaft kochen und wollen, dass der Raum makellos bleibt. Ihre exklusive dreiteilige seitliche Hitzeschutzblende lässt sich in wenigen Sekunden ohne Werkzeug abnehmen und bequem in der Spülmaschine reinigen: So ist nach frittierten Zucchini in Carpione oder sautierten Knoblauchgarnelen die Reinigung sofort erledigt.",
+    ppd_vesta_p1: "Der Kochstellenrost aus massiven Edelstahlstäben von 8 mm hält ohne Vibration den Topf eines Meeresfrüchte-Risottos, das kräftig gerührt werden muss, während die auch in der Höhe verstellbaren Topfhalterarme den Topf arretieren, wenn Sie auf See eine Fischsuppe zubereiten. Der statische Ofen nach italienischer Art, mit einem Metall-Sandwich-System isoliert und durch das doppelte Sicherheitsglas geschlossen, sichert das gleichmäßige Garen, das eine hohe, aromatische genuesische Focaccia oder ein Makkaroni-Timballo braucht. Und wenn der Abend mit einem Tiramisù endet, ist alles schon bereit, im Nu wieder sauber zu werden.",
+    ppd_vesta_p2: "Die Sorgfalt für die Reinigung geht mit einem klaren Design einher: waschbare Hitzeschutzblenden, ein massiver Edelstahlrost und spiegelnde Oberflächen verleihen Vesta ein aufgeräumtes, elegantes Aussehen, gestaltet, um sich dezent in die Innenräume einzufügen und über die Zeit schön zu bleiben.",
     ppd_lux_s0: "Dreiteiliges seitliches Hitzeschutzsystem, werkzeuglos abnehmbar und spülmaschinenfest.",
     ppd_lux_s1: "Kochstellenrost aus massiven Edelstahlstäben, Ø 8 mm.",
     ppd_lux_s2: "Platzsparender einteiliger Rost, zum Reinigen aufklappbar.",
@@ -22775,6 +23018,10 @@ var DICT = {
     rv_btn: "Lo que dicen de nosotros",
     oc_ms2: "Miles de cocinas instaladas en barcos que surcan los océanos de todo el mundo",
     oc_badge: "Variante Bluewater disponible",
+    eco_badge: "Versión ECO disponible",
+    eco_pop_ttl: "Versión ECO",
+    eco_pop_body: "Este modelo también está disponible con nuestra nueva tecnología de ahorro energético. Consúltenos para conocer la disponibilidad y la configuración.",
+    eco_pop_link: "Descubrir la eficiencia energética",
     ct_hours_label: "Horario",
     ct_hours_val: "Lunes - Viernes<br>08:30 - 17:30 CET",
     ct_open_maps: "Abrir en Google Maps",
@@ -23368,6 +23615,11 @@ var DICT = {
     ppd_lux_p0: "Lux está dedicada a quien cocina con pasión y quiere que el ambiente se mantenga impecable. Su exclusivo paracalor lateral de tres piezas se desmonta en pocos segundos sin herramientas y se lava cómodamente en el lavavajillas: así, después de freír unos calabacines in carpione o saltear unas gambas al ajillo, la limpieza es inmediata.",
     ppd_lux_p1: "La parrilla de encimera en barras de acero inoxidable macizo de 8 mm sostiene sin vibraciones la olla de un risotto alla pescatora que hay que ligar con energía, mientras que los brazos sujeta-ollas, regulables también en altura, bloquean la cazuela cuando en el mar prepara una sopa de pescado. El horno estático a la italiana, aislado con sistema sándwich metálico y cerrado por el doble vidrio templado, garantiza la cocción uniforme necesaria para una focaccia genovesa alta y fragante o un timballo de macarrones. Y cuando la velada se cierra con un tiramisú, todo está ya listo para volver a quedar limpio en un instante.",
     ppd_lux_p2: "El cuidado por la limpieza se acompaña de un diseño limpio: paracalores lavables, parrilla de inox macizo y superficies de espejo dan a Lux un aspecto ordenado y elegante, pensado para integrarse con discreción en los interiores y mantenerse bella con el tiempo.",
+    ppd_vesta_t: "Vesta: cocina impecable, paracalores aptos para lavavajillas y parrilla de inox de 8 mm.",
+    ppd_vesta_k: "El relato de Vesta",
+    ppd_vesta_p0: "Vesta está dedicada a quien cocina con pasión y quiere que el ambiente se mantenga impecable. Su exclusivo paracalor lateral de tres piezas se desmonta en pocos segundos sin herramientas y se lava cómodamente en el lavavajillas: así, después de freír unos calabacines in carpione o saltear unas gambas al ajillo, la limpieza es inmediata.",
+    ppd_vesta_p1: "La parrilla de encimera en barras de acero inoxidable macizo de 8 mm sostiene sin vibraciones la olla de un risotto alla pescatora que hay que ligar con energía, mientras que los brazos sujeta-ollas, regulables también en altura, bloquean la cazuela cuando en el mar prepara una sopa de pescado. El horno estático a la italiana, aislado con sistema sándwich metálico y cerrado por el doble vidrio templado, garantiza la cocción uniforme necesaria para una focaccia genovesa alta y fragante o un timballo de macarrones. Y cuando la velada se cierra con un tiramisú, todo está ya listo para volver a quedar limpio en un instante.",
+    ppd_vesta_p2: "El cuidado por la limpieza se acompaña de un diseño limpio: paracalores lavables, parrilla de inox macizo y superficies de espejo dan a Vesta un aspecto ordenado y elegante, pensado para integrarse con discreción en los interiores y mantenerse bella con el tiempo.",
     ppd_lux_s0: "Sistema de paracalor lateral de 3 piezas, desmontable sin herramientas y apto para lavavajillas.",
     ppd_lux_s1: "Parrilla de encimera en barras de acero inoxidable macizo Ø 8 mm.",
     ppd_lux_s2: "Parrilla monopieza que ahorra espacio, plegable en posición abierta para la limpieza.",
@@ -23848,7 +24100,7 @@ window.setLang = setLang;
   // modelli): la rotta /#/slug e i link /#/modello funzionano da soli.
   var CATS = [
     {slug:'electric-cookers-with-oven', name:'Electric Cookers with Oven', models:['ORIZZONTE','TOLOMEO','NOBILIS','ALTALUX','FORMA','VERA','MARINA E','NAUTICA','COMPACTA','GRANLUX','MODULAR']},
-    {slug:'gas-cookers-with-oven',      name:'Gas Cookers with Oven',      models:['MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','MAXIMA','MAREA','LUX','ALTAMAREA']},
+    {slug:'gas-cookers-with-oven',      name:'Gas Cookers with Oven',      models:['MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','MAXIMA','MAREA','LUX','VESTA','ALTAMAREA']},
     {slug:'gas-cookers',                name:'Gas Cookers',                models:['VENTOTENE','MARETTIMO','FAVIGNANA','LIPARI']},
     {slug:'built-in-electric-cooktops', name:'Built-in Electric Cooktops', models:['DUE','TRE','UNO','MEDITERRANEO','TIRRENO','ADRIATICO']},
     {slug:'gas-grills',                 name:'Gas Grills',                 models:['CAPITANO']},
@@ -23903,7 +24155,7 @@ window.PROD_KNOB = [
 ];
 
 window.PROD_GIMBAL = [
-  'MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','LUX',
+  'MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','LUX','VESTA',
   'ORIZZONTE','FORMA','TOLOMEO','NOBILIS','ALTALUX','VERA','MARINA E'
 ];
 
@@ -23959,13 +24211,24 @@ window.PROD_3D = {
   'VENTOTENE':    [{k:'v3d_std', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/BZZyypvAgXs9xiG'}, {k:'v3d_builtin', u:'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/XFEB3ADWXWv3Qwo'}],
   'VENTUS':       'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/IfqHfFCTSRbj0GQ',
   'VERA':         'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/DZ7be8VMruQsIWe',
+  /* VESTA: stesso ingombro di LUX, stesso modello 3D. */
+  'VESTA':        'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/sw6yfYFhVQB2EU8',
   'VIRTUS':       'https://www.3dvieweronline.com/viewer/members/Idf663b8c9b8331a8c625007b4337601ec/eIeC5rAWWdgA6YN'
 };
 
 window.OC_NOLINK = ['GIORGIONE','RAFFAELLO','VIRTUS','TIZIANO','MAGNUS','CAPITANO','MEGA GRILL'];
 
+/* Modelli disponibili nella versione ECO a risparmio energetico (bollino
+   verde). Elenco del committente del 16/09/2026, piu' VESTA, gemella di LUX. */
+window.ECO_MODELS = [
+  'MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','MAXIMA','MAREA','LUX','VESTA',
+  'SIDEREUS',
+  /* Forno a gas da incasso, aggiunto dal committente il 16/09. */
+  'ROMA'
+];
+
 window.OC_MODELS = [
-  'MARINA','GUSTO','MAREA','LUX','VENTUS','ALTURA','MAXIMA',
+  'MARINA','GUSTO','MAREA','LUX','VESTA','VENTUS','ALTURA','MAXIMA',
   'GIORGIONE','RAFFAELLO','VIRTUS','TIZIANO','MAGNUS','CAPITANO','MEGA GRILL',
   'ORIZZONTE','TOLOMEO','NOBILIS','ALTALUX','FORMA','VERA',
   'MARINA E','NAUTICA','COMPACTA','GRANLUX','MODULAR',
