@@ -4660,6 +4660,33 @@ body.ts-on .pcard-eco.pair ~ .pnm, body.ts-on .pcard-eco.pair ~ .pdsc{ padding-r
 }
 .ef-list li strong{ color:rgba(248,246,241,.9); font-weight:400; }
 
+/* Capitolo GAS ECO: stessa impaginazione degli altri, accento verde del
+   bollino ECO su etichetta, puntini dell'elenco e modelli. */
+.ef-eco .ef-ch-label{ color:rgba(143,190,136,.95); }
+.ef-eco .ef-list li::before{ background:rgba(128,172,122,.8); }
+.ef-eco-models{ margin-top:26px; padding-top:22px; border-top:1px solid rgba(128,172,122,.18); }
+.ef-eco-models-lbl{
+  display:block; margin-bottom:14px;
+  font-family:'Outfit',sans-serif; font-size:9px; letter-spacing:.28em;
+  text-transform:uppercase; color:rgba(143,190,136,.9);
+}
+.ef-eco-chips{ display:flex; flex-wrap:wrap; gap:8px; }
+.ef-eco-chip{
+  display:inline-flex; align-items:center;
+  padding:6px 13px;
+  border:1px solid rgba(128,172,122,.45); border-radius:999px;
+  font-family:'Outfit',sans-serif; font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:rgba(248,246,241,.75);
+  cursor:pointer; text-decoration:none;
+  transition:border-color .35s ease, background .35s ease, color .35s ease;
+}
+@media(hover:hover){
+  .ef-eco-chip:hover{ border-color:rgba(128,172,122,.95); background:rgba(128,172,122,.12); color:#a9d0a2; }
+}
+@media(max-width:768px){
+  .ef-eco-chip{ font-size:9px; letter-spacing:.14em; padding:5px 11px; }
+}
+
 /* PRIMATI · riga numeri chiave */
 .ef-milestones{
   display:grid; grid-template-columns:repeat(3,1fr); gap:34px;
@@ -8278,9 +8305,41 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
       </div>
     </div>
 
-    <div class="ef-chapter">
+    <!-- CAPITOLO IV · GAS ECO. Racconta la versione ECO dei forni a gas, quella
+         del bollino verde. L'elenco dei modelli in fondo NON e' scritto a mano:
+         lo costruisce effEcoChips() da window.ECO_MODELS, prendendo solo i
+         modelli delle categorie a gas (SIDEREUS e' elettrica e resta fuori).
+         ⚠️ Nessun numero sulle temperature minime: finche' il committente non
+         fornisce il dato misurato, il testo parla di "temperature molto piu'
+         basse" senza cifre. -->
+    <div class="ef-chapter ef-eco" id="eff-eco">
       <div class="ef-ch-side">
         <span class="ef-ch-num">IV</span>
+        <span class="ef-ch-label" data-i18n="eff_c6_label">Gas ECO</span>
+      </div>
+      <div class="ef-ch-main">
+        <h2 class="ef-ch-title" data-i18n-html="eff_c6_title">Gas, <em>reinvented</em></h2>
+        <p class="ef-ch-body" data-i18n="eff_c6_b1">The same pioneering spirit that has always driven our research has not stopped at electricity. We are the first marine company to introduce a revolutionary technology on gas ovens: the ECO version, which saves a great deal of gas on board and, at the same time, lets you cook far better.</p>
+        <p class="ef-ch-body" data-i18n="eff_c6_b2">Less gas burned means cylinders that last longer, fewer spares to stow and more autonomy between one port and the next: a real advantage for anyone sailing long distances or far from refuelling points.</p>
+        <p class="ef-ch-body" data-i18n="eff_c6_b3">The most surprising benefit, though, is in the cooking. In a traditional gas oven it is hard to hold low temperatures: the flame has a minimum below which it cannot go. ECO technology keeps the oven at much lower, steady temperatures, opening the door to slow cooking that until now was almost impossible with gas on board.</p>
+        <ul class="ef-list">
+          <li data-i18n-html="eff_c6_l1"><strong>Meltingly tender meat.</strong> A roast beef evenly pink from edge to centre, a pork shank or ribs cooked for hours until they fall off the bone, a vitello tonnato with perfectly juicy veal.</li>
+          <li data-i18n-html="eff_c6_l2"><strong>Delicate fish.</strong> A fillet of amberjack or salmon cooked gently stays soft and translucent instead of drying out: the best way to respect the catch of the day.</li>
+          <li data-i18n-html="eff_c6_l3"><strong>Vegetables and preserves.</strong> Sweet cherry tomatoes confit, peppers and aubergines slowly softened, fruit and herbs dried to keep in the ship's stores.</li>
+          <li data-i18n-html="eff_c6_l4"><strong>Pastry.</strong> Crisp, snow-white meringues, crème caramel and cheesecake baked in a bain-marie without cracks or bubbles.</li>
+          <li data-i18n-html="eff_c6_l5"><strong>Keeping warm.</strong> Low, steady heat holds dishes at serving temperature without cooking them further: dinner waits for the crew, not the other way round.</li>
+        </ul>
+        <p class="ef-ch-body" data-i18n="eff_c6_b4">Slow cooking also means less supervision: while the oven works, those on board can focus on navigation or simply enjoy the day. For the first time, saving gas and cooking better go in the same direction.</p>
+        <div class="ef-eco-models">
+          <span class="ef-eco-models-lbl" data-i18n="eff_c6_models">Available on</span>
+          <div class="ef-eco-chips" id="ef-eco-chips"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ef-chapter">
+      <div class="ef-ch-side">
+        <span class="ef-ch-num">V</span>
         <span class="ef-ch-label" data-i18n="eff_c4_label">Marine Induction</span>
       </div>
       <div class="ef-ch-main">
@@ -8296,7 +8355,7 @@ p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable
 
     <div class="ef-chapter">
       <div class="ef-ch-side">
-        <span class="ef-ch-num">V</span>
+        <span class="ef-ch-num">VI</span>
         <span class="ef-ch-label" data-i18n="eff_c5_label">The Italian Method</span>
       </div>
       <div class="ef-ch-main">
@@ -14826,6 +14885,30 @@ function closeEcoInfo(){
   if(box) box.classList.remove('show');
 }
 window.ecoInfo=ecoInfo; window.closeEcoInfo=closeEcoInfo;
+/* Capitolo Gas ECO della pagina Efficienza: i modelli si leggono da
+   ECO_MODELS e CATS, cosi' aggiungendo un modello all'elenco compare anche
+   qui. Solo categorie a gas (nome con "Gas"). */
+function effEcoChips(){
+  var host=document.getElementById('ef-eco-chips');
+  if(!host||!window.ECO_MODELS||!window.CATS) return;
+  var gas={};
+  window.CATS.forEach(function(c){ if(/\bGas\b/.test(c.name)) c.models.forEach(function(m){ gas[m]=1; }); });
+  var h='';
+  window.ECO_MODELS.forEach(function(m){
+    if(!gas[m]) return;
+    var d=(typeof prodDisp==='function')?prodDisp(m):m;
+    h+='<a class="ef-eco-chip" href="/'+m.toLowerCase().replace(/[^a-z0-9]/g,'')+'" data-m="'+m+'">'+d+'</a>';
+  });
+  host.innerHTML=h;
+  host.onclick=function(e){
+    var a=e.target.closest('.ef-eco-chip'); if(!a) return;
+    e.preventDefault();
+    closeEff();
+    goProd(a.getAttribute('data-m'));
+  };
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',effEcoChips);
+else setTimeout(effEcoChips,0);
 
 /* Dissolvenza incrociata fine/inizio, 2 secondi.
    Un elemento video non puo' dissolversi su se stesso: negli ultimi 2 secondi
@@ -16645,6 +16728,18 @@ var DICT = {
     eff_c3_l1: "<strong>Gas systems.</strong> Our models feature high-efficiency burners developed together with leading names in professional catering.",
     eff_c3_l2: "<strong>Electric.</strong> In the marine sector we built a complete range of electric marine cookers at a time when cooking aboard meant gas alone.",
     eff_c3_l3: "<strong>Induction (2015).</strong> In 2015 we put into production the first collection of gimballed induction cookers for sailing and motor yachts; the line reached the market at the beginning of 2016.",
+    eff_c6_label: "Gas ECO",
+    eff_c6_title: "Gas, <em>reinvented</em>",
+    eff_c6_b1: "The same pioneering spirit that has always driven our research has not stopped at electricity. We are the first marine company to introduce a revolutionary technology on gas ovens: the ECO version, which saves a great deal of gas on board and, at the same time, lets you cook far better.",
+    eff_c6_b2: "Less gas burned means cylinders that last longer, fewer spares to stow and more autonomy between one port and the next: a real advantage for anyone sailing long distances or far from refuelling points.",
+    eff_c6_b3: "The most surprising benefit, though, is in the cooking. In a traditional gas oven it is hard to hold low temperatures: the flame has a minimum below which it cannot go. ECO technology keeps the oven at much lower, steady temperatures, opening the door to slow cooking that until now was almost impossible with gas on board.",
+    eff_c6_l1: "<strong>Meltingly tender meat.</strong> A roast beef evenly pink from edge to centre, a pork shank or ribs cooked for hours until they fall off the bone, a vitello tonnato with perfectly juicy veal.",
+    eff_c6_l2: "<strong>Delicate fish.</strong> A fillet of amberjack or salmon cooked gently stays soft and translucent instead of drying out: the best way to respect the catch of the day.",
+    eff_c6_l3: "<strong>Vegetables and preserves.</strong> Sweet cherry tomatoes confit, peppers and aubergines slowly softened, fruit and herbs dried to keep in the ship's stores.",
+    eff_c6_l4: "<strong>Pastry.</strong> Crisp, snow-white meringues, crème caramel and cheesecake baked in a bain-marie without cracks or bubbles.",
+    eff_c6_l5: "<strong>Keeping warm.</strong> Low, steady heat holds dishes at serving temperature without cooking them further: dinner waits for the crew, not the other way round.",
+    eff_c6_b4: "Slow cooking also means less supervision: while the oven works, those on board can focus on navigation or simply enjoy the day. For the first time, saving gas and cooking better go in the same direction.",
+    eff_c6_models: "Available on",
     eff_c4_label: "Marine Induction",
     eff_c4_title: "Marine induction is not home induction",
     eff_c4_b1: "Cooking with induction in the middle of the ocean or in the desert requires specific measures compared to a domestic setting. Drawing on years of experience and leadership, we forged a strategic partnership with one of Europe's leading manufacturers of induction components, developing flexible and unique solutions, available in custom variants too.",
@@ -18171,6 +18266,18 @@ var DICT = {
     eff_c3_l1: "<strong>Sistemi a gas.</strong> I nostri modelli sono dotati di bruciatori ad alta efficienza realizzati in collaborazione con le primarie aziende della ristorazione professionale.",
     eff_c3_l2: "<strong>Elettrico.</strong> Nel settore nautico abbiamo realizzato una serie completa di cucine nautiche elettriche quando a bordo si cucinava soltanto a gas.",
     eff_c3_l3: "<strong>Induzione (2015).</strong> Nel 2015 abbiamo messo in produzione la prima collezione di cucine a induzione basculanti per imbarcazioni a vela e a motore; la linea è arrivata sul mercato all'inizio del 2016.",
+    eff_c6_label: "Gas ECO",
+    eff_c6_title: "Il gas, <em>ripensato</em>",
+    eff_c6_b1: "Lo stesso spirito pionieristico che guida da sempre la nostra ricerca non si è fermato all'elettrico. Siamo la prima azienda del settore nautico a introdurre sui forni a gas una tecnologia rivoluzionaria: la versione ECO, che consente di risparmiare moltissimo gas a bordo e, allo stesso tempo, di cucinare molto meglio.",
+    eff_c6_b2: "Meno gas consumato significa bombole che durano più a lungo, meno ricambi da stivare e più autonomia da un porto all'altro: un vantaggio concreto per chi naviga a lungo o lontano dai punti di rifornimento.",
+    eff_c6_b3: "Il vantaggio più sorprendente, però, è in cucina. In un forno a gas tradizionale è difficile mantenere temperature basse: la fiamma ha un minimo sotto il quale non può scendere. La tecnologia ECO permette di mantenere nel forno temperature molto più basse e stabili, e apre la strada alle cotture lente, finora quasi impossibili con il gas a bordo.",
+    eff_c6_l1: "<strong>Carni tenerissime.</strong> Un roast beef rosato e uniforme dal bordo al cuore, uno stinco o delle costine che cuociono per ore fino a staccarsi dall'osso, un vitello tonnato con la carne perfettamente succosa.",
+    eff_c6_l2: "<strong>Pesce delicato.</strong> Un filetto di ricciola o di salmone cotto dolcemente resta morbido e traslucido, senza asciugarsi: il modo migliore per rispettare il pescato del giorno.",
+    eff_c6_l3: "<strong>Verdure e conserve.</strong> Pomodorini confit dolcissimi, peperoni e melanzane appassiti lentamente, frutta ed erbe aromatiche essiccate da conservare in cambusa.",
+    eff_c6_l4: "<strong>Pasticceria.</strong> Meringhe asciutte e candide, crème caramel e cheesecake cotti a bagnomaria senza crepe né bolle.",
+    eff_c6_l5: "<strong>Tenere in caldo.</strong> Un calore basso e costante mantiene i piatti alla temperatura di servizio senza continuare a cuocerli: è la cena ad aspettare l'equipaggio, e non il contrario.",
+    eff_c6_b4: "Le cotture lente richiedono anche meno sorveglianza: mentre il forno lavora, chi è a bordo può dedicarsi alla navigazione o semplicemente godersi la giornata. Per la prima volta, risparmiare gas e cucinare meglio vanno nella stessa direzione.",
+    eff_c6_models: "Disponibile sui modelli",
     eff_c4_label: "Induzione Nautica",
     eff_c4_title: "L'induzione nautica non è quella di casa",
     eff_c4_b1: "Cucinare a induzione in mezzo all'oceano o nel deserto richiede accorgimenti specifici rispetto all'ambiente domestico. Forti di anni di esperienza e leadership, abbiamo stretto una partnership strategica con uno dei principali produttori europei di componenti per l'induzione, sviluppando soluzioni flessibili e uniche, realizzabili anche in varianti custom.",
@@ -19691,6 +19798,18 @@ var DICT = {
     eff_c3_l1: "<strong>Systèmes à gaz.</strong> Nos modèles sont dotés de brûleurs à haute efficacité développés avec les grands noms de la restauration professionnelle.",
     eff_c3_l2: "<strong>Électrique.</strong> Dans le secteur nautique, nous avons réalisé une gamme complète de cuisinières marines électriques à une époque où cuisiner à bord voulait dire gaz et rien d'autre.",
     eff_c3_l3: "<strong>Induction (2015).</strong> En 2015 nous avons mis en production la première collection de cuisinières à induction sur cardan pour voiliers et bateaux à moteur ; la ligne est arrivée sur le marché au début de 2016.",
+    eff_c6_label: "Gaz ECO",
+    eff_c6_title: "Le gaz, <em>réinventé</em>",
+    eff_c6_b1: "Le même esprit pionnier qui guide depuis toujours notre recherche ne s'est pas arrêté à l'électrique. Nous sommes la première entreprise du secteur nautique à introduire sur les fours à gaz une technologie révolutionnaire : la version ECO, qui permet d'économiser énormément de gaz à bord et, en même temps, de cuisiner bien mieux.",
+    eff_c6_b2: "Moins de gaz consommé, ce sont des bouteilles qui durent plus longtemps, moins de rechanges à stocker et plus d'autonomie d'un port à l'autre : un avantage concret pour qui navigue longtemps ou loin des points de ravitaillement.",
+    eff_c6_b3: "Le bénéfice le plus surprenant se trouve pourtant dans l'assiette. Dans un four à gaz traditionnel, il est difficile de maintenir des températures basses : la flamme a un minimum en dessous duquel elle ne peut pas descendre. La technologie ECO permet de garder dans le four des températures bien plus basses et stables, et ouvre la voie aux cuissons lentes, jusqu'ici presque impossibles au gaz à bord.",
+    eff_c6_l1: "<strong>Viandes fondantes.</strong> Un rosbif rosé et uniforme du bord au cœur, un jarret ou des travers cuits pendant des heures jusqu'à se détacher de l'os, un vitello tonnato à la viande parfaitement juteuse.",
+    eff_c6_l2: "<strong>Poissons délicats.</strong> Un filet de sériole ou de saumon cuit en douceur reste moelleux et nacré, sans se dessécher : la meilleure façon de respecter la pêche du jour.",
+    eff_c6_l3: "<strong>Légumes et conserves.</strong> Tomates cerises confites, poivrons et aubergines fondus lentement, fruits et herbes aromatiques séchés à garder dans la cambuse.",
+    eff_c6_l4: "<strong>Pâtisserie.</strong> Meringues sèches et immaculées, crème caramel et cheesecake cuits au bain-marie sans fissures ni bulles.",
+    eff_c6_l5: "<strong>Maintien au chaud.</strong> Une chaleur basse et constante garde les plats à température de service sans prolonger leur cuisson : c'est le dîner qui attend l'équipage, et non l'inverse.",
+    eff_c6_b4: "La cuisson lente demande aussi moins de surveillance : pendant que le four travaille, on peut se consacrer à la navigation ou simplement profiter de la journée. Pour la première fois, économiser le gaz et mieux cuisiner vont dans la même direction.",
+    eff_c6_models: "Disponible sur",
     eff_c4_label: "Induction Marine",
     eff_c4_title: "L'induction marine n'est pas celle de la maison",
     eff_c4_b1: "Cuisiner à l'induction en plein océan ou dans le désert exige des précautions spécifiques par rapport à un environnement domestique. Forts d'années d'expérience et de leadership, nous avons noué un partenariat stratégique avec l'un des principaux fabricants européens de composants d'induction, développant des solutions flexibles et uniques, réalisables aussi en variantes sur mesure.",
@@ -21211,6 +21330,18 @@ var DICT = {
     eff_c3_l1: "<strong>Gassysteme.</strong> Unsere Modelle verfügen über Hochleistungsbrenner, die gemeinsam mit führenden Namen der professionellen Gastronomie entwickelt wurden.",
     eff_c3_l2: "<strong>Elektrisch.</strong> Im Marinesektor realisierten wir eine komplette Serie elektrischer Bordküchen, als Kochen an Bord noch gleichbedeutend mit Gas war.",
     eff_c3_l3: "<strong>Induktion (2015).</strong> 2015 brachten wir die erste Kollektion kardanisch aufgehängter Induktionsherde für Segel- und Motoryachten in Produktion; die Linie kam Anfang 2016 auf den Markt.",
+    eff_c6_label: "Gas ECO",
+    eff_c6_title: "Gas, <em>neu gedacht</em>",
+    eff_c6_b1: "Der Pioniergeist, der unsere Forschung seit jeher antreibt, hat nicht beim Strom haltgemacht. Wir sind das erste Unternehmen der Bootsbranche, das bei Gasbacköfen eine revolutionäre Technologie einführt: die ECO-Version, mit der sich an Bord sehr viel Gas sparen und zugleich deutlich besser kochen lässt.",
+    eff_c6_b2: "Weniger Gasverbrauch bedeutet Flaschen, die länger halten, weniger Ersatz, der verstaut werden muss, und mehr Autonomie von Hafen zu Hafen: ein echter Vorteil für alle, die lange oder fern von Versorgungspunkten unterwegs sind.",
+    eff_c6_b3: "Der überraschendste Vorteil zeigt sich jedoch auf dem Teller. In einem herkömmlichen Gasbackofen lassen sich niedrige Temperaturen kaum halten: Die Flamme hat ein Minimum, unter das sie nicht gehen kann. Die ECO-Technologie hält im Backofen deutlich niedrigere, stabile Temperaturen und eröffnet so das langsame Garen, das mit Gas an Bord bisher kaum möglich war.",
+    eff_c6_l1: "<strong>Zartes Fleisch.</strong> Ein Roastbeef, gleichmäßig rosa vom Rand bis zur Mitte, eine Schweinshaxe oder Rippchen, die stundenlang garen, bis sie vom Knochen fallen, ein Vitello tonnato mit perfekt saftigem Kalbfleisch.",
+    eff_c6_l2: "<strong>Feiner Fisch.</strong> Ein sanft gegartes Filet von Bernsteinmakrele oder Lachs bleibt weich und glasig, statt auszutrocknen: die beste Art, den Fang des Tages zu würdigen.",
+    eff_c6_l3: "<strong>Gemüse und Vorräte.</strong> Süße confierte Kirschtomaten, langsam geschmorte Paprika und Auberginen, getrocknetes Obst und Kräuter für die Bordvorräte.",
+    eff_c6_l4: "<strong>Gebäck.</strong> Trockene, schneeweiße Baisers, Crème Caramel und Käsekuchen im Wasserbad, ohne Risse und ohne Blasen.",
+    eff_c6_l5: "<strong>Warmhalten.</strong> Niedrige, konstante Hitze hält die Speisen auf Serviertemperatur, ohne sie weiterzugaren: Das Abendessen wartet auf die Crew, nicht umgekehrt.",
+    eff_c6_b4: "Langsames Garen verlangt zudem weniger Aufsicht: Während der Backofen arbeitet, kann man sich der Navigation widmen oder einfach den Tag genießen. Zum ersten Mal gehen Gas sparen und besser kochen in dieselbe Richtung.",
+    eff_c6_models: "Erhältlich für",
     eff_c4_label: "Marine-Induktion",
     eff_c4_title: "Marine-Induktion ist nicht die aus dem Haushalt",
     eff_c4_b1: "Das Kochen mit Induktion mitten im Ozean oder in der Wüste erfordert besondere Vorkehrungen gegenüber dem häuslichen Umfeld. Gestützt auf jahrelange Erfahrung und Führung haben wir eine strategische Partnerschaft mit einem der führenden europäischen Hersteller von Induktionskomponenten geschlossen und flexible, einzigartige Lösungen entwickelt, auch in Sonderanfertigungen.",
@@ -22731,6 +22862,18 @@ var DICT = {
     eff_c3_l1: "<strong>Sistemas de gas.</strong> Nuestros modelos cuentan con quemadores de alta eficiencia desarrollados junto a las principales empresas de la restauración profesional.",
     eff_c3_l2: "<strong>Eléctrico.</strong> En el sector náutico realizamos una serie completa de cocinas náuticas eléctricas cuando cocinar a bordo significaba gas y nada más.",
     eff_c3_l3: "<strong>Inducción (2015).</strong> En 2015 pusimos en producción la primera colección de cocinas de inducción basculantes para embarcaciones de vela y de motor; la línea llegó al mercado a principios de 2016.",
+    eff_c6_label: "Gas ECO",
+    eff_c6_title: "El gas, <em>reinventado</em>",
+    eff_c6_b1: "El mismo espíritu pionero que siempre ha guiado nuestra investigación no se ha detenido en la electricidad. Somos la primera empresa del sector náutico en introducir en los hornos de gas una tecnología revolucionaria: la versión ECO, que permite ahorrar muchísimo gas a bordo y, al mismo tiempo, cocinar mucho mejor.",
+    eff_c6_b2: "Menos gas consumido significa bombonas que duran más, menos recambios que estibar y más autonomía de un puerto a otro: una ventaja concreta para quien navega mucho tiempo o lejos de los puntos de abastecimiento.",
+    eff_c6_b3: "Sin embargo, la ventaja más sorprendente está en el plato. En un horno de gas tradicional es difícil mantener temperaturas bajas: la llama tiene un mínimo por debajo del cual no puede bajar. La tecnología ECO permite mantener en el horno temperaturas mucho más bajas y estables, y abre la puerta a las cocciones lentas, hasta ahora casi imposibles con gas a bordo.",
+    eff_c6_l1: "<strong>Carnes tiernísimas.</strong> Un rosbif rosado y uniforme del borde al centro, un codillo o unas costillas cocinados durante horas hasta desprenderse del hueso, un vitello tonnato con la carne perfectamente jugosa.",
+    eff_c6_l2: "<strong>Pescado delicado.</strong> Un lomo de pez limón o de salmón cocinado suavemente queda tierno y nacarado, sin secarse: la mejor manera de respetar la pesca del día.",
+    eff_c6_l3: "<strong>Verduras y conservas.</strong> Tomates cherry confitados, pimientos y berenjenas pochados lentamente, fruta y hierbas aromáticas deshidratadas para guardar en la despensa de a bordo.",
+    eff_c6_l4: "<strong>Repostería.</strong> Merengues secos y blanquísimos, flan y tarta de queso al baño maría, sin grietas ni burbujas.",
+    eff_c6_l5: "<strong>Mantener caliente.</strong> Un calor bajo y constante conserva los platos a temperatura de servicio sin seguir cocinándolos: la cena espera a la tripulación, y no al revés.",
+    eff_c6_b4: "La cocción lenta también requiere menos vigilancia: mientras el horno trabaja, a bordo uno puede dedicarse a la navegación o simplemente disfrutar del día. Por primera vez, ahorrar gas y cocinar mejor van en la misma dirección.",
+    eff_c6_models: "Disponible en",
     eff_c4_label: "Inducción Náutica",
     eff_c4_title: "La inducción náutica no es la de casa",
     eff_c4_b1: "Cocinar con inducción en medio del océano o en el desierto exige precauciones específicas respecto al entorno doméstico. Con años de experiencia y liderazgo, hemos establecido una alianza estratégica con uno de los principales fabricantes europeos de componentes para inducción, desarrollando soluciones flexibles y únicas, realizables también en variantes a medida.",
@@ -24223,8 +24366,8 @@ window.OC_NOLINK = ['GIORGIONE','RAFFAELLO','VIRTUS','TIZIANO','MAGNUS','CAPITAN
 window.ECO_MODELS = [
   'MARIS','NAUTA','MARINA','GUSTO','ALTURA','VENTUS','MAXIMA','MAREA','LUX','VESTA',
   'SIDEREUS',
-  /* Forno a gas da incasso, aggiunto dal committente il 16/09. */
-  'ROMA'
+  /* Forni a gas da incasso, aggiunti dal committente il 16/09. */
+  'ROMA','FIRENZE'
 ];
 
 window.OC_MODELS = [
