@@ -2988,6 +2988,13 @@ header.hide{transform:translateY(-100%);}
   #pp-lightbox-close, #pp-lightbox-download{ position:fixed; }
   #pp-lightbox-close{ top:16px; right:18px; }
   #pp-lightbox-download{ top:16px; left:18px; }
+  #pp-lightbox.lb-video-on{
+    align-items:center;
+    justify-content:center;
+    padding:0;
+    overflow:hidden;
+  }
+  #pp-lightbox.lb-video-on #pp-lightbox-video{ width:96vw; margin:auto; }
   .pp-lb-arrow{font-size:26px;padding:8px}
   #pp-lb-prev{left:0}
   #pp-lb-next{right:0}
@@ -13563,7 +13570,10 @@ window.PROD_GALLERY_VIDEO = {
     {after:1, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=82-ocean-sunseeker_0SB0HZqy_ttplxm', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/82-ocean-sunseeker_0SB0HZqy_ttplxm.jpg', alt:'VIRTUS · 82 Ocean Sunseeker'}
   ],
   'PRINCIPE': [
-    {after:0, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=PRINCIPE_lux-3-burner-gimbaled-marine-gas-stove-oven_video_ulj4gn', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/PRINCIPE_lux-3-burner-gimbaled-marine-gas-stove-oven_video_ulj4gn.jpg', alt:'PRINCIPE · 3-burner gimbaled marine gas stove with oven · video'},
+    /* Video del 18/09, a meta' galleria (after:7). Il file caricato su
+       Cloudinary e' GIA' senza traccia audio (versione ac_none ricaricata il
+       18/09), quindi non serve alcun accorgimento sul player. */
+    {after:7, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=principe-3-burner-gimbaled-marine-gas-stove-oven.mp4_djeuwe', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/principe-3-burner-gimbaled-marine-gas-stove-oven.mp4_djeuwe.jpg', alt:'PRINCIPE · 3-burner gimbaled marine gas stove with oven · video'},
     {after:0, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=PRINCIPE27_16_rrczdj', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/PRINCIPE27_16_rrczdj.jpg', alt:'PRINCIPE video'},
     {after:3, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=PRINCIPE25_13_y5oree', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/PRINCIPE25_13_y5oree.jpg', alt:'PRINCIPE video'},
     {after:6, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=PRINCIPE26_14_ou5q74', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/PRINCIPE26_14_ou5q74.jpg', alt:'PRINCIPE video'},
