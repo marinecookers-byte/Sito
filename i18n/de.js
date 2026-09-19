@@ -561,6 +561,7 @@
     oc_ms1: "Der Molybd\u00e4n-Stahl, gegen Chloride",
     oc_ms3: "Latifa, William Fife III \u00b7 ein Herd f\u00fcr ihr Refit",
     oc_fig_cap: "Latifa \u00b7 Refit: Variante Classic, vollst\u00e4ndig nach Ma\u00df",
+    oc_fig_more: "Klicken, um die Fotogalerie zu sehen",
     oc_btn: "Hochsee-Herde",
     rv_btn: "Was unsere Kunden sagen",
     oc_ms2: "Tausende Kocher an Bord von Booten, die die Ozeane der Welt durchqueren",

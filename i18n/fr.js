@@ -561,6 +561,7 @@
     oc_ms1: "L'acier au molybd\u00e8ne, contre les chlorures",
     oc_ms3: "Latifa, William Fife III \u00b7 une cuisini\u00e8re pour son refit",
     oc_fig_cap: "Latifa \u00b7 refit : variante Classic, enti\u00e8rement sur mesure",
+    oc_fig_more: "Cliquez pour voir la galerie photos",
     oc_btn: "Cuisines oc\u00e9aniques",
     rv_btn: "Ce qu'ils disent de nous",
     oc_ms2: "Des milliers de cuisini\u00e8res install\u00e9es sur des bateaux qui sillonnent les oc\u00e9ans du monde entier",

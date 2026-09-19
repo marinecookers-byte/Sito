@@ -561,6 +561,7 @@
     oc_ms1: "El acero al molibdeno, contra los cloruros",
     oc_ms3: "Latifa, William Fife III \u00b7 una cocina para su refit",
     oc_fig_cap: "Latifa \u00b7 refit: variante Classic, enteramente a medida",
+    oc_fig_more: "Haga clic para ver la galer\u00eda de fotos",
     oc_btn: "Cocinas oce\u00e1nicas",
     rv_btn: "Lo que dicen de nosotros",
     oc_ms2: "Miles de cocinas instaladas en barcos que surcan los oc\u00e9anos de todo el mundo",
