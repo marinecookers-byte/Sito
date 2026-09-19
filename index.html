@@ -4188,6 +4188,20 @@ body.ts-on .pcard-oc ~ .pdsc{ padding-right:74px; }
   transition:filter .5s ease;
 }
 .oc-fig-img:hover{ filter:grayscale(0); }
+/* Invito sotto la didascalia di Latifa: apre le stesse 34 foto del clic
+   sulla foto (ocLatifa). E' un <button>, quindi il cursore dorato lo
+   riconosce da solo. Testo nelle cinque lingue: chiave oc_fig_more, sullo
+   stesso modello di "Click to open the 3D model". */
+.oc-fig-more{
+  display:inline-block; margin-top:12px; padding:0 0 3px;
+  background:none; border:0; border-bottom:1px solid rgba(184,150,90,.45);
+  font-family:'Outfit',sans-serif; font-size:10px; font-weight:400;
+  letter-spacing:.2em; text-transform:uppercase; line-height:1.6;
+  color:#b8965a; cursor:pointer;
+  transition:color .35s ease, border-color .35s ease;
+}
+@media(hover:hover){ .oc-fig-more:hover{ color:#d4b07a; border-color:rgba(184,150,90,.9); } }
+@media(max-width:768px){ .oc-fig-more{ font-size:9px; letter-spacing:.16em; margin-top:10px; } }
 .oc-fig-cap{
   margin-top:12px;
   font-family:'Outfit',sans-serif;
@@ -9717,8 +9731,9 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
         <p class="ef-ch-body" data-i18n-html="oc_c2_b1">Among them is the XXL3 built to measure for Elmo’s Fire, the yacht of the great Italian offshore sailor <span class="oc-lnk" onclick="ocSoldini()" role="link" tabindex="0">Giovanni Soldini</span>.</p>
         <p class="ef-ch-body" data-i18n="oc_c2_b2">And there is Latifa. An ocean racer in the fullest sense of the term: designed by William Fife III and launched in Scotland in 1936 by the yard of William Fife & Son, she is counted among the finest the great Scottish designer ever drew, and by many as the finest of them all. For her refit we built a cooker in the Classic variant, made entirely to measure: special burners, an oversized oven, a reinforced one-piece steel grate cut from solid, and gimbal pivots of exceptional strength.</p>
         <figure class="oc-fig">
-          <img class="oc-fig-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg" alt="Techimpex cooker, Classic variant, built to measure for the ocean racer Latifa" loading="lazy" onclick="hdZoom(this.getAttribute('data-zoom')||this.src, this.alt)" data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg">
+          <img class="oc-fig-img" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg" alt="Techimpex cooker, Classic variant, built to measure for the ocean racer Latifa" loading="lazy" onclick="if(window.ocLatifa){ocLatifa();}else{hdZoom(this.getAttribute('data-zoom')||this.src, this.alt);}" data-zoom="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1920/v1787137012/LATIFA_-_cucina_per_barca_1_de6fft.jpg">
           <figcaption class="oc-fig-cap" data-i18n="oc_fig_cap">Latifa &middot; Classic variant, built entirely to measure</figcaption>
+          <button type="button" class="oc-fig-more" onclick="if(window.ocLatifa)ocLatifa()" data-i18n="oc_fig_more">Click to view the photo gallery</button>
         </figure>
         <p class="ef-ch-body" data-i18n="oc_c2_b3">The XXL3 and the LATIFA model, which takes its name from the yacht herself, are only two examples of cookers reinforced or customised for extreme ocean use. The specification is the starting point, and from there the cooker is built around the boat it will live on.</p>
       </div>
@@ -15936,6 +15951,63 @@ function ocSoldini(){
 }
 window.ocSoldini=ocSoldini;
 
+/* ══ LATIFA · TUTTE LE FOTO DELLA CUCINA (19/09/2026) ══
+   La foto di Latifa nel capitolo II apre DIRETTAMENTE il visore con tutte
+   le foto, grandi, dalla prima dell'elenco. Niente griglia intermedia e
+   niente titolo: scelta del titolare. Come per Soldini, OCEANO NON SI
+   CHIUDE: il visore sta a 9500, sopra la pagina (940), e alla X si torna
+   esattamente dove si era.
+   Per aggiungere o togliere foto basta modificare l'elenco qui sotto:
+   [percorso dopo /upload/, testo alternativo]. Niente apostrofi nei testi. */
+(function(){
+  var B='https://res.cloudinary.com/dseiw9ndw/image/upload/';
+  var F=[
+    ['v1789833960/Bespoke-marine-cooker-vintage-sailing-yacht-latifa_o1wwfm.jpg','Bespoke marine cooker built by Techimpex for Latifa, the 1936 William Fife III yawl'],
+    ['v1789833960/Handcrafted-italian-yacht-stove-classic-design_zo1rqe.jpg','Handcrafted Italian yacht stove in a classic design, made for Latifa'],
+    ['v1789833961/Luxury-cooker-for-classic-yacht_vvbw8u.jpg','Luxury cooker for a classic yacht, the galley stove of Latifa'],
+    ['v1789833961/Galley-stove-for-classic-oceanic-yacht_ejf77z.jpg','Galley stove for Latifa, the classic ocean racing yacht'],
+    ['v1789833959/Propane-stove-for-vintage-bluewater-sailing-yacht_kask2j.jpg','Propane stove for the vintage bluewater sailing yacht Latifa'],
+    ['v1789833958/Bluewater-luxury-stove_d5afra.jpg','Bluewater luxury stove built to measure for Latifa'],
+    ['v1789833958/Bespoke-luxury-stove-for-vintage-sailing-yacht_znkaqn.jpg','Bespoke luxury stove for the vintage sailing yacht Latifa'],
+    ['v1789833958/Luxury-cooker-for-bluewater-yacht_xyergv.jpg','Luxury cooker for a bluewater yacht, built for Latifa'],
+    ['v1789833957/Luxury-range-for-bluewater-sailing-yacht_o0hvqm.jpg','Luxury range for the bluewater sailing yacht Latifa'],
+    ['v1789833957/Bespoke-luxury-propane-range-for-classic-yacht_xzt1us.jpg','Bespoke luxury propane range for the classic yacht Latifa'],
+    ['v1789833956/Handmade-luxury-stove-for-vintage-yacht_k9gvce.jpg','Handmade luxury stove for the vintage yacht Latifa'],
+    ['v1789833956/Handmade-luxury-yacht-stove_bhqeic.jpg','Handmade luxury yacht stove, Classic variant built for Latifa'],
+    ['v1789833955/Luxury-stove-for-yacht-made-in-conegliano-venice_afla92.jpg','Luxury yacht stove made in Conegliano, near Venice, for Latifa'],
+    ['v1789833955/Handmade-luxury-propane-range-for-classic-sailing-yacht_gmn15k.jpg','Handmade luxury propane range for the classic sailing yacht Latifa'],
+    ['v1789833954/Luxury-cooker-for-vintage-sailing-yacht-latifa_vwriwj.jpg','Luxury cooker for the vintage sailing yacht Latifa'],
+    ['v1789833953/Bespoke-cooker-for-vintage-yacht_jr7rgo.jpg','Bespoke cooker for the vintage yacht Latifa, William Fife III, 1936'],
+    ['v1789833954/Bespoke-cooker-for-classic-yacht_megbr5.jpg','Bespoke cooker for the classic yacht Latifa'],
+    ['v1789833953/Bespoke-stove-for-vintage-yacht_kabahe.jpg','Bespoke stove for the vintage yacht Latifa'],
+    ['v1789833953/High-end-cooker-for-classic-bluewater-sailing-yacht_mqjhei.jpg','High-end cooker for the classic bluewater sailing yacht Latifa'],
+    ['v1789833941/Latifa-galley-stove-oversized-oven_r9naxk.jpg','Latifa galley stove with oversized oven'],
+    ['v1789833941/Latifa-custom-marine-stove-burners_iup6tc.jpg','Burners of the custom marine stove built for Latifa'],
+    ['v1789833941/Latifa-fife-classic-yacht-gimbaled-galley-stove_m1g7al.jpg','Gimbaled galley stove for Latifa, the classic Fife yacht'],
+    ['v1789833940/Luxury-galley-stove-classic-yacht-marine-cookers_nqezkt.jpg','Luxury galley stove by Marine Cookers for the classic yacht Latifa'],
+    ['v1789833940/cucina_per_barca_1_zgwfl5.jpg','Techimpex cooker, Classic variant, built to measure for the ocean racer Latifa'],
+    ['v1789833940/Handmade-italian-marine-stove-for-vintage-yacht_v5plnb.jpg','Handmade Italian marine stove for the vintage yacht Latifa'],
+    ['v1789833940/Rugged-marine-cooker-construction-detail_hbjsbj.jpg','Construction detail of the rugged marine cooker built for Latifa'],
+    ['v1789833940/LATIFA_-Two-burner-Gimbaled-Propane-Range_emlcnj.jpg','LATIFA two-burner gimbaled propane range'],
+    ['v1789833939/Latifa-custom-yacht-stove-made-in-italy_cwnd72.jpg','Latifa custom yacht stove, made in Italy'],
+    ['v1789833940/Venezia-hand-made-luxury-stove-for-classic-yacht_uklmzh.jpg','Hand-made luxury stove from the Venice area for the classic yacht Latifa'],
+    ['v1789833939/Heavy-duty-gimballed-cooker-vintage-yacht_wtsb6y.jpg','Heavy-duty gimballed cooker for the vintage yacht Latifa'],
+    ['v1789833939/High-end-bluewater-galley-stove-classic-yacht_y7nv2q.jpg','High-end bluewater galley stove for the classic yacht Latifa'],
+    ['v1789833939/Latifa-bluewater-stove-heavy-duty-gimbals_ytt6or.jpg','Latifa bluewater stove on heavy-duty gimbals'],
+    ['v1789833939/LATIFA-Gas-Range-for-Classic-Yacht_sise3e.jpg','LATIFA gas range for a classic yacht'],
+    ['v1789833939/Latifa-marine-stove-handcrafted-in-italy_odfjpf.jpg','Latifa marine stove, handcrafted in Italy']
+  ];
+  window.ocLatifa=function(){
+    if(typeof window.ppGalleryOpen==='function'){
+      window.ppGalleryOpen(F.map(function(f){ return {src:B+'f_auto,q_auto,w_1600/'+f[0], alt:f[1]}; }), 0);
+      return;
+    }
+    /* Ricaduta: senza visore, lo zoom sulla foto singola di prima. */
+    var im=document.querySelector('.oc-fig-img');
+    if(im && typeof window.hdZoom==='function') window.hdZoom(im.getAttribute('data-zoom')||im.src, im.alt);
+  };
+})();
+
 /* ══ PAGINA CUSTOM ══ Stessa meccanica di openOcean, senza il video. */
 var _cuLock=false;
 function openCustom(){
@@ -17410,7 +17482,27 @@ window.SRCH_CATKEY = {
     lb.addEventListener('click',function(e){
       // guardia anti ghost-click: ignora la chiusura nei primissimi ms dopo
       // l'apertura (il tap che apre il lightbox non deve richiuderlo subito)
-      if(e.target===lb && (Date.now()-openedAt)>350) window.ppLightboxClose();
+      if(e.target!==lb || (Date.now()-openedAt)<=350) return;
+      /* 19/09/2026 · CLIC ACCANTO ALLA FOTO = CAMBIO FOTO. Prima ogni clic
+         fuori dalla foto chiudeva il visore, e per passare alla successiva
+         bisognava arrivare fino alla freccia sul bordo. Ora a sinistra della
+         foto si torna alla precedente, a destra si va alla successiva.
+         Sopra e sotto la foto il clic chiude, come prima.
+         ⚠️ Vale SOLO se le frecce sono visibili: e' l'unico segnale affidabile
+         che il visore sta mostrando una galleria. hdZoom (foto singola) non
+         svuota l'elenco imgs, quindi dopo una galleria l'elenco vecchio
+         resterebbe li' e il clic accanto a una foto singola aprirebbe foto
+         di un altro prodotto. Esclusi anche i disegni tecnici (lb-draw). */
+      var nx=document.getElementById('pp-lb-next');
+      if(imgs.length>1 && nx && nx.style.display!=='none' && !lb.classList.contains('lb-draw')){
+        var m=lb.classList.contains('lb-video-on')?document.getElementById('pp-lightbox-video'):getImg();
+        var r=m?m.getBoundingClientRect():null;
+        if(r && r.width>0){
+          if(e.clientX<r.left){ goTo(idx-1); return; }
+          if(e.clientX>r.right){ goTo(idx+1); return; }
+        }
+      }
+      window.ppLightboxClose();
     });
     var touchStartX=0;
     lb.addEventListener('touchstart',function(e){touchStartX=e.touches[0].clientX;},{passive:true});
@@ -18265,6 +18357,7 @@ var DICT = {
     oc_ms1: "The molybdenum grade, against chlorides",
     oc_ms3: "Latifa, William Fife III · a cooker for her refit",
     oc_fig_cap: "Latifa · refit: Classic variant, built entirely to measure",
+    oc_fig_more: "Click to view the photo gallery",
     oc_btn: "Bluewater Passages",
     rv_btn: "What our customers say",
     oc_ms2: "Thousands of cookers aboard boats that sail the world’s oceans",
