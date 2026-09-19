@@ -8093,7 +8093,62 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
     transition:none !important;
   }
 }
+
+/* ═══ PAGINE CHIUSE SPENTE DAVVERO (19/09/2026) ═══════════════════════════
+   Le pagine interne sono livelli fissi a tutto schermo resi trasparenti
+   (opacity:0). Cosi' pero' il browser le considerava VISIBILI: le impaginava
+   a ogni cambiamento (oltre 3.000 elementi) e loading="lazy" scaricava
+   subito tutte le loro foto, circa 80 all'avvio su telefono con una sola
+   davvero in vista. content-visibility:hidden dice al browser di non
+   disegnarle e di non caricarne le foto finche' non si aprono.
+   ⚠ .cv-on la mette e la toglie lo script subito sotto: tiene la pagina
+   accesa durante la dissolvenza di chiusura, che altrimenti si vedrebbe
+   vuota. Non va aggiunta a mano.
+   ⚠ La scheda prodotto (#prodpage) non e' qui: e' gia' in display:none.
+   Nei browser che non conoscono la proprieta' non cambia nulla. */
+:is(#matrixpage,#sparepage,#custompage,#aboutpage,#oceanpage,#accpage,
+    #effpage,#contactpage,#cp,#sinkpage,#casespage,#catpage):not(.show):not(.cv-on){
+  content-visibility:hidden;
+}
 </style>
+<script>
+/* PAGINE CHIUSE · accensione e spegnimento (vedi il blocco CSS qui sopra).
+   All'apertura (.show) la pagina si accende subito; alla chiusura resta
+   accesa per la durata della sua dissolvenza e poi si spegne, salvo che nel
+   frattempo sia stata riaperta. */
+(function(){
+  var IDS = ['matrixpage','sparepage','custompage','aboutpage','oceanpage','accpage',
+             'effpage','contactpage','cp','sinkpage','casespage','catpage'];
+  function secondi(v){ v = (v || '').trim(); var n = parseFloat(v) || 0; return /ms$/.test(v) ? n/1000 : n; }
+  function durata(el){
+    var cs = getComputedStyle(el);
+    var d = cs.transitionDuration.split(','), r = cs.transitionDelay.split(','), m = 0;
+    for(var i = 0; i < d.length; i++){ m = Math.max(m, secondi(d[i]) + secondi(r[i % r.length])); }
+    return Math.ceil(m * 1000) + 120;
+  }
+  function segui(el){
+    var t = null;
+    function sync(){
+      if(el.classList.contains('show')){
+        if(t){ clearTimeout(t); t = null; }
+        if(!el.classList.contains('cv-on')) el.classList.add('cv-on');
+      } else if(el.classList.contains('cv-on') && !t){
+        t = setTimeout(function(){
+          t = null;
+          if(!el.classList.contains('show')) el.classList.remove('cv-on');
+        }, durata(el));
+      }
+    }
+    new MutationObserver(sync).observe(el, { attributes:true, attributeFilter:['class'] });
+    sync();
+  }
+  function avvia(){
+    IDS.forEach(function(id){ var el = document.getElementById(id); if(el) segui(el); });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', avvia);
+  else avvia();
+})();
+</script>
 </head>
 <body>
 
@@ -13979,12 +14034,14 @@ document.addEventListener('keydown',function(e){
   if(!dot||!ring)return;
   var mx=window.innerWidth/2, my=window.innerHeight/2;
   var rx=mx, ry=my;
+  var lastDark=-1;
   dot.style.left=mx+'px'; dot.style.top=my+'px';
   ring.style.left=rx+'px'; ring.style.top=ry+'px';
   dot.style.opacity='0'; ring.style.opacity='0';
 
   document.addEventListener('mousemove',function(e){
     mx=e.clientX; my=e.clientY;
+    kick();
     dot.style.left=mx+'px'; dot.style.top=my+'px';
     dot.style.opacity='1'; ring.style.opacity='1';
     /* ATTENZIONE lo stato di sorvolo va RICALCOLATO qui, non solo su
@@ -14000,27 +14057,45 @@ document.addEventListener('keydown',function(e){
     }
     var cpOpen=document.getElementById('cp')&&document.getElementById('cp').classList.contains('show');
     var ppOpen=document.getElementById('prodpage')&&document.getElementById('prodpage').classList.contains('show');
-    if(!cpOpen&&!ppOpen){
-      dot.style.background='#b8965a';
-      dot.style.mixBlendMode='normal';
-      ring.style.borderColor='rgba(184,150,90,.7)';
-      ring.style.mixBlendMode='normal';
-    } else {
-      dot.style.background='#fff';
-      dot.style.mixBlendMode='difference';
-      ring.style.borderColor='rgba(255,255,255,1)';
-      ring.style.mixBlendMode='difference';
+    /* I colori si riscrivono solo quando cambia la pagina sotto il
+       cursore, non a ogni movimento del mouse. */
+    var dark=(cpOpen||ppOpen)?1:0;
+    if(dark!==lastDark){
+      lastDark=dark;
+      if(!dark){
+        dot.style.background='#b8965a';
+        dot.style.mixBlendMode='normal';
+        ring.style.borderColor='rgba(184,150,90,.7)';
+        ring.style.mixBlendMode='normal';
+      } else {
+        dot.style.background='#fff';
+        dot.style.mixBlendMode='difference';
+        ring.style.borderColor='rgba(255,255,255,1)';
+        ring.style.mixBlendMode='difference';
+      }
     }
   });
 
   function lerp(a,b,t){return a+(b-a)*t;}
+  /* ⚠ IL CICLO SI FERMA QUANDO L'ANELLO HA RAGGIUNTO IL PUNTATORE
+     (19/09/2026). Prima girava sessanta volte al secondo per sempre, anche a
+     mouse fermo e sui telefoni, dove il cursore non si vede: ogni fotogramma
+     riscriveva la posizione e costringeva il browser a ricalcolare la
+     pagina. Riparte da solo al primo movimento: vedi kick() in mousemove.
+     Il movimento dell'anello e' identico a prima. */
+  var looping=false;
   function loop(){
     rx=lerp(rx,mx,0.12); ry=lerp(ry,my,0.12);
+    if(Math.abs(rx-mx)<0.05 && Math.abs(ry-my)<0.05){ rx=mx; ry=my; }
     ring.style.left=Math.round(rx*10)/10+'px';
     ring.style.top=Math.round(ry*10)/10+'px';
+    if(rx===mx && ry===my){ looping=false; return; }
     requestAnimationFrame(loop);
   }
-  loop();
+  function kick(){
+    if(!looping){ looping=true; requestAnimationFrame(loop); }
+  }
+  kick();
 
   var hoverSel='a,button,.pcard,.ncat,.nbtn,.cpbk,.pp-nav-item,.pp-back,.hbg,.btp,.btg,.pp-sdl-toggle,.pp-sdl-link,.pp-drawing-full,.pp-spec-media-frame';
   document.addEventListener('mouseover',function(e){
@@ -25213,7 +25288,7 @@ function setLang(lang) {
   });
 
   /* Update html lang attr */
-  document.documentElement.lang = lang;
+  if (document.documentElement.lang !== lang) document.documentElement.lang = lang;
 
   var d = DICT[lang];
 
@@ -25224,9 +25299,15 @@ function setLang(lang) {
     return (d && d[key] !== undefined) ? d[key] : (fb !== undefined ? fb : key);
   };
   window.__curLang = lang;
+  /* ⚠ SI SCRIVE SOLO CIO' CHE CAMBIA (19/09/2026). setLang non viene
+     chiamata solo al cambio lingua: la fascia del percorso la richiama a ogni
+     apertura di menu, pagina o ricerca, con la lingua GIA' attiva. Riscrivere
+     comunque migliaia di testi identici costringeva il browser a ridisporre
+     meta' pagina a ogni clic (INP). Un testo diverso, anche vuoto, viene
+     scritto come prima: nessun elemento puo' restare non tradotto. */
   document.querySelectorAll('[data-i18n]').forEach(function(el){
     var key = el.getAttribute('data-i18n');
-    if (d[key] !== undefined) el.textContent = d[key];
+    if (d[key] !== undefined && el.textContent !== d[key]) el.textContent = d[key];
   });
   /* La mappa dei contatti non ha testo nostro da tradurre: la lingua sta
      dentro l'indirizzo dell'embed, quindi va aggiornata qui. */
@@ -25235,20 +25316,21 @@ function setLang(lang) {
   /* Translate all [data-i18n-html] elements · innerHTML */
   document.querySelectorAll('[data-i18n-html]').forEach(function(el){
     var key = el.getAttribute('data-i18n-html');
-    if (d[key] !== undefined) el.innerHTML = d[key];
+    if (d[key] !== undefined && el.innerHTML !== d[key]) el.innerHTML = d[key];
   });
 
   /* Translate spec VALUES · [data-spec-val] (mappa EN -> lingua) */
   document.querySelectorAll('[data-spec-val]').forEach(function(el){
     var en = el.getAttribute('data-spec-val');
     var mp = window.SPEC_VAL_I18N && window.SPEC_VAL_I18N[en];
-    el.textContent = (mp && mp[lang]) ? mp[lang] : en;
+    var val = (mp && mp[lang]) ? mp[lang] : en;
+    if (el.textContent !== val) el.textContent = val;
   });
 
   /* Translate placeholders · [data-i18n-ph] */
   document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
     var key = el.getAttribute('data-i18n-ph');
-    if (d[key] !== undefined) el.setAttribute('placeholder', d[key]);
+    if (d[key] !== undefined && el.getAttribute('placeholder') !== d[key]) el.setAttribute('placeholder', d[key]);
   });
 
   /* Save preference */
@@ -25266,7 +25348,7 @@ function setLang(lang) {
       // se il viewer inline e' aperto, ricarico l'iframe con la nuova lingua
       var __fr=document.getElementById('pp-pdf-iframe');
       var __wrap=document.getElementById('pp-pdf-viewer-wrap');
-      if(__fr && __wrap && __wrap.style.display!=='none' && __u.htmlStr){ __fr.setAttribute('srcdoc',__u.htmlStr); }
+      if(__fr && __wrap && __wrap.style.display!=='none' && __u.htmlStr && __fr.getAttribute('srcdoc')!==__u.htmlStr){ __fr.setAttribute('srcdoc',__u.htmlStr); }
     }
   } catch(e){}
 }
@@ -26369,10 +26451,23 @@ window.hdZoom=function(url,alt,maxw){
     return document.body.classList.contains('page-open') || document.body.classList.contains('nav-open');
   }
   function threshold(){ return Math.max(480, window.innerHeight*0.7); }
+  /* ⚠ UNA VOLTA PER FOTOGRAMMA, E SOLO SE SERVE (19/09/2026). update()
+     scatta a ogni cambio di classe del body, cioe' a ogni apertura di pagina
+     o di menu, e leggere scrollY in quel momento costringeva il browser a
+     ridisporre la pagina in mezzo al clic. Ora il controllo si fa al
+     fotogramma successivo, e con una pagina aperta non si legge nulla: il
+     pulsante va comunque nascosto. */
+  var pend=false;
   function update(){
-    var y=window.scrollY||window.pageYOffset||document.documentElement.scrollTop||0;
-    if(!blocked() && y>threshold()) btn.classList.add('show');
-    else btn.classList.remove('show');
+    if(pend) return;
+    pend=true;
+    requestAnimationFrame(function(){
+      pend=false;
+      if(blocked()){ btn.classList.remove('show'); return; }
+      var y=window.scrollY||window.pageYOffset||document.documentElement.scrollTop||0;
+      if(y>threshold()) btn.classList.add('show');
+      else btn.classList.remove('show');
+    });
   }
 
   function toTop(){
