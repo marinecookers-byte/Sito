@@ -6846,6 +6846,1254 @@ html{-webkit-tap-highlight-color:transparent}
 body{-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-touch-callout:none}
 p,address,li,td,th,input,textarea,a[href^="tel:"],a[href^="mailto:"],.selectable{-webkit-user-select:text;-moz-user-select:text;user-select:text;-webkit-touch-callout:default}
 </style>
+<!-- CSS spostata qui dal fondo della pagina il 18/09/2026: contiene la hero
+     mobile. Quando stava in fondo, il telefono disegnava prima la hero corta
+     e poi la allungava: #produzione saltava giu' di oltre 1000px
+     (CLS 0,766 su PageSpeed). Deve restare l'ULTIMO blocco di stile
+     dell'intestazione, subito prima della sua chiusura. -->
+<style id="btt-style">
+#backtotop{
+  position:fixed; left:34px; bottom:34px;
+  width:52px; height:52px; display:flex; align-items:center; justify-content:center;
+  border-radius:50%; padding:0; margin:0;
+  border:1px solid rgba(184,150,90,.34);
+  background:rgba(10,10,10,.42);
+  -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px);
+  color:#b8965a; cursor:none; z-index:500;
+  opacity:0; pointer-events:none; transform:translateY(14px);
+  transition:opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1), border-color .4s ease, background .4s ease;
+}
+#backtotop.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
+#backtotop svg{ width:20px; height:20px; display:block; fill:none; stroke:#b8965a; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; transition:transform .45s cubic-bezier(.22,1,.36,1); }
+#backtotop:hover{ border-color:rgba(184,150,90,.78); background:rgba(10,10,10,.62); }
+#backtotop:hover svg{ transform:translateY(-3px); }
+/* Nascosto quando un overlay o la nav sono aperti (home congelata) */
+body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; pointer-events:none !important; transform:translateY(14px) !important; }
+@media(max-width:900px){
+  #backtotop{ left:18px; bottom:18px; width:46px; height:46px; }
+  #backtotop svg{ width:18px; height:18px; }
+}
+@media print{ #backtotop{ display:none !important; } }
+
+/* ═══ BARRA DEL PERCORSO ═════════════════════════════════════════
+   Sta in fondo all'ULTIMO blocco di stile del documento, quindi dopo ogni
+   altra regola che tocca gli stessi selettori: e' la condizione perche' gli
+   scostamenti qui sotto vincano davvero (regola 3.1).
+
+   ⚠ IL TRUCCO DI --bh. L'altezza della barra e' zero finche' il body non ha
+   la classe .bcon. Cosi' TUTTI gli scostamenti di geometria qui sotto sono
+   scritti una volta sola e restano inerti quando la barra non c'e': non
+   esistono due versioni del layout da tenere allineate, e togliere la barra
+   significa togliere una classe, non rimettere a posto dieci regole. */
+:root{ --bh:0px; }
+body.bcon{ --bh:38px; }
+
+#bcbar{
+  position:fixed; top:var(--hh); left:0; right:0;
+  height:38px; z-index:799;
+  /* ⚠ SEMPRE SCURA, MAI CHIARA. Niente sfocatura, che la farebbe sembrare un
+     pannello pieno, ma neppure un velo cosi' leggero da lasciarsi attraversare
+     dal bianco: sopra una foto chiara o una pagina chiara le scritte
+     sparivano. Due terzi di nero tengono il testo leggibile su qualunque
+     fondo e lasciano comunque intravedere cio' che scorre sotto. */
+  background:rgba(10,10,10,.66);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:none; align-items:center;
+  padding:0 40px;
+  overflow-x:auto; overflow-y:visible; white-space:nowrap;
+  scrollbar-width:none; -webkit-overflow-scrolling:touch;
+}
+#bcbar::-webkit-scrollbar{ display:none; }
+body.bcon #bcbar{ display:flex; }
+/* Col menu aperto la fascia NON sparisce: e' il punto fermo del sito, sta
+   sempre alla stessa altezza e cambia solo cio' che ci scrive sopra. Aperta la
+   sidebar dice NAVIGAZIONE, cioe' il gradino in cui ti trovi.
+   ⚠ NON si usa body.nav-open: tm() non la applica mai, il menu si segnala solo
+   con #np.on. La classe bcmenu la mette il codice in fondo al file. */
+body.bcmenu #bcbar{ display:flex; }
+/* La stessa scritta era gia' in cima al pannello: adesso la porta la fascia e
+   li' sarebbe ripetuta due volte a dieci pixel di distanza. */
+body.bcmenu .nlbl{ display:none; }
+/* Su telefono il pannello comincia appena sotto l'header e finirebbe dietro
+   alla fascia: gli si lascia lo spessore in piu'. */
+@media(max-width:768px){
+  body.bcmenu #np{ padding-top:calc(var(--hh) + var(--bh) + 18px); }
+}
+
+.bc-i{ display:inline-flex; align-items:center; flex:0 0 auto; }
+.bc-b{
+  background:none; border:0; padding:7px 0;
+  font-family:"Outfit",sans-serif; font-weight:300;
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(255,255,255,.68); cursor:pointer;
+  transition:color .35s ease;
+  text-shadow:0 1px 6px rgba(0,0,0,.4);
+}
+/* ⚠ Al passaggio cambia SOLO il colore: niente transform, niente ombre che
+   crescono (regola 3.12, l'effetto molla). */
+.bc-b:hover{ color:var(--go); }
+.bc-b:focus-visible{ outline:1px solid var(--go); outline-offset:3px; }
+/* Sei gia' qui, quindi la scritta e' dorata come ogni voce attiva della fascia.
+   Ma resta un bottone: serve a richiudere i sottomenu senza uscire dal menu.
+   ⚠ Si usa il dorato CHIARO --gl, non --go: su una fascia scura e trasparente
+   il dorato pieno perde leggibilita', e questa e' la parola che deve saltare
+   all'occhio per prima. */
+.bc-b-qui{ color:var(--gl); }
+.bc-b-qui:hover{ color:var(--wh); }
+
+/* L'ultima voce e' la pagina in cui ti trovi: non e' un bottone, non si clicca. */
+.bc-cur{
+  font-family:"Outfit",sans-serif; font-weight:300;
+  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--gl); padding:7px 0; cursor:default;
+  text-shadow:0 1px 6px rgba(0,0,0,.4);
+}
+/* Voci del menu volutamente in sordina: restano cliccabili e al passaggio si
+   riaccendono come le altre, perche' .nbtn:hover .ntxt ha specificita' piu'
+   alta di queste due righe. */
+.nbtn-soft .ntxt{ color:rgba(248,246,241,.52); }
+.nbtn-soft .nnum{ opacity:.70; }
+/* Filo dorato che stacca le ultime due voci dal resto del menu: restano
+   numerate e cliccabili, ma si capisce a colpo d'occhio che sono un'altra
+   cosa. Il bordo va sulla riga, non sul bottone, per allinearsi a quello
+   grigio che .nrow ha gia' in basso. */
+.nrow-div{ border-top:1px solid rgba(184,150,90,.34); }
+
+.bc-sep{
+  color:rgba(184,150,90,.85); margin:0 12px; font-size:11px;
+  flex:0 0 auto; line-height:1;
+  font-family:"Outfit",sans-serif; font-weight:200;
+}
+
+/* Con la fascia non serve piu' il pulsante Indietro: il percorso dice dove sei
+   e ti riporta a qualunque livello. Due modi di tornare indietro nella stessa
+   schermata si contraddicono. Nascosto, non cancellato: se si toglie la
+   fascia, il pulsante torna da solo. */
+body.bcon .pp-back{ display:none; }
+body.bcon .cphd{ display:none; }
+
+/* ═══ PAGINA LAVELLI ═════════════════════════════════════════════════════
+   Il modale riusa per intero il vestito di Progetti su misura (.ef-modal,
+   .ef-hero, .ef-chapter, .ef-close): qui c'e' solo la parte che cambia, cioe'
+   le immagini.
+   ⚠ Lo scambio desktop/telefono e' fatto con display, non con una foto sola
+   ridimensionata: cosi' il browser scarica soltanto l'immagine che gli serve
+   e sul telefono non passa mai il file grande. */
+/* ⚠ NESSUNA REGOLA DI POSIZIONE QUI. Il riquadro e' centrato perche'
+   #sinkpage e' stato aggiunto agli elenchi condivisi piu' sopra, quelli di
+   Energia, Oceano e Progetti su misura. Riscrivere qui inset, z-index e
+   sfondo significava avere due verita' sulla stessa cosa: bastava che un
+   domani si ritoccasse il modale comune perche' i Lavelli restassero
+   indietro. Qui sotto c'e' solo cio' che i Lavelli hanno di diverso: le foto.
+
+   ⚠ LE FOTO NASCONO GRANDI. Una per riga, a tutta larghezza del riquadro,
+   senza ritaglio: si vede l'inquadratura intera, non un pezzo. Al tocco
+   crescono del 10% e basta, e un secondo tocco le riporta a posto. Niente
+   ingrandimento a schermo intero: a questa dimensione non aggiungerebbe
+   nulla e porterebbe via il lettore dalla pagina. */
+.snk-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:clamp(14px,2vw,28px);
+  padding:0 clamp(20px,4vw,64px) clamp(50px,6vw,90px);
+}
+.snk-it{ margin:0; position:relative; overflow:hidden; }
+.snk-img{
+  width:100%; display:block; height:auto;
+  cursor:zoom-in;
+  transform-origin:center center;
+  transition:transform .6s cubic-bezier(.16,1,.3,1);
+}
+.snk-img.snk-on{ transform:scale(1.1); cursor:zoom-out; }
+.snk-mob{ display:none; }
+
+@media(max-width:768px){
+  .snk-grid{ gap:10px; padding:0 16px 60px; }
+  .snk-desk{ display:none; }
+  .snk-mob{ display:block; }
+}
+/* Chi ha chiesto meno movimento non deve vedere nulla muoversi. */
+@media(prefers-reduced-motion:reduce){
+  .snk-img{ transition:none; }
+}
+
+/* ═══ PAGINA ACCESSORI DI COTTURA ══════════════════════════════
+   Come per i Lavelli: la posizione e il vestito del riquadro vengono dagli
+   elenchi condivisi piu' sopra. Qui c'e' solo cio' che riguarda le foto.
+
+   ⚠ IL VELO E' UN ELEMENTO A PARTE, non un filtro sull'immagine. Se fosse
+   parte dell'immagine crescerebbe insieme a lei durante l'ingrandimento e il
+   bordo scuro si allargherebbe; steso sopra come strato indipendente, resta
+   fermo e la foto cresce sotto di lui. */
+/* Le immagini non stanno piu' tutte in fondo: respirano fra un capitolo e
+   l'altro. ⚠ Sono dentro .ef-body, che ha gia' il suo margine laterale: qui
+   NON si aggiunge padding orizzontale, altrimenti rientrerebbero rispetto al
+   testo invece di allinearsi. */
+.acc-media{ margin:clamp(26px,4vw,52px) 0; }
+.acc-it{ margin:0; position:relative; overflow:hidden; }
+/* Le velature: una sfumatura scura in alto e in basso piu' un tocco laterale,
+   per legare le foto al fondo nero della pagina invece di lasciarle come
+   rettangoli incollati sopra. Al passaggio del mouse si alleggeriscono, cosi'
+   la foto che prende colore prende anche luce. */
+.acc-it::after{
+  content:"";
+  position:absolute; left:0; right:0; top:0; bottom:0;
+  background:
+    linear-gradient(to bottom,
+      rgba(10,10,10,.55) 0%,
+      rgba(10,10,10,.10) 34%,
+      rgba(10,10,10,.14) 62%,
+      rgba(10,10,10,.62) 100%),
+    linear-gradient(to right,
+      rgba(10,10,10,.30) 0%,
+      rgba(10,10,10,0) 16%,
+      rgba(10,10,10,0) 84%,
+      rgba(10,10,10,.30) 100%);
+  pointer-events:none;
+  transition:opacity .7s ease;
+}
+@media(hover:hover){ .acc-it:hover::after{ opacity:.42; } }
+.acc-img{
+  width:100%; display:block; height:auto;
+  filter:grayscale(1) contrast(1.02);
+  transition:filter .7s ease;
+}
+/* Il colore si accende solo dove esiste un puntatore che possa passarci sopra. */
+@media(hover:hover){
+  .acc-img:hover{ filter:grayscale(0) contrast(1); }
+}
+/* ⚠ LE FOTO NON SI INGRANDISCONO. Il tocco serve soltanto ad accendere il
+   colore, perche' sul telefono il passaggio del mouse non esiste e senza un
+   gesto resterebbero grigie per sempre. Si tocca, si accendono; si tocca di
+   nuovo e tornano in bianco e nero.
+   ⚠ Niente transform qui: e' la ragione per cui il velo puo' restare un
+   elemento sovrapposto e non si sfalsa mai rispetto all'immagine. */
+.acc-img.acc-on{ filter:grayscale(0) contrast(1); }
+.acc-video{
+  width:100%; display:block; height:auto;
+  filter:grayscale(1) contrast(1.02);
+  transition:filter .7s ease;
+}
+@media(hover:hover){ .acc-vid:hover .acc-video{ filter:grayscale(0); } }
+.acc-mob{ display:none; }
+
+@media(max-width:768px){
+  .acc-media{ margin:22px 0; }
+  .acc-desk{ display:none; }
+  .acc-mob{ display:block; }
+  /* ⚠ SU TELEFONO IL COLORE LO DECIDE LO SCORRIMENTO, non il tocco: il codice
+     in fondo al file scrive il grigio direttamente sull'elemento, mano a mano
+     che la foto sale verso il centro dello schermo.
+     ⚠ Per questo la transizione va SPENTA: se restasse, ogni fotogramma
+     inseguirebbe il precedente con mezzo secondo di ritardo e il colore
+     arriverebbe dopo la foto, a scatti.
+     ⚠ Le foto NON vengono sbiancate qui: restano in bianco e nero e si
+     accendono salendo.
+     Il filmato del vulcano e' l'eccezione: non si tocca, quindi senza questa
+     riga resterebbe grigio per sempre su telefono. E' l'unica immagine della
+     pagina sempre a colori. */
+  .acc-video{ filter:grayscale(0); }
+  .acc-img{ transition:none; }
+
+  /* Il filmato va a vivo con lo schermo, mentre le foto restano allineate al
+     testo. ⚠ I 24 pixel non sono scelti a caso: sono esattamente il margine
+     laterale che .ef-body ha su telefono. Toccando quel margine va cambiato
+     anche questo, altrimenti il filmato sborda o rientra.
+     ⚠ Nessun ritaglio: altezza automatica, il fotogramma resta intero e
+     l'inquadratura si vede tutta. */
+  .acc-media-vid{ margin-left:-24px; margin-right:-24px; }
+  .acc-media-vid .cst-cap{ padding:0 16px; }
+  .acc-media-vid .acc-video{ height:auto; object-fit:contain; }
+}
+@media(prefers-reduced-motion:reduce){
+  .acc-img{ transition:none; }
+}
+
+/* ── GLI SCOSTAMENTI DI GEOMETRIA ──────────────────────────────
+   Tutto cio' che era misurato sull'altezza dell'header ora tiene conto anche
+   della barra. Con --bh a zero queste righe non cambiano nulla. */
+/* Le altre pagine interne partono da top:0 e hanno gia' dentro di se' un
+   distacco calcolato sull'altezza dell'header. Invece di riscrivere il
+   riempimento di ogni singola hero (una decina di regole, meta' dentro media
+   query), si aggiunge lo spessore della fascia al CONTENITORE: tutti gli
+   scostamenti interni restano quelli di prima e continuano a funzionare.
+   Con box-sizing:border-box, gia' globale a riga 29, il riquadro non cresce.
+   ⚠ Non ci sono Energia, Oceano e Progetti su misura: quelle tre stanno a
+   z-index 940, cioe' SOPRA l'header, sono finestre modali con la loro barra
+   di chiusura. La fascia non si vedrebbe e non avrebbe senso. */
+body.bcon #aboutpage,
+body.bcon #contactpage,
+body.bcon #sparepage,
+body.bcon #matrixpage,
+body.bcon #catpage{ padding-top:var(--bh); }
+
+#prodpage{ top:calc(var(--hh) + var(--bh)); }
+.pp-hero{ height:calc(100vh - var(--hh) - var(--bh)); }
+.slr-pin{ height:calc(100vh - var(--hh) - var(--bh) - 77px); }
+.cp-header-cover{ height:calc(var(--hh) + var(--bh)); }
+.cphd{ top:calc(var(--hh) + var(--bh)); }
+.cp-electric-hero{ height:calc(100vh - var(--hh) - var(--bh)); }
+.cp-electric-hero.iframe-mode{ height:auto; max-height:calc(100vh - var(--hh) - var(--bh)); }
+
+/* ═══ INVITO A SCORRERE · TELEFONO ═══════════════════════════════════════
+   Sta A SINISTRA, sopra la prima foto, non a destra: e' li' che l'occhio
+   comincia a leggere e li' che parte il dito. La punta guarda a destra, cioe'
+   indica il verso dello scorrimento.
+   Niente dischetto: solo la punta dorata, un filo piu' grande, un'ombra che la
+   stacca dalla foto sotto, e un battito lento di opacita' invece di uno
+   spostamento. Deve farsi notare, non farsi guardare.
+   ⚠ Resta pointer-events:none dalla regola originale: sta sopra la scheda e
+   se fosse premibile ruberebbe il tocco che deve aprire il prodotto.
+   ⚠ Continua a spegnersi al primo scorrimento, perche' .pg-scrolled ha una
+   specificita' piu' alta di queste righe: l'invito serve una volta sola. */
+/* Solo luce, nessuno spostamento: e' il modo piu' sobrio di farsi notare.
+   Nota che qui NON si tocca transform, altrimenti servirebbe ripetere il
+   translateY della regola base e basterebbe dimenticarlo per far saltare la
+   freccia fuori posto. */
+@keyframes pgridBattito{
+  0%,100%{ opacity:.42; }
+  50%    { opacity:1; }
+}
+@media(max-width:768px),(hover:none){
+  .pgrid-arrow-next{
+    top:-34px; left:0; right:auto;
+    transform:none;
+    width:32px; height:30px;
+    justify-content:flex-start;
+    color:#d8b478;
+    background:transparent;
+    filter:drop-shadow(0 1px 5px rgba(0,0,0,.55));
+    animation:pgridBattito 2.4s ease-in-out infinite;
+  }
+  .pgrid-arrow-next svg{ width:26px; height:26px; }
+}
+
+@media(max-width:768px){
+  body.bcon{ --bh:34px; }
+  #bcbar{ height:34px; padding:0 16px; }
+  .bc-b{ font-size:9px; letter-spacing:.12em; }
+  .bc-sep{ margin:0 9px; }
+  .bc-d{ min-width:210px; max-height:50vh; }
+  .cp-electric-hero{ height:calc(100svh - var(--hh) - var(--bh)); }
+}
+
+/* ═══ CONTROLLO DIMENSIONE TESTO ═══ */
+:root{ --ts: 1; }
+
+/* ── Il pulsante · ricalca esattamente .hsr (la lente) per non stonare ── */
+.htx{
+  width:38px; height:38px;
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:none; padding:0; cursor:pointer;
+  color:rgba(248,246,241,.9);
+  transition:color .3s, transform .3s cubic-bezier(.23,1,.32,1);
+  filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));
+  font-family:"Cormorant Garamond",serif; font-weight:500;
+  font-size:20px; line-height:1; letter-spacing:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.htx:hover{ color:var(--gl); transform:scale(1.08); }
+/* Quando l'ingrandimento è attivo il pulsante resta dorato: è l'unico
+   segnale che lo stato non è quello di partenza. Niente bordi né badge. */
+.htx[data-ts="2"], .htx[data-ts="3"]{ color:var(--gl); }
+/* Il segno e' due A di corpo diverso, allineate sulla linea di base: e' la
+   convenzione tipografica per la dimensione del testo, si capisce senza
+   leggere nulla e non ha bisogno di simboli matematici.
+   ⚠️ NIENTE "+" e "++": erano segni da calcolatrice su un sito che usa il
+   Cormorant. Il livello si legge dal colore e dal corpo della A grande. */
+.htx{ gap:1px; align-items:baseline; }
+.htx-s{ font-size:.62em; opacity:.75; transition:font-size .3s, opacity .3s; }
+.htx-l{ font-size:1em; transition:font-size .3s; }
+.htx[data-ts="2"] .htx-l{ font-size:1.12em; }
+.htx[data-ts="3"] .htx-l{ font-size:1.26em; }
+.htx[data-ts="3"] .htx-s{ opacity:1; }
+/* Mobile: header già affollato (logo + 5 lingue + 3 icone). Il pulsante
+   testo è più stretto delle icone perché non ha bisogno di area quadrata. */
+@media(max-width:480px){
+  .htx{ width:24px; height:30px; font-size:16px; }
+}
+
+/* ── La scala vera e propria ──
+   Elenco volutamente ESPLICITO: si scala ciò che si legge, non tutto.
+   Aggiungere qui eventuali classi di prosa nuove. */
+body.ts-on p,
+body.ts-on li,
+body.ts-on blockquote,
+body.ts-on .it-desc,
+body.ts-on .ef-ch-body,
+body.ts-on .ef-body,
+body.ts-on .ef-hero-lead,
+body.ts-on .rv-text,
+body.ts-on .ab-section-body,
+body.ts-on .ab-hd-feature-text,
+body.ts-on .cat-intro-lead,
+body.ts-on .cat-intro-text,
+body.ts-on .cat-body,
+body.ts-on .cp-es-block-body,
+body.ts-on .mx-acc-txt,
+body.ts-on .slr-para,
+body.ts-on .slr-mag-p,
+body.ts-on .slr-mag-body,
+body.ts-on .sp-intro-lead,
+body.ts-on .sp-body,
+body.ts-on .ppd-body,
+body.ts-on .pp-body,
+body.ts-on .ocinfo-body,
+body.ts-on .ncoll-body,
+body.ts-on .nt-body,
+body.ts-on .ct-body,
+body.ts-on .ct-dist-lead,
+body.ts-on .ckb-text{
+  zoom: var(--ts);
+}
+
+/* ── Zone franche ──
+   Header, menu, ticker e didascalie minute restano com'erano: sono
+   arredo fisso, ingrandirli sfonderebbe i layout. */
+body.ts-on header p,
+body.ts-on header li,
+body.ts-on #np p,
+body.ts-on #np li,
+body.ts-on .tbr p,
+body.ts-on footer li,
+body.ts-on .pp-draw-cap,
+body.ts-on .pp-pdf-viewer-label,
+body.ts-on .ts-skip,
+body.ts-on .ts-skip p,
+body.ts-on .ts-skip li{
+  zoom: 1;
+}
+
+/* ═══ RICHIAMO SULLA DIMENSIONE DEL TESTO · solo telefono ═══
+   Compare 10 secondi dopo l'apertura, UNA VOLTA SOLA per dispositivo, e solo
+   a chi non ha gia' scelto una dimensione.
+   ⚠️ Sta SOTTO l'intestazione (top = --hh + --bh), non sopra: cosi' non copre
+   ne' il logo ne' le lingue ne' il pulsante a cui si riferisce, che deve
+   restare visibile mentre la freccetta lo indica.
+   ⚠️ z-index 950: sopra le pagine modali (940) perche' deve comparire anche
+   mentre se ne sta guardando una, ma sotto la finestra distributori (960) e
+   la galleria a schermo intero (9500), che il visitatore apre di proposito. */
+#tspop{
+  position:fixed; z-index:950;
+  top:calc(var(--hh) + var(--bh) + 10px);
+  left:12px; right:12px;
+  background:rgba(14,14,14,.97);
+  border:1px solid rgba(184,150,90,.4);
+  padding:16px 16px 14px;
+  opacity:0; transform:translateY(-8px);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1);
+  pointer-events:none;
+}
+#tspop.on{ opacity:1; transform:translateY(0); pointer-events:auto; }
+/* La freccetta punta in alto a destra, dove sta il pulsante nell'intestazione. */
+#tspop::before{
+  content:''; position:absolute; top:-7px; right:52px;
+  width:12px; height:12px;
+  background:rgba(14,14,14,.97);
+  border-left:1px solid rgba(184,150,90,.4);
+  border-top:1px solid rgba(184,150,90,.4);
+  transform:rotate(45deg);
+}
+/* La X e' il solo modo di chiudere il pannello, e il pannello nasce per chi
+   fatica a vedere: era grigia e minuta, cioe' proprio quello che quel
+   visitatore non riesce a trovare. Dorata e piu' grande, con un'area di tocco
+   di 40px (il minimo perche' un dito la prenda senza sbagliare). */
+.tsp-x{
+  position:absolute; top:4px; right:5px;
+  width:40px; height:40px; padding:0;
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:none; cursor:pointer;
+  color:#b8965a;
+  font-family:'Outfit',sans-serif; font-size:27px; font-weight:300; line-height:1;
+  transition:color .3s;
+}
+@media(hover:hover){ .tsp-x:hover{ color:#d4b07a; } }
+.tsp-txt{
+  margin:0 34px 12px 0;
+  font-family:'Outfit',sans-serif; font-size:13px; font-weight:300; line-height:1.55;
+  color:rgba(248,246,241,.9);
+}
+.tsp-row{ display:flex; gap:8px; align-items:stretch; }
+.tsp-b{
+  flex:1; padding:9px 4px 10px;
+  background:none; border:1px solid rgba(248,246,241,.22);
+  color:rgba(248,246,241,.85); cursor:pointer;
+  font-family:'Cormorant Garamond',serif; font-weight:500; line-height:1;
+  transition:border-color .3s, color .3s;
+}
+.tsp-b[data-lv="0"]{ font-size:15px; }
+.tsp-b[data-lv="1"]{ font-size:19px; }
+.tsp-b[data-lv="2"]{ font-size:24px; }
+.tsp-b.sel{ border-color:#b8965a; color:#b8965a; }
+.tsp-hint{
+  margin:11px 0 0;
+  font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:300;
+  letter-spacing:.06em; line-height:1.5;
+  color:rgba(184,150,90,.85);
+}
+/* Mentre il richiamo e' aperto il pulsante nell'intestazione respira: cambia
+   SOLO opacita' e colore, nessuna dimensione (trappola 3.12). */
+@keyframes tsPulse{ 0%,100%{opacity:1} 50%{opacity:.42} }
+/* La pulsazione vale solo per la comparsa AUTOMATICA: se e' il visitatore ad
+   aprire il pannello sa gia' dov'e' il pulsante, e vederlo lampeggiare sarebbe
+   un segnale senza destinatario. */
+body.tspop-auto .htx{ color:var(--gl); animation:tsPulse 1.7s ease-in-out infinite; }
+body.tspop-on .htx{ color:var(--gl); }
+@media(prefers-reduced-motion:reduce){
+  #tspop{ transition:none; }
+  body.tspop-auto .htx{ animation:none; }
+}
+/* Su desktop non esiste: li' il testo e' gia' grande e l'intestazione ampia. */
+/* Su schermo largo non e' una fascia da bordo a bordo ma un riquadro stretto
+   sotto l'intestazione, allineato a destra: resta vicino al pulsante che la
+   freccetta indica, e non attraversa tutta la pagina come un avviso di
+   sistema. */
+@media(min-width:769px){
+  #tspop{ left:auto; right:18px; width:340px; padding:18px 18px 16px; }
+  #tspop::before{ right:58px; }
+  .tsp-txt{ font-size:13.5px; }
+}
+
+
+/* ═══ CONTRASTO · TRE LIVELLI ═══
+   ⚠️ QUI NON C'E' UNA REGOLA DI COLORE, ED E' VOLUTO.
+   La versione precedente imponeva lo stesso colore chiaro a TUTTI i
+   paragrafi: dove il testo era scuro o dorato lo ribaltava, e in Chi siamo
+   il nero diventava crema. Un colore a tappeto non puo' funzionare su un
+   sito che alterna testo chiaro, testo dorato e testo scuro.
+   Il colore viene ora deciso dal codice ELEMENTO PER ELEMENTO, leggendo
+   quello che l'elemento ha gia' e spingendolo nella sua stessa direzione:
+   il chiaro diventa piu' chiaro, il dorato piu' luminoso, lo scuro piu'
+   scuro. Vedi la funzione hcApplica nello script isolato.
+   Qui restano solo le due cose che il codice non deve toccare a mano. */
+body.hc-2 p, body.hc-2 li, body.hc-2 blockquote{ font-weight:400 !important; }
+#tspop p, #tspop span{ font-weight:300 !important; }
+
+.tsp-lbl{
+  margin:13px 0 6px;
+  font-family:'Outfit',sans-serif; font-size:9.5px; font-weight:300;
+  letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(248,246,241,.42);
+}
+.tsp-c{
+  flex:1; display:flex; align-items:center; justify-content:center;
+  padding:11px 4px;
+  background:none; border:1px solid rgba(248,246,241,.22);
+  color:rgba(248,246,241,.85); cursor:pointer;
+  transition:border-color .3s, color .3s;
+}
+/* Il pallino e' mezzo pieno e mezzo vuoto: e' il contrasto disegnato, non una
+   spia accesa. Cresce di intensita' da sinistra a destra. */
+.tsp-hc-dot{
+  display:block; width:14px; height:14px; border-radius:50%;
+  border:1px solid currentColor;
+  background:linear-gradient(90deg, currentColor 0 50%, transparent 50% 100%);
+}
+.tsp-c[data-hc="0"] .tsp-hc-dot{ opacity:.45; }
+.tsp-c[data-hc="1"] .tsp-hc-dot{ opacity:.8; }
+.tsp-c[data-hc="2"] .tsp-hc-dot{ width:17px; height:17px; color:#fbeed0; }
+.tsp-c.sel{ border-color:#b8965a; color:#b8965a; }
+.tsp-c.sel .tsp-hc-dot{ opacity:1; }
+/* Il nome dei tre pulsanti del contrasto. Il pallino e' solo disegno
+   (aria-hidden): senza questo testo i pulsanti non hanno nome, e PageSpeed
+   boccia sia l'accessibilita' sia la navigazione agentica («I pulsanti non
+   hanno nomi accessibili»). Non si vede e non occupa spazio: e' fuori dal
+   flusso, quindi non tocca la disposizione flex del pulsante. */
+.tsp-sr{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); clip-path:inset(50%);
+  white-space:nowrap; border:0;
+}
+
+
+/* ═══ TESTO INGRANDITO · l'intestazione non deve piu' essere trasparente ═══
+   In cima alla pagina l'intestazione e' opaca solo al 35%: il testo che le
+   scorre sotto si vede attraverso, e con i caratteri ingranditi il
+   sovrapporsi delle due cose rende illeggibili entrambe. Con l'ingrandimento
+   attivo diventa piena da subito, come gia' fa scorrendo (classe .sc).
+   ⚠️ Non si tocca il caso normale: la trasparenza in cima e' una scelta di
+   stile e resta per chi non ha ingrandito nulla. */
+body.ts-on header{
+  background:rgba(10,10,10,.96) !important;
+  border-bottom:1px solid rgba(184,150,90,.15);
+}
+/* I salti agli ancoraggi devono fermarsi SOTTO l'intestazione, altrimenti la
+   prima riga finisce nascosta: con il testo grande sono due o tre righe. */
+body.ts-on{ scroll-padding-top:calc(var(--hh) + 16px); }
+/* 🔴 LA HERO HA ALTEZZA FISSA (100vh desktop, 64vh telefono) con il contenuto
+   ancorato in basso e `overflow:hidden`. Il testo che cresce spinge verso
+   l'ALTO: finisce sotto l'intestazione e viene tagliato. Era il difetto piu'
+   grave dell'ingrandimento, e si vedeva solo al terzo livello.
+   Con l'ingrandimento attivo la hero smette di avere un'altezza imposta e
+   cresce verso il basso: il contenuto resta tutto dentro e nulla passa sotto
+   l'intestazione.
+   ⚠️ Il video di fondo e' in posizione assoluta su tutti i lati, quindi
+   continua a coprire la hero qualunque altezza prenda. */
+body.ts-on .hero{
+  height:auto !important;
+  max-height:none !important;
+  min-height:100vh;
+  padding-top:calc(var(--hh) + 28px);
+}
+@media(max-width:768px){
+  body.ts-on .hero{ min-height:64vh; padding-top:calc(var(--hh) + 34px); }
+}
+/* Stessa cura per la testata delle pagine interne. */
+body.ts-on .mx-hero{ min-height:0; height:auto; }
+body.ts-on .mx-hero, body.ts-on .hero{ scroll-margin-top:calc(var(--hh) + 16px); }
+
+
+/* ═══ FASCIA DI NAVIGAZIONE E CONTRASTO ═══
+   🔴 La voce della pagina attuale si distingue SOLO per il colore: oro contro
+   bianco. Al contrasto 2 il bianco diventa crema e l'oro oro chiaro, due tinte
+   quasi identiche, e non si capisce piu' dove ci si trova.
+   La soluzione qui e' allontanare le due tinte invece di avvicinarle: le altre
+   voci vanno a BIANCO PIENO (neutro, senza traccia di giallo) e la voce attiva
+   al SENAPE, con un filo di corpo in piu'. Neutro contro giallo
+   saturo si distingue anche a vista stanca.
+   ⚠️ Niente sottolineatura: e' stata provata e scartata, appesantiva la
+   fascia. Se un domani non bastasse, prima di rimetterla si provi ad
+   accentuare ancora la differenza di tinta.
+   ⚠️ Servono !important: il colore lo scrive il codice negli stili in linea. */
+/* 🔴 LA FASCIA E' UN VELO, NON UN PANNELLO: se dietro passa una fotografia
+   chiara, l'oro della voce attiva finisce su fondo bianco e sparisce. Sul
+   telefono succede spesso, perche' le immagini occupano tutta la larghezza.
+   Con l'ingrandimento o il contrasto attivi diventa piena: a quel punto la
+   leggibilita' viene prima della trasparenza.
+   ⚠️ Resta SEMPRE SCURA, mai chiara: e' l'invariante della fascia. */
+body.ts-on #bcbar, body.hc-1 #bcbar, body.hc-2 #bcbar{
+  background:rgba(10,10,10,.97) !important;
+  backdrop-filter:none;
+}
+body.hc-1 #bcbar .bc-b, body.hc-2 #bcbar .bc-b{ color:#ffffff !important; }
+body.hc-1 #bcbar .bc-b-qui, body.hc-2 #bcbar .bc-b-qui,
+body.hc-1 #bcbar .bc-cur,   body.hc-2 #bcbar .bc-cur{
+  /* Senape, non oro chiaro: e' l'unica tinta che tiene su TUTTI E DUE i fondi.
+     L'oro chiaro (#e8bc63) si legge bene sul nero e sparisce sul bianco; il
+     senape ha luminosita' intermedia, quindi stacca sia dal chiaro sia dallo
+     scuro. Su un velo semitrasparente, dove non si sa cosa passera' dietro,
+     e' l'unica scelta prudente. */
+  color:#c9942f !important;
+  font-weight:500;
+  text-shadow:0 1px 3px rgba(0,0,0,.55);
+}
+body.hc-1 #bcbar .bc-sep, body.hc-2 #bcbar .bc-sep{ color:rgba(184,150,90,.9) !important; }
+
+/* 🔴 IL PASSAGGIO DEL MOUSE DEVE CONTINUARE A FUNZIONARE.
+   Le regole del contrasto usano !important, e senza queste righe
+   sovrascriverebbero anche il colore di :hover: le voci restavano spente al
+   passaggio, e il visitatore non capiva piu' cosa fosse cliccabile.
+   ⚠️ Regola generale: ogni volta che si scrive un colore con !important, va
+   riscritto con !important anche lo stato acceso corrispondente. */
+@media(hover:hover){
+  body.hc-1 #bcbar .bc-b:hover, body.hc-2 #bcbar .bc-b:hover{ color:#e8bc63 !important; }
+  body.hc-1 .pp-nav-btn:hover, body.hc-2 .pp-nav-btn:hover{ color:#0a0a0a; }
+  body.hc-1 .pp-mob-btn:hover, body.hc-2 .pp-mob-btn:hover{ color:#0a0a0a; }
+}
+body.hc-1 #bcbar .bc-b:focus-visible, body.hc-2 #bcbar .bc-b:focus-visible{ color:#e8bc63 !important; }
+
+
+/* ═══ FASCETTA DELLA SCHEDA PRODOTTO E CONTRASTO ═══
+   ⚠️ La scheda prodotto ha FONDO CHIARO: qui il testo va reso piu' SCURO, non
+   piu' chiaro. E' l'unico punto del sito dove il contrasto lavora al
+   contrario, ed e' la ragione per cui un colore imposto a tappeto non
+   funzionava.
+   La voce scelta resta senape: stacca dal grigio delle altre e dal bianco del
+   fondo. */
+body.hc-1 .pp-nav-btn, body.hc-2 .pp-nav-btn{ color:rgba(0,0,0,.62); }
+body.hc-2 .pp-nav-btn{ color:rgba(0,0,0,.78); font-weight:400; }
+body.hc-1 .pp-nav-btn.active, body.hc-2 .pp-nav-btn.active,
+body.hc-1 .pp-mob-btn.active, body.hc-2 .pp-mob-btn.active{
+  color:#a8791f;
+  font-weight:500;
+}
+body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
+
+
+/* ═══ SCHEDA TECNICA · lettura su telefono ═══
+   ⚠️ UN PDF NON PUO' ESSERE RESO ADATTABILE: ha un'impaginazione fissa, ed e'
+   quello che lo rende affidabile in stampa. Qui non si tocca il documento, si
+   cambia lo SPAZIO in cui viene mostrato.
+   Era alto 520px fissi: su un telefono e' meta' schermo, e dentro ci stava una
+   pagina A4 rimpicciolita con sopra i comandi di Google Drive che si
+   accavallavano al contenuto.
+   Ora l'altezza segue lo schermo: su telefono quasi tutto, su computer resta
+   come prima. */
+#pp-pdf-iframe{ height:520px; }
+@media(max-width:768px){
+  #pp-pdf-iframe{ height:82vh; min-height:460px; }
+  .pp-pdf-viewer{ margin-left:-12px; margin-right:-12px; width:calc(100% + 24px); }
+  /* Il collegamento «apri a schermo intero» diventa un vero pulsante: sul
+     telefono e' il modo migliore di leggere una scheda tecnica, perche' usa il
+     lettore PDF del dispositivo invece di un riquadro dentro la pagina. */
+  #pp-ds-open{
+    display:block; margin-top:10px; padding:12px 14px; text-align:center;
+    border:1px solid rgba(184,150,90,.45); color:#b8965a !important;
+    font-size:10px !important; letter-spacing:.2em;
+  }
+}
+
+@media(max-width:768px){
+  /* 🔴 SU TELEFONO LA SCHEDA NON SI MOSTRA, SI SCARICA.
+     Un PDF ha impaginazione fissa: dentro un riquadro di mezzo schermo resta
+     una A4 rimpicciolita, con sopra i comandi di Google Drive che si
+     accavallano al contenuto. Meglio nessuna anteprima che un'anteprima
+     illeggibile: il lettore PDF del telefono la mostra molto meglio.
+     Resta il pulsante «Scarica», che e' quello che serve davvero. */
+  #pp-pdf-viewer-wrap{ display:none !important; }
+  #pp-pdf-toggle-label, a[onclick*="ppPdfToggle"]{ display:none !important; }
+}
+
+/* HERO SU SCHERMI BASSI, QUALUNQUE LARGHEZZA
+   =========================================
+   IL PROBLEMA. L'header e' fixed e alto 72px. La hero e' un flex in colonna
+   con il testo allineato in basso. Quando il blocco di testo e' piu' alto
+   dello spazio libero, l'eccedenza di un flex esce dal lato OPPOSTO
+   all'allineamento: con il testo in basso, esce IN ALTO, e il padding
+   superiore non la trattiene. Risultato: "Cucine Marine d'Autore" finiva
+   sotto l'header, o a cavallo.
+
+   ATTENZIONE: la correzione precedente stava dentro @media(max-width:768px)
+   e quindi NON copriva gli schermi bassi ma LARGHI: telefono in orizzontale,
+   tablet, portatili piccoli. Li' valeva la regola base, che ha padding-top:0.
+
+   LA CURA. Sotto i 620px di altezza la hero smette di essere alta quanto lo
+   schermo e cresce quanto il suo contenuto: niente altezza forzata, niente
+   eccedenza, quindi nessuna sovrapposizione possibile. Il padding superiore
+   tiene comunque l'header fuori e i corpi del testo scendono un poco.
+
+   NON rimettere qui justify-content:flex-end e non rimettere
+   min-height/max-height: sono esattamente le due cose che riaprono il
+   difetto. Se un giorno il testo della hero si allunga ancora, si accorcia
+   il testo, non si tocca questa regola. */
+@media (max-height: 620px){
+  .hero{
+    height:auto;
+    min-height:0;
+    max-height:none;
+    justify-content:flex-start;
+    padding-top:calc(var(--hh) + 20px);
+    padding-bottom:56px;
+  }
+  .hco{ margin-top:0; }
+  .hey{ margin-bottom:8px; }
+  .hti{ font-size:clamp(24px,4.6vw,40px); margin-bottom:10px; line-height:1; }
+  .hde{ font-size:12px; line-height:1.6; margin-bottom:20px; }
+  .hyr{ display:none; }
+}
+@media (max-height: 620px) and (max-width: 768px){
+  .hero{ padding-left:24px; padding-right:24px; }
+}
+
+/* HERO SU MOBILE, PRIMA SCHERMATA PULITA
+   ======================================
+   IL MOTIVO. Sul telefono sopra il video stavano undici blocchi: occhiello,
+   titolo, descrizione, riga delle figure, tre pulsanti, tre link, piu' gli
+   elementi decorativi e il ticker. Troppi.
+
+   LA SOLUZIONE. Il contenuto e' diviso in due fratelli, .hco e .hco-more.
+   Sotto i 768px la hero cresce quanto serve: .hco riempie la prima
+   schermata con occhiello, titolo e indicatore di scorrimento, mentre
+   .hco-more scorre sotto, su nero pieno. I media di sfondo (video, foto,
+   velatura) vengono fermati a 100svh, cosi' la parte inferiore non e' piu'
+   sopra la foto.
+
+   ATTENZIONE, e' il punto che conta: NIENTE display:none. Il testo non e'
+   nascosto ne' duplicato, e' lo stesso elemento spostato piu' in basso.
+   Google indicizza in modalita' mobile-first e svaluta il contenuto
+   nascosto: se un giorno si volesse "semplificare" togliendo .hde dal
+   telefono, si perderebbe l'unica riga di prodotto sopra la piega.
+
+   Su DESKTOP non cambia nulla: i due blocchi restano incolonnati come i
+   loro contenuti erano prima dentro un unico contenitore. */
+/* z-index senza position: .hco-more e' un elemento flex della hero, e per
+   gli elementi flex lo z-index vale anche da statici. DEVE restare statico,
+   altrimenti diventa il riferimento del posizionamento assoluto di .btm, che
+   invece si ancora alla hero. */
+.hco-more{ z-index:3; max-width:600px; }
+/* NOTA: qui c'era un secondo indicatore di scorrimento, .hsp. E' stato
+   tolto perche' ne esisteva gia' uno globale, .pp-scroll-hint, che
+   attachTo(window,'home') accende anche sulla home: se ne vedevano due, uno
+   al centro e uno a destra. Prima di aggiungerne uno nuovo, cercare
+   "pp-scroll-hint". */
+
+@media(max-width:768px){
+  .hero{
+    height:auto;
+    min-height:0;
+    max-height:none;
+    padding-bottom:0;
+    background:#0a0a0a;
+    justify-content:flex-start;
+  }
+  /* I media di sfondo hanno lo stile IN LINEA con inset:0, quindi servono
+     le sovrascritture. Si fermano alla prima schermata. */
+  #heroVid, #heroVid2, .hero picture, .hero picture img, .hovl{
+    height:100vh !important;
+    height:100svh !important;
+    bottom:auto !important;
+  }
+  /* Il secondo filmato del ciclo, sul telefono, e' quello di Oceano:
+     completamente desaturato, cosi' il montaggio si legge come un unico
+     racconto e non come due riprese diverse incollate. */
+  #heroVid2{ filter:grayscale(1) brightness(.82) !important; }
+  .hci{ top:50vh; top:50svh; }
+  .hco{
+    margin-top:0;
+    min-height:calc(100vh - var(--hh) - 34px);
+    min-height:calc(100svh - var(--hh) - 34px);
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    /* Lo spazio che occupava l'indicatore di scorrimento quando stava qui
+       dentro. Togliendolo da .hco il titolo e' sceso di colpo fino al bordo
+       inferiore della prima schermata, perche' i figli sono allineati in
+       basso e non c'era piu' niente in coda a tenerlo su.
+       Ora l'indicatore e' fisso a 96px dal fondo della finestra: questo
+       margine lascia libera quella fascia. */
+    padding-bottom:88px;
+  }
+  .hco-more{
+    max-width:100%;
+    width:100%;
+    padding-top:34px;
+    padding-bottom:56px;
+  }
+
+
+  /* INGRESSO SCAGLIONATO DEL BLOCCO SOTTO IL TITOLO
+     Le animazioni fiu dei singoli elementi partono al caricamento della
+     pagina: sul telefono questo blocco e' sotto la piega, quindi la loro
+     corsa finisce prima che qualcuno la veda, e il testo compariva di
+     colpo. Qui vengono spente (animation:none) e sostituite da una
+     salita legata alla comparsa, con 90ms di sfasamento fra una riga e
+     l'altra.
+     ATTENZIONE: il ritardo e' sul figlio, non sul contenitore. Mettendolo
+     sul contenitore salirebbero tutti insieme, che e' proprio quello che
+     si vuole evitare. */
+  .hco-more > *{
+    opacity:0;
+    transform:translateY(34px);
+    animation:none !important;
+    transition:opacity .7s linear, transform 1.1s cubic-bezier(.42,0,.25,1);
+    will-change:transform,opacity;
+  }
+  .hco-more.in > *{ opacity:1; transform:none; will-change:auto; }
+
+  /* ORDINE E RESPIRO DEL BLOCCO SOTTO IL TITOLO
+     =========================================
+     I valori di prima erano tarati su una hero stretta, dove questo testo
+     stava sopra la foto insieme a tutto il resto: corpi minuscoli,
+     interlinee compresse e perfino un margine negativo su .hwho-sm per
+     recuperare quattordici pixel. Ora il blocco ha una schermata tutta sua.
+
+     L'ORDINE sul telefono e' diverso da quello del markup:
+       descrizione, figure, ESPLORA I PRODOTTI a tutta larghezza,
+       la nostra storia, i tre link, e in fondo, piccolo,
+       PANORAMICA PRODOTTI.
+
+     COME. .hac diventa display:contents, cioe' smette di generare un
+     riquadro e i suoi tre pulsanti diventano figli diretti di .hco-more:
+     da li' si possono ordinare insieme ai link con la proprieta' order.
+     ATTENZIONE: con display:contents .hac non ha piu' un riquadro, quindi
+     opacita' e trasformazioni su di lui non hanno alcun effetto. Per
+     questo l'ingresso e' scritto anche su .hac > *, e i ritardi sono
+     assegnati per classe e non per nth-child: seguono l'ordine VISIVO,
+     non quello del markup. */
+  .hco-more{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    padding-top:44px;
+    padding-bottom:18px;
+  }
+  .hac{ display:contents; }
+
+  /* I paragrafi occupano tutta la larghezza: con align-items:flex-start
+     un elemento flex si dimensiona sul contenuto, e una riga corta come
+     quella delle figure resterebbe piu' stretta della colonna. */
+  .hde, .hwho{ align-self:stretch; }
+  .hde        { order:1; }
+  .hwho-sm    { order:2; }
+  .hac .btp   { order:3; }
+  .hac .btg   { order:4; }
+  .bte        { order:5; }
+  .hac .btm   { order:6; }
+
+  .hde{
+    font-size:13px;
+    line-height:1.9;
+    margin-bottom:28px;
+    letter-spacing:.015em;
+  }
+  .hwho-sm{
+    font-size:10px;
+    line-height:1.85;
+    letter-spacing:.09em;
+    margin:0 0 34px;
+  }
+  /* Il pulsante principale prende tutta la larghezza ed e' il piu' grande
+     elemento cliccabile della schermata: sul telefono e' la sola azione
+     che conta davvero. */
+  /* Stessa veste di Panoramica prodotti: oro su trasparente con cornice.
+     Il rettangolo pieno pesava troppo su una colonna stretta. Resta il
+     pulsante piu' grande della schermata, ma per larghezza e corpo, non
+     per colore. */
+  .hac .btp{
+    align-self:stretch;
+    width:100%;
+    text-align:center;
+    background:transparent;
+    color:var(--go);
+    border:1px solid rgba(184,150,90,.55);
+    font-size:10.5px;
+    letter-spacing:.24em;
+    padding:18px 24px;
+    margin:0;
+  }
+  .hac .btg{
+    align-self:flex-start;
+    margin:24px 0 0;
+    font-size:9px;
+    letter-spacing:.18em;
+  }
+  .bte{ margin-top:40px; font-size:10.5px; letter-spacing:.16em; gap:11px; }
+  .bte + .bte{ margin-top:24px; }
+  .bte svg{ width:17px; height:17px; }
+  /* Panoramica prodotti: in fondo e in punta di piedi, e' una scorciatoia
+     per chi sa gia' cosa cerca. */
+  /* Panoramica prodotti sta in fondo, vicino al bordo ma non appiccicata:
+     il distacco lo fa il margine superiore, il respiro sotto lo fa il
+     padding ridotto di .hco-more. Sommati restano meno di prima, quindi la
+     sezione nera si accorcia invece di allungarsi. */
+  .hac .btm{
+    align-self:flex-start;
+    width:auto;
+    margin:72px 0 0;
+    font-size:7px;
+    letter-spacing:.14em;
+    padding:8px 14px;
+    border-color:rgba(184,150,90,.35);
+  }
+
+  /* Ingresso: i ritardi seguono l'ordine visivo di sopra. */
+  .hco-more .hac > *{
+    opacity:0;
+    transform:translateY(34px);
+    animation:none !important;
+    transition:opacity .7s linear, transform 1.1s cubic-bezier(.42,0,.25,1);
+    will-change:transform,opacity;
+  }
+  .hco-more.in .hac > *{ opacity:1; transform:none; will-change:auto; }
+  .hco-more.in .hde                 { transition-delay:0ms; }
+  .hco-more.in .hwho-sm             { transition-delay:90ms; }
+  .hco-more.in .hac .btp            { transition-delay:180ms; }
+  .hco-more.in .hac .btg            { transition-delay:270ms; }
+  .hco-more.in .bte:nth-of-type(1)  { transition-delay:360ms; }
+  .hco-more.in .bte:nth-of-type(2)  { transition-delay:450ms; }
+  .hco-more.in .bte:nth-of-type(3)  { transition-delay:540ms; }
+  .hco-more.in .hac .btm            { transition-delay:630ms; }
+}
+/* PANORAMICA PRODOTTI IN BASSO, SU DESKTOP
+   ========================================
+   Tolta dalla riga dei pulsanti e appoggiata in fondo a sinistra, alla
+   stessa altezza dei riquadri 1st / 40yr / Global di destra. Come quelli,
+   all'apertura della home resta coperta dalla fascia dei cantieri.
+
+   RIFERIMENTO: la HERO, che e' position:relative e sta ferma. NON .hco-more.
+   Un primo tentativo la ancorava a .hco-more calcolando la distanza dal
+   fondo come min(100px,8vh), cioe' il padding inferiore della hero. Quel
+   calcolo saltava sugli schermi alti, dove @media(min-height:900px) mette
+   justify-content:center e padding-bottom:0: li' .hco-more non sta piu' in
+   fondo e il pulsante finiva in mezzo alle altre scritte.
+
+   left:60px e' il padding orizzontale della hero su desktop, cosi' il
+   pulsante e' incolonnato con il testo. bottom:20px lo porta a meta' altezza
+   dei riquadri di destra, alti circa 76px.
+
+   ATTENZIONE: con position:absolute esce dal flusso, quindi la riga .hac
+   resta con due soli elementi. Se un giorno lo si rimettesse in riga, va
+   tolto anche questo blocco.
+
+   ATTENZIONE 2: sugli schermi bassi la hero e' alta quanto il contenuto,
+   non quanto la finestra. Il pulsante resta comunque in fondo alla hero,
+   ma serve il margine inferiore maggiorato del blocco qui sotto, altrimenti
+   si sovrappone ai tre link. */
+@media (min-width:769px){
+  /* LA TRASFORMAZIONE VA TOLTA, ALTRIMENTI IL PULSANTE SBAGLIA POSTO.
+     L'animazione fiu finisce con transform:translateY(0), e con "forwards"
+     quel valore resta applicato. Un elemento con una transform diventa il
+     riferimento del posizionamento assoluto dei suoi discendenti: .btm si
+     ancorava a .hac invece che alla hero, e finiva un centinaio di pixel
+     piu' in alto, sopra gli altri pulsanti.
+     "fi" e' l'animazione di sola dissolvenza gia' usata dai riquadri delle
+     statistiche: stessa entrata, senza scivolata e senza transform. */
+  .hac{ animation:fi 1s ease .9s forwards; }
+  .hac .btm{
+    position:absolute;
+    left:60px;
+    bottom:18px;
+    margin:0;
+    /* Piccolo come sul telefono: in fondo alla hero e' una scorciatoia per
+       chi torna, non un invito. La cornice e' attenuata perche' su un
+       riquadro piccolo un bordo pieno pesa piu' del testo. */
+    font-size:7.5px;
+    letter-spacing:.16em;
+    padding:9px 16px;
+    border-color:rgba(184,150,90,.35);
+  }
+}
+/* Sugli schermi bassi la hero e' alta quanto il contenuto: senza un po' di
+   margine in fondo la Panoramica finirebbe sopra i tre link. */
+@media (min-width:769px) and (max-height:620px){
+  .hero{ padding-bottom:88px; }
+}
+
+@media (max-width:768px) and (prefers-reduced-motion: reduce){
+  .hco-more > *, .hco-more .hac > *{ opacity:1; transform:none; transition:none; }
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   LA SECONDA SCHERMATA DEL TELEFONO · TESTO SUL NERO, INDICE SU FASCE
+   ══════════════════════════════════════════════════════════════════════
+   IL DIFETTO. Sotto la prima videata il telefono mostrava otto blocchi
+   incolonnati a sinistra, tutti dello stesso grigio, tutti larghi uguale,
+   su nero piatto, e tutti in salita insieme: un muro. "La nostra storia"
+   era una riga di nove pixel al 65% di bianco, invisibile fra il pulsante
+   grande e i tre link.
+
+   LA CURA, in quattro mosse:
+     1. IL NERO RESTA SOLO DOVE SERVE · e' la coda della hero: descrizione,
+        riga delle figure, pulsante principale. Tre elementi, molta aria.
+     2. GLI APPROFONDIMENTI DIVENTANO FASCE AVORIO A TUTTO VIVO · quattro
+        pannelli #f8f6f1 larghi quanto lo schermo, staccati da 10px di nero,
+        testo scuro e icona oro. Sono pulsanti veri, non link, e il nero
+        smette di essere una parete continua: diventa lo spazio fra i
+        pannelli. Il colpo di bianco richiama la sezione prodotti subito
+        sotto, che e' gia' avorio.
+     3. "LA NOSTRA STORIA" E' LA PRIMA FASCIA, la piu' alta, con la freccia
+        in oro a destra: e' la voce a cui il committente tiene di piu'.
+     4. SALGONO UNA PER UNA · ogni riga ha il suo osservatore
+        (avviaHeroMoreItems) e parte quando entra in schermo, con la stessa
+        curva e la stessa corsa delle schede della sezione produzione.
+
+   ⚠️ VINCOLI RISPETTATI, da non riaprire:
+   · TUTTO dentro @media(max-width:768px): su desktop non cambia un pixel.
+   · Il blocco sta in fondo al foglio, DOPO le regole che deve battere
+     (riga ~24216 e ~3806). Spostarlo piu' in su lo rende inerte.
+   · NIENTE display:none: nessun testo sparisce, l'indicizzazione
+     mobile-first vede le stesse parole.
+   · position:relative su .hco-more vale SOLO qui: sul telefono .btm e'
+     statico. Su desktop .btm e' absolute e si ancora alla HERO, percio'
+     li' .hco-more deve restare statico e infatti non viene toccato.
+   · Le fasce escono dal padding di 24px della hero con margini negativi:
+     con align-self:stretch la larghezza di un elemento flex si calcola
+     togliendo i margini, quindi negativi la allargano di 48px esatti.
+     La hero ha overflow:hidden: nessuna barra orizzontale possibile.
+   · I RITARDI DI SCALETTA VANNO AZZERATI: erano tarati sull'ingresso a
+     blocco (fino a 630ms). Con l'osservatore per riga diventerebbero
+     attesa a vuoto dopo che la riga e' gia' in schermo.
+   · Il ramo prefers-reduced-motion va RIPETUTO in fondo: quello di sopra
+     viene prima di queste regole e da solo non basterebbe piu'.
+   ══════════════════════════════════════════════════════════════════════ */
+@media(max-width:768px){
+
+  /* ── 1 · LA CODA NERA DELLA HERO ──────────────────────────────────
+     Il velo sta in un ::before e non nel background dell'elemento: cosi'
+     arriva ai bordi dello schermo senza toccare il flusso e non entra
+     nell'animazione, che agisce sui figli e non sui pseudo-elementi. */
+  .hco-more{
+    position:relative;
+    padding-top:52px;
+    padding-bottom:40px;
+  }
+  .hco-more::before{
+    content:"";
+    position:absolute;
+    left:-24px; right:-24px; top:0; bottom:0;
+    z-index:-1;
+    pointer-events:none;
+    border-top:1px solid rgba(184,150,90,.18);
+    background:
+      radial-gradient(135% 60% at 10% -6%, rgba(184,150,90,.09) 0%, rgba(184,150,90,0) 62%),
+      linear-gradient(180deg,#0c0b09 0%, #0a0a0a 55%, #080808 100%);
+  }
+  /* Eco del cerchio dorato della hero, fermo e quasi spento: da'
+     profondita' al nero senza chiedere attenzione. Sta in alto, dove il
+     nero e' ancora ampio, e viene tagliato dall'overflow della hero. */
+  .hco-more::after{
+    content:"";
+    position:absolute;
+    right:-40vw; top:-6vw;
+    width:82vw; height:82vw;
+    border-radius:50%;
+    border:1px solid rgba(184,150,90,.08);
+    z-index:-1;
+    pointer-events:none;
+  }
+
+  /* ── 2 · LA DESCRIZIONE, CON CAPOLETTERA ──────────────────────────
+     Corpo e colore salgono un poco (era .65 di bianco a 13px). Il
+     capolettera e' in Cormorant come i titoli del sito e funziona in
+     tutte e cinque le lingue. Per toglierlo basta cancellare il blocco
+     ::first-letter. */
+  .hde{
+    font-size:13.5px;
+    line-height:1.9;
+    color:rgba(248,246,241,.74);
+    margin-bottom:30px;
+    letter-spacing:.012em;
+  }
+  .hde::first-letter{
+    float:left;
+    font-family:"Cormorant Garamond",serif;
+    font-weight:300;
+    font-size:54px;
+    line-height:.76;
+    color:#c9a568;
+    margin:7px 13px 0 0;
+  }
+
+  /* ── 3 · LA RIGA DELLE FIGURE ─────────────────────────────────────
+     Il filetto e' un ::before inline-block: NON si usa display:flex,
+     perche' dentro c'e' il collegamento ai ricambi (.hw-go) e i nodi di
+     testo intorno diventerebbero elementi flex separati, spezzando la
+     riga. */
+  .hwho-sm{
+    font-size:10px;
+    letter-spacing:.1em;
+    line-height:1.8;
+    color:rgba(248,246,241,.52);
+    margin:0 0 44px;
+  }
+  .hwho-sm::before{
+    content:"";
+    display:inline-block;
+    width:24px; height:1px;
+    background:rgba(184,150,90,.55);
+    vertical-align:middle;
+    margin:-2px 12px 0 0;
+  }
+
+  /* ── 4 · IL PULSANTE PRINCIPALE ───────────────────────────────────
+     Resta oro su trasparente, ma piu' alto e con un velo dorato dentro:
+     sotto arrivano quattro fasce avorio, e senza un minimo di corpo
+     perderebbe il primo posto nella gerarchia. */
+  .hac .btp{
+    padding:20px 24px;
+    letter-spacing:.26em;
+    font-size:10.5px;
+    background:rgba(184,150,90,.07);
+    border-color:rgba(184,150,90,.6);
+  }
+
+  /* ── 5 · LE QUATTRO FASCE AVORIO ──────────────────────────────────
+     Stessa scatola per tutte: a tutto vivo, testo rientrato di 24px come
+     il resto della pagina, staccate da 10px di nero. I margini di prima
+     (40px e 24px fra un link e l'altro) vengono azzerati qui: stessa
+     specificita', ma questo blocco viene dopo. */
+  .hac .btg, .bte{
+    align-self:stretch;
+    width:auto;
+    margin-left:-24px;
+    margin-right:-24px;
+    margin-bottom:0;
+    padding:23px 24px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    background:#f8f6f1;
+    color:#0a0a0a;
+    font-family:"Outfit",sans-serif;
+    font-weight:400;
+    text-transform:uppercase;
+  }
+  /* La nostra storia: prima, piu' alta, con la freccia gia' presente nel
+     markup spinta a destra a chiudere la riga. Nessuna freccia nuova. */
+  .hac .btg{
+    margin-top:56px;
+    padding-top:27px;
+    padding-bottom:27px;
+    font-size:11.5px;
+    letter-spacing:.2em;
+  }
+  .hac .btg svg{
+    width:14px; height:14px;
+    margin-left:auto;
+    color:rgba(140,108,52,.95);
+  }
+  .bte{
+    margin-top:10px;
+    font-size:11px;
+    letter-spacing:.17em;
+  }
+  .bte + .bte{ margin-top:10px; }
+  .bte svg{
+    width:18px; height:18px;
+    flex-shrink:0;
+    color:rgba(140,108,52,.95);
+  }
+
+  /* ── 6 · PANORAMICA PRODOTTI ──────────────────────────────────────
+     Torna sul nero, piccola e centrata sotto le fasce: e' una
+     scorciatoia per chi sa gia' cosa cerca, non un invito. */
+  .hac .btm{
+    align-self:center;
+    width:auto;
+    margin:46px 0 0;
+    font-size:8px;
+    letter-spacing:.2em;
+    padding:11px 20px;
+    border-color:rgba(184,150,90,.35);
+  }
+
+  /* ── 7 · L'INGRESSO, RIGA PER RIGA ────────────────────────────────
+     La classe .up la mette avviaHeroMoreItems() quando la singola riga
+     entra in schermo. Le due regole ".in" qui sotto RIMETTONO a zero
+     l'accensione a blocco della versione precedente: senza, la classe
+     .in sul contenitore accenderebbe tutto insieme e l'osservatore per
+     riga non servirebbe a nulla. Corsa e curva sono quelle di .pr-rise
+     della sezione produzione, per coerenza. */
+  .hco-more > *, .hco-more .hac > *{
+    opacity:0;
+    transform:translateY(48px);
+    animation:none !important;
+    transition:opacity .75s linear, transform 1.15s cubic-bezier(.42,0,.25,1);
+    will-change:transform,opacity;
+  }
+  .hco-more.in > *, .hco-more.in .hac > *{
+    opacity:0;
+    transform:translateY(48px);
+  }
+  .hco-more > .up, .hco-more .hac > .up{
+    opacity:1;
+    transform:none;
+    will-change:auto;
+  }
+  /* I ritardi della scaletta vecchia, riscritti a zero uno per uno:
+     hanno specificita' alta e senza queste righe resterebbero attivi. */
+  .hco-more.in .hde,
+  .hco-more.in .hwho-sm,
+  .hco-more.in .hac .btp,
+  .hco-more.in .hac .btg,
+  .hco-more.in .bte:nth-of-type(1),
+  .hco-more.in .bte:nth-of-type(2),
+  .hco-more.in .bte:nth-of-type(3),
+  .hco-more.in .hac .btm{ transition-delay:0ms; }
+}
+
+/* Ripetuto qui in fondo: il ramo di sopra viene prima delle regole nuove
+   e non basterebbe piu' a batterle. Con "meno movimento" tutto e' visibile
+   e fermo, anche se l'osservatore non partisse mai. */
+@media (max-width:768px) and (prefers-reduced-motion: reduce){
+  .hco-more > *, .hco-more .hac > *,
+  .hco-more.in > *, .hco-more.in .hac > *{
+    opacity:1 !important;
+    transform:none !important;
+    transition:none !important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -16556,6 +17804,9 @@ var DICT = {
     ts_pop_txt: "Is the text too small? You can enlarge it.",
     ts_pop_hint: "You can reopen this panel at any time from the button in the header above.",
     ts_hc: "Contrast",
+    ts_hc_0: "Standard contrast",
+    ts_hc_1: "Increased contrast",
+    ts_hc_2: "Maximum contrast",
     ts_size: "Text size",
     dist_ttl: "International Distributors and Partners",
     dist_p1: "Our production is broad and varied: some of our lines are distributed worldwide, others are built to order for a single shipyard or a single boat, and others again are dedicated lines developed with partner brands. Where a line is distributed, spare parts are normally held by the distributor. The list below is not exhaustive: write to us and we will point you to the nearest dealer, distributor, exclusive agent or partner.",
@@ -18081,6 +19332,9 @@ var DICT = {
     ts_pop_txt: "Il testo è troppo piccolo? Potete ingrandirlo.",
     ts_pop_hint: "Potete riaprire questo pannello in ogni momento dal pulsante nell'intestazione qui sopra.",
     ts_hc: "Contrasto",
+    ts_hc_0: "Contrasto normale",
+    ts_hc_1: "Contrasto aumentato",
+    ts_hc_2: "Contrasto massimo",
     ts_size: "Dimensione del testo",
     dist_ttl: "Distributori e partner esteri",
     dist_p1: "La nostra produzione è ampia e articolata: alcune delle nostre linee sono distribuite in tutto il mondo, altre nascono su commessa per un singolo cantiere o una singola barca, altre ancora sono linee dedicate sviluppate insieme a marchi partner. Dove una linea è distribuita, i ricambi sono di norma disponibili presso il distributore. L'elenco che segue non è esaustivo: scriveteci, e vi indicheremo il rivenditore, il distributore, l'esclusivista o il partner più vicino.",
@@ -19598,6 +20852,9 @@ var DICT = {
     ts_pop_txt: "Le texte est trop petit ? Vous pouvez l'agrandir.",
     ts_pop_hint: "Vous pouvez rouvrir ce panneau à tout moment depuis le bouton dans l'en-tête ci-dessus.",
     ts_hc: "Contraste",
+    ts_hc_0: "Contraste normal",
+    ts_hc_1: "Contraste renforcé",
+    ts_hc_2: "Contraste maximal",
     ts_size: "Taille du texte",
     dist_ttl: "Distributeurs et partenaires à l'étranger",
     dist_p1: "Notre production est vaste et diversifiée : certaines de nos lignes sont distribuées dans le monde entier, d'autres naissent sur commande pour un seul chantier naval ou un seul bateau, d'autres encore sont des lignes dédiées développées avec des marques partenaires. Là où une ligne est distribuée, les pièces détachées sont généralement disponibles auprès du distributeur. La liste ci-dessous n'est pas exhaustive : écrivez-nous et nous vous indiquerons le revendeur, le distributeur, l'agent exclusif ou le partenaire le plus proche.",
@@ -21115,6 +22372,9 @@ var DICT = {
     ts_pop_txt: "Ist die Schrift zu klein? Sie können sie vergrößern.",
     ts_pop_hint: "Sie können dieses Feld jederzeit über die Schaltfläche oben in der Kopfzeile wieder öffnen.",
     ts_hc: "Kontrast",
+    ts_hc_0: "Normaler Kontrast",
+    ts_hc_1: "Erhöhter Kontrast",
+    ts_hc_2: "Maximaler Kontrast",
     ts_size: "Schriftgröße",
     dist_ttl: "Vertriebspartner und Partner im Ausland",
     dist_p1: "Unsere Fertigung ist breit und vielgestaltig: einige unserer Linien werden weltweit vertrieben, andere entstehen auf Bestellung für eine einzelne Werft oder ein einzelnes Boot, wieder andere sind eigens entwickelte Linien für Partnermarken. Wo eine Linie vertrieben wird, sind Ersatzteile in der Regel beim Vertriebspartner erhältlich. Die folgende Liste ist nicht vollständig: schreiben Sie uns, und wir nennen Ihnen den nächstgelegenen Händler, Vertriebspartner, Exklusivvertreter oder Partner.",
@@ -22632,6 +23892,9 @@ var DICT = {
     ts_pop_txt: "¿El texto es demasiado pequeño? Puede agrandarlo.",
     ts_pop_hint: "Puede volver a abrir este panel en cualquier momento desde el botón de la cabecera de arriba.",
     ts_hc: "Contraste",
+    ts_hc_0: "Contraste normal",
+    ts_hc_1: "Contraste aumentado",
+    ts_hc_2: "Contraste máximo",
     ts_size: "Tamaño del texto",
     dist_ttl: "Distribuidores y socios en el extranjero",
     dist_p1: "Nuestra producción es amplia y variada: algunas de nuestras líneas se distribuyen en todo el mundo, otras nacen por encargo para un solo astillero o un solo barco, y otras son líneas dedicadas desarrolladas junto a marcas asociadas. Allí donde una línea se distribuye, los repuestos suelen estar disponibles en el propio distribuidor. La lista siguiente no es exhaustiva: escríbanos y le indicaremos el revendedor, distribuidor, representante exclusivo o socio más cercano.",
@@ -25097,1239 +26360,6 @@ window.hdZoom=function(url,alt,maxw){
   };
 })();
 </script>
-<style id="btt-style">
-#backtotop{
-  position:fixed; left:34px; bottom:34px;
-  width:52px; height:52px; display:flex; align-items:center; justify-content:center;
-  border-radius:50%; padding:0; margin:0;
-  border:1px solid rgba(184,150,90,.34);
-  background:rgba(10,10,10,.42);
-  -webkit-backdrop-filter:blur(9px); backdrop-filter:blur(9px);
-  color:#b8965a; cursor:none; z-index:500;
-  opacity:0; pointer-events:none; transform:translateY(14px);
-  transition:opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1), border-color .4s ease, background .4s ease;
-}
-#backtotop.show{ opacity:1; pointer-events:auto; transform:translateY(0); }
-#backtotop svg{ width:20px; height:20px; display:block; fill:none; stroke:#b8965a; stroke-width:1.4; stroke-linecap:round; stroke-linejoin:round; transition:transform .45s cubic-bezier(.22,1,.36,1); }
-#backtotop:hover{ border-color:rgba(184,150,90,.78); background:rgba(10,10,10,.62); }
-#backtotop:hover svg{ transform:translateY(-3px); }
-/* Nascosto quando un overlay o la nav sono aperti (home congelata) */
-body.page-open #backtotop, body.nav-open #backtotop{ opacity:0 !important; pointer-events:none !important; transform:translateY(14px) !important; }
-@media(max-width:900px){
-  #backtotop{ left:18px; bottom:18px; width:46px; height:46px; }
-  #backtotop svg{ width:18px; height:18px; }
-}
-@media print{ #backtotop{ display:none !important; } }
-
-/* ═══ BARRA DEL PERCORSO ═════════════════════════════════════════
-   Sta in fondo all'ULTIMO blocco di stile del documento, quindi dopo ogni
-   altra regola che tocca gli stessi selettori: e' la condizione perche' gli
-   scostamenti qui sotto vincano davvero (regola 3.1).
-
-   ⚠ IL TRUCCO DI --bh. L'altezza della barra e' zero finche' il body non ha
-   la classe .bcon. Cosi' TUTTI gli scostamenti di geometria qui sotto sono
-   scritti una volta sola e restano inerti quando la barra non c'e': non
-   esistono due versioni del layout da tenere allineate, e togliere la barra
-   significa togliere una classe, non rimettere a posto dieci regole. */
-:root{ --bh:0px; }
-body.bcon{ --bh:38px; }
-
-#bcbar{
-  position:fixed; top:var(--hh); left:0; right:0;
-  height:38px; z-index:799;
-  /* ⚠ SEMPRE SCURA, MAI CHIARA. Niente sfocatura, che la farebbe sembrare un
-     pannello pieno, ma neppure un velo cosi' leggero da lasciarsi attraversare
-     dal bianco: sopra una foto chiara o una pagina chiara le scritte
-     sparivano. Due terzi di nero tengono il testo leggibile su qualunque
-     fondo e lasciano comunque intravedere cio' che scorre sotto. */
-  background:rgba(10,10,10,.66);
-  border-bottom:1px solid rgba(255,255,255,.07);
-  display:none; align-items:center;
-  padding:0 40px;
-  overflow-x:auto; overflow-y:visible; white-space:nowrap;
-  scrollbar-width:none; -webkit-overflow-scrolling:touch;
-}
-#bcbar::-webkit-scrollbar{ display:none; }
-body.bcon #bcbar{ display:flex; }
-/* Col menu aperto la fascia NON sparisce: e' il punto fermo del sito, sta
-   sempre alla stessa altezza e cambia solo cio' che ci scrive sopra. Aperta la
-   sidebar dice NAVIGAZIONE, cioe' il gradino in cui ti trovi.
-   ⚠ NON si usa body.nav-open: tm() non la applica mai, il menu si segnala solo
-   con #np.on. La classe bcmenu la mette il codice in fondo al file. */
-body.bcmenu #bcbar{ display:flex; }
-/* La stessa scritta era gia' in cima al pannello: adesso la porta la fascia e
-   li' sarebbe ripetuta due volte a dieci pixel di distanza. */
-body.bcmenu .nlbl{ display:none; }
-/* Su telefono il pannello comincia appena sotto l'header e finirebbe dietro
-   alla fascia: gli si lascia lo spessore in piu'. */
-@media(max-width:768px){
-  body.bcmenu #np{ padding-top:calc(var(--hh) + var(--bh) + 18px); }
-}
-
-.bc-i{ display:inline-flex; align-items:center; flex:0 0 auto; }
-.bc-b{
-  background:none; border:0; padding:7px 0;
-  font-family:"Outfit",sans-serif; font-weight:300;
-  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
-  color:rgba(255,255,255,.68); cursor:pointer;
-  transition:color .35s ease;
-  text-shadow:0 1px 6px rgba(0,0,0,.4);
-}
-/* ⚠ Al passaggio cambia SOLO il colore: niente transform, niente ombre che
-   crescono (regola 3.12, l'effetto molla). */
-.bc-b:hover{ color:var(--go); }
-.bc-b:focus-visible{ outline:1px solid var(--go); outline-offset:3px; }
-/* Sei gia' qui, quindi la scritta e' dorata come ogni voce attiva della fascia.
-   Ma resta un bottone: serve a richiudere i sottomenu senza uscire dal menu.
-   ⚠ Si usa il dorato CHIARO --gl, non --go: su una fascia scura e trasparente
-   il dorato pieno perde leggibilita', e questa e' la parola che deve saltare
-   all'occhio per prima. */
-.bc-b-qui{ color:var(--gl); }
-.bc-b-qui:hover{ color:var(--wh); }
-
-/* L'ultima voce e' la pagina in cui ti trovi: non e' un bottone, non si clicca. */
-.bc-cur{
-  font-family:"Outfit",sans-serif; font-weight:300;
-  font-size:11px; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--gl); padding:7px 0; cursor:default;
-  text-shadow:0 1px 6px rgba(0,0,0,.4);
-}
-/* Voci del menu volutamente in sordina: restano cliccabili e al passaggio si
-   riaccendono come le altre, perche' .nbtn:hover .ntxt ha specificita' piu'
-   alta di queste due righe. */
-.nbtn-soft .ntxt{ color:rgba(248,246,241,.52); }
-.nbtn-soft .nnum{ opacity:.70; }
-/* Filo dorato che stacca le ultime due voci dal resto del menu: restano
-   numerate e cliccabili, ma si capisce a colpo d'occhio che sono un'altra
-   cosa. Il bordo va sulla riga, non sul bottone, per allinearsi a quello
-   grigio che .nrow ha gia' in basso. */
-.nrow-div{ border-top:1px solid rgba(184,150,90,.34); }
-
-.bc-sep{
-  color:rgba(184,150,90,.85); margin:0 12px; font-size:11px;
-  flex:0 0 auto; line-height:1;
-  font-family:"Outfit",sans-serif; font-weight:200;
-}
-
-/* Con la fascia non serve piu' il pulsante Indietro: il percorso dice dove sei
-   e ti riporta a qualunque livello. Due modi di tornare indietro nella stessa
-   schermata si contraddicono. Nascosto, non cancellato: se si toglie la
-   fascia, il pulsante torna da solo. */
-body.bcon .pp-back{ display:none; }
-body.bcon .cphd{ display:none; }
-
-/* ═══ PAGINA LAVELLI ═════════════════════════════════════════════════════
-   Il modale riusa per intero il vestito di Progetti su misura (.ef-modal,
-   .ef-hero, .ef-chapter, .ef-close): qui c'e' solo la parte che cambia, cioe'
-   le immagini.
-   ⚠ Lo scambio desktop/telefono e' fatto con display, non con una foto sola
-   ridimensionata: cosi' il browser scarica soltanto l'immagine che gli serve
-   e sul telefono non passa mai il file grande. */
-/* ⚠ NESSUNA REGOLA DI POSIZIONE QUI. Il riquadro e' centrato perche'
-   #sinkpage e' stato aggiunto agli elenchi condivisi piu' sopra, quelli di
-   Energia, Oceano e Progetti su misura. Riscrivere qui inset, z-index e
-   sfondo significava avere due verita' sulla stessa cosa: bastava che un
-   domani si ritoccasse il modale comune perche' i Lavelli restassero
-   indietro. Qui sotto c'e' solo cio' che i Lavelli hanno di diverso: le foto.
-
-   ⚠ LE FOTO NASCONO GRANDI. Una per riga, a tutta larghezza del riquadro,
-   senza ritaglio: si vede l'inquadratura intera, non un pezzo. Al tocco
-   crescono del 10% e basta, e un secondo tocco le riporta a posto. Niente
-   ingrandimento a schermo intero: a questa dimensione non aggiungerebbe
-   nulla e porterebbe via il lettore dalla pagina. */
-.snk-grid{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:clamp(14px,2vw,28px);
-  padding:0 clamp(20px,4vw,64px) clamp(50px,6vw,90px);
-}
-.snk-it{ margin:0; position:relative; overflow:hidden; }
-.snk-img{
-  width:100%; display:block; height:auto;
-  cursor:zoom-in;
-  transform-origin:center center;
-  transition:transform .6s cubic-bezier(.16,1,.3,1);
-}
-.snk-img.snk-on{ transform:scale(1.1); cursor:zoom-out; }
-.snk-mob{ display:none; }
-
-@media(max-width:768px){
-  .snk-grid{ gap:10px; padding:0 16px 60px; }
-  .snk-desk{ display:none; }
-  .snk-mob{ display:block; }
-}
-/* Chi ha chiesto meno movimento non deve vedere nulla muoversi. */
-@media(prefers-reduced-motion:reduce){
-  .snk-img{ transition:none; }
-}
-
-/* ═══ PAGINA ACCESSORI DI COTTURA ══════════════════════════════
-   Come per i Lavelli: la posizione e il vestito del riquadro vengono dagli
-   elenchi condivisi piu' sopra. Qui c'e' solo cio' che riguarda le foto.
-
-   ⚠ IL VELO E' UN ELEMENTO A PARTE, non un filtro sull'immagine. Se fosse
-   parte dell'immagine crescerebbe insieme a lei durante l'ingrandimento e il
-   bordo scuro si allargherebbe; steso sopra come strato indipendente, resta
-   fermo e la foto cresce sotto di lui. */
-/* Le immagini non stanno piu' tutte in fondo: respirano fra un capitolo e
-   l'altro. ⚠ Sono dentro .ef-body, che ha gia' il suo margine laterale: qui
-   NON si aggiunge padding orizzontale, altrimenti rientrerebbero rispetto al
-   testo invece di allinearsi. */
-.acc-media{ margin:clamp(26px,4vw,52px) 0; }
-.acc-it{ margin:0; position:relative; overflow:hidden; }
-/* Le velature: una sfumatura scura in alto e in basso piu' un tocco laterale,
-   per legare le foto al fondo nero della pagina invece di lasciarle come
-   rettangoli incollati sopra. Al passaggio del mouse si alleggeriscono, cosi'
-   la foto che prende colore prende anche luce. */
-.acc-it::after{
-  content:"";
-  position:absolute; left:0; right:0; top:0; bottom:0;
-  background:
-    linear-gradient(to bottom,
-      rgba(10,10,10,.55) 0%,
-      rgba(10,10,10,.10) 34%,
-      rgba(10,10,10,.14) 62%,
-      rgba(10,10,10,.62) 100%),
-    linear-gradient(to right,
-      rgba(10,10,10,.30) 0%,
-      rgba(10,10,10,0) 16%,
-      rgba(10,10,10,0) 84%,
-      rgba(10,10,10,.30) 100%);
-  pointer-events:none;
-  transition:opacity .7s ease;
-}
-@media(hover:hover){ .acc-it:hover::after{ opacity:.42; } }
-.acc-img{
-  width:100%; display:block; height:auto;
-  filter:grayscale(1) contrast(1.02);
-  transition:filter .7s ease;
-}
-/* Il colore si accende solo dove esiste un puntatore che possa passarci sopra. */
-@media(hover:hover){
-  .acc-img:hover{ filter:grayscale(0) contrast(1); }
-}
-/* ⚠ LE FOTO NON SI INGRANDISCONO. Il tocco serve soltanto ad accendere il
-   colore, perche' sul telefono il passaggio del mouse non esiste e senza un
-   gesto resterebbero grigie per sempre. Si tocca, si accendono; si tocca di
-   nuovo e tornano in bianco e nero.
-   ⚠ Niente transform qui: e' la ragione per cui il velo puo' restare un
-   elemento sovrapposto e non si sfalsa mai rispetto all'immagine. */
-.acc-img.acc-on{ filter:grayscale(0) contrast(1); }
-.acc-video{
-  width:100%; display:block; height:auto;
-  filter:grayscale(1) contrast(1.02);
-  transition:filter .7s ease;
-}
-@media(hover:hover){ .acc-vid:hover .acc-video{ filter:grayscale(0); } }
-.acc-mob{ display:none; }
-
-@media(max-width:768px){
-  .acc-media{ margin:22px 0; }
-  .acc-desk{ display:none; }
-  .acc-mob{ display:block; }
-  /* ⚠ SU TELEFONO IL COLORE LO DECIDE LO SCORRIMENTO, non il tocco: il codice
-     in fondo al file scrive il grigio direttamente sull'elemento, mano a mano
-     che la foto sale verso il centro dello schermo.
-     ⚠ Per questo la transizione va SPENTA: se restasse, ogni fotogramma
-     inseguirebbe il precedente con mezzo secondo di ritardo e il colore
-     arriverebbe dopo la foto, a scatti.
-     ⚠ Le foto NON vengono sbiancate qui: restano in bianco e nero e si
-     accendono salendo.
-     Il filmato del vulcano e' l'eccezione: non si tocca, quindi senza questa
-     riga resterebbe grigio per sempre su telefono. E' l'unica immagine della
-     pagina sempre a colori. */
-  .acc-video{ filter:grayscale(0); }
-  .acc-img{ transition:none; }
-
-  /* Il filmato va a vivo con lo schermo, mentre le foto restano allineate al
-     testo. ⚠ I 24 pixel non sono scelti a caso: sono esattamente il margine
-     laterale che .ef-body ha su telefono. Toccando quel margine va cambiato
-     anche questo, altrimenti il filmato sborda o rientra.
-     ⚠ Nessun ritaglio: altezza automatica, il fotogramma resta intero e
-     l'inquadratura si vede tutta. */
-  .acc-media-vid{ margin-left:-24px; margin-right:-24px; }
-  .acc-media-vid .cst-cap{ padding:0 16px; }
-  .acc-media-vid .acc-video{ height:auto; object-fit:contain; }
-}
-@media(prefers-reduced-motion:reduce){
-  .acc-img{ transition:none; }
-}
-
-/* ── GLI SCOSTAMENTI DI GEOMETRIA ──────────────────────────────
-   Tutto cio' che era misurato sull'altezza dell'header ora tiene conto anche
-   della barra. Con --bh a zero queste righe non cambiano nulla. */
-/* Le altre pagine interne partono da top:0 e hanno gia' dentro di se' un
-   distacco calcolato sull'altezza dell'header. Invece di riscrivere il
-   riempimento di ogni singola hero (una decina di regole, meta' dentro media
-   query), si aggiunge lo spessore della fascia al CONTENITORE: tutti gli
-   scostamenti interni restano quelli di prima e continuano a funzionare.
-   Con box-sizing:border-box, gia' globale a riga 29, il riquadro non cresce.
-   ⚠ Non ci sono Energia, Oceano e Progetti su misura: quelle tre stanno a
-   z-index 940, cioe' SOPRA l'header, sono finestre modali con la loro barra
-   di chiusura. La fascia non si vedrebbe e non avrebbe senso. */
-body.bcon #aboutpage,
-body.bcon #contactpage,
-body.bcon #sparepage,
-body.bcon #matrixpage,
-body.bcon #catpage{ padding-top:var(--bh); }
-
-#prodpage{ top:calc(var(--hh) + var(--bh)); }
-.pp-hero{ height:calc(100vh - var(--hh) - var(--bh)); }
-.slr-pin{ height:calc(100vh - var(--hh) - var(--bh) - 77px); }
-.cp-header-cover{ height:calc(var(--hh) + var(--bh)); }
-.cphd{ top:calc(var(--hh) + var(--bh)); }
-.cp-electric-hero{ height:calc(100vh - var(--hh) - var(--bh)); }
-.cp-electric-hero.iframe-mode{ height:auto; max-height:calc(100vh - var(--hh) - var(--bh)); }
-
-/* ═══ INVITO A SCORRERE · TELEFONO ═══════════════════════════════════════
-   Sta A SINISTRA, sopra la prima foto, non a destra: e' li' che l'occhio
-   comincia a leggere e li' che parte il dito. La punta guarda a destra, cioe'
-   indica il verso dello scorrimento.
-   Niente dischetto: solo la punta dorata, un filo piu' grande, un'ombra che la
-   stacca dalla foto sotto, e un battito lento di opacita' invece di uno
-   spostamento. Deve farsi notare, non farsi guardare.
-   ⚠ Resta pointer-events:none dalla regola originale: sta sopra la scheda e
-   se fosse premibile ruberebbe il tocco che deve aprire il prodotto.
-   ⚠ Continua a spegnersi al primo scorrimento, perche' .pg-scrolled ha una
-   specificita' piu' alta di queste righe: l'invito serve una volta sola. */
-/* Solo luce, nessuno spostamento: e' il modo piu' sobrio di farsi notare.
-   Nota che qui NON si tocca transform, altrimenti servirebbe ripetere il
-   translateY della regola base e basterebbe dimenticarlo per far saltare la
-   freccia fuori posto. */
-@keyframes pgridBattito{
-  0%,100%{ opacity:.42; }
-  50%    { opacity:1; }
-}
-@media(max-width:768px),(hover:none){
-  .pgrid-arrow-next{
-    top:-34px; left:0; right:auto;
-    transform:none;
-    width:32px; height:30px;
-    justify-content:flex-start;
-    color:#d8b478;
-    background:transparent;
-    filter:drop-shadow(0 1px 5px rgba(0,0,0,.55));
-    animation:pgridBattito 2.4s ease-in-out infinite;
-  }
-  .pgrid-arrow-next svg{ width:26px; height:26px; }
-}
-
-@media(max-width:768px){
-  body.bcon{ --bh:34px; }
-  #bcbar{ height:34px; padding:0 16px; }
-  .bc-b{ font-size:9px; letter-spacing:.12em; }
-  .bc-sep{ margin:0 9px; }
-  .bc-d{ min-width:210px; max-height:50vh; }
-  .cp-electric-hero{ height:calc(100svh - var(--hh) - var(--bh)); }
-}
-
-/* ═══ CONTROLLO DIMENSIONE TESTO ═══ */
-:root{ --ts: 1; }
-
-/* ── Il pulsante · ricalca esattamente .hsr (la lente) per non stonare ── */
-.htx{
-  width:38px; height:38px;
-  display:flex; align-items:center; justify-content:center;
-  background:none; border:none; padding:0; cursor:pointer;
-  color:rgba(248,246,241,.9);
-  transition:color .3s, transform .3s cubic-bezier(.23,1,.32,1);
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,.5));
-  font-family:"Cormorant Garamond",serif; font-weight:500;
-  font-size:20px; line-height:1; letter-spacing:0;
-  -webkit-tap-highlight-color:transparent;
-}
-.htx:hover{ color:var(--gl); transform:scale(1.08); }
-/* Quando l'ingrandimento è attivo il pulsante resta dorato: è l'unico
-   segnale che lo stato non è quello di partenza. Niente bordi né badge. */
-.htx[data-ts="2"], .htx[data-ts="3"]{ color:var(--gl); }
-/* Il segno e' due A di corpo diverso, allineate sulla linea di base: e' la
-   convenzione tipografica per la dimensione del testo, si capisce senza
-   leggere nulla e non ha bisogno di simboli matematici.
-   ⚠️ NIENTE "+" e "++": erano segni da calcolatrice su un sito che usa il
-   Cormorant. Il livello si legge dal colore e dal corpo della A grande. */
-.htx{ gap:1px; align-items:baseline; }
-.htx-s{ font-size:.62em; opacity:.75; transition:font-size .3s, opacity .3s; }
-.htx-l{ font-size:1em; transition:font-size .3s; }
-.htx[data-ts="2"] .htx-l{ font-size:1.12em; }
-.htx[data-ts="3"] .htx-l{ font-size:1.26em; }
-.htx[data-ts="3"] .htx-s{ opacity:1; }
-/* Mobile: header già affollato (logo + 5 lingue + 3 icone). Il pulsante
-   testo è più stretto delle icone perché non ha bisogno di area quadrata. */
-@media(max-width:480px){
-  .htx{ width:24px; height:30px; font-size:16px; }
-}
-
-/* ── La scala vera e propria ──
-   Elenco volutamente ESPLICITO: si scala ciò che si legge, non tutto.
-   Aggiungere qui eventuali classi di prosa nuove. */
-body.ts-on p,
-body.ts-on li,
-body.ts-on blockquote,
-body.ts-on .it-desc,
-body.ts-on .ef-ch-body,
-body.ts-on .ef-body,
-body.ts-on .ef-hero-lead,
-body.ts-on .rv-text,
-body.ts-on .ab-section-body,
-body.ts-on .ab-hd-feature-text,
-body.ts-on .cat-intro-lead,
-body.ts-on .cat-intro-text,
-body.ts-on .cat-body,
-body.ts-on .cp-es-block-body,
-body.ts-on .mx-acc-txt,
-body.ts-on .slr-para,
-body.ts-on .slr-mag-p,
-body.ts-on .slr-mag-body,
-body.ts-on .sp-intro-lead,
-body.ts-on .sp-body,
-body.ts-on .ppd-body,
-body.ts-on .pp-body,
-body.ts-on .ocinfo-body,
-body.ts-on .ncoll-body,
-body.ts-on .nt-body,
-body.ts-on .ct-body,
-body.ts-on .ct-dist-lead,
-body.ts-on .ckb-text{
-  zoom: var(--ts);
-}
-
-/* ── Zone franche ──
-   Header, menu, ticker e didascalie minute restano com'erano: sono
-   arredo fisso, ingrandirli sfonderebbe i layout. */
-body.ts-on header p,
-body.ts-on header li,
-body.ts-on #np p,
-body.ts-on #np li,
-body.ts-on .tbr p,
-body.ts-on footer li,
-body.ts-on .pp-draw-cap,
-body.ts-on .pp-pdf-viewer-label,
-body.ts-on .ts-skip,
-body.ts-on .ts-skip p,
-body.ts-on .ts-skip li{
-  zoom: 1;
-}
-
-/* ═══ RICHIAMO SULLA DIMENSIONE DEL TESTO · solo telefono ═══
-   Compare 10 secondi dopo l'apertura, UNA VOLTA SOLA per dispositivo, e solo
-   a chi non ha gia' scelto una dimensione.
-   ⚠️ Sta SOTTO l'intestazione (top = --hh + --bh), non sopra: cosi' non copre
-   ne' il logo ne' le lingue ne' il pulsante a cui si riferisce, che deve
-   restare visibile mentre la freccetta lo indica.
-   ⚠️ z-index 950: sopra le pagine modali (940) perche' deve comparire anche
-   mentre se ne sta guardando una, ma sotto la finestra distributori (960) e
-   la galleria a schermo intero (9500), che il visitatore apre di proposito. */
-#tspop{
-  position:fixed; z-index:950;
-  top:calc(var(--hh) + var(--bh) + 10px);
-  left:12px; right:12px;
-  background:rgba(14,14,14,.97);
-  border:1px solid rgba(184,150,90,.4);
-  padding:16px 16px 14px;
-  opacity:0; transform:translateY(-8px);
-  transition:opacity .5s ease, transform .5s cubic-bezier(.16,1,.3,1);
-  pointer-events:none;
-}
-#tspop.on{ opacity:1; transform:translateY(0); pointer-events:auto; }
-/* La freccetta punta in alto a destra, dove sta il pulsante nell'intestazione. */
-#tspop::before{
-  content:''; position:absolute; top:-7px; right:52px;
-  width:12px; height:12px;
-  background:rgba(14,14,14,.97);
-  border-left:1px solid rgba(184,150,90,.4);
-  border-top:1px solid rgba(184,150,90,.4);
-  transform:rotate(45deg);
-}
-/* La X e' il solo modo di chiudere il pannello, e il pannello nasce per chi
-   fatica a vedere: era grigia e minuta, cioe' proprio quello che quel
-   visitatore non riesce a trovare. Dorata e piu' grande, con un'area di tocco
-   di 40px (il minimo perche' un dito la prenda senza sbagliare). */
-.tsp-x{
-  position:absolute; top:4px; right:5px;
-  width:40px; height:40px; padding:0;
-  display:flex; align-items:center; justify-content:center;
-  background:none; border:none; cursor:pointer;
-  color:#b8965a;
-  font-family:'Outfit',sans-serif; font-size:27px; font-weight:300; line-height:1;
-  transition:color .3s;
-}
-@media(hover:hover){ .tsp-x:hover{ color:#d4b07a; } }
-.tsp-txt{
-  margin:0 34px 12px 0;
-  font-family:'Outfit',sans-serif; font-size:13px; font-weight:300; line-height:1.55;
-  color:rgba(248,246,241,.9);
-}
-.tsp-row{ display:flex; gap:8px; align-items:stretch; }
-.tsp-b{
-  flex:1; padding:9px 4px 10px;
-  background:none; border:1px solid rgba(248,246,241,.22);
-  color:rgba(248,246,241,.85); cursor:pointer;
-  font-family:'Cormorant Garamond',serif; font-weight:500; line-height:1;
-  transition:border-color .3s, color .3s;
-}
-.tsp-b[data-lv="0"]{ font-size:15px; }
-.tsp-b[data-lv="1"]{ font-size:19px; }
-.tsp-b[data-lv="2"]{ font-size:24px; }
-.tsp-b.sel{ border-color:#b8965a; color:#b8965a; }
-.tsp-hint{
-  margin:11px 0 0;
-  font-family:'Outfit',sans-serif; font-size:10.5px; font-weight:300;
-  letter-spacing:.06em; line-height:1.5;
-  color:rgba(184,150,90,.85);
-}
-/* Mentre il richiamo e' aperto il pulsante nell'intestazione respira: cambia
-   SOLO opacita' e colore, nessuna dimensione (trappola 3.12). */
-@keyframes tsPulse{ 0%,100%{opacity:1} 50%{opacity:.42} }
-/* La pulsazione vale solo per la comparsa AUTOMATICA: se e' il visitatore ad
-   aprire il pannello sa gia' dov'e' il pulsante, e vederlo lampeggiare sarebbe
-   un segnale senza destinatario. */
-body.tspop-auto .htx{ color:var(--gl); animation:tsPulse 1.7s ease-in-out infinite; }
-body.tspop-on .htx{ color:var(--gl); }
-@media(prefers-reduced-motion:reduce){
-  #tspop{ transition:none; }
-  body.tspop-auto .htx{ animation:none; }
-}
-/* Su desktop non esiste: li' il testo e' gia' grande e l'intestazione ampia. */
-/* Su schermo largo non e' una fascia da bordo a bordo ma un riquadro stretto
-   sotto l'intestazione, allineato a destra: resta vicino al pulsante che la
-   freccetta indica, e non attraversa tutta la pagina come un avviso di
-   sistema. */
-@media(min-width:769px){
-  #tspop{ left:auto; right:18px; width:340px; padding:18px 18px 16px; }
-  #tspop::before{ right:58px; }
-  .tsp-txt{ font-size:13.5px; }
-}
-
-
-/* ═══ CONTRASTO · TRE LIVELLI ═══
-   ⚠️ QUI NON C'E' UNA REGOLA DI COLORE, ED E' VOLUTO.
-   La versione precedente imponeva lo stesso colore chiaro a TUTTI i
-   paragrafi: dove il testo era scuro o dorato lo ribaltava, e in Chi siamo
-   il nero diventava crema. Un colore a tappeto non puo' funzionare su un
-   sito che alterna testo chiaro, testo dorato e testo scuro.
-   Il colore viene ora deciso dal codice ELEMENTO PER ELEMENTO, leggendo
-   quello che l'elemento ha gia' e spingendolo nella sua stessa direzione:
-   il chiaro diventa piu' chiaro, il dorato piu' luminoso, lo scuro piu'
-   scuro. Vedi la funzione hcApplica nello script isolato.
-   Qui restano solo le due cose che il codice non deve toccare a mano. */
-body.hc-2 p, body.hc-2 li, body.hc-2 blockquote{ font-weight:400 !important; }
-#tspop p, #tspop span{ font-weight:300 !important; }
-
-.tsp-lbl{
-  margin:13px 0 6px;
-  font-family:'Outfit',sans-serif; font-size:9.5px; font-weight:300;
-  letter-spacing:.22em; text-transform:uppercase;
-  color:rgba(248,246,241,.42);
-}
-.tsp-c{
-  flex:1; display:flex; align-items:center; justify-content:center;
-  padding:11px 4px;
-  background:none; border:1px solid rgba(248,246,241,.22);
-  color:rgba(248,246,241,.85); cursor:pointer;
-  transition:border-color .3s, color .3s;
-}
-/* Il pallino e' mezzo pieno e mezzo vuoto: e' il contrasto disegnato, non una
-   spia accesa. Cresce di intensita' da sinistra a destra. */
-.tsp-hc-dot{
-  display:block; width:14px; height:14px; border-radius:50%;
-  border:1px solid currentColor;
-  background:linear-gradient(90deg, currentColor 0 50%, transparent 50% 100%);
-}
-.tsp-c[data-hc="0"] .tsp-hc-dot{ opacity:.45; }
-.tsp-c[data-hc="1"] .tsp-hc-dot{ opacity:.8; }
-.tsp-c[data-hc="2"] .tsp-hc-dot{ width:17px; height:17px; color:#fbeed0; }
-.tsp-c.sel{ border-color:#b8965a; color:#b8965a; }
-.tsp-c.sel .tsp-hc-dot{ opacity:1; }
-
-
-/* ═══ TESTO INGRANDITO · l'intestazione non deve piu' essere trasparente ═══
-   In cima alla pagina l'intestazione e' opaca solo al 35%: il testo che le
-   scorre sotto si vede attraverso, e con i caratteri ingranditi il
-   sovrapporsi delle due cose rende illeggibili entrambe. Con l'ingrandimento
-   attivo diventa piena da subito, come gia' fa scorrendo (classe .sc).
-   ⚠️ Non si tocca il caso normale: la trasparenza in cima e' una scelta di
-   stile e resta per chi non ha ingrandito nulla. */
-body.ts-on header{
-  background:rgba(10,10,10,.96) !important;
-  border-bottom:1px solid rgba(184,150,90,.15);
-}
-/* I salti agli ancoraggi devono fermarsi SOTTO l'intestazione, altrimenti la
-   prima riga finisce nascosta: con il testo grande sono due o tre righe. */
-body.ts-on{ scroll-padding-top:calc(var(--hh) + 16px); }
-/* 🔴 LA HERO HA ALTEZZA FISSA (100vh desktop, 64vh telefono) con il contenuto
-   ancorato in basso e `overflow:hidden`. Il testo che cresce spinge verso
-   l'ALTO: finisce sotto l'intestazione e viene tagliato. Era il difetto piu'
-   grave dell'ingrandimento, e si vedeva solo al terzo livello.
-   Con l'ingrandimento attivo la hero smette di avere un'altezza imposta e
-   cresce verso il basso: il contenuto resta tutto dentro e nulla passa sotto
-   l'intestazione.
-   ⚠️ Il video di fondo e' in posizione assoluta su tutti i lati, quindi
-   continua a coprire la hero qualunque altezza prenda. */
-body.ts-on .hero{
-  height:auto !important;
-  max-height:none !important;
-  min-height:100vh;
-  padding-top:calc(var(--hh) + 28px);
-}
-@media(max-width:768px){
-  body.ts-on .hero{ min-height:64vh; padding-top:calc(var(--hh) + 34px); }
-}
-/* Stessa cura per la testata delle pagine interne. */
-body.ts-on .mx-hero{ min-height:0; height:auto; }
-body.ts-on .mx-hero, body.ts-on .hero{ scroll-margin-top:calc(var(--hh) + 16px); }
-
-
-/* ═══ FASCIA DI NAVIGAZIONE E CONTRASTO ═══
-   🔴 La voce della pagina attuale si distingue SOLO per il colore: oro contro
-   bianco. Al contrasto 2 il bianco diventa crema e l'oro oro chiaro, due tinte
-   quasi identiche, e non si capisce piu' dove ci si trova.
-   La soluzione qui e' allontanare le due tinte invece di avvicinarle: le altre
-   voci vanno a BIANCO PIENO (neutro, senza traccia di giallo) e la voce attiva
-   al SENAPE, con un filo di corpo in piu'. Neutro contro giallo
-   saturo si distingue anche a vista stanca.
-   ⚠️ Niente sottolineatura: e' stata provata e scartata, appesantiva la
-   fascia. Se un domani non bastasse, prima di rimetterla si provi ad
-   accentuare ancora la differenza di tinta.
-   ⚠️ Servono !important: il colore lo scrive il codice negli stili in linea. */
-/* 🔴 LA FASCIA E' UN VELO, NON UN PANNELLO: se dietro passa una fotografia
-   chiara, l'oro della voce attiva finisce su fondo bianco e sparisce. Sul
-   telefono succede spesso, perche' le immagini occupano tutta la larghezza.
-   Con l'ingrandimento o il contrasto attivi diventa piena: a quel punto la
-   leggibilita' viene prima della trasparenza.
-   ⚠️ Resta SEMPRE SCURA, mai chiara: e' l'invariante della fascia. */
-body.ts-on #bcbar, body.hc-1 #bcbar, body.hc-2 #bcbar{
-  background:rgba(10,10,10,.97) !important;
-  backdrop-filter:none;
-}
-body.hc-1 #bcbar .bc-b, body.hc-2 #bcbar .bc-b{ color:#ffffff !important; }
-body.hc-1 #bcbar .bc-b-qui, body.hc-2 #bcbar .bc-b-qui,
-body.hc-1 #bcbar .bc-cur,   body.hc-2 #bcbar .bc-cur{
-  /* Senape, non oro chiaro: e' l'unica tinta che tiene su TUTTI E DUE i fondi.
-     L'oro chiaro (#e8bc63) si legge bene sul nero e sparisce sul bianco; il
-     senape ha luminosita' intermedia, quindi stacca sia dal chiaro sia dallo
-     scuro. Su un velo semitrasparente, dove non si sa cosa passera' dietro,
-     e' l'unica scelta prudente. */
-  color:#c9942f !important;
-  font-weight:500;
-  text-shadow:0 1px 3px rgba(0,0,0,.55);
-}
-body.hc-1 #bcbar .bc-sep, body.hc-2 #bcbar .bc-sep{ color:rgba(184,150,90,.9) !important; }
-
-/* 🔴 IL PASSAGGIO DEL MOUSE DEVE CONTINUARE A FUNZIONARE.
-   Le regole del contrasto usano !important, e senza queste righe
-   sovrascriverebbero anche il colore di :hover: le voci restavano spente al
-   passaggio, e il visitatore non capiva piu' cosa fosse cliccabile.
-   ⚠️ Regola generale: ogni volta che si scrive un colore con !important, va
-   riscritto con !important anche lo stato acceso corrispondente. */
-@media(hover:hover){
-  body.hc-1 #bcbar .bc-b:hover, body.hc-2 #bcbar .bc-b:hover{ color:#e8bc63 !important; }
-  body.hc-1 .pp-nav-btn:hover, body.hc-2 .pp-nav-btn:hover{ color:#0a0a0a; }
-  body.hc-1 .pp-mob-btn:hover, body.hc-2 .pp-mob-btn:hover{ color:#0a0a0a; }
-}
-body.hc-1 #bcbar .bc-b:focus-visible, body.hc-2 #bcbar .bc-b:focus-visible{ color:#e8bc63 !important; }
-
-
-/* ═══ FASCETTA DELLA SCHEDA PRODOTTO E CONTRASTO ═══
-   ⚠️ La scheda prodotto ha FONDO CHIARO: qui il testo va reso piu' SCURO, non
-   piu' chiaro. E' l'unico punto del sito dove il contrasto lavora al
-   contrario, ed e' la ragione per cui un colore imposto a tappeto non
-   funzionava.
-   La voce scelta resta senape: stacca dal grigio delle altre e dal bianco del
-   fondo. */
-body.hc-1 .pp-nav-btn, body.hc-2 .pp-nav-btn{ color:rgba(0,0,0,.62); }
-body.hc-2 .pp-nav-btn{ color:rgba(0,0,0,.78); font-weight:400; }
-body.hc-1 .pp-nav-btn.active, body.hc-2 .pp-nav-btn.active,
-body.hc-1 .pp-mob-btn.active, body.hc-2 .pp-mob-btn.active{
-  color:#a8791f;
-  font-weight:500;
-}
-body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
-
-
-/* ═══ SCHEDA TECNICA · lettura su telefono ═══
-   ⚠️ UN PDF NON PUO' ESSERE RESO ADATTABILE: ha un'impaginazione fissa, ed e'
-   quello che lo rende affidabile in stampa. Qui non si tocca il documento, si
-   cambia lo SPAZIO in cui viene mostrato.
-   Era alto 520px fissi: su un telefono e' meta' schermo, e dentro ci stava una
-   pagina A4 rimpicciolita con sopra i comandi di Google Drive che si
-   accavallavano al contenuto.
-   Ora l'altezza segue lo schermo: su telefono quasi tutto, su computer resta
-   come prima. */
-#pp-pdf-iframe{ height:520px; }
-@media(max-width:768px){
-  #pp-pdf-iframe{ height:82vh; min-height:460px; }
-  .pp-pdf-viewer{ margin-left:-12px; margin-right:-12px; width:calc(100% + 24px); }
-  /* Il collegamento «apri a schermo intero» diventa un vero pulsante: sul
-     telefono e' il modo migliore di leggere una scheda tecnica, perche' usa il
-     lettore PDF del dispositivo invece di un riquadro dentro la pagina. */
-  #pp-ds-open{
-    display:block; margin-top:10px; padding:12px 14px; text-align:center;
-    border:1px solid rgba(184,150,90,.45); color:#b8965a !important;
-    font-size:10px !important; letter-spacing:.2em;
-  }
-}
-
-@media(max-width:768px){
-  /* 🔴 SU TELEFONO LA SCHEDA NON SI MOSTRA, SI SCARICA.
-     Un PDF ha impaginazione fissa: dentro un riquadro di mezzo schermo resta
-     una A4 rimpicciolita, con sopra i comandi di Google Drive che si
-     accavallano al contenuto. Meglio nessuna anteprima che un'anteprima
-     illeggibile: il lettore PDF del telefono la mostra molto meglio.
-     Resta il pulsante «Scarica», che e' quello che serve davvero. */
-  #pp-pdf-viewer-wrap{ display:none !important; }
-  #pp-pdf-toggle-label, a[onclick*="ppPdfToggle"]{ display:none !important; }
-}
-
-/* HERO SU SCHERMI BASSI, QUALUNQUE LARGHEZZA
-   =========================================
-   IL PROBLEMA. L'header e' fixed e alto 72px. La hero e' un flex in colonna
-   con il testo allineato in basso. Quando il blocco di testo e' piu' alto
-   dello spazio libero, l'eccedenza di un flex esce dal lato OPPOSTO
-   all'allineamento: con il testo in basso, esce IN ALTO, e il padding
-   superiore non la trattiene. Risultato: "Cucine Marine d'Autore" finiva
-   sotto l'header, o a cavallo.
-
-   ATTENZIONE: la correzione precedente stava dentro @media(max-width:768px)
-   e quindi NON copriva gli schermi bassi ma LARGHI: telefono in orizzontale,
-   tablet, portatili piccoli. Li' valeva la regola base, che ha padding-top:0.
-
-   LA CURA. Sotto i 620px di altezza la hero smette di essere alta quanto lo
-   schermo e cresce quanto il suo contenuto: niente altezza forzata, niente
-   eccedenza, quindi nessuna sovrapposizione possibile. Il padding superiore
-   tiene comunque l'header fuori e i corpi del testo scendono un poco.
-
-   NON rimettere qui justify-content:flex-end e non rimettere
-   min-height/max-height: sono esattamente le due cose che riaprono il
-   difetto. Se un giorno il testo della hero si allunga ancora, si accorcia
-   il testo, non si tocca questa regola. */
-@media (max-height: 620px){
-  .hero{
-    height:auto;
-    min-height:0;
-    max-height:none;
-    justify-content:flex-start;
-    padding-top:calc(var(--hh) + 20px);
-    padding-bottom:56px;
-  }
-  .hco{ margin-top:0; }
-  .hey{ margin-bottom:8px; }
-  .hti{ font-size:clamp(24px,4.6vw,40px); margin-bottom:10px; line-height:1; }
-  .hde{ font-size:12px; line-height:1.6; margin-bottom:20px; }
-  .hyr{ display:none; }
-}
-@media (max-height: 620px) and (max-width: 768px){
-  .hero{ padding-left:24px; padding-right:24px; }
-}
-
-/* HERO SU MOBILE, PRIMA SCHERMATA PULITA
-   ======================================
-   IL MOTIVO. Sul telefono sopra il video stavano undici blocchi: occhiello,
-   titolo, descrizione, riga delle figure, tre pulsanti, tre link, piu' gli
-   elementi decorativi e il ticker. Troppi.
-
-   LA SOLUZIONE. Il contenuto e' diviso in due fratelli, .hco e .hco-more.
-   Sotto i 768px la hero cresce quanto serve: .hco riempie la prima
-   schermata con occhiello, titolo e indicatore di scorrimento, mentre
-   .hco-more scorre sotto, su nero pieno. I media di sfondo (video, foto,
-   velatura) vengono fermati a 100svh, cosi' la parte inferiore non e' piu'
-   sopra la foto.
-
-   ATTENZIONE, e' il punto che conta: NIENTE display:none. Il testo non e'
-   nascosto ne' duplicato, e' lo stesso elemento spostato piu' in basso.
-   Google indicizza in modalita' mobile-first e svaluta il contenuto
-   nascosto: se un giorno si volesse "semplificare" togliendo .hde dal
-   telefono, si perderebbe l'unica riga di prodotto sopra la piega.
-
-   Su DESKTOP non cambia nulla: i due blocchi restano incolonnati come i
-   loro contenuti erano prima dentro un unico contenitore. */
-/* z-index senza position: .hco-more e' un elemento flex della hero, e per
-   gli elementi flex lo z-index vale anche da statici. DEVE restare statico,
-   altrimenti diventa il riferimento del posizionamento assoluto di .btm, che
-   invece si ancora alla hero. */
-.hco-more{ z-index:3; max-width:600px; }
-/* NOTA: qui c'era un secondo indicatore di scorrimento, .hsp. E' stato
-   tolto perche' ne esisteva gia' uno globale, .pp-scroll-hint, che
-   attachTo(window,'home') accende anche sulla home: se ne vedevano due, uno
-   al centro e uno a destra. Prima di aggiungerne uno nuovo, cercare
-   "pp-scroll-hint". */
-
-@media(max-width:768px){
-  .hero{
-    height:auto;
-    min-height:0;
-    max-height:none;
-    padding-bottom:0;
-    background:#0a0a0a;
-    justify-content:flex-start;
-  }
-  /* I media di sfondo hanno lo stile IN LINEA con inset:0, quindi servono
-     le sovrascritture. Si fermano alla prima schermata. */
-  #heroVid, #heroVid2, .hero picture, .hero picture img, .hovl{
-    height:100vh !important;
-    height:100svh !important;
-    bottom:auto !important;
-  }
-  /* Il secondo filmato del ciclo, sul telefono, e' quello di Oceano:
-     completamente desaturato, cosi' il montaggio si legge come un unico
-     racconto e non come due riprese diverse incollate. */
-  #heroVid2{ filter:grayscale(1) brightness(.82) !important; }
-  .hci{ top:50vh; top:50svh; }
-  .hco{
-    margin-top:0;
-    min-height:calc(100vh - var(--hh) - 34px);
-    min-height:calc(100svh - var(--hh) - 34px);
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end;
-    /* Lo spazio che occupava l'indicatore di scorrimento quando stava qui
-       dentro. Togliendolo da .hco il titolo e' sceso di colpo fino al bordo
-       inferiore della prima schermata, perche' i figli sono allineati in
-       basso e non c'era piu' niente in coda a tenerlo su.
-       Ora l'indicatore e' fisso a 96px dal fondo della finestra: questo
-       margine lascia libera quella fascia. */
-    padding-bottom:88px;
-  }
-  .hco-more{
-    max-width:100%;
-    width:100%;
-    padding-top:34px;
-    padding-bottom:56px;
-  }
-
-
-  /* INGRESSO SCAGLIONATO DEL BLOCCO SOTTO IL TITOLO
-     Le animazioni fiu dei singoli elementi partono al caricamento della
-     pagina: sul telefono questo blocco e' sotto la piega, quindi la loro
-     corsa finisce prima che qualcuno la veda, e il testo compariva di
-     colpo. Qui vengono spente (animation:none) e sostituite da una
-     salita legata alla comparsa, con 90ms di sfasamento fra una riga e
-     l'altra.
-     ATTENZIONE: il ritardo e' sul figlio, non sul contenitore. Mettendolo
-     sul contenitore salirebbero tutti insieme, che e' proprio quello che
-     si vuole evitare. */
-  .hco-more > *{
-    opacity:0;
-    transform:translateY(34px);
-    animation:none !important;
-    transition:opacity .7s linear, transform 1.1s cubic-bezier(.42,0,.25,1);
-    will-change:transform,opacity;
-  }
-  .hco-more.in > *{ opacity:1; transform:none; will-change:auto; }
-
-  /* ORDINE E RESPIRO DEL BLOCCO SOTTO IL TITOLO
-     =========================================
-     I valori di prima erano tarati su una hero stretta, dove questo testo
-     stava sopra la foto insieme a tutto il resto: corpi minuscoli,
-     interlinee compresse e perfino un margine negativo su .hwho-sm per
-     recuperare quattordici pixel. Ora il blocco ha una schermata tutta sua.
-
-     L'ORDINE sul telefono e' diverso da quello del markup:
-       descrizione, figure, ESPLORA I PRODOTTI a tutta larghezza,
-       la nostra storia, i tre link, e in fondo, piccolo,
-       PANORAMICA PRODOTTI.
-
-     COME. .hac diventa display:contents, cioe' smette di generare un
-     riquadro e i suoi tre pulsanti diventano figli diretti di .hco-more:
-     da li' si possono ordinare insieme ai link con la proprieta' order.
-     ATTENZIONE: con display:contents .hac non ha piu' un riquadro, quindi
-     opacita' e trasformazioni su di lui non hanno alcun effetto. Per
-     questo l'ingresso e' scritto anche su .hac > *, e i ritardi sono
-     assegnati per classe e non per nth-child: seguono l'ordine VISIVO,
-     non quello del markup. */
-  .hco-more{
-    display:flex;
-    flex-direction:column;
-    align-items:flex-start;
-    padding-top:44px;
-    padding-bottom:18px;
-  }
-  .hac{ display:contents; }
-
-  /* I paragrafi occupano tutta la larghezza: con align-items:flex-start
-     un elemento flex si dimensiona sul contenuto, e una riga corta come
-     quella delle figure resterebbe piu' stretta della colonna. */
-  .hde, .hwho{ align-self:stretch; }
-  .hde        { order:1; }
-  .hwho-sm    { order:2; }
-  .hac .btp   { order:3; }
-  .hac .btg   { order:4; }
-  .bte        { order:5; }
-  .hac .btm   { order:6; }
-
-  .hde{
-    font-size:13px;
-    line-height:1.9;
-    margin-bottom:28px;
-    letter-spacing:.015em;
-  }
-  .hwho-sm{
-    font-size:10px;
-    line-height:1.85;
-    letter-spacing:.09em;
-    margin:0 0 34px;
-  }
-  /* Il pulsante principale prende tutta la larghezza ed e' il piu' grande
-     elemento cliccabile della schermata: sul telefono e' la sola azione
-     che conta davvero. */
-  /* Stessa veste di Panoramica prodotti: oro su trasparente con cornice.
-     Il rettangolo pieno pesava troppo su una colonna stretta. Resta il
-     pulsante piu' grande della schermata, ma per larghezza e corpo, non
-     per colore. */
-  .hac .btp{
-    align-self:stretch;
-    width:100%;
-    text-align:center;
-    background:transparent;
-    color:var(--go);
-    border:1px solid rgba(184,150,90,.55);
-    font-size:10.5px;
-    letter-spacing:.24em;
-    padding:18px 24px;
-    margin:0;
-  }
-  .hac .btg{
-    align-self:flex-start;
-    margin:24px 0 0;
-    font-size:9px;
-    letter-spacing:.18em;
-  }
-  .bte{ margin-top:40px; font-size:10.5px; letter-spacing:.16em; gap:11px; }
-  .bte + .bte{ margin-top:24px; }
-  .bte svg{ width:17px; height:17px; }
-  /* Panoramica prodotti: in fondo e in punta di piedi, e' una scorciatoia
-     per chi sa gia' cosa cerca. */
-  /* Panoramica prodotti sta in fondo, vicino al bordo ma non appiccicata:
-     il distacco lo fa il margine superiore, il respiro sotto lo fa il
-     padding ridotto di .hco-more. Sommati restano meno di prima, quindi la
-     sezione nera si accorcia invece di allungarsi. */
-  .hac .btm{
-    align-self:flex-start;
-    width:auto;
-    margin:72px 0 0;
-    font-size:7px;
-    letter-spacing:.14em;
-    padding:8px 14px;
-    border-color:rgba(184,150,90,.35);
-  }
-
-  /* Ingresso: i ritardi seguono l'ordine visivo di sopra. */
-  .hco-more .hac > *{
-    opacity:0;
-    transform:translateY(34px);
-    animation:none !important;
-    transition:opacity .7s linear, transform 1.1s cubic-bezier(.42,0,.25,1);
-    will-change:transform,opacity;
-  }
-  .hco-more.in .hac > *{ opacity:1; transform:none; will-change:auto; }
-  .hco-more.in .hde                 { transition-delay:0ms; }
-  .hco-more.in .hwho-sm             { transition-delay:90ms; }
-  .hco-more.in .hac .btp            { transition-delay:180ms; }
-  .hco-more.in .hac .btg            { transition-delay:270ms; }
-  .hco-more.in .bte:nth-of-type(1)  { transition-delay:360ms; }
-  .hco-more.in .bte:nth-of-type(2)  { transition-delay:450ms; }
-  .hco-more.in .bte:nth-of-type(3)  { transition-delay:540ms; }
-  .hco-more.in .hac .btm            { transition-delay:630ms; }
-}
-/* PANORAMICA PRODOTTI IN BASSO, SU DESKTOP
-   ========================================
-   Tolta dalla riga dei pulsanti e appoggiata in fondo a sinistra, alla
-   stessa altezza dei riquadri 1st / 40yr / Global di destra. Come quelli,
-   all'apertura della home resta coperta dalla fascia dei cantieri.
-
-   RIFERIMENTO: la HERO, che e' position:relative e sta ferma. NON .hco-more.
-   Un primo tentativo la ancorava a .hco-more calcolando la distanza dal
-   fondo come min(100px,8vh), cioe' il padding inferiore della hero. Quel
-   calcolo saltava sugli schermi alti, dove @media(min-height:900px) mette
-   justify-content:center e padding-bottom:0: li' .hco-more non sta piu' in
-   fondo e il pulsante finiva in mezzo alle altre scritte.
-
-   left:60px e' il padding orizzontale della hero su desktop, cosi' il
-   pulsante e' incolonnato con il testo. bottom:20px lo porta a meta' altezza
-   dei riquadri di destra, alti circa 76px.
-
-   ATTENZIONE: con position:absolute esce dal flusso, quindi la riga .hac
-   resta con due soli elementi. Se un giorno lo si rimettesse in riga, va
-   tolto anche questo blocco.
-
-   ATTENZIONE 2: sugli schermi bassi la hero e' alta quanto il contenuto,
-   non quanto la finestra. Il pulsante resta comunque in fondo alla hero,
-   ma serve il margine inferiore maggiorato del blocco qui sotto, altrimenti
-   si sovrappone ai tre link. */
-@media (min-width:769px){
-  /* LA TRASFORMAZIONE VA TOLTA, ALTRIMENTI IL PULSANTE SBAGLIA POSTO.
-     L'animazione fiu finisce con transform:translateY(0), e con "forwards"
-     quel valore resta applicato. Un elemento con una transform diventa il
-     riferimento del posizionamento assoluto dei suoi discendenti: .btm si
-     ancorava a .hac invece che alla hero, e finiva un centinaio di pixel
-     piu' in alto, sopra gli altri pulsanti.
-     "fi" e' l'animazione di sola dissolvenza gia' usata dai riquadri delle
-     statistiche: stessa entrata, senza scivolata e senza transform. */
-  .hac{ animation:fi 1s ease .9s forwards; }
-  .hac .btm{
-    position:absolute;
-    left:60px;
-    bottom:18px;
-    margin:0;
-    /* Piccolo come sul telefono: in fondo alla hero e' una scorciatoia per
-       chi torna, non un invito. La cornice e' attenuata perche' su un
-       riquadro piccolo un bordo pieno pesa piu' del testo. */
-    font-size:7.5px;
-    letter-spacing:.16em;
-    padding:9px 16px;
-    border-color:rgba(184,150,90,.35);
-  }
-}
-/* Sugli schermi bassi la hero e' alta quanto il contenuto: senza un po' di
-   margine in fondo la Panoramica finirebbe sopra i tre link. */
-@media (min-width:769px) and (max-height:620px){
-  .hero{ padding-bottom:88px; }
-}
-
-@media (max-width:768px) and (prefers-reduced-motion: reduce){
-  .hco-more > *, .hco-more .hac > *{ opacity:1; transform:none; transition:none; }
-}
-
-/* ══════════════════════════════════════════════════════════════════════
-   LA SECONDA SCHERMATA DEL TELEFONO · TESTO SUL NERO, INDICE SU FASCE
-   ══════════════════════════════════════════════════════════════════════
-   IL DIFETTO. Sotto la prima videata il telefono mostrava otto blocchi
-   incolonnati a sinistra, tutti dello stesso grigio, tutti larghi uguale,
-   su nero piatto, e tutti in salita insieme: un muro. "La nostra storia"
-   era una riga di nove pixel al 65% di bianco, invisibile fra il pulsante
-   grande e i tre link.
-
-   LA CURA, in quattro mosse:
-     1. IL NERO RESTA SOLO DOVE SERVE · e' la coda della hero: descrizione,
-        riga delle figure, pulsante principale. Tre elementi, molta aria.
-     2. GLI APPROFONDIMENTI DIVENTANO FASCE AVORIO A TUTTO VIVO · quattro
-        pannelli #f8f6f1 larghi quanto lo schermo, staccati da 10px di nero,
-        testo scuro e icona oro. Sono pulsanti veri, non link, e il nero
-        smette di essere una parete continua: diventa lo spazio fra i
-        pannelli. Il colpo di bianco richiama la sezione prodotti subito
-        sotto, che e' gia' avorio.
-     3. "LA NOSTRA STORIA" E' LA PRIMA FASCIA, la piu' alta, con la freccia
-        in oro a destra: e' la voce a cui il committente tiene di piu'.
-     4. SALGONO UNA PER UNA · ogni riga ha il suo osservatore
-        (avviaHeroMoreItems) e parte quando entra in schermo, con la stessa
-        curva e la stessa corsa delle schede della sezione produzione.
-
-   ⚠️ VINCOLI RISPETTATI, da non riaprire:
-   · TUTTO dentro @media(max-width:768px): su desktop non cambia un pixel.
-   · Il blocco sta in fondo al foglio, DOPO le regole che deve battere
-     (riga ~24216 e ~3806). Spostarlo piu' in su lo rende inerte.
-   · NIENTE display:none: nessun testo sparisce, l'indicizzazione
-     mobile-first vede le stesse parole.
-   · position:relative su .hco-more vale SOLO qui: sul telefono .btm e'
-     statico. Su desktop .btm e' absolute e si ancora alla HERO, percio'
-     li' .hco-more deve restare statico e infatti non viene toccato.
-   · Le fasce escono dal padding di 24px della hero con margini negativi:
-     con align-self:stretch la larghezza di un elemento flex si calcola
-     togliendo i margini, quindi negativi la allargano di 48px esatti.
-     La hero ha overflow:hidden: nessuna barra orizzontale possibile.
-   · I RITARDI DI SCALETTA VANNO AZZERATI: erano tarati sull'ingresso a
-     blocco (fino a 630ms). Con l'osservatore per riga diventerebbero
-     attesa a vuoto dopo che la riga e' gia' in schermo.
-   · Il ramo prefers-reduced-motion va RIPETUTO in fondo: quello di sopra
-     viene prima di queste regole e da solo non basterebbe piu'.
-   ══════════════════════════════════════════════════════════════════════ */
-@media(max-width:768px){
-
-  /* ── 1 · LA CODA NERA DELLA HERO ──────────────────────────────────
-     Il velo sta in un ::before e non nel background dell'elemento: cosi'
-     arriva ai bordi dello schermo senza toccare il flusso e non entra
-     nell'animazione, che agisce sui figli e non sui pseudo-elementi. */
-  .hco-more{
-    position:relative;
-    padding-top:52px;
-    padding-bottom:40px;
-  }
-  .hco-more::before{
-    content:"";
-    position:absolute;
-    left:-24px; right:-24px; top:0; bottom:0;
-    z-index:-1;
-    pointer-events:none;
-    border-top:1px solid rgba(184,150,90,.18);
-    background:
-      radial-gradient(135% 60% at 10% -6%, rgba(184,150,90,.09) 0%, rgba(184,150,90,0) 62%),
-      linear-gradient(180deg,#0c0b09 0%, #0a0a0a 55%, #080808 100%);
-  }
-  /* Eco del cerchio dorato della hero, fermo e quasi spento: da'
-     profondita' al nero senza chiedere attenzione. Sta in alto, dove il
-     nero e' ancora ampio, e viene tagliato dall'overflow della hero. */
-  .hco-more::after{
-    content:"";
-    position:absolute;
-    right:-40vw; top:-6vw;
-    width:82vw; height:82vw;
-    border-radius:50%;
-    border:1px solid rgba(184,150,90,.08);
-    z-index:-1;
-    pointer-events:none;
-  }
-
-  /* ── 2 · LA DESCRIZIONE, CON CAPOLETTERA ──────────────────────────
-     Corpo e colore salgono un poco (era .65 di bianco a 13px). Il
-     capolettera e' in Cormorant come i titoli del sito e funziona in
-     tutte e cinque le lingue. Per toglierlo basta cancellare il blocco
-     ::first-letter. */
-  .hde{
-    font-size:13.5px;
-    line-height:1.9;
-    color:rgba(248,246,241,.74);
-    margin-bottom:30px;
-    letter-spacing:.012em;
-  }
-  .hde::first-letter{
-    float:left;
-    font-family:"Cormorant Garamond",serif;
-    font-weight:300;
-    font-size:54px;
-    line-height:.76;
-    color:#c9a568;
-    margin:7px 13px 0 0;
-  }
-
-  /* ── 3 · LA RIGA DELLE FIGURE ─────────────────────────────────────
-     Il filetto e' un ::before inline-block: NON si usa display:flex,
-     perche' dentro c'e' il collegamento ai ricambi (.hw-go) e i nodi di
-     testo intorno diventerebbero elementi flex separati, spezzando la
-     riga. */
-  .hwho-sm{
-    font-size:10px;
-    letter-spacing:.1em;
-    line-height:1.8;
-    color:rgba(248,246,241,.52);
-    margin:0 0 44px;
-  }
-  .hwho-sm::before{
-    content:"";
-    display:inline-block;
-    width:24px; height:1px;
-    background:rgba(184,150,90,.55);
-    vertical-align:middle;
-    margin:-2px 12px 0 0;
-  }
-
-  /* ── 4 · IL PULSANTE PRINCIPALE ───────────────────────────────────
-     Resta oro su trasparente, ma piu' alto e con un velo dorato dentro:
-     sotto arrivano quattro fasce avorio, e senza un minimo di corpo
-     perderebbe il primo posto nella gerarchia. */
-  .hac .btp{
-    padding:20px 24px;
-    letter-spacing:.26em;
-    font-size:10.5px;
-    background:rgba(184,150,90,.07);
-    border-color:rgba(184,150,90,.6);
-  }
-
-  /* ── 5 · LE QUATTRO FASCE AVORIO ──────────────────────────────────
-     Stessa scatola per tutte: a tutto vivo, testo rientrato di 24px come
-     il resto della pagina, staccate da 10px di nero. I margini di prima
-     (40px e 24px fra un link e l'altro) vengono azzerati qui: stessa
-     specificita', ma questo blocco viene dopo. */
-  .hac .btg, .bte{
-    align-self:stretch;
-    width:auto;
-    margin-left:-24px;
-    margin-right:-24px;
-    margin-bottom:0;
-    padding:23px 24px;
-    display:flex;
-    align-items:center;
-    gap:15px;
-    background:#f8f6f1;
-    color:#0a0a0a;
-    font-family:"Outfit",sans-serif;
-    font-weight:400;
-    text-transform:uppercase;
-  }
-  /* La nostra storia: prima, piu' alta, con la freccia gia' presente nel
-     markup spinta a destra a chiudere la riga. Nessuna freccia nuova. */
-  .hac .btg{
-    margin-top:56px;
-    padding-top:27px;
-    padding-bottom:27px;
-    font-size:11.5px;
-    letter-spacing:.2em;
-  }
-  .hac .btg svg{
-    width:14px; height:14px;
-    margin-left:auto;
-    color:rgba(140,108,52,.95);
-  }
-  .bte{
-    margin-top:10px;
-    font-size:11px;
-    letter-spacing:.17em;
-  }
-  .bte + .bte{ margin-top:10px; }
-  .bte svg{
-    width:18px; height:18px;
-    flex-shrink:0;
-    color:rgba(140,108,52,.95);
-  }
-
-  /* ── 6 · PANORAMICA PRODOTTI ──────────────────────────────────────
-     Torna sul nero, piccola e centrata sotto le fasce: e' una
-     scorciatoia per chi sa gia' cosa cerca, non un invito. */
-  .hac .btm{
-    align-self:center;
-    width:auto;
-    margin:46px 0 0;
-    font-size:8px;
-    letter-spacing:.2em;
-    padding:11px 20px;
-    border-color:rgba(184,150,90,.35);
-  }
-
-  /* ── 7 · L'INGRESSO, RIGA PER RIGA ────────────────────────────────
-     La classe .up la mette avviaHeroMoreItems() quando la singola riga
-     entra in schermo. Le due regole ".in" qui sotto RIMETTONO a zero
-     l'accensione a blocco della versione precedente: senza, la classe
-     .in sul contenitore accenderebbe tutto insieme e l'osservatore per
-     riga non servirebbe a nulla. Corsa e curva sono quelle di .pr-rise
-     della sezione produzione, per coerenza. */
-  .hco-more > *, .hco-more .hac > *{
-    opacity:0;
-    transform:translateY(48px);
-    animation:none !important;
-    transition:opacity .75s linear, transform 1.15s cubic-bezier(.42,0,.25,1);
-    will-change:transform,opacity;
-  }
-  .hco-more.in > *, .hco-more.in .hac > *{
-    opacity:0;
-    transform:translateY(48px);
-  }
-  .hco-more > .up, .hco-more .hac > .up{
-    opacity:1;
-    transform:none;
-    will-change:auto;
-  }
-  /* I ritardi della scaletta vecchia, riscritti a zero uno per uno:
-     hanno specificita' alta e senza queste righe resterebbero attivi. */
-  .hco-more.in .hde,
-  .hco-more.in .hwho-sm,
-  .hco-more.in .hac .btp,
-  .hco-more.in .hac .btg,
-  .hco-more.in .bte:nth-of-type(1),
-  .hco-more.in .bte:nth-of-type(2),
-  .hco-more.in .bte:nth-of-type(3),
-  .hco-more.in .hac .btm{ transition-delay:0ms; }
-}
-
-/* Ripetuto qui in fondo: il ramo di sopra viene prima delle regole nuove
-   e non basterebbe piu' a batterle. Con "meno movimento" tutto e' visibile
-   e fermo, anche se l'osservatore non partisse mai. */
-@media (max-width:768px) and (prefers-reduced-motion: reduce){
-  .hco-more > *, .hco-more .hac > *,
-  .hco-more.in > *, .hco-more.in .hac > *{
-    opacity:1 !important;
-    transform:none !important;
-    transition:none !important;
-  }
-}
-</style>
 <script>
 (function(){
   var btn=document.getElementById('backtotop');
@@ -28106,9 +28136,9 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
   </div>
   <p class="tsp-lbl" data-i18n="ts_hc">Contrast</p>
   <div class="tsp-row">
-    <button class="tsp-c" data-hc="0" onclick="tsHcScegli(0)"><span class="tsp-hc-dot" aria-hidden="true"></span></button>
-    <button class="tsp-c" data-hc="1" onclick="tsHcScegli(1)"><span class="tsp-hc-dot" aria-hidden="true"></span></button>
-    <button class="tsp-c" data-hc="2" onclick="tsHcScegli(2)"><span class="tsp-hc-dot" aria-hidden="true"></span></button>
+    <button class="tsp-c" data-hc="0" onclick="tsHcScegli(0)"><span class="tsp-hc-dot" aria-hidden="true"></span><span class="tsp-sr" data-i18n="ts_hc_0">Standard contrast</span></button>
+    <button class="tsp-c" data-hc="1" onclick="tsHcScegli(1)"><span class="tsp-hc-dot" aria-hidden="true"></span><span class="tsp-sr" data-i18n="ts_hc_1">Increased contrast</span></button>
+    <button class="tsp-c" data-hc="2" onclick="tsHcScegli(2)"><span class="tsp-hc-dot" aria-hidden="true"></span><span class="tsp-sr" data-i18n="ts_hc_2">Maximum contrast</span></button>
   </div>
   <p class="tsp-hint" data-i18n="ts_pop_hint">You can reopen this panel at any time from the button in the header above.</p>
 </div>
