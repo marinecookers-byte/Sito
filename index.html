@@ -4188,8 +4188,8 @@ body.ts-on .pcard-oc ~ .pdsc{ padding-right:74px; }
   transition:filter .5s ease;
 }
 .oc-fig-img:hover{ filter:grayscale(0); }
-/* Invito sotto la didascalia di Latifa: apre le stesse 34 foto del clic
-   sulla foto (ocLatifa). E' un <button>, quindi il cursore dorato lo
+/* Invito sotto la didascalia di Latifa: apre la stessa finestra con le
+   foto del clic sulla foto (ocLatifa). E' un <button>, quindi il cursore dorato lo
    riconosce da solo. Testo nelle cinque lingue: chiave oc_fig_more, sullo
    stesso modello di "Click to open the 3D model". */
 .oc-fig-more{
@@ -4353,6 +4353,84 @@ body.ts-on .pcard-oc ~ .pdsc{ padding-right:74px; }
   transition:color .3s ease;
 }
 .ocinfo-x svg{ width:17px; height:17px; }
+
+/* ═══ LATIFA · FINESTRA CON TUTTE LE FOTO DELLA CUCINA (19/09/2026) ═══
+   Si apre dalla foto di Latifa nel capitolo II di Oceano e dalla frase
+   sotto la didascalia. Stessa meccanica di #ocinfo (velo, scatola scura, X)
+   ma grande: dentro c'e' solo la griglia delle foto, e ogni foto apre il
+   visore (9500). NESSUN TITOLO: scelta del titolare, in alto solo la X.
+   (Provato anche il visore diretto senza finestra: bocciato dal titolare.)
+   ⚠️ Le colonne stanno su .latgal-grid, NON sul contenitore che scorre:
+   in un riquadro di altezza fissa le colonne CSS si riempiono fino in fondo
+   e poi ne creano altre di lato, e la griglia scapperebbe in orizzontale.
+   ⚠️ La finestra sta FUORI dal modale di Oceano: il gestore della rotellina
+   di Oceano non la tocca e lei scorre in modo nativo. */
+#latgal{
+  position:fixed; inset:0; z-index:960;
+  display:flex; align-items:center; justify-content:center;
+  padding:28px;
+  background:rgba(6,6,6,.86);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  opacity:0; pointer-events:none;
+  transition:opacity .4s ease;
+}
+#latgal.show{ opacity:1; pointer-events:all; }
+.latgal-box{
+  position:relative;
+  width:min(1180px,100%); max-height:100%;
+  display:flex; flex-direction:column;
+  background:#0f0f0f;
+  border:1px solid rgba(184,150,90,.28);
+  transform:translateY(14px);
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+}
+#latgal.show .latgal-box{ transform:none; }
+.latgal-head{
+  flex:0 0 auto;
+  display:flex; align-items:center; justify-content:flex-end;
+  padding:6px 8px 4px;
+}
+.latgal-x{
+  flex-shrink:0; width:36px; height:36px;
+  display:flex; align-items:center; justify-content:center;
+  background:none; border:none; padding:0;
+  color:rgba(248,246,241,.5); cursor:pointer;
+  transition:color .3s ease;
+}
+.latgal-x svg{ width:17px; height:17px; }
+.latgal-scroll{
+  flex:1 1 auto; min-height:0;
+  overflow-y:auto; overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  padding:0 14px 14px;
+}
+.latgal-grid{ columns:3; column-gap:12px; }
+.latgal-tile{
+  display:inline-block; width:100%; vertical-align:top;
+  margin:0 0 12px; padding:0; border:0;
+  background:#161616; cursor:pointer;
+  -webkit-column-break-inside:avoid; break-inside:avoid;
+}
+.latgal-tile img{
+  display:block; width:100%; height:auto;
+  filter:brightness(.9);
+  transition:filter .5s ease;
+}
+@media(hover:hover){
+  .latgal-x:hover{ color:#b8965a; }
+  .latgal-tile:hover img{ filter:brightness(1); }
+}
+.latgal-tile:focus-visible{ outline:1px solid #b8965a; outline-offset:2px; }
+@media(max-width:900px){ .latgal-grid{ columns:2; } }
+@media(max-width:768px){
+  /* Su telefono a tutto schermo. La X resta sotto la barra di sistema. */
+  #latgal{ padding:0; }
+  .latgal-box{ width:100%; height:100%; max-height:none; border:none; }
+  .latgal-head{ padding:calc(4px + env(safe-area-inset-top,0px)) 4px 2px; }
+  .latgal-scroll{ padding:0 8px calc(8px + env(safe-area-inset-bottom,0px)); }
+  .latgal-grid{ column-gap:8px; }
+  .latgal-tile{ margin-bottom:8px; }
+}
 .ocinfo-ttl{
   display:block;
   font-family:'Outfit',sans-serif;
@@ -10633,6 +10711,20 @@ body.hc-1 .pp-mob-btn, body.hc-2 .pp-mob-btn{ color:rgba(0,0,0,.62); }
   </div>
 </div>
 
+<!-- LATIFA · finestra con tutte le foto della cucina (ocLatifa). Nessun
+     titolo, solo la X. Le miniature si creano al primo clic: la pagina
+     Oceano non scarica foto che nessuno ha chiesto. -->
+<div id="latgal" role="dialog" aria-modal="true" aria-label="Latifa" onclick="if(event.target===this)closeLatifa()">
+  <div class="latgal-box">
+    <div class="latgal-head">
+      <button class="latgal-x" id="latgal-x" type="button" onclick="closeLatifa()" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="latgal-scroll" id="latgal-scroll"><div class="latgal-grid" id="latgal-grid"></div></div>
+  </div>
+</div>
+
 
 <!-- CONTACT PAGE -->
 <div id="contactpage">
@@ -14043,6 +14135,8 @@ document.addEventListener('keydown',function(e){
   var _sp=document.getElementById('sparepage');
   if(_sp&&_sp.classList.contains('show')){closeSpare();return;}
   var _ef=document.getElementById('effpage');
+  var _lgl=document.getElementById('latgal');
+  if(_lgl&&_lgl.classList.contains('show')){if(window.closeLatifa)window.closeLatifa();return;}
   var _oci=document.getElementById('ocinfo');
   if(_oci&&_oci.classList.contains('show')){closeOcInfo();return;}
   if(_ef&&_ef.classList.contains('show')){closeEff();return;}
@@ -15914,6 +16008,7 @@ function closeOcean(){
   var oc=document.getElementById('oceanpage');
   if(!oc) return;
   oc.classList.remove('show');
+  if(window.closeLatifa) window.closeLatifa();
   ocStop();
   if(_ocLock){ document.body.classList.remove('page-open'); _ocLock=false; }
   if(!document.body.classList.contains('page-open')){ document.body.style.overflow=''; }
@@ -15952,11 +16047,13 @@ function ocSoldini(){
 window.ocSoldini=ocSoldini;
 
 /* ══ LATIFA · TUTTE LE FOTO DELLA CUCINA (19/09/2026) ══
-   La foto di Latifa nel capitolo II apre DIRETTAMENTE il visore con tutte
-   le foto, grandi, dalla prima dell'elenco. Niente griglia intermedia e
-   niente titolo: scelta del titolare. Come per Soldini, OCEANO NON SI
-   CHIUDE: il visore sta a 9500, sopra la pagina (940), e alla X si torna
-   esattamente dove si era.
+   La foto di Latifa nel capitolo II (e la frase oc_fig_more) apre #latgal:
+   finestra con la griglia di tutte le foto, SENZA TITOLO. Ogni foto apre il
+   visore alla stessa posizione. OCEANO NON SI CHIUDE: la finestra sta a 960,
+   sopra la pagina (940), il visore a 9500 sopra la finestra. Esc chiude
+   nell'ordine visore, finestra, Oceano.
+   ⚠️ Il visore diretto senza finestra e' stato provato e BOCCIATO dal
+   titolare (brutto, e su telefono non si scorreva): non tornarci.
    Per aggiungere o togliere foto basta modificare l'elenco qui sotto:
    [percorso dopo /upload/, testo alternativo]. Niente apostrofi nei testi. */
 (function(){
@@ -15997,14 +16094,36 @@ window.ocSoldini=ocSoldini;
     ['v1789833939/LATIFA-Gas-Range-for-Classic-Yacht_sise3e.jpg','LATIFA gas range for a classic yacht'],
     ['v1789833939/Latifa-marine-stove-handcrafted-in-italy_odfjpf.jpg','Latifa marine stove, handcrafted in Italy']
   ];
+  var built=false;
+  function build(){
+    if(built) return true;
+    var g=document.getElementById('latgal-grid');
+    if(!g) return false;
+    var h='';
+    for(var i=0;i<F.length;i++){
+      h+='<button type="button" class="latgal-tile" onclick="ocLatifaShow('+i+')">'
+       +'<img src="'+B+'f_auto,q_auto,w_700/'+F[i][0]+'" alt="'+F[i][1]+'" loading="lazy" decoding="async"></button>';
+    }
+    g.innerHTML=h; built=true; return true;
+  }
   window.ocLatifa=function(){
-    if(typeof window.ppGalleryOpen==='function'){
-      window.ppGalleryOpen(F.map(function(f){ return {src:B+'f_auto,q_auto,w_1600/'+f[0], alt:f[1]}; }), 0);
+    var box=document.getElementById('latgal');
+    if(!box || !build()){
+      /* Ricaduta: senza finestra, lo zoom sulla foto singola di prima. */
+      var im=document.querySelector('.oc-fig-img');
+      if(im && typeof window.hdZoom==='function') window.hdZoom(im.getAttribute('data-zoom')||im.src, im.alt);
       return;
     }
-    /* Ricaduta: senza visore, lo zoom sulla foto singola di prima. */
-    var im=document.querySelector('.oc-fig-img');
-    if(im && typeof window.hdZoom==='function') window.hdZoom(im.getAttribute('data-zoom')||im.src, im.alt);
+    var sc=document.getElementById('latgal-scroll'); if(sc) sc.scrollTop=0;
+    box.classList.add('show');
+  };
+  window.ocLatifaShow=function(i){
+    if(typeof window.ppGalleryOpen!=='function') return;
+    window.ppGalleryOpen(F.map(function(f){ return {src:B+'f_auto,q_auto,w_1600/'+f[0], alt:f[1]}; }), i);
+  };
+  window.closeLatifa=function(){
+    var box=document.getElementById('latgal');
+    if(box) box.classList.remove('show');
   };
 })();
 
