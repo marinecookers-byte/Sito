@@ -13748,7 +13748,7 @@ function applyProdSpecLayout(m){
   // La foto della sezione specs e' SEMPRE quella della galleria di categoria,
   // cioe' PROD_IMGS[m]: la stessa che compare nella griglia della categoria.
   var src='';
-  if(mode==='split'&&window.PROD_IMGS&&window.PROD_IMGS[m])src=window.PROD_IMGS[m];
+  if(mode==='split')src=(window.PROD_PAGE_IMG&&window.PROD_PAGE_IMG[m])||(window.PROD_IMGS&&window.PROD_IMGS[m])||'';
   if(mode==='split'&&src){
     if(img){if(img.getAttribute('src')!==src)img.src=src;img.alt=m;}
     if(cap)cap.textContent=(typeof prodDisp==='function')?prodDisp(m):m;
@@ -14626,6 +14626,15 @@ window.PROD_IMGS={
   'ESPRESSO12':   'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785405492/EPRESSO12_bk29lb.webp'
 };
 
+// Foto della scheda prodotto (sezione 01, accanto alla descrizione) quando deve
+// essere DIVERSA da quella della griglia di categoria. Chi non e' elencato qui
+// usa PROD_IMGS come sempre. Non tocca card di categoria, matrice, scheda PDF.
+window.PROD_PAGE_IMG={
+  // MARIS: nella foto la cucina sta a destra. c_crop,g_east,w_0.87 toglie il
+  // 13% di sfondo a sinistra (tiene intera la parte destra) e la centra.
+  'MARIS': 'https://res.cloudinary.com/dseiw9ndw/image/upload/c_crop,g_east,w_0.87,h_1.0/f_auto,q_auto,w_1600/v1788883770/MARIS_DSC_8834_copia_b49fhb.jpg'
+};
+
 
 // Zoom della foto DENTRO la card di categoria, per singolo modello.
 // La finestra (.pcard) resta identica alle altre: si ingrandisce solo l'immagine.
@@ -14831,27 +14840,35 @@ window.PROD_GALLERY={
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786079779/GUSTO_FOTO2_oqtgx3.jpg', alt:'GUSTO high-end gimballed gas cooker with gas oven for boat galleys, high-end Italian design, engineered for authentic Italian cuisine on board'}
   ],
   'MARIS':[
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1784901110/MARIS_-_xl2_con_paraventi_sfondo_nero_kq3qmq.jpg', alt:'MARIS XL2 luxury version with wind guards, gimballed marine gas cooker in mirror-polished stainless steel with extra-large gas oven and pot holders'},
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786089137/MARIS_XL2_FOTO10_dhtp0l.jpg', alt:'Gimballed marine gas cooker with high-output burners and large 30-litre oven for sailing yachts, Italian design engineered for fine Italian cuisine at sea'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808183/MARIS_marine_gas_cooker_with_oven_su75js.jpg', alt:'MARIS marine gas cooker with oven, two burners and 30-litre static gas oven, handmade in solid stainless steel in Conegliano'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786090133/MARIS_FOTO_12_fphy4u.jpg', alt:'Installation example of the MARIS XL2 reinforced luxury version, gimballed gas cooker with large gas oven for sailing boats, spare parts available for many years'},
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786089116/MARIS_XL2_FOTO_2_vrkqc9.jpg', alt:'MARIS gimballed gas cooker with gas oven for sailing boats, two burners and enamelled drip pan for even heat distribution in static oven cooking, Italian fine dining style'},
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786089112/MARIS_XL2_EVO_FOTO_1_n5o6qo.webp', alt:'MARIS gimballed gas cooker with gas oven for sailing boats, one-piece grate and automatic door lock, heavy-duty build for ocean sailing', cap:'MARIS EVO'},
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787324356/ollarepizza_xaax1w.jpg', alt:'Pizza baked on a soapstone plate, MARIS gimballed marine gas cooker with 30-litre oven, the Italian way of cooking, on board'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789810584/MARIS_GAS_COOKER_WITH_OVEN_jognuo.png', alt:'MARIS gas cooker with oven for sailing yachts, two burners and a large gas oven'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883783/MARIS_DSC_8822_copia_ftaret.jpg', alt:'MARIS gimballed marine gas cooker with oven, formerly XL2, handmade in solid stainless steel in Conegliano'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808185/MARIS_marine_gas_stove_burners_solid_brass_flame_spreaders_3_ynlen5.jpg', alt:'MARIS marine gas stove burners with hot-forged solid brass flame spreaders, for a soft and even flame'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883778/MARIS_DSC_8827_copia_las94g.jpg', alt:'MARIS gimballed gas cooker for yachts, front view with the oven door closed and hand-finished knobs'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883775/MARIS_DSC_8830_copia_iiymrz.jpg', alt:'Detail of the hob of the MARIS marine gas cooker, with solid stainless steel grate and safety valves on every burner'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808177/MARIS_marine_premium_gas_cooker_with_oven_gm078f.jpg', alt:'MARIS premium marine gas cooker with oven, Italian design for high-end yacht galleys'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883779/MARIS_DSC_8823_guwlet.jpg', alt:'MARIS marine gas cooker with oven, three-quarter view showing the gimbal suspension'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883773/MARIS_DSC_8832_copia_vtt3jb.jpg', alt:'Burner detail of the MARIS gas cooker for boats, with electronic ignition and thermocouple'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808169/MARIS_gimbaled_galley_range_l3uvph.jpg', alt:'MARIS gimbaled galley range with oven, keeping pans level while the boat heels'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883770/MARIS_DSC_8834_copia_b49fhb.jpg', alt:'MARIS gimballed gas cooker, detail of the pot holder arms adjustable lengthways and in height'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808182/MARIS_marine_gas_stove_burners_solid_brass_flame_spreaders_waqr3e.jpg', alt:'Detail of the solid brass flame spreaders on the MARIS marine gas stove, which store heat and release it gently'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883765/MARIS_DSC_8838_copia_hqvtb7.jpg', alt:'Stainless steel oven of the MARIS marine gas cooker, with double-glazed door and automatic door lock'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787392574/FIORENTINA_STEAK_ORIZZONTALE_jitzah.jpg', alt:'Steak cooked on the soapstone plate inside the oven, an option for the MARIS marine gas stove'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883761/MARIS_DSC_8839_copia_juufjw.jpg', alt:'MARIS marine cooker, detail of the oven interior with removable racks for real cooking on board'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808157/MARIS_2-burner_gimbaled_marine_gas_stove_with_oven_-_thermometer_detail_ivshet.jpg', alt:'MARIS 2-burner gimbaled marine gas stove with oven, detail of the oven thermometer'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883759/MARIS_DSC_8845_h3wr05.jpg', alt:'MARIS gas cooker for sailing yachts, side view of the gimbal system that keeps the pans level'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808183/MARIS_marine_gas_stove_bxvb2y.jpg', alt:'MARIS marine gas stove for sailing and motor yachts, solid stainless steel construction'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883498/MARIS_DSC_8846_npatu2.jpg', alt:'Detail of the solid stainless steel construction of the MARIS marine gas cooker, built for real seas'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808180/MARIS_marine_gas_stove_burners_solid_brass_flame_spreaders_2_a5ud6q.jpg', alt:'MARIS gas stove for boats, burners with differentiated power and solid brass flame spreaders'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883497/MARIS_DSC_8851_copia_dckqv7.jpg', alt:'MARIS gimballed cooker with oven, detail of the mirror-polished front and the control panel'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883496/MARIS_DSC_8852_copia_necysz.jpg', alt:'MARIS marine gas cooker, detail of the hand-turned solid metal knobs'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787394301/PIZZA_MARGHERITA_ON_PIETRA_OLLARE_VERTICALE_knhti2.jpg', alt:'Pizza margherita baked on the soapstone plate in the 30-litre oven of the MARIS marine gas stove, the Italian way of cooking on board'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883494/MARIS_DSC_8854_copia_odtrwn.jpg', alt:'MARIS gas cooker for boats, detail of the fiddle rails and the raised edge of the hob'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808179/MARIS_marine_gas_stove_burners_solid_brass_flame_spreaders_1_tu37iy.jpg', alt:'MARIS marine gas stove burners with solid brass flame spreaders, valves calibrated from simmer to full power'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883491/MARIS_DSC_8868_copia_p0smte.jpg', alt:'MARIS gimballed marine gas cooker with oven, overall view, Italian craftsmanship from the Inox Valley'},
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883491/MARIS_DSC_8856_hztn6d.jpg', alt:'MARIS marine gas cooker, detail of the oven handle and the insulated double-glazed door'}
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1788883491/MARIS_DSC_8856_hztn6d.jpg', alt:'MARIS marine gas cooker, detail of the oven handle and the insulated double-glazed door'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1784901110/MARIS_-_xl2_con_paraventi_sfondo_nero_kq3qmq.jpg', alt:'MARIS XL2 luxury version with wind guards, gimballed marine gas cooker in mirror-polished stainless steel with extra-large gas oven and pot holders'}
   ],
   'MAXIMA':[
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787324403/L4GL2-1_c7vufv.jpg', alt:'Large Italian gimballed gas cooker for sailing boats, minimal Italian design with ocean-going heavy-duty build, engineered for fine Italian cuisine on board'}
@@ -14861,6 +14878,7 @@ window.PROD_GALLERY={
   ],
   'VESTA':[
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534855/VESTA_-_17_High-End_2-Burner_Range_rlg1pl.jpg', alt:'VESTA high-end two-burner gimballed marine gas cooker with oven, handmade in solid stainless steel in Conegliano, Italy'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808310/vesta_con_pentola_spaghetti_e_teglia_pesce_yl7vlu.png', alt:'VESTA two-burner marine gas cooker with oven in use, with a pot of spaghetti and a fish tray, Italian cooking on board'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534832/VESTA_-_4_High-End_2-Burner_Range_kxw9ak.jpg', alt:'VESTA gimballed gas cooker with oven for sailing and motor yachts, two burners and Italian-style static oven'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534832/VESTA_-_6_High-End_2-Burner_Range_cac3zo.jpg', alt:'VESTA marine gas range with two burners, compact and elegant, for the yacht galley'},
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789534836/VESTA_-_9_High-End_2-Burner_Range_vax18x.jpg', alt:'Detail of the VESTA two-burner marine gas cooker, solid stainless steel construction'},
