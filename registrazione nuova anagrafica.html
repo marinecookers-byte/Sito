@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Pagina riservata: si raggiunge solo dal link mandato al cliente.
+     Fuori da menu e sitemap, e Google non la deve indicizzare. -->
+<meta name="robots" content="noindex, nofollow">
+<title>Registrazione cliente · Marine Cookers Techimpex</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Outfit:wght@300;400;500&display=swap">
+<style>
+:root{
+  --bk:#0a0a0a; --wh:#f8f6f1; --go:#b8965a; --gl:#cdae78;
+  --mu:rgba(248,246,241,.58); --fa:rgba(248,246,241,.36);
+  --ln:rgba(248,246,241,.16); --er:#c2705a;
+  --disp:'Cormorant Garamond',Georgia,'Times New Roman',serif;
+  --body:'Outfit',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bk);color:var(--wh);font-family:var(--body);font-weight:300;
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+a{color:var(--gl);text-decoration:none;border-bottom:1px solid rgba(184,150,90,.4)}
+a:hover{color:var(--wh)}
+.wrap{max-width:720px;margin:0 auto;padding:0 24px}
+
+/* Testata: la stessa del sito (logo, selettore lingue, misure e sfondo
+   presi da index.html). Niente menu e ricerca: la pagina e' riservata. */
+header{position:fixed;top:0;left:0;right:0;height:calc(72px + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 40px 0;
+  display:flex;align-items:center;justify-content:space-between;z-index:800;background:rgba(10,10,10,.35);transition:background .5s}
+header.sc{background:rgba(10,10,10,.94);border-bottom:1px solid rgba(184,150,90,.15)}
+header .logo{display:flex;align-items:center;border:0}
+header .logo img{height:36px;width:auto;display:block;filter:drop-shadow(0 1px 4px rgba(0,0,0,.3))}
+.lang-sel{display:flex;align-items:center}
+.lang-btn{background:none;border:none;cursor:pointer;font-family:"Outfit",sans-serif;font-size:9px;font-weight:300;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(248,246,241,.38);padding:6px 7px;transition:color .3s;line-height:1}
+.lang-btn:hover{color:rgba(248,246,241,.7)}
+.lang-btn.active{color:rgba(184,150,90,.9)}
+.lang-sep{width:1px;height:10px;background:rgba(248,246,241,.12);flex-shrink:0}
+
+/* Apertura */
+.hero{padding:150px 0 40px}
+h1{font-family:var(--disp);font-weight:300;font-size:clamp(42px,8vw,68px);line-height:1.02;margin:0 0 22px;letter-spacing:-.01em}
+.lead{color:var(--mu);max-width:34em;margin:0}
+/* Le cinque lingue, in vista sopra il modulo: il cliente sceglie in che
+   lingua compilare. Nessun cambio automatico. */
+.lingue{display:flex;flex-wrap:wrap;gap:6px 26px;margin:0 0 34px}
+.lang-btn2{background:none;border:0;border-bottom:1px solid transparent;padding:4px 0;font:300 15px var(--body);
+  color:var(--fa);cursor:pointer;transition:color .25s,border-color .25s}
+.lang-btn2:hover{color:var(--wh)}
+.lang-btn2.active{color:var(--go);border-bottom-color:var(--go)}
+.lang-btn2:focus-visible{outline:1px solid var(--go);outline-offset:4px}
+.ref{margin:22px 0 0;font-size:14px;color:var(--mu)}
+.ref b{font-weight:400;color:var(--go)}
+
+/* Sezioni */
+.sec{padding:44px 0 8px;border-top:1px solid var(--ln)}
+.sh{display:flex;align-items:baseline;gap:16px;margin:0 0 18px}
+.sh i{font-style:normal;font-family:var(--disp);font-size:20px;color:var(--go);min-width:14px}
+h2{font-family:var(--disp);font-weight:400;font-size:30px;line-height:1.15;margin:0}
+.q{font-size:14px;color:var(--mu);margin:22px 0 10px}
+
+/* Scelte a riquadro */
+.ch{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.ch.two{grid-template-columns:repeat(2,1fr)}
+.ch.big label{padding:26px 24px 24px}
+.ch.big span{font-family:var(--disp);font-size:26px;font-weight:400;line-height:1.15}
+.ch.big em{font-size:13px;margin-top:6px}
+.ch label{position:relative;display:block;border:1px solid var(--ln);padding:16px 16px 15px;cursor:pointer;transition:border-color .25s,background .25s}
+.ch label:hover{border-color:rgba(184,150,90,.5)}
+.ch input{position:absolute;opacity:0;pointer-events:none}
+.ch span{display:block;font-size:15px;font-weight:400}
+.ch em{display:block;font-style:normal;font-size:12.5px;color:var(--fa);margin-top:3px}
+.ch label:has(input:checked){border-color:var(--go);background:rgba(184,150,90,.07)}
+.ch label.on{border-color:var(--go);background:rgba(184,150,90,.07)}
+.ch input:focus-visible + span{outline:1px solid var(--go);outline-offset:6px}
+.grp.bad .ch label{border-color:rgba(194,112,90,.6)}
+
+/* Campi */
+.row{display:grid;grid-template-columns:1fr;gap:0 28px}
+.r2{grid-template-columns:1fr 1fr}
+.r3{grid-template-columns:120px 1fr 90px;grid-template-areas:"cap cit prv"}
+.r3 .a-cap{grid-area:cap}.r3 .a-cit{grid-area:cit}.r3 .a-prv{grid-area:prv}
+.f{padding:14px 0 6px;min-width:0}
+.f label,.k{display:block;font-size:13px;color:var(--mu);margin-bottom:2px}
+.f input[type=text],.f input[type=email],.f input[type=tel],.f input[type=date],.f select,.f textarea{
+  display:block;width:100%;background:transparent;color:var(--wh);border:0;border-bottom:1px solid var(--ln);
+  border-radius:0;padding:8px 0 9px;font:300 16px var(--body);outline:none;transition:border-color .25s;
+  -webkit-appearance:none;appearance:none}
+.f input[type=date]{min-height:42px;color-scheme:dark}
+.f select{background-image:linear-gradient(45deg,transparent 50%,var(--fa) 50%),linear-gradient(135deg,var(--fa) 50%,transparent 50%);
+  background-position:calc(100% - 10px) 55%,calc(100% - 5px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:24px}
+.f select option{background:#141414;color:var(--wh)}
+.f textarea{resize:vertical;min-height:84px;line-height:1.5}
+.f input:focus,.f select:focus,.f textarea:focus{border-bottom-color:var(--go)}
+.f input[readonly]{color:var(--mu)}
+.f .opt{color:var(--fa);font-size:12px}
+.f small.h{display:block;font-size:12.5px;color:var(--fa);margin-top:6px;line-height:1.45}
+/* Avviso IVA: conta per il prezzo, quindi piu' leggibile delle altre note */
+.f small.vies{font-size:13px;color:var(--mu);margin-top:10px;line-height:1.5}
+.f small.vies a{display:inline-block;margin-top:8px}
+.f small.e{display:none;font-size:12.5px;color:var(--er);margin-top:6px;line-height:1.45}
+.f.bad input,.f.bad select,.f.bad textarea{border-bottom-color:var(--er)}
+.f.bad small.e,.grp.bad small.e{display:block}
+.f.warn small.e{display:block;color:var(--gl)}
+.grp small.e{display:none;font-size:12.5px;color:var(--er);margin-top:8px}
+.pre{display:flex;align-items:flex-end;gap:10px}
+.pre b{font-weight:400;color:var(--go);padding:0 0 10px;font-size:16px;min-width:26px}
+.pre input{flex:1}
+
+/* Caselle di spunta */
+.ck,.f label.ck{display:flex;margin-bottom:0;gap:12px;align-items:flex-start;padding:16px 0 6px;font-size:14px;color:var(--mu);cursor:pointer}
+.ck input{appearance:none;-webkit-appearance:none;flex:none;width:18px;height:18px;margin:2px 0 0;border:1px solid var(--fa);border-radius:0;background:transparent;cursor:pointer;display:grid;place-content:center}
+.ck input::after{content:"";width:9px;height:9px;background:var(--go);transform:scale(0);transition:transform .15s}
+.ck input:checked{border-color:var(--go)}
+.ck input:checked::after{transform:scale(1)}
+.ck input:focus-visible{outline:1px solid var(--go);outline-offset:3px}
+.f.bad .ck input{border-color:var(--er)}
+
+/* Invio */
+.send{padding:34px 0 20px}
+.go{background:var(--go);color:var(--bk);border:0;font:500 15px var(--body);letter-spacing:.02em;padding:17px 40px;cursor:pointer;transition:background .25s}
+.go:hover{background:var(--gl)}
+.go[disabled]{opacity:.5;cursor:default}
+.sum{display:none;color:var(--er);font-size:14px;margin:0 0 16px}
+form.err .sum{display:block}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.done{display:none;padding:64px 0 40px}
+.done h2{font-size:clamp(34px,6vw,48px);font-weight:300;margin-bottom:18px}
+.done p{color:var(--mu);max-width:34em}
+.done p.code{color:var(--mu);font-size:15px;margin:0 0 18px}
+.done p.code b{font-weight:400;color:var(--go);letter-spacing:.04em}
+body.sent form,body.sent .hero{display:none}
+body.sent .done{display:block}
+.fail{display:none;color:var(--er);font-size:14px;margin:14px 0 0}
+
+.foot{border-top:1px solid var(--ln);margin-top:40px;padding:26px 0 40px;font-size:12.5px;color:var(--fa);line-height:1.7}
+[hidden]{display:none !important}
+
+@media (max-width:600px){
+  .wrap{padding:0 20px}
+  .hero{padding:118px 0 32px}
+  header{padding-left:16px;padding-right:16px}
+  .lang-btn{font-size:8px;padding:5px 5px;letter-spacing:.16em;color:rgba(248,246,241,.72)}
+  .lang-btn.active{color:var(--gl)}
+  .lang-sep{background:rgba(248,246,241,.3)}
+  .ch,.ch.two{grid-template-columns:1fr}
+  .r2{grid-template-columns:1fr}
+  .r3{grid-template-columns:1fr 90px;grid-template-areas:"cit cit" "cap prv"}
+  h2{font-size:27px}
+  .go{width:100%}
+  .lingue{gap:6px 11px;margin-bottom:28px;justify-content:space-between}
+  .lang-btn2{font-size:13.5px}
+}
+
+/* Cursore dorato del sito, solo con mouse. Nei campi di testo resta il
+   cursore di scrittura: in un modulo lungo serve vedere dove si clicca. */
+#cursor,#cursor-ring{display:none}
+@media (hover:hover) and (pointer:fine){
+  html,body,label,button,a,select,.ch label,.lang-btn,.lang-btn2{cursor:none}
+  input[type=text],input[type=email],input[type=tel],input[type=date],textarea{cursor:text}
+  #cursor,#cursor-ring{display:block;position:fixed;left:0;top:0;opacity:0;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%)}
+  #cursor{width:9px;height:9px;background:var(--go);z-index:2147483647;transition:width .2s,height .2s,opacity .3s}
+  #cursor-ring{width:38px;height:38px;border:1.5px solid rgba(184,150,90,.55);z-index:2147483646;transition:width .3s,height .3s,border-color .3s,opacity .3s}
+  body.cur-hover #cursor{width:0;height:0}
+  body.cur-hover #cursor-ring{width:56px;height:56px;border-color:rgba(184,150,90,.8)}
+  body.cur-text #cursor,body.cur-text #cursor-ring{opacity:0 !important}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div id="cursor"></div><div id="cursor-ring"></div>
+
+<header id="hdr">
+  <a class="logo" href="/"><img src="data:image/png;base64,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" alt="Techimpex Marine Cookers"></a>
+  <div class="lang-sel" role="group" aria-label="Language">
+    <button type="button" class="lang-btn" data-lang="en">EN</button><div class="lang-sep"></div>
+    <button type="button" class="lang-btn" data-lang="it">IT</button><div class="lang-sep"></div>
+    <button type="button" class="lang-btn" data-lang="fr">FR</button><div class="lang-sep"></div>
+    <button type="button" class="lang-btn" data-lang="de">DE</button><div class="lang-sep"></div>
+    <button type="button" class="lang-btn" data-lang="es">ES</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="lingue" role="group" aria-label="Lingua / Language">
+      <button type="button" class="lang-btn2" data-lang="it">Italiano</button>
+      <button type="button" class="lang-btn2" data-lang="en">English</button>
+      <button type="button" class="lang-btn2" data-lang="fr">Français</button>
+      <button type="button" class="lang-btn2" data-lang="de">Deutsch</button>
+      <button type="button" class="lang-btn2" data-lang="es">Español</button>
+    </div>
+    <h1 data-t="h1">Registrazione cliente</h1>
+    <p class="lead" data-t="lead">Questi dati servono a intestare fattura e documenti di trasporto e a spedire la merce all'indirizzo giusto. Bastano pochi minuti.</p>
+  </section>
+
+  <!-- ⚠️ Modulo Netlify. Netlify registra SOLO i campi presenti in questo HTML
+       al momento della pubblicazione: ogni campo va scritto qui, anche quelli
+       che compaiono solo in certi casi. I campi dei blocchi nascosti vengono
+       disattivati e quindi non partono: nella mail arrivano solo quelli utili.
+       novalidate: la verifica la fa lo script, nella lingua della pagina. -->
+  <form name="anagrafica" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate id="fa">
+    <input type="hidden" name="form-name" value="anagrafica">
+    <p class="hp"><label>Non compilare <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+    <!-- 1 · PRIVATO O AZIENDA · la prima scelta, da cui dipende tutto il resto -->
+    <section class="sec">
+      <div class="sh"><i>1</i><h2 id="q-tipo" data-t="s1">Privato o azienda</h2></div>
+      <div class="grp" data-g="tipo_cliente">
+        <div class="ch two big" role="radiogroup" aria-labelledby="q-tipo">
+          <label><input type="radio" name="tipo_cliente" value="PRIVATO" data-p="P"><span data-t="t_p">Privato</span><em data-t="t_p2">Persona fisica senza partita IVA</em></label>
+          <label><input type="radio" name="tipo_cliente" value="SOCIETA CON PARTITA IVA" data-p="A"><span data-t="t_a">Azienda con partita IVA</span><em data-t="t_a2">Società, ditta individuale o professionista</em></label>
+        </div>
+        <small class="e" data-t="e_choose">Scegli una delle opzioni</small>
+      </div>
+    </section>
+
+    <!-- 2 · ITALIA, CEE, EXTRA CEE · compare dopo la prima scelta -->
+    <section class="sec" data-show="?-*">
+      <div class="sh"><i>2</i><h2 id="q-area" data-t="s_sede">Paese di residenza o sede</h2></div>
+      <div class="grp" data-g="area_cliente">
+        <div class="ch" role="radiogroup" aria-labelledby="q-area">
+          <label><input type="radio" name="area_cliente" value="ITALIA" data-a="IT"><span data-t="a_it">Italia</span></label>
+          <label><input type="radio" name="area_cliente" value="CEE" data-a="UE"><span data-t="a_ue">Unione Europea</span></label>
+          <label><input type="radio" name="area_cliente" value="EXTRA CEE" data-a="EX"><span data-t="a_ex">Fuori dall'Unione Europea</span></label>
+        </div>
+        <small class="e" data-t="e_choose">Scegli una delle opzioni</small>
+      </div>
+
+      <div data-show="IT-?"><input type="hidden" name="paese" value="Italia"></div>
+      <div class="f" data-show="UE-?">
+        <label for="f-ue" data-t="paese">Paese</label>
+        <select id="f-ue" name="paese" required></select>
+        <small class="e"></small>
+      </div>
+      <div class="f" data-show="EX-?">
+        <label for="f-ex" data-t="paese">Paese</label>
+        <!-- Elenco e non campo libero: dal Paese dipende la lingua della pagina,
+             e da un nome scritto a mano non si ricava in modo sicuro. -->
+        <select id="f-ex" name="paese" required autocomplete="country"></select>
+        <small class="e"></small>
+      </div>
+    </section>
+
+    <!-- 3 · DATI ANAGRAFICI O AZIENDALI -->
+    <section class="sec" data-show="*-*">
+      <div class="sh"><i>3</i><h2><span data-show="*-P" data-t="s2p">Dati anagrafici</span><span data-show="*-A" data-t="s2a">Dati aziendali</span></h2></div>
+
+      <!-- Privato -->
+      <div class="row r2" data-show="*-P">
+        <div class="f"><label for="f-nome" data-t="nome">Nome</label>
+          <input id="f-nome" name="nome" type="text" required autocomplete="given-name"><small class="e"></small></div>
+        <div class="f"><label for="f-cogn" data-t="cognome">Cognome</label>
+          <input id="f-cogn" name="cognome" type="text" required autocomplete="family-name"><small class="e"></small></div>
+      </div>
+      <div data-show="IT-P">
+        <div class="row r2">
+          <div class="f"><label for="f-nasc" data-t="nascita">Data di nascita</label>
+            <input id="f-nasc" name="data_nascita" type="date" required data-v="date" autocomplete="bday"><small class="e"></small></div>
+          <div class="f"><label for="f-luogo" data-t="luogo">Luogo di nascita</label>
+            <input id="f-luogo" name="luogo_nascita" type="text" required><small class="h" data-t="luogo_h">Comune e provincia, oppure Stato estero</small><small class="e"></small></div>
+        </div>
+        <div class="f"><label for="f-cfp" data-t="cf">Codice fiscale</label>
+          <input id="f-cfp" name="codice_fiscale" type="text" required data-v="cfp" maxlength="16" autocapitalize="characters" spellcheck="false" autocomplete="off">
+          <small class="h" data-t="cf_h">16 caratteri, come sulla tessera sanitaria</small><small class="e"></small></div>
+      </div>
+
+      <!-- Azienda -->
+      <div data-show="*-A">
+        <div class="f"><label for="f-rs" data-t="rs">Ragione sociale</label>
+          <input id="f-rs" name="ragione_sociale" type="text" required autocomplete="organization"><small class="e"></small></div>
+      </div>
+      <div data-show="IT-A">
+        <div class="row r2">
+          <div class="f"><label for="f-piva" data-t="piva">Partita IVA</label>
+            <input id="f-piva" name="partita_iva" type="text" required data-v="piva" inputmode="numeric" maxlength="13" spellcheck="false" autocomplete="off">
+            <small class="h" data-t="piva_h">11 cifre</small><small class="e"></small></div>
+          <div class="f"><label for="f-cfa" data-t="cf">Codice fiscale</label>
+            <input id="f-cfa" name="codice_fiscale" type="text" required data-v="cfa" maxlength="16" autocapitalize="characters" spellcheck="false" autocomplete="off">
+            <label class="ck"><input type="checkbox" id="c-same-cf"><span data-t="cf_same">Uguale alla partita IVA</span></label>
+            <small class="e"></small></div>
+        </div>
+        <div class="row r2">
+          <div class="f"><label for="f-sdi" data-t="sdi">Codice destinatario SDI</label>
+            <input id="f-sdi" name="codice_sdi" type="text" data-v="sdi" maxlength="7" autocapitalize="characters" spellcheck="false" autocomplete="off">
+            <small class="h" data-t="sdi_h">7 caratteri, per la fattura elettronica</small><small class="e"></small></div>
+          <div class="f"><label for="f-pec" data-t="pec">PEC</label>
+            <input id="f-pec" name="pec" type="email" data-v="email" autocomplete="off"><small class="e"></small></div>
+        </div>
+        <div class="f" id="g-sdi">
+          <label class="ck"><input type="checkbox" id="c-nosdi" name="sdi_pec_assenti" value="Nessun codice SDI né PEC: fattura con codice 0000000"><span data-t="nosdi">Non ho né codice destinatario né PEC</span></label>
+          <small class="e"></small>
+        </div>
+      </div>
+      <div data-show="UE-A">
+        <div class="f"><label for="f-vat" data-t="vat">Partita IVA comunitaria</label>
+          <div class="pre"><b id="vat-pre">··</b><input id="f-vat" type="text" required data-v="vat" maxlength="16" autocapitalize="characters" spellcheck="false" autocomplete="off"></div>
+          <input type="hidden" name="partita_iva_ue" id="h-vat" value="">
+          <small class="h vies"><span data-t="vat_h">Deve risultare valida per le operazioni intracomunitarie nel sistema VIES. La verifichiamo prima di ogni fattura: se non è valida, all'importo di questo ordine e degli ordini futuri viene aggiunta l'IVA italiana.</span>
+            <a href="https://ec.europa.eu/taxation_customs/vies/#/vat-validation" target="_blank" rel="noopener" data-t="vat_l">Controlla la tua partita IVA sul sito VIES della Commissione Europea</a></small><small class="e"></small></div>
+      </div>
+      <div data-show="EX-A">
+        <div class="row r2">
+          <div class="f"><label for="f-tax" data-t="tax">Numero fiscale</label>
+            <input id="f-tax" name="numero_fiscale_estero" type="text" required spellcheck="false" autocomplete="off">
+            <small class="h" data-t="tax_h">VAT, Tax ID o numero equivalente del vostro Paese</small><small class="e"></small></div>
+          <div class="f"><label for="f-eori">EORI <span class="opt" data-t="opt">facoltativo</span></label>
+            <input id="f-eori" name="eori" type="text" spellcheck="false" autocomplete="off">
+            <small class="h" data-t="eori_h">Utile per lo sdoganamento</small><small class="e"></small></div>
+        </div>
+      </div>
+      <div data-show="*-A">
+        <div class="f"><label for="f-ref" data-t="referente">Persona di riferimento</label>
+          <input id="f-ref" name="referente" type="text" required autocomplete="name"><small class="h" data-t="ref_h">Nome e cognome</small><small class="e"></small></div>
+      </div>
+    </section>
+
+    <!-- 4 · INDIRIZZO -->
+    <section class="sec" data-show="*-*">
+      <div class="sh"><i>4</i><h2><span data-show="*-P" data-t="s3p">Indirizzo di residenza</span><span data-show="*-A" data-t="s3a">Sede legale</span></h2></div>
+      <div class="f"><label for="f-ind" data-t="ind">Via e numero civico</label>
+        <input id="f-ind" name="indirizzo" type="text" required autocomplete="address-line1"><small class="e"></small></div>
+      <div class="row r3">
+        <div class="f a-cap" id="w-cap"><label for="f-cap" data-t="cap">CAP</label>
+          <input id="f-cap" name="cap" type="text" required data-v="cap" autocomplete="postal-code"><small class="e"></small></div>
+        <div class="f a-cit"><label for="f-cit" data-t="citta">Città</label>
+          <input id="f-cit" name="citta" type="text" required autocomplete="address-level2"><small class="e"></small></div>
+        <div class="f a-prv" data-show="IT-?"><label for="f-prv" data-t="prov">Provincia</label>
+          <input id="f-prv" name="provincia" type="text" required data-v="prov" maxlength="2" autocapitalize="characters" autocomplete="address-level1"><small class="e"></small></div>
+      </div>
+    </section>
+
+    <!-- 5 · CONTATTI -->
+    <section class="sec" data-show="*-*">
+      <div class="sh"><i>5</i><h2 data-t="s4">Contatti</h2></div>
+      <div class="row r2">
+        <div class="f"><label for="f-mail" data-t="email">Email</label>
+          <input id="f-mail" name="email" type="email" required data-v="email" autocomplete="email"><small class="e"></small></div>
+        <div class="f"><label for="f-tel" data-t="tel">Telefono</label>
+          <input id="f-tel" name="telefono" type="tel" required data-v="tel" autocomplete="tel">
+          <small class="h" data-t="tel_h">Con il prefisso internazionale, per esempio +39</small><small class="e"></small></div>
+      </div>
+      <div class="f" data-show="*-A"><label for="f-mailf"><span data-t="mailf">Email per le fatture</span> <span class="opt" data-t="opt">facoltativo</span></label>
+        <input id="f-mailf" name="email_fatture" type="email" data-v="email" autocomplete="off">
+        <small class="h" data-t="mailf_h">Se è diversa da quella sopra</small><small class="e"></small></div>
+    </section>
+
+    <!-- 6 · CONSEGNA -->
+    <section class="sec" data-show="*-*">
+      <div class="sh"><i>6</i><h2 data-t="s5">Consegna della merce</h2></div>
+      <label class="ck"><input type="checkbox" id="c-same" name="consegna_stesso_indirizzo" value="Sì" checked><span data-t="same">Stesso indirizzo indicato sopra</span></label>
+      <div data-if="!c-same">
+        <div class="f"><label for="f-sdest" data-t="sdest">Destinatario o presso</label>
+          <input id="f-sdest" name="consegna_destinatario" type="text" required>
+          <small class="h" data-t="sdest_h">Persona, azienda, cantiere o marina che riceve la merce</small><small class="e"></small></div>
+        <div class="f"><label for="f-sind" data-t="ind">Via e numero civico</label>
+          <input id="f-sind" name="consegna_indirizzo" type="text" required autocomplete="shipping address-line1"><small class="e"></small></div>
+        <div class="row r3">
+          <div class="f a-cap" id="w-scap"><label for="f-scap" data-t="cap">CAP</label>
+            <input id="f-scap" name="consegna_cap" type="text" required data-v="scap" autocomplete="shipping postal-code"><small class="e"></small></div>
+          <div class="f a-cit"><label for="f-scit" data-t="citta">Città</label>
+            <input id="f-scit" name="consegna_citta" type="text" required autocomplete="shipping address-level2"><small class="e"></small></div>
+          <div class="f a-prv" id="w-sprv"><label for="f-sprv" data-t="prov">Provincia</label>
+            <input id="f-sprv" name="consegna_provincia" type="text" required data-v="prov" maxlength="2" autocapitalize="characters" autocomplete="shipping address-level1"><small class="e"></small></div>
+        </div>
+        <div class="row r2">
+          <div class="f"><label for="f-spae" data-t="paese">Paese</label>
+            <select id="f-spae" name="consegna_paese" required autocomplete="shipping country"></select><small class="e"></small></div>
+          <div class="f"><label for="f-stel" data-t="stel">Telefono per il corriere</label>
+            <input id="f-stel" name="consegna_telefono" type="tel" required data-v="tel" autocomplete="off"><small class="e"></small></div>
+        </div>
+      </div>
+      <div class="f"><label for="f-snote"><span data-t="snote">Note per la consegna</span> <span class="opt" data-t="opt">facoltativo</span></label>
+        <input id="f-snote" name="consegna_note" type="text">
+        <small class="h" data-t="snote_h">Orari, nome della barca, posto barca, accesso al cantiere</small><small class="e"></small></div>
+    </section>
+
+    <!-- 7 · NOTE E INVIO -->
+    <section class="sec" data-show="*-*">
+      <div class="sh"><i>7</i><h2 data-t="s6">Invio</h2></div>
+      <div class="f"><label for="f-note"><span data-t="note">Note</span> <span class="opt" data-t="opt">facoltativo</span></label>
+        <textarea id="f-note" name="note" rows="3"></textarea><small class="e"></small></div>
+      <div class="f">
+        <label class="ck"><input type="checkbox" id="c-priv" name="privacy" value="Presa visione dell'informativa" required>
+          <span><span data-t="priv">Ho letto l'</span><a href="/privacy-policy" target="_blank" rel="noopener" data-t="priv_l">informativa sulla privacy</a><span data-t="priv2">. I dati servono a registrare il cliente e a gestire ordine, fattura e spedizione.</span></span></label>
+        <small class="e"></small>
+      </div>
+      <div class="send">
+        <p class="sum" data-t="e_sum">Alcuni campi vanno completati o corretti.</p>
+        <button class="go" type="submit" id="go" data-t="send">Invia i dati</button>
+        <p class="fail" id="fail" data-t="e_fail">Invio non riuscito. Riprova tra poco oppure scrivi a info@marinecookers.com.</p>
+      </div>
+    </section>
+
+    <!-- In fondo, cosi' nella mail arrivano dopo i dati del cliente.
+         Esito dei controlli automatici, per chi inserisce l'anagrafica. -->
+    <input type="hidden" name="lingua" id="h-lang" value="it">
+    <!-- Esito dei controlli automatici, per chi inserisce l'anagrafica -->
+    <input type="hidden" name="controllo_codice_fiscale" id="h-cf" value="">
+    <input type="hidden" name="controllo_partita_iva" id="h-piva" value="">
+    <!-- Codice unico della registrazione e oggetto della mail di Netlify.
+         Netlify usa il campo "subject" come oggetto della notifica: tutte le
+         mail cominciano con ANAGRAFICA WEB, cosi' la skill le trova. -->
+    <input type="hidden" name="codice_registrazione" id="h-code" value="">
+    <input type="hidden" name="subject" id="h-subj" value="ANAGRAFICA WEB">
+  </form>
+
+  <section class="done" aria-live="polite">
+    <h2 data-t="ok_h">Dati ricevuti</h2>
+    <p class="code"><span data-t="ok_code">Numero di registrazione</span> <b id="ok-code"></b></p>
+    <p data-t="ok_p">Grazie. Registriamo l'anagrafica e vi scriviamo con la conferma d'ordine e le indicazioni per il pagamento. Se entro due giorni lavorativi non arriva nulla, scrivete a info@marinecookers.com.</p>
+  </section>
+
+  <footer class="foot">
+    Marine Cookers Techimpex · Via Cosmo 14, 31015 Conegliano (TV), Italia · P.IVA IT04751070261<br>
+    <a href="mailto:info@marinecookers.com">info@marinecookers.com</a> · <a href="tel:+3904381840230">+39 0438 1840230</a>
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ───────────── Testi IT / EN ───────────── */
+var T={
+it:{h1:"Registrazione cliente",
+ lead:"Questi dati servono a intestare fattura e documenti di trasporto e a spedire la merce all'indirizzo giusto. Bastano pochi minuti.",
+ s1:"Privato o azienda",t_p:"Privato",t_p2:"Persona fisica senza partita IVA",
+ t_a:"Azienda con partita IVA",t_a2:"Società, ditta individuale o professionista",s_sede:"Paese di residenza o sede",
+ a_it:"Italia",a_ue:"Unione Europea",a_ex:"Fuori dall'Unione Europea",
+ paese:"Paese",pick:"Seleziona",s2p:"Dati anagrafici",s2a:"Dati aziendali",nome:"Nome",cognome:"Cognome",nascita:"Data di nascita",
+ luogo:"Luogo di nascita",luogo_h:"Comune e provincia, oppure Stato estero",cf:"Codice fiscale",cf_h:"16 caratteri, come sulla tessera sanitaria",
+ rs:"Ragione sociale",piva:"Partita IVA",piva_h:"11 cifre",cf_same:"Uguale alla partita IVA",sdi:"Codice destinatario SDI",
+ sdi_h:"7 caratteri, per la fattura elettronica",pec:"PEC",nosdi:"Non ho né codice destinatario né PEC",vat:"Partita IVA comunitaria",
+ vat_h:"Deve risultare valida per le operazioni intracomunitarie nel sistema VIES. La verifichiamo prima di ogni fattura: se non è valida, all'importo di questo ordine e degli ordini futuri viene aggiunta l'IVA italiana.",vat_l:"Controlla la tua partita IVA sul sito VIES della Commissione Europea",
+ tax:"Numero fiscale",tax_h:"VAT, Tax ID o numero equivalente del vostro Paese",eori_h:"Utile per lo sdoganamento",opt:"facoltativo",
+ referente:"Persona di riferimento",ref_h:"Nome e cognome",s3p:"Indirizzo di residenza",s3a:"Sede legale",ind:"Via e numero civico",
+ cap:"CAP",citta:"Città",prov:"Provincia",prov2:"Prov.",s4:"Contatti",email:"Email",tel:"Telefono",
+ tel_h:"Con il prefisso internazionale, per esempio +39",mailf:"Email per le fatture",mailf_h:"Se è diversa da quella sopra",
+ s5:"Consegna della merce",same:"Stesso indirizzo indicato sopra",sdest:"Destinatario o presso",
+ sdest_h:"Persona, azienda, cantiere o marina che riceve la merce",stel:"Telefono per il corriere",snote:"Note per la consegna",
+ snote_h:"Orari, nome della barca, posto barca, accesso al cantiere",s6:"Invio",note:"Note",
+ priv:"Ho letto l'",priv_l:"informativa sulla privacy",priv2:". I dati servono a registrare il cliente e a gestire ordine, fattura e spedizione.",
+ send:"Invia i dati",sending:"Invio in corso",ok_h:"Dati ricevuti",ok_code:"Numero di registrazione",
+ ok_p:"Grazie. Registriamo l'anagrafica e vi scriviamo con la conferma d'ordine e le indicazioni per il pagamento. Se entro due giorni lavorativi non arriva nulla, scrivete a info@marinecookers.com.",
+ e_sum:"Alcuni campi vanno completati o corretti.",e_fail:"Invio non riuscito. Riprova tra poco oppure scrivi a info@marinecookers.com.",
+ e_choose:"Scegli una delle opzioni",e_req:"Campo obbligatorio",e_email:"Indirizzo email non valido",
+ e_tel:"Scrivi il numero con il prefisso internazionale, per esempio +39 0438 1840230",
+ e_date:"Data non valida",e_cap:"Il CAP italiano ha 5 cifre",e_prov:"Sigla di 2 lettere, per esempio TV",
+ e_cf_len:"Il codice fiscale ha 16 caratteri: 6 lettere, 2 cifre, 1 lettera, 2 cifre, 1 lettera, 3 cifre, 1 lettera",
+ e_cf_chk:"Codice fiscale non corretto: l'ultimo carattere non torna. Controlla di averlo copiato bene dalla tessera sanitaria.",
+ e_cf_mis:"Il codice fiscale non corrisponde a: {x}. Controlla i dati. Se sono giusti, premi di nuovo Invia i dati.",
+ m_cogn:"cognome",m_nome:"nome",m_anno:"anno di nascita",m_mese:"mese di nascita",m_giorno:"giorno di nascita",
+ e_cfa:"Il codice fiscale dell'azienda ha 11 cifre (16 caratteri per le ditte individuali)",
+ e_cfa_chk:"Codice fiscale non valido: controlla le cifre",
+ e_piva:"La partita IVA italiana ha 11 cifre",e_piva_chk:"Partita IVA non valida: controlla le cifre",
+ e_vat:"Il numero non ha il formato della partita IVA di questo Paese: {x}. Controlla le cifre.",e_vat0:"Scegli prima il Paese",
+ e_sdi:"Il codice destinatario ha 7 caratteri",e_sdipec:"Indica il codice destinatario o la PEC, oppure spunta la casella",
+ e_priv:"Serve la presa visione dell'informativa"},
+en:{h1:"Customer registration",
+ lead:"We use these details for the invoice and shipping documents, and to deliver the goods to the right address. It takes a few minutes.",
+ s1:"Private or business",t_p:"Private individual",t_p2:"Individual without a VAT number",
+ t_a:"Business with a VAT number",t_a2:"Company, sole trader or professional",s_sede:"Country of residence or registered office",
+ a_it:"Italy",a_ue:"European Union",a_ex:"Outside the European Union",
+ paese:"Country",pick:"Select",s2p:"Personal details",s2a:"Company details",nome:"First name",cognome:"Last name",nascita:"Date of birth",
+ luogo:"Place of birth",luogo_h:"Town and province, or foreign country",cf:"Tax code (codice fiscale)",cf_h:"16 characters, as on the Italian health card",
+ rs:"Company name",piva:"VAT number (partita IVA)",piva_h:"11 digits",cf_same:"Same as VAT number",sdi:"SDI recipient code",
+ sdi_h:"7 characters, for e-invoicing",pec:"PEC (certified email)",nosdi:"I have neither an SDI code nor a PEC",vat:"EU VAT number",
+ vat_h:"It must be valid for intra-EU transactions in the VIES system. We check it before every invoice: if it is not valid, Italian VAT will be added to the amount of this order and of future orders.",vat_l:"Check your VAT number on the European Commission VIES website",
+ tax:"Tax number",tax_h:"VAT, Tax ID or equivalent number in your country",eori_h:"Helps with customs clearance",opt:"optional",
+ referente:"Contact person",ref_h:"First and last name",s3p:"Home address",s3a:"Registered office",ind:"Street and number",
+ cap:"Postcode",citta:"City",prov:"Province",prov2:"Region",s4:"Contact details",email:"Email",tel:"Phone",
+ tel_h:"Include the country code, for example +44",mailf:"Email for invoices",mailf_h:"If different from the one above",
+ s5:"Delivery",same:"Same address as above",sdest:"Recipient or care of",
+ sdest_h:"Person, company, shipyard or marina receiving the goods",stel:"Phone for the courier",snote:"Delivery notes",
+ snote_h:"Opening hours, boat name, berth, shipyard access",s6:"Send",note:"Notes",
+ priv:"I have read the ",priv_l:"privacy notice",priv2:". We use these details to register you as a customer and to handle the order, invoice and shipping.",
+ send:"Send details",sending:"Sending",ok_h:"Details received",ok_code:"Registration number",
+ ok_p:"Thank you. We will set up your customer record and write to you with the order confirmation and payment instructions. If you hear nothing within two working days, please write to info@marinecookers.com.",
+ e_sum:"Some fields need to be completed or corrected.",e_fail:"Sending failed. Try again shortly or write to info@marinecookers.com.",
+ e_choose:"Choose one of the options",e_req:"Required",e_email:"Invalid email address",
+ e_tel:"Write the number with the country code, for example +44 20 7946 0000",
+ e_date:"Invalid date",e_cap:"Italian postcodes have 5 digits",e_prov:"2-letter code, for example TV",
+ e_cf_len:"The tax code has 16 characters: 6 letters, 2 digits, 1 letter, 2 digits, 1 letter, 3 digits, 1 letter",
+ e_cf_chk:"Incorrect tax code: the last character does not match. Check that you copied it correctly from the health card.",
+ e_cf_mis:"The tax code does not match: {x}. Check your details. If they are correct, press Send details again.",
+ m_cogn:"last name",m_nome:"first name",m_anno:"year of birth",m_mese:"month of birth",m_giorno:"day of birth",
+ e_cfa:"The company tax code has 11 digits (16 characters for sole traders)",
+ e_cfa_chk:"Invalid tax code: check the digits",
+ e_piva:"Italian VAT numbers have 11 digits",e_piva_chk:"Invalid VAT number: check the digits",
+ e_vat:"This does not match the VAT number format for {x}. Check the digits.",e_vat0:"Choose the country first",
+ e_sdi:"The recipient code has 7 characters",e_sdipec:"Enter the SDI code or the PEC, or tick the box",
+ e_priv:"Please confirm you have read the privacy notice"},
+fr:{h1:"Enregistrement client",
+ lead:"Ces informations nous servent à établir la facture et les documents de transport, et à livrer la marchandise à la bonne adresse. Quelques minutes suffisent.",
+ s1:"Particulier ou entreprise",t_p:"Particulier",t_p2:"Personne physique sans numéro de TVA",
+ t_a:"Entreprise avec numéro de TVA",t_a2:"Société, entreprise individuelle ou profession libérale",s_sede:"Pays de résidence ou siège",
+ a_it:"Italie",a_ue:"Union européenne",a_ex:"Hors Union européenne",
+ paese:"Pays",pick:"Choisir",s2p:"Données personnelles",s2a:"Données de l'entreprise",nome:"Prénom",cognome:"Nom",nascita:"Date de naissance",
+ luogo:"Lieu de naissance",luogo_h:"Commune et province, ou pays étranger",cf:"Code fiscal (codice fiscale)",cf_h:"16 caractères, comme sur la carte sanitaire italienne",
+ rs:"Raison sociale",piva:"Numéro de TVA (partita IVA)",piva_h:"11 chiffres",cf_same:"Identique au numéro de TVA",sdi:"Code destinataire SDI",
+ sdi_h:"7 caractères, pour la facture électronique",pec:"PEC (e-mail certifié)",nosdi:"Je n'ai ni code destinataire ni PEC",vat:"Numéro de TVA intracommunautaire",
+ vat_h:"Il doit être valide pour les opérations intracommunautaires dans le système VIES. Nous le vérifions avant chaque facture : s'il n'est pas valide, la TVA italienne sera ajoutée au montant de cette commande et des commandes futures.",vat_l:"Vérifiez votre numéro de TVA sur le site VIES de la Commission européenne",
+ tax:"Numéro fiscal",tax_h:"TVA, Tax ID ou numéro équivalent de votre pays",eori_h:"Utile pour le dédouanement",opt:"facultatif",
+ referente:"Personne de contact",ref_h:"Prénom et nom",s3p:"Adresse de résidence",s3a:"Siège social",ind:"Rue et numéro",
+ cap:"Code postal",citta:"Ville",prov:"Province",prov2:"Région",s4:"Coordonnées",email:"E-mail",tel:"Téléphone",
+ tel_h:"Avec l'indicatif international, par exemple +33",mailf:"E-mail pour les factures",mailf_h:"Si différent de celui ci-dessus",
+ s5:"Livraison",same:"Même adresse que ci-dessus",sdest:"Destinataire ou à l'attention de",
+ sdest_h:"Personne, entreprise, chantier naval ou marina qui reçoit la marchandise",stel:"Téléphone pour le transporteur",snote:"Notes de livraison",
+ snote_h:"Horaires, nom du bateau, place de port, accès au chantier",s6:"Envoi",note:"Notes",
+ priv:"J'ai lu la ",priv_l:"politique de confidentialité",priv2:". Ces données servent à vous enregistrer comme client et à gérer la commande, la facture et l'expédition.",
+ send:"Envoyer les données",sending:"Envoi en cours",ok_h:"Données reçues",ok_code:"Numéro d'enregistrement",
+ ok_p:"Merci. Nous créons votre fiche client et vous écrivons avec la confirmation de commande et les instructions de paiement. Sans nouvelles de notre part sous deux jours ouvrables, écrivez à info@marinecookers.com.",
+ e_sum:"Certains champs doivent être complétés ou corrigés.",e_fail:"L'envoi a échoué. Réessayez dans un instant ou écrivez à info@marinecookers.com.",
+ e_choose:"Choisissez une option",e_req:"Champ obligatoire",e_email:"Adresse e-mail non valide",
+ e_tel:"Indiquez le numéro avec l'indicatif international, par exemple +33 1 23 45 67 89",
+ e_date:"Date non valide",e_cap:"Le code postal italien a 5 chiffres",e_prov:"Sigle de 2 lettres, par exemple TV",
+ e_cf_len:"Le code fiscal a 16 caractères : 6 lettres, 2 chiffres, 1 lettre, 2 chiffres, 1 lettre, 3 chiffres, 1 lettre",
+ e_cf_chk:"Code fiscal incorrect : le dernier caractère ne correspond pas. Vérifiez la copie depuis la carte sanitaire.",
+ e_cf_mis:"Le code fiscal ne correspond pas : {x}. Vérifiez vos données. Si elles sont correctes, appuyez à nouveau sur Envoyer les données.",
+ m_cogn:"nom",m_nome:"prénom",m_anno:"année de naissance",m_mese:"mois de naissance",m_giorno:"jour de naissance",
+ e_cfa:"Le code fiscal de l'entreprise a 11 chiffres (16 caractères pour les entreprises individuelles)",
+ e_cfa_chk:"Code fiscal non valide : vérifiez les chiffres",
+ e_piva:"Le numéro de TVA italien a 11 chiffres",e_piva_chk:"Numéro de TVA non valide : vérifiez les chiffres",
+ e_vat:"Ce numéro ne correspond pas au format de TVA prévu pour : {x}. Vérifiez les chiffres.",e_vat0:"Choisissez d'abord le pays",
+ e_sdi:"Le code destinataire a 7 caractères",e_sdipec:"Indiquez le code destinataire ou la PEC, ou cochez la case",
+ e_priv:"Veuillez confirmer avoir lu la politique de confidentialité"},
+de:{h1:"Kundenregistrierung",
+ lead:"Mit diesen Angaben erstellen wir Rechnung und Lieferpapiere und liefern die Ware an die richtige Adresse. Es dauert nur wenige Minuten.",
+ s1:"Privat oder Unternehmen",t_p:"Privatperson",t_p2:"Natürliche Person ohne USt-IdNr.",
+ t_a:"Unternehmen mit USt-IdNr.",t_a2:"Gesellschaft, Einzelunternehmen oder Freiberufler",s_sede:"Wohnsitz- oder Sitzland",
+ a_it:"Italien",a_ue:"Europäische Union",a_ex:"Außerhalb der Europäischen Union",
+ paese:"Land",pick:"Auswählen",s2p:"Persönliche Angaben",s2a:"Firmenangaben",nome:"Vorname",cognome:"Nachname",nascita:"Geburtsdatum",
+ luogo:"Geburtsort",luogo_h:"Gemeinde und Provinz oder Staat im Ausland",cf:"Steuernummer (codice fiscale)",cf_h:"16 Zeichen, wie auf der italienischen Gesundheitskarte",
+ rs:"Firmenname",piva:"USt-IdNr. (partita IVA)",piva_h:"11 Ziffern",cf_same:"Gleich wie USt-IdNr.",sdi:"SDI-Empfängercode",
+ sdi_h:"7 Zeichen, für die elektronische Rechnung",pec:"PEC (zertifizierte E-Mail)",nosdi:"Ich habe weder SDI-Code noch PEC",vat:"USt-IdNr. (EU)",
+ vat_h:"Sie muss im VIES-System für innergemeinschaftliche Umsätze gültig sein. Wir prüfen sie vor jeder Rechnung: Ist sie nicht gültig, wird dem Betrag dieser und künftiger Bestellungen die italienische Mehrwertsteuer hinzugerechnet.",vat_l:"Prüfen Sie Ihre USt-IdNr. auf der VIES-Website der Europäischen Kommission",
+ tax:"Steuernummer",tax_h:"VAT, Tax ID oder gleichwertige Nummer Ihres Landes",eori_h:"Hilfreich für die Verzollung",opt:"optional",
+ referente:"Ansprechpartner",ref_h:"Vor- und Nachname",s3p:"Wohnadresse",s3a:"Firmensitz",ind:"Straße und Hausnummer",
+ cap:"PLZ",citta:"Ort",prov:"Provinz",prov2:"Region",s4:"Kontakt",email:"E-Mail",tel:"Telefon",
+ tel_h:"Mit internationaler Vorwahl, zum Beispiel +49",mailf:"E-Mail für Rechnungen",mailf_h:"Falls abweichend von der obigen",
+ s5:"Lieferung",same:"Gleiche Adresse wie oben",sdest:"Empfänger oder c/o",
+ sdest_h:"Person, Firma, Werft oder Marina, die die Ware annimmt",stel:"Telefon für den Kurier",snote:"Hinweise zur Lieferung",
+ snote_h:"Zeiten, Bootsname, Liegeplatz, Zufahrt zur Werft",s6:"Absenden",note:"Anmerkungen",
+ priv:"Ich habe die ",priv_l:"Datenschutzerklärung",priv2:" gelesen. Die Angaben dienen der Kundenregistrierung sowie der Abwicklung von Bestellung, Rechnung und Versand.",
+ send:"Daten senden",sending:"Wird gesendet",ok_h:"Daten erhalten",ok_code:"Registrierungsnummer",
+ ok_p:"Vielen Dank. Wir legen Ihre Kundendaten an und senden Ihnen die Auftragsbestätigung mit den Zahlungshinweisen. Falls Sie innerhalb von zwei Werktagen nichts hören, schreiben Sie an info@marinecookers.com.",
+ e_sum:"Einige Felder müssen ausgefüllt oder korrigiert werden.",e_fail:"Senden fehlgeschlagen. Bitte gleich noch einmal versuchen oder an info@marinecookers.com schreiben.",
+ e_choose:"Bitte eine Option wählen",e_req:"Pflichtfeld",e_email:"Ungültige E-Mail-Adresse",
+ e_tel:"Nummer mit internationaler Vorwahl angeben, zum Beispiel +49 40 1234567",
+ e_date:"Ungültiges Datum",e_cap:"Italienische Postleitzahlen haben 5 Ziffern",e_prov:"Kürzel aus 2 Buchstaben, zum Beispiel TV",
+ e_cf_len:"Die Steuernummer hat 16 Zeichen: 6 Buchstaben, 2 Ziffern, 1 Buchstabe, 2 Ziffern, 1 Buchstabe, 3 Ziffern, 1 Buchstabe",
+ e_cf_chk:"Steuernummer nicht korrekt: Das letzte Zeichen stimmt nicht. Bitte die Abschrift von der Gesundheitskarte prüfen.",
+ e_cf_mis:"Die Steuernummer passt nicht zu: {x}. Bitte Angaben prüfen. Wenn sie stimmen, erneut auf Daten senden klicken.",
+ m_cogn:"Nachname",m_nome:"Vorname",m_anno:"Geburtsjahr",m_mese:"Geburtsmonat",m_giorno:"Geburtstag",
+ e_cfa:"Die Steuernummer des Unternehmens hat 11 Ziffern (16 Zeichen bei Einzelunternehmen)",
+ e_cfa_chk:"Ungültige Steuernummer: bitte Ziffern prüfen",
+ e_piva:"Die italienische USt-IdNr. hat 11 Ziffern",e_piva_chk:"Ungültige USt-IdNr.: bitte Ziffern prüfen",
+ e_vat:"Die Nummer entspricht nicht dem USt-IdNr.-Format für {x}. Bitte Ziffern prüfen.",e_vat0:"Bitte zuerst das Land wählen",
+ e_sdi:"Der Empfängercode hat 7 Zeichen",e_sdipec:"SDI-Code oder PEC angeben oder das Kästchen ankreuzen",
+ e_priv:"Bitte bestätigen, dass Sie die Datenschutzerklärung gelesen haben"},
+es:{h1:"Registro de cliente",
+ lead:"Con estos datos emitimos la factura y los documentos de transporte, y enviamos la mercancía a la dirección correcta. Solo lleva unos minutos.",
+ s1:"Particular o empresa",t_p:"Particular",t_p2:"Persona física sin NIF-IVA",
+ t_a:"Empresa con NIF-IVA",t_a2:"Sociedad, empresario individual o profesional",s_sede:"País de residencia o domicilio social",
+ a_it:"Italia",a_ue:"Unión Europea",a_ex:"Fuera de la Unión Europea",
+ paese:"País",pick:"Seleccionar",s2p:"Datos personales",s2a:"Datos de la empresa",nome:"Nombre",cognome:"Apellidos",nascita:"Fecha de nacimiento",
+ luogo:"Lugar de nacimiento",luogo_h:"Municipio y provincia, o país extranjero",cf:"Código fiscal (codice fiscale)",cf_h:"16 caracteres, como en la tarjeta sanitaria italiana",
+ rs:"Razón social",piva:"Número de IVA (partita IVA)",piva_h:"11 cifras",cf_same:"Igual que el número de IVA",sdi:"Código destinatario SDI",
+ sdi_h:"7 caracteres, para la factura electrónica",pec:"PEC (correo certificado)",nosdi:"No tengo código destinatario ni PEC",vat:"NIF-IVA intracomunitario",
+ vat_h:"Debe ser válido para operaciones intracomunitarias en el sistema VIES. Lo comprobamos antes de cada factura: si no es válido, se añadirá el IVA italiano al importe de este pedido y de los pedidos futuros.",vat_l:"Compruebe su NIF-IVA en el sitio VIES de la Comisión Europea",
+ tax:"Número fiscal",tax_h:"VAT, Tax ID o número equivalente de su país",eori_h:"Útil para el despacho de aduanas",opt:"opcional",
+ referente:"Persona de contacto",ref_h:"Nombre y apellidos",s3p:"Dirección de residencia",s3a:"Domicilio social",ind:"Calle y número",
+ cap:"Código postal",citta:"Ciudad",prov:"Provincia",prov2:"Provincia",s4:"Contacto",email:"Correo electrónico",tel:"Teléfono",
+ tel_h:"Con el prefijo internacional, por ejemplo +34",mailf:"Correo para facturas",mailf_h:"Si es distinto del anterior",
+ s5:"Entrega",same:"Misma dirección que arriba",sdest:"Destinatario o a la atención de",
+ sdest_h:"Persona, empresa, astillero o marina que recibe la mercancía",stel:"Teléfono para el transportista",snote:"Notas para la entrega",
+ snote_h:"Horarios, nombre del barco, amarre, acceso al astillero",s6:"Envío",note:"Notas",
+ priv:"He leído la ",priv_l:"política de privacidad",priv2:". Los datos sirven para registrarle como cliente y gestionar el pedido, la factura y el envío.",
+ send:"Enviar los datos",sending:"Enviando",ok_h:"Datos recibidos",ok_code:"Número de registro",
+ ok_p:"Gracias. Creamos su ficha de cliente y le escribimos con la confirmación del pedido y las instrucciones de pago. Si en dos días laborables no recibe nada, escriba a info@marinecookers.com.",
+ e_sum:"Algunos campos deben completarse o corregirse.",e_fail:"No se ha podido enviar. Inténtelo de nuevo en unos momentos o escriba a info@marinecookers.com.",
+ e_choose:"Elija una opción",e_req:"Campo obligatorio",e_email:"Correo electrónico no válido",
+ e_tel:"Escriba el número con el prefijo internacional, por ejemplo +34 912 345 678",
+ e_date:"Fecha no válida",e_cap:"El código postal italiano tiene 5 cifras",e_prov:"Sigla de 2 letras, por ejemplo TV",
+ e_cf_len:"El código fiscal tiene 16 caracteres: 6 letras, 2 cifras, 1 letra, 2 cifras, 1 letra, 3 cifras, 1 letra",
+ e_cf_chk:"Código fiscal incorrecto: el último carácter no coincide. Compruebe que lo ha copiado bien de la tarjeta sanitaria.",
+ e_cf_mis:"El código fiscal no coincide con: {x}. Compruebe los datos. Si son correctos, pulse de nuevo Enviar los datos.",
+ m_cogn:"apellidos",m_nome:"nombre",m_anno:"año de nacimiento",m_mese:"mes de nacimiento",m_giorno:"día de nacimiento",
+ e_cfa:"El código fiscal de la empresa tiene 11 cifras (16 caracteres para empresarios individuales)",
+ e_cfa_chk:"Código fiscal no válido: compruebe las cifras",
+ e_piva:"El número de IVA italiano tiene 11 cifras",e_piva_chk:"Número de IVA no válido: compruebe las cifras",
+ e_vat:"El número no tiene el formato de NIF-IVA previsto para: {x}. Compruebe las cifras.",e_vat0:"Elija primero el país",
+ e_sdi:"El código destinatario tiene 7 caracteres",e_sdipec:"Indique el código destinatario o la PEC, o marque la casilla",
+ e_priv:"Confirme que ha leído la política de privacidad"}
+};
+
+/* ───────────── Paesi UE: nome, prefisso IVA, prefisso telefonico, formato ─────────────
+   Formati della parte numerica secondo le regole VIES. Il controllo qui è solo
+   di forma: la validità vera si verifica su VIES. */
+var UE=[
+ ['AT','Austria','Austria','AT','+43',/^U\d{8}$/],
+ ['BE','Belgio','Belgium','BE','+32',/^[01]\d{9}$/],
+ ['BG','Bulgaria','Bulgaria','BG','+359',/^\d{9,10}$/],
+ ['CY','Cipro','Cyprus','CY','+357',/^\d{8}[A-Z]$/],
+ ['HR','Croazia','Croatia','HR','+385',/^\d{11}$/],
+ ['DK','Danimarca','Denmark','DK','+45',/^\d{8}$/],
+ ['EE','Estonia','Estonia','EE','+372',/^\d{9}$/],
+ ['FI','Finlandia','Finland','FI','+358',/^\d{8}$/],
+ ['FR','Francia','France','FR','+33',/^[A-HJ-NP-Z0-9]{2}\d{9}$/],
+ ['DE','Germania','Germany','DE','+49',/^\d{9}$/],
+ ['GR','Grecia','Greece','EL','+30',/^\d{9}$/],
+ ['IE','Irlanda','Ireland','IE','+353',/^\d[A-Z0-9+*]\d{5}[A-Z]{1,2}$/],
+ ['XI','Irlanda del Nord','Northern Ireland','XI','+44',/^(\d{9}|\d{12}|GD\d{3}|HA\d{3})$/],
+ ['LV','Lettonia','Latvia','LV','+371',/^\d{11}$/],
+ ['LT','Lituania','Lithuania','LT','+370',/^(\d{9}|\d{12})$/],
+ ['LU','Lussemburgo','Luxembourg','LU','+352',/^\d{8}$/],
+ ['MT','Malta','Malta','MT','+356',/^\d{8}$/],
+ ['NL','Paesi Bassi','Netherlands','NL','+31',/^\d{9}B\d{2}$/],
+ ['PL','Polonia','Poland','PL','+48',/^\d{10}$/],
+ ['PT','Portogallo','Portugal','PT','+351',/^\d{9}$/],
+ ['CZ','Repubblica Ceca','Czech Republic','CZ','+420',/^\d{8,10}$/],
+ ['RO','Romania','Romania','RO','+40',/^\d{2,10}$/],
+ ['SK','Slovacchia','Slovakia','SK','+421',/^\d{10}$/],
+ ['SI','Slovenia','Slovenia','SI','+386',/^\d{8}$/],
+ ['ES','Spagna','Spain','ES','+34',/^[A-Z0-9]\d{7}[A-Z0-9]$/],
+ ['SE','Svezia','Sweden','SE','+46',/^\d{12}$/],
+ ['HU','Ungheria','Hungary','HU','+36',/^\d{8}$/]
+];
+function ueBy(code){for(var i=0;i<UE.length;i++) if(UE[i][0]===code) return UE[i]; return null;}
+
+/* ───────────── Controlli fiscali italiani ───────────── */
+function up(s){return (s||'').toUpperCase().replace(/[\s.\-\/]/g,'');}
+
+/* Partita IVA e codice fiscale numerico (11 cifre): cifre in posizione dispari
+   sommate, cifre in posizione pari raddoppiate (meno 9 se superano 9);
+   l'ultima cifra porta il totale a un multiplo di 10. */
+function piva11(s){
+  if(!/^\d{11}$/.test(s) || /^0{11}$/.test(s)) return false;
+  var sum=0;
+  for(var i=0;i<10;i++){var d=+s[i]; if(i%2){d*=2; if(d>9)d-=9;} sum+=d;}
+  return (10-sum%10)%10===+s[10];
+}
+
+/* Codice fiscale delle persone fisiche (DM 23/12/1976): 3 lettere cognome,
+   3 nome, 2 cifre anno, lettera del mese, 2 cifre giorno (+40 per le donne),
+   codice del comune o Stato (lettera + 3 cifre), carattere di controllo.
+   Nei casi di omocodia le cifre sono sostituite da L M N P Q R S T U V. */
+var OMO='LMNPQRSTUV', MESI='ABCDEHLMPRST';
+var DISP={0:1,1:0,2:5,3:7,4:9,5:13,6:15,7:17,8:19,9:21,A:1,B:0,C:5,D:7,E:9,F:13,G:15,H:17,I:19,J:21,
+  K:2,L:4,M:18,N:20,O:11,P:3,Q:6,R:8,S:12,T:14,U:16,V:10,W:22,X:25,Y:24,Z:23};
+var CF_RE=/^[A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST][0-9LMNPQRSTUV]{2}[A-Z][0-9LMNPQRSTUV]{3}[A-Z]$/;
+function cfCheckChar(s){
+  var sum=0;
+  for(var i=0;i<15;i++){var c=s[i]; sum+= (i%2===0) ? DISP[c] : (/\d/.test(c)? +c : c.charCodeAt(0)-65);}
+  return String.fromCharCode(65+sum%26);
+}
+function cf16(s){ return CF_RE.test(s) && cfCheckChar(s)===s[15]; }
+function deOmo(s){
+  var a=s.split(''); [6,7,9,10,12,13,14].forEach(function(i){var k=OMO.indexOf(a[i]); if(k>=0) a[i]=String(k);});
+  return a.join('');
+}
+function letters(s){return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z]/g,'');}
+function cons(s){return s.replace(/[AEIOU]/g,'');}
+function vocs(s){return s.replace(/[^AEIOU]/g,'');}
+function codCognome(s){s=letters(s); return (cons(s)+vocs(s)+'XXX').slice(0,3);}
+function codNome(s){s=letters(s); var c=cons(s); if(c.length>=4) return c[0]+c[2]+c[3]; return (c+vocs(s)+'XXX').slice(0,3);}
+/* Confronto con i dati scritti: restituisce l'elenco di ciò che non torna. */
+function cfMismatch(cf,nome,cognome,dataISO){
+  var d=deOmo(cf), out=[];
+  if(cognome && codCognome(cognome)!==d.slice(0,3)) out.push('m_cogn');
+  if(nome && codNome(nome)!==d.slice(3,6)) out.push('m_nome');
+  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(dataISO||'');
+  if(m){
+    if(m[1].slice(2)!==d.slice(6,8)) out.push('m_anno');
+    if(MESI[+m[2]-1]!==d[8]) out.push('m_mese');
+    var g=+d.slice(9,11), gg=+m[3];
+    if(g!==gg && g!==gg+40) out.push('m_giorno');
+  }
+  return out;
+}
+
+/* ───────────── Stato della pagina ───────────── */
+var F=document.getElementById('fa'), lang='it', area='', tipo='', cfWarned='';
+var $=function(id){return document.getElementById(id);};
+function t(k){return (T[lang]&&T[lang][k])||T.en[k]||k;}
+
+/* Nome del Paese nella lingua della pagina. Il browser conosce i nomi di tutti
+   i Paesi (Intl.DisplayNames); se e' troppo vecchio si usa l'inglese.
+   XI (Irlanda del Nord) non e' un codice di Paese: nome scritto a mano. */
+var XI={it:'Irlanda del Nord',en:'Northern Ireland',fr:'Irlande du Nord',de:'Nordirland',es:'Irlanda del Norte'};
+function cName(r){
+  if(r[0]==='XI') return XI[lang]||r[2];
+  if(lang==='it') return r[1];
+  try{ return new Intl.DisplayNames([lang],{type:'region'}).of(r[0]) || r[2]; }catch(e){ return r[2]; }
+}
+/* Paesi fuori dall'Unione Europea (codici ISO). I nomi li fornisce il browser
+   nella lingua della pagina. */
+var EXTRA=('AD AE AF AG AI AL AM AO AR AS AU AW AZ BA BB BD BF BH BI BJ BL BM BN BO BQ BR BS BT BW BY BZ '+
+ 'CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX DJ DM DO DZ EC EG EH ER ET FJ FK FM FO GA GB GD GE GF GG '+
+ 'GH GI GL GM GN GP GQ GS GT GU GW GY HK HN HT ID IL IM IN IO IQ IR IS JE JM JO JP KE KG KH KI KM KN KP KR KW '+
+ 'KY KZ LA LB LC LI LK LR LS LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MU MV MW MX MY MZ NA NC NE NF '+
+ 'NG NI NO NP NR NU NZ OM PA PE PF PG PH PK PM PN PR PS PW PY QA RE RS RU RW SA SB SC SD SG SH SJ SL SM SN SO '+
+ 'SR SS ST SV SX SY SZ TC TD TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG US UY UZ VA VC VE VG VI VN VU WF WS '+
+ 'XK YE YT ZA ZM ZW').split(' ');
+var EXTRA_EN={XK:'Kosovo'};
+function rName(code,l){
+  try{ return new Intl.DisplayNames([l],{type:'region'}).of(code) || EXTRA_EN[code] || code; }catch(e){ return EXTRA_EN[code] || code; }
+}
+
+/* Paesi che non usano il codice postale: li' il CAP non si chiede. */
+var NOPC=('AE AG AI AO AW BF BI BJ BO BS BW BZ CD CF CG CI CK CM DJ DM ER FJ GA GD GH GM GN GQ GY HK KI KM KN KP '+
+  'LY ML MO MR MW NR NU QA RW SB SC SL SO SR SS ST SY TD TG TK TL TO TT TV UG VU YE ZW').split(' ');
+function noPostcode(c){ return !!c && NOPC.indexOf(c)>=0; }
+
+function addOpt(sel,value,code,text){
+  var op=document.createElement('option'); op.value=value; op.textContent=text;
+  if(code) op.setAttribute('data-c',code); sel.appendChild(op);
+}
+function fillCountries(){
+  /* Valore leggibile nella mail: nome italiano e sigla, come serve al gestionale */
+  var sel=$('f-ue'), cur=sel.value;
+  var list=UE.slice().sort(function(a,b){return cName(a).localeCompare(cName(b),lang);});
+  sel.innerHTML=''; addOpt(sel,'','',t('pick'));
+  list.forEach(function(r){ addOpt(sel, r[1]+' ('+r[0]+')', r[0], cName(r)); });
+  sel.value=cur;
+
+  var ex=$('f-ex'), curx=ex.value;
+  var lx=EXTRA.map(function(c){ return [c, rName(c,lang)]; })
+              .sort(function(a,b){ return a[1].localeCompare(b[1],lang); });
+  ex.innerHTML=''; addOpt(ex,'','',t('pick'));
+  lx.forEach(function(r){ addOpt(ex, rName(r[0],'it')+' ('+r[0]+')', r[0], r[1]); });
+  ex.value=curx;
+
+  /* Paese di consegna: Italia, Unione Europea e resto del mondo */
+  var sp=$('f-spae'), curs=sp.value;
+  var all=[['IT',rName('IT',lang),'Italia']]
+    .concat(UE.map(function(r){ return [r[0], cName(r), r[1]]; }))
+    .concat(EXTRA.map(function(c){ return [c, rName(c,lang), rName(c,'it')]; }))
+    .sort(function(a,b){ return a[1].localeCompare(b[1],lang); });
+  sp.innerHTML=''; addOpt(sp,'','',t('pick'));
+  all.forEach(function(r){ addOpt(sp, r[2]+' ('+r[0]+')', r[0], r[1]); });
+  sp.value=curs;
+}
+function ueCode(){var o=$('f-ue').selectedOptions[0]; return o?o.getAttribute('data-c'):'';}
+function exCode(){var o=$('f-ex').selectedOptions[0]; return o?o.getAttribute('data-c'):'';}
+function shipCode(){var o=$('f-spae').selectedOptions[0]; return o?o.getAttribute('data-c'):'';}
+/* Codice del Paese scelto, qualunque sia l'area */
+function countryCode(){ return area==='IT' ? 'IT' : area==='UE' ? ueCode() : area==='EX' ? exCode() : ''; }
+
+function setLang(l){
+  lang=T[l]?l:'en';
+  /* Stessa memoria del sito: la lingua scelta qui vale anche tornando al sito */
+  try{ localStorage.setItem('txLang',lang); }catch(e){}
+  document.documentElement.lang=lang; $('h-lang').value=lang;
+  document.querySelectorAll('[data-t]').forEach(function(el){el.textContent=t(el.getAttribute('data-t'));});
+  document.querySelectorAll('.lang-btn,.lang-btn2').forEach(function(b){var on=b.getAttribute('data-lang')===lang; b.classList.toggle('active',on); b.setAttribute('aria-pressed',String(on));});
+  fillCountries();
+  document.title=t('h1')+' · Marine Cookers Techimpex';
+  /* rinnova i messaggi di errore già visibili */
+  if(F.classList.contains('err')) validate(false);
+}
+
+/* Mostra e nasconde i blocchi. data-show: elenco di "AREA-TIPO";
+   * = qualunque valore già scelto, ? = non importa.
+   data-if: id di una casella, con ! davanti se deve essere NON spuntata. */
+function match(tok){
+  var p=tok.split('-'), a=p[0], k=p[1];
+  var okA = a==='?' ? true : a==='*' ? !!area : a===area;
+  var okT = k==='?' ? true : k==='*' ? !!tipo : k===tipo;
+  return okA && okT;
+}
+function apply(){
+  document.querySelectorAll('[data-show]').forEach(function(el){
+    var vis=el.getAttribute('data-show').split(/\s+/).some(match);
+    el.hidden=!vis;
+  });
+  document.querySelectorAll('[data-if]').forEach(function(el){
+    var v=el.getAttribute('data-if'), neg=v[0]==='!', c=$(v.replace('!',''));
+    el.hidden = neg ? c.checked : !c.checked;
+  });
+  /* CAP solo nei Paesi che lo usano; provincia di consegna solo per l'Italia */
+  $('w-cap').hidden = area==='EX' && noPostcode(exCode());
+  $('w-scap').hidden = noPostcode(shipCode());
+  $('w-sprv').hidden = shipCode()!=='IT';
+  /* I campi nei blocchi nascosti non partono con il modulo */
+  F.querySelectorAll('input,select,textarea').forEach(function(el){
+    if(el.name==='form-name'||el.name==='bot-field'||el.id==='h-lang'||el.id==='h-cf'||el.id==='h-piva'||el.id==='h-code'||el.id==='h-subj') return;
+    el.disabled=!!el.closest('[hidden]');
+  });
+  var ue=ueBy(ueCode()); $('vat-pre').textContent= ue ? ue[3] : '··';
+  /* Con "nessun SDI né PEC" i due campi restano facoltativi */
+  document.querySelectorAll('.ch label').forEach(function(l){l.classList.toggle('on', l.querySelector('input').checked);});
+}
+
+/* Prefisso telefonico proposto quando si sceglie il Paese, solo se il campo è vuoto
+   o contiene ancora il prefisso proposto prima */
+var lastPre='';
+function suggestPrefix(){
+  var pre = area==='IT' ? '+39' : area==='UE' ? ((ueBy(ueCode())||[])[4]||'') : '';
+  var el=$('f-tel'), v=el.value.trim();
+  if(!v || v===lastPre){ el.value = pre ? pre+' ' : ''; }
+  lastPre=pre;
+}
+
+/* ───────────── Verifica ───────────── */
+function box(el){return el.closest('.f');}
+function mark(el,msg,warn){
+  var b=box(el); if(!b) return;
+  b.classList.toggle('bad', !!msg && !warn);
+  b.classList.toggle('warn', !!msg && !!warn);
+  var e=b.querySelector('small.e'); if(e) e.textContent=msg||'';
+}
+function clearMarks(){F.querySelectorAll('.bad,.warn').forEach(function(b){b.classList.remove('bad','warn');});}
+
+function checkField(el){
+  var v=(el.value||'').trim(), kind=el.getAttribute('data-v');
+  if(el.type==='checkbox') return el.required && !el.checked ? (el.id==='c-priv'?t('e_priv'):t('e_req')) : '';
+  if(!v) return el.required ? t('e_req') : '';
+  switch(kind){
+    case 'email': return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v) ? '' : t('e_email');
+    case 'tel': {
+      var n=v.replace(/[\s().\-\/]/g,'').replace(/^00/,'+');
+      return /^\+[1-9]\d{6,14}$/.test(n) ? '' : t('e_tel');
+    }
+    case 'date': {
+      var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v); if(!m) return t('e_date');
+      var d=new Date(v+'T12:00:00'), now=new Date();
+      return (+m[1]<1900 || d>now || isNaN(d)) ? t('e_date') : '';
+    }
+    case 'cap': return area==='IT' && !/^\d{5}$/.test(v) ? t('e_cap') : '';
+    case 'scap': return shipCode()==='IT' && !/^\d{5}$/.test(v) ? t('e_cap') : '';
+    case 'prov': return /^[A-Za-z]{2}$/.test(v) ? '' : t('e_prov');
+    case 'sdi': return /^[A-Z0-9]{7}$/.test(up(v)) ? '' : t('e_sdi');
+    case 'piva': {
+      var p=up(v).replace(/^IT/,'');
+      if(!/^\d{11}$/.test(p)) return t('e_piva');
+      return piva11(p) ? '' : t('e_piva_chk');
+    }
+    case 'cfa': {
+      var c=up(v);
+      if(/^\d{11}$/.test(c)) return piva11(c) ? '' : t('e_cfa_chk');
+      if(c.length===16) return CF_RE.test(c) ? (cf16(c)?'':t('e_cfa_chk')) : t('e_cfa');
+      return t('e_cfa');
+    }
+    case 'cfp': {
+      var s=up(v);
+      if(!CF_RE.test(s)) return t('e_cf_len');
+      if(!cf16(s)) return t('e_cf_chk');
+      return '';
+    }
+    case 'vat': {
+      var u=ueBy(ueCode()); if(!u) return t('e_vat0');
+      var x=up(v); if(x.indexOf(u[3])===0) x=x.slice(u[3].length);
+      return u[5].test(x) ? '' : t('e_vat').replace('{x}', cName(u));
+    }
+  }
+  return '';
+}
+
+/* Restituisce il primo elemento da correggere, oppure null */
+function validate(final){
+  clearMarks();
+  var first=null;
+  ['area_cliente','tipo_cliente'].forEach(function(g){
+    var grp=F.querySelector('[data-g="'+g+'"]');
+    var ok=!!F.querySelector('input[name="'+g+'"]:checked');
+    grp.classList.toggle('bad',!ok);
+    if(!ok && !first) first=grp.querySelector('input');
+  });
+  F.querySelectorAll('input,select,textarea').forEach(function(el){
+    if(el.disabled || el.type==='hidden' || el.type==='radio' || !box(el)) return;
+    if(el.closest('.ck') && el.id!=='c-priv') return;
+    var msg=checkField(el);
+    if(msg){ mark(el,msg); if(!first) first=el; }
+  });
+  /* SDI o PEC, salvo casella spuntata */
+  if(area==='IT' && tipo==='A' && !$('c-nosdi').checked && !$('f-sdi').value.trim() && !$('f-pec').value.trim()){
+    var g=$('g-sdi'); g.classList.add('bad'); g.querySelector('small.e').textContent=t('e_sdipec');
+    if(!first) first=$('f-sdi');
+  }
+  /* Codice fiscale del privato: corrisponde a nome, cognome e data? */
+  var cfp=$('f-cfp'), cfNote='';
+  if(!cfp.disabled && !box(cfp).classList.contains('bad') && cfp.value.trim()){
+    var s=up(cfp.value), mis=cfMismatch(s,$('f-nome').value,$('f-cogn').value,$('f-nasc').value);
+    var sig=[s,$('f-nome').value,$('f-cogn').value,$('f-nasc').value].join('|');
+    if(mis.length){
+      var list=mis.map(t).join(', ');
+      if(final && cfWarned===sig){
+        cfNote='ATTENZIONE: carattere di controllo corretto ma NON corrisponde a: '+mis.map(function(k){return T.it[k];}).join(', ')+'. Il cliente ha confermato i dati. Luogo di nascita da verificare.';
+      } else {
+        mark(cfp, t('e_cf_mis').replace('{x}',list), true);
+        if(final){ cfWarned=sig; if(!first) first=cfp; }
+      }
+    } else {
+      cfNote='OK: formato e carattere di controllo corretti, corrisponde a cognome, nome e data di nascita. Luogo di nascita da verificare.';
+    }
+  }
+  if(final){
+    var cfa=$('f-cfa');
+    if(!cfa.disabled && cfa.value.trim()){
+      cfNote = /^\d{11}$/.test(up(cfa.value)) ? 'OK: codice fiscale numerico, cifra di controllo corretta.' :
+               'OK: codice fiscale personale (ditta individuale), carattere di controllo corretto.';
+    }
+    $('h-cf').value=cfNote;
+    var pv='';
+    if(area==='IT' && tipo==='A') pv='OK: cifra di controllo corretta. Verificare che la partita IVA sia attiva (servizio Agenzia delle Entrate o VIES).';
+    if(area==='UE' && tipo==='A') pv='Formato corretto per '+(ueBy(ueCode())||[''])[0]+'. DA VERIFICARE SU VIES prima della fattura senza IVA.';
+    if(area==='EX' && tipo==='A') pv='Numero fiscale estero, non verificato automaticamente.';
+    $('h-piva').value=pv;
+  }
+  F.classList.toggle('err', !!first);
+  return first;
+}
+
+/* ───────────── Eventi ───────────── */
+F.addEventListener('change',function(e){
+  var el=e.target;
+  if(el.name==='area_cliente'){ area=el.getAttribute('data-a'); suggestPrefix(); }
+  if(el.name==='tipo_cliente'){ tipo=el.getAttribute('data-p'); }
+  if(el.id==='f-ue'){ suggestPrefix(); }
+  if(el.id==='c-same-cf'){ syncCf(); }
+  if(el.id==='c-same' && !el.checked && !$('f-spae').value){
+    var cc=countryCode(), op=cc && $('f-spae').querySelector('option[data-c="'+cc+'"]');
+    if(op) $('f-spae').value=op.value;
+  }
+  apply();
+  var b=box(el); if(b) b.classList.remove('bad','warn');
+  var g=el.closest('.grp'); if(g) g.classList.remove('bad');
+  if(el.id==='c-nosdi'||el.id==='f-sdi'||el.id==='f-pec') $('g-sdi').classList.remove('bad');
+  if(!F.querySelector('.bad')) F.classList.remove('err');
+});
+F.addEventListener('input',function(e){
+  var el=e.target, b=box(el);
+  if(b && !el.closest('.ck')) b.classList.remove('bad','warn');
+  if(el.id==='f-piva') syncCf();
+  if(el.id==='f-prv'||el.id==='f-sprv') el.value=el.value.toUpperCase();
+  if(!F.querySelector('.bad')) F.classList.remove('err');
+});
+/* Maiuscolo e senza spazi per i codici, all'uscita dal campo */
+['f-cfp','f-cfa','f-sdi','f-vat','f-piva'].forEach(function(id){
+  $(id).addEventListener('blur',function(){ this.value=up(this.value); if(this.id==='f-piva') syncCf(); });
+});
+function syncCf(){
+  var c=$('c-same-cf'), f=$('f-cfa');
+  if(c.checked){ f.value=up($('f-piva').value).replace(/^IT/,''); f.readOnly=true; }
+  else if(f.readOnly){ f.readOnly=false; }
+}
+
+F.addEventListener('submit',function(e){
+  e.preventDefault();
+  if(F.querySelector('input[name="bot-field"]').value) return;
+  var bad=validate(true);
+  if(bad){
+    var top=(bad.closest('.f,.grp')||bad).getBoundingClientRect().top+window.pageYOffset-90;
+    window.scrollTo({top:top,behavior:'smooth'});
+    setTimeout(function(){ try{bad.focus({preventScroll:true});}catch(x){} },350);
+    return;
+  }
+  /* Partita IVA comunitaria completa di sigla del Paese */
+  var u=ueBy(ueCode());
+  if(u && !$('f-vat').disabled){ var x=up($('f-vat').value); if(x.indexOf(u[3])!==0) x=u[3]+x; $('h-vat').value=x; }
+  /* Codici in maiuscolo, telefono con + */
+  ['f-cfp','f-cfa','f-sdi','f-piva'].forEach(function(id){ var el=$(id); if(!el.disabled) el.value=up(el.value).replace(/^IT(?=\d{11}$)/,''); });
+  ['f-tel','f-stel'].forEach(function(id){ var el=$(id); if(!el.disabled && el.value.trim()) el.value=el.value.trim().replace(/^00/,'+'); });
+
+  var btn=$('go'); btn.disabled=true; btn.textContent=t('sending');
+  $('fail').style.display='none';
+  /* Codice della registrazione: data e ora dell'invio piu' due caratteri a
+     caso (REG-260921-143205-K7). Non e' un progressivo, che richiederebbe un
+     server, ma e' unico e dice subito quando e' arrivata la registrazione. */
+  var d=new Date(), z=function(n){return (n<10?'0':'')+n;}, AB='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var code='REG-'+String(d.getFullYear()).slice(2)+z(d.getMonth()+1)+z(d.getDate())+'-'+z(d.getHours())+z(d.getMinutes())+z(d.getSeconds())+'-'+
+           AB[Math.floor(Math.random()*AB.length)]+AB[Math.floor(Math.random()*AB.length)];
+  var chi = tipo==='A' ? $('f-rs').value.trim() : ($('f-cogn').value.trim()+' '+$('f-nome').value.trim());
+  var ar=(F.querySelector('input[name="area_cliente"]:checked')||{}).value||'';
+  var tp=(F.querySelector('input[name="tipo_cliente"]:checked')||{}).value||'';
+  $('h-code').value=code;
+  $('h-subj').value='ANAGRAFICA WEB '+code+' | '+chi+' | '+ar+' | '+tp;
+  $('ok-code').textContent=code;
+  var body=new URLSearchParams(new FormData(F)).toString();
+  fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body})
+    .then(function(r){ if(!r.ok) throw new Error(r.status); document.body.classList.add('sent'); window.scrollTo(0,0); })
+    .catch(function(){ $('fail').style.display='block'; btn.disabled=false; btn.textContent=t('send'); });
+});
+
+document.querySelectorAll('.lang-btn,.lang-btn2').forEach(function(b){
+  b.addEventListener('click',function(){ setLang(b.getAttribute('data-lang')); });
+});
+
+/* ───────────── Avvio ───────────── */
+var q=new URLSearchParams(location.search);
+/* Lingua: come il sito. Prima ?lang= nel link, poi la lingua gia' scelta sul
+   sito (txLang), poi quella del browser, altrimenti inglese. */
+var L=['en','it','fr','de','es'], ql=(q.get('lang')||'').toLowerCase(), sl='';
+try{ sl=localStorage.getItem('txLang')||''; }catch(e){}
+var nl=(navigator.language||'en').slice(0,2).toLowerCase();
+setLang(L.indexOf(ql)>=0 ? ql : L.indexOf(sl)>=0 ? sl : L.indexOf(nl)>=0 ? nl : 'en');
+/* Testata: si scurisce scorrendo, come sul sito */
+var hdr=$('hdr');
+function hs(){ hdr.classList.toggle('sc', window.pageYOffset>10); }
+window.addEventListener('scroll',hs,{passive:true}); hs();
+apply();
+
+/* Cursore dorato, solo con mouse */
+if(window.matchMedia && matchMedia('(hover:hover) and (pointer:fine)').matches){
+  var c1=$('cursor'), c2=$('cursor-ring'), mx=0,my=0,rx=0,ry=0,on=false;
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX; my=e.clientY;
+    if(!on){ on=true; rx=mx; ry=my; c1.style.opacity=c2.style.opacity='1'; loop(); }
+    c1.style.transform='translate('+(mx-4.5)+'px,'+(my-4.5)+'px)';
+    var el=e.target;
+    document.body.classList.toggle('cur-text', !!(el.matches && el.matches('input[type=text],input[type=email],input[type=tel],input[type=date],textarea')));
+    document.body.classList.toggle('cur-hover', !!(el.closest && el.closest('a,button,label,select')));
+  });
+  document.addEventListener('mouseleave',function(){ c1.style.opacity=c2.style.opacity='0'; on=false; });
+  c1.style.left=c1.style.top=c2.style.left=c2.style.top='0';
+  c1.style.transform='translate(-50px,-50px)';
+  function loop(){ if(!on) return; rx+=(mx-rx)*.2; ry+=(my-ry)*.2;
+    var s=c2.offsetWidth/2; c2.style.transform='translate('+(rx-s)+'px,'+(ry-s)+'px)'; requestAnimationFrame(loop); }
+}
+
+/* Per i test: funzioni di controllo esposte */
+window.__mcCheck={piva11:piva11,cf16:cf16,cfMismatch:cfMismatch,codNome:codNome,codCognome:codCognome};
+})();
+</script>
+</body>
+</html>
