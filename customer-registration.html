@@ -205,6 +205,13 @@ body.sent .done{display:block}
        che compaiono solo in certi casi. I campi dei blocchi nascosti vengono
        disattivati e quindi non partono: nella mail arrivano solo quelli utili.
        novalidate: la verifica la fa lo script, nella lingua della pagina. -->
+  <!-- ⚠️ ETICHETTE UNICHE. Nella mail di notifica Netlify non usa i name dei
+       campi ma il testo delle etichette scritto qui nell'HTML. Due campi con la
+       stessa etichetta ("CAP" della sede e "CAP" della consegna) vengono fusi e
+       nella mail ne resta uno solo, l'ultimo. Per questo le etichette della
+       consegna qui cominciano con "Consegna:". Il cliente non le vede cosi':
+       lo script le sostituisce con i testi tradotti (data-t). Ogni campo nuovo
+       deve avere un'etichetta diversa da tutte le altre. -->
   <form name="anagrafica" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate id="fa">
     <input type="hidden" name="form-name" value="anagrafica">
     <p class="hp"><label>Non compilare <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
@@ -359,18 +366,18 @@ body.sent .done{display:block}
         <div class="f"><label for="f-sdest" data-t="sdest">Destinatario o presso</label>
           <input id="f-sdest" name="consegna_destinatario" type="text" required>
           <small class="h" data-t="sdest_h">Persona, azienda, cantiere o marina che riceve la merce</small><small class="e"></small></div>
-        <div class="f"><label for="f-sind" data-t="ind">Via e numero civico</label>
+        <div class="f"><label for="f-sind" data-t="ind">Consegna: via e numero civico</label>
           <input id="f-sind" name="consegna_indirizzo" type="text" required autocomplete="shipping address-line1"><small class="e"></small></div>
         <div class="row r3">
-          <div class="f a-cap" id="w-scap"><label for="f-scap" data-t="cap">CAP</label>
+          <div class="f a-cap" id="w-scap"><label for="f-scap" data-t="cap">Consegna: CAP</label>
             <input id="f-scap" name="consegna_cap" type="text" required data-v="scap" autocomplete="shipping postal-code"><small class="e"></small></div>
-          <div class="f a-cit"><label for="f-scit" data-t="citta">Città</label>
+          <div class="f a-cit"><label for="f-scit" data-t="citta">Consegna: città</label>
             <input id="f-scit" name="consegna_citta" type="text" required autocomplete="shipping address-level2"><small class="e"></small></div>
-          <div class="f a-prv" id="w-sprv"><label for="f-sprv" data-t="prov">Provincia</label>
+          <div class="f a-prv" id="w-sprv"><label for="f-sprv" data-t="prov">Consegna: provincia</label>
             <input id="f-sprv" name="consegna_provincia" type="text" required data-v="prov" maxlength="2" autocapitalize="characters" autocomplete="shipping address-level1"><small class="e"></small></div>
         </div>
         <div class="row r2">
-          <div class="f"><label for="f-spae" data-t="paese">Paese</label>
+          <div class="f"><label for="f-spae" data-t="paese">Consegna: paese</label>
             <select id="f-spae" name="consegna_paese" required autocomplete="shipping country"></select><small class="e"></small></div>
           <div class="f"><label for="f-stel" data-t="stel">Telefono per il corriere</label>
             <input id="f-stel" name="consegna_telefono" type="tel" required data-v="tel" autocomplete="off"><small class="e"></small></div>
