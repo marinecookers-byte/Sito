@@ -13045,7 +13045,7 @@ function goProd(m){
           var gvi=gvs[vi]; if(!gvi||!gvi.embed)continue;
           var at=(typeof gvi.after==='number'?gvi.after:0)+1+vi;
           if(at<0)at=0; if(at>media.length)at=media.length;
-          media.splice(at,0,{type:'video', embed:gvi.embed, src:(gvi.poster||''), alt:(gvi.alt||(m+' video'))});
+          media.splice(at,0,{type:'video', embed:gvi.embed, src:(gvi.poster||''), alt:(gvi.alt||(m+' video')), prev:(gvi.preview||'')});
         }
       }
       // Layout dinamico a mosaico (opt-in): una foto ogni tre a tutta larghezza.
@@ -13055,7 +13055,10 @@ function goProd(m){
         var it=media[gj];
         if(it.type==='video'){
           var vpid=(it.embed.match(/public_id=([^&]+)/)||[])[1]||'';
-          var vmp4=vpid?('https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/'+vpid+'.mp4'):'';
+          /* preview (facoltativo, 22/09/2026): indirizzo dell'anteprima scelto a
+             mano nella voce di PROD_GALLERY_VIDEO. Senza, si costruisce come
+             sempre da public_id (f_auto,q_auto, risoluzione originale). */
+          var vmp4=it.prev||(vpid?('https://res.cloudinary.com/dseiw9ndw/video/upload/f_auto,q_auto/'+vpid+'.mp4'):'');
           gh+='<div class="pp-gallery-item pp-gallery-video pp-gallery-video-auto" data-lb-type="video" data-lb-embed="'+it.embed+'" data-lb-alt="'+it.alt+'" onclick="ppGalleryOpenFromGrid('+gj+')">'
             +(vmp4?'<video src="'+vmp4+'"'+(it.src?' poster="'+it.src+'"':'')+' loop muted playsinline preload="none"></video>'
                   :(it.src?'<img src="'+it.src+'" alt="'+it.alt+'" onerror="this.style.display=\'none\'">':''))
@@ -15037,8 +15040,13 @@ window.PROD_GALLERY_VIDEO = {
   'ORIZZONTE': {after:16, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=ORIZZONTE_CNB_1_vi9ufs', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/ORIZZONTE_CNB_1_vi9ufs.jpg', alt:'ORIZZONTE · CNB 62 · Horizon3 Induction'},
   /* MARIS (22/09/2026): a meta' galleria, 15a casella su 30, a colori.
      Provato anche come hero della scheda (desaturato): BOCCIATO dal
-     titolare. La hero di MARIS resta quella della categoria. */
-  'MARIS': {after:13, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=maris-2-burner-gimbaled-marine-gas-stove-with-oven-video_ikuqy6', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/maris-2-burner-gimbaled-marine-gas-stove-with-oven-video_ikuqy6.jpg', alt:'MARIS · 2-burner gimbaled marine gas stove with oven · video'},
+     titolare. La hero di MARIS resta quella della categoria.
+     File: MP4 caricato dal titolare (sostituisce un primo .mov, pesante e
+     invisibile sui telefoni). L'anteprima nella griglia usa l'MP4 ORIGINALE,
+     senza trasformazioni: nessuna conversione da aspettare, parte subito su
+     tutti i dispositivi. Il punto nel public_id (…video._omxkhx) e' nel nome
+     del file su Cloudinary: non toglierlo. */
+  'MARIS': {after:13, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=maris-2-burner-gimbaled-marine-gas-stove-with-oven-video._omxkhx', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,q_auto,w_720,c_limit/v1790087744/maris-2-burner-gimbaled-marine-gas-stove-with-oven-video._omxkhx.jpg', preview:'https://res.cloudinary.com/dseiw9ndw/video/upload/v1790087744/maris-2-burner-gimbaled-marine-gas-stove-with-oven-video._omxkhx.mp4', alt:'MARIS · 2-burner gimbaled marine gas stove with oven · video'},
   'TIZIANO': {after:0, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=20260117_133200_1_e7u8py', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/20260117_133200_1_e7u8py.jpg', alt:'TIZIANO · video'},
   'VIRTUS': [
     {after:0, embed:'https://player.cloudinary.com/embed/?cloud_name=dseiw9ndw&public_id=VIRTUS_VIDEO_SUNSEEKER_90_OCEAN_fowdgh', poster:'https://res.cloudinary.com/dseiw9ndw/video/upload/so_0,f_auto,q_auto/VIRTUS_VIDEO_SUNSEEKER_90_OCEAN_fowdgh.jpg', alt:'VIRTUS · Sunseeker 90 Ocean'},
