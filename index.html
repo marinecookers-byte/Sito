@@ -1751,7 +1751,7 @@ header.hide{transform:translateY(-100%);}
 /* ⚠️ Con TRE foto la disposizione a tre colonne le mette tutte in fila, e la
    terza finisce accanto alle altre invece che sotto. Qui la terza, quando e'
    anche l'ultima, prende l'intera larghezza e va a capo da sola.
-   Vale per ESPRESSO12, FORMA e GUSTO, che oggi hanno tre foto: su tutte e tre
+   Valeva per ESPRESSO12, FORMA e GUSTO quando avevano tre foto (oggi solo ESPRESSO12): su tutte e tre
    la fila da tre schiacciava le immagini. */
 .pp-gallery-grid.pp-gallery-multi .pp-gallery-item:nth-child(3):last-child{
   grid-column:1 / -1;
@@ -14697,7 +14697,8 @@ window.PROD_IMGS={
   'MARIS':        'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784901110/MARIS_-_xl2_con_paraventi_sfondo_nero_kq3qmq.jpg',
   'NAUTA':        'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786289372/NAUTA_XL3_brx3xv.png',
   'MARINA':       'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657235/MARINA_-_mariner2_copiare_in_foto_idjllk.jpg',
-  'GUSTO':        'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657228/GUSTO_-_MARINER3_xvfjed.jpg',
+  /* GUSTO (04/11/2026): foto nuova per card di categoria, matrice e scheda prodotto. */
+  'GUSTO':        'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1793775173/GUSTO_-_STOVE_FOR_MARINE_CHEFS_dp6mpj.jpg',
   'ALTURA':       'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1786285757/ALTURA_-_TOP4_lnikqx.jpg',
   'VENTUS':       'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1784657218/VENTUS_-_xxl3-2_fspppu.jpg',
   /* MAXIMA (03/11/2026): foto nuova per card di categoria, matrice e scheda prodotto. */
@@ -14968,9 +14969,38 @@ window.PROD_GALLERY={
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1787409409/ESPRESSO12_COFFEE_t8lgxo.jpg', alt:'Espresso12 patented 12 V DC espresso coffee maker for boats, ultra compact, Italian design, for real Italian espresso at sea'}
   ],
   'GUSTO':[
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1784657228/GUSTO_-_MARINER3_xvfjed.jpg', alt:'Three-burner gas cooker with gas oven, former MARINER 3 variant in the heavy-duty ocean-going version, mirror-polished stainless steel oven, high-output burners and exclusive adjustable gimbals'},
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786079793/GUSTO_FOTO3_flt6di.jpg', alt:'Installation example of the GUSTO Mariner gas cooker with gas oven on a sailing boat, mirror-polished front reflecting the boat interior, heavy-duty structure with an exclusive cooking chamber mounting system'},
-    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1786079779/GUSTO_FOTO2_oqtgx3.jpg', alt:'GUSTO high-end gimballed gas cooker with gas oven for boat galleys, high-end Italian design, engineered for authentic Italian cuisine on board'}
+    /* GUSTO (04/11/2026): 30 foto nuove nell'ordine dato dal titolare.
+       Tolte le vecchie xvfjed, flt6di, oqtgx3. */
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775180/GUSTO_CUCINA_BASCULANTE_3_FUOCHI_xlwyau.jpg', alt:'GUSTO three-burner gimballed marine gas cooker with oven'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775176/GUSTO_BLUE_WATER_COOKER_kt1ltn.jpg', alt:'GUSTO bluewater marine gas cooker with oven for ocean-going yachts'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775173/GUSTO_-_STOVE_FOR_MARINE_CHEFS_dp6mpj.jpg', alt:'GUSTO marine gas stove with oven designed for chefs on board'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775174/GUSTO_-_RECHAUD_FOUR_AVEC_CARDANS_ca0ues.jpg', alt:'GUSTO gimballed marine gas cooker with oven, made in Italy'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775162/GUSTO_-_LUXURY_MARINE_GIMBALED_STOVE_d8gucc.jpg', alt:'GUSTO luxury gimbaled marine gas stove'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775168/GUSTO_-_STOVE_FOR_BOATS_MADE_IN_ITALY_huobzd.jpg', alt:'GUSTO gas stove for boats, made in Italy'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775161/GUSTO_-_PERFOMANT_STOVE_FOR_BLUE_WATER_YACHTS_ivm9oe.jpg', alt:'GUSTO high-performance gas stove for bluewater yachts'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775157/GUSTO_-_MADE_IN_ITALY_LUXURY_GIMBALED_RANGE_teonys.jpg', alt:'GUSTO luxury gimbaled galley range made in Italy'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775156/GUSTO_-_LUXURY_GIMBALED_STOVE_nbxnzr.jpg', alt:'GUSTO luxury gimbaled marine stove with oven'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775155/GUSTO_-_HIGH_END_COOKER_WITH_OVEN_FOR_YACHTS_psnod3.jpg', alt:'GUSTO high-end gas cooker with oven for yachts'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775152/GUSTO_-_ITALIAN_STYLE_GIMBALED_RANGE_tsxjdw.jpg', alt:'GUSTO gimbaled galley range in Italian style'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775144/GUSTO_-_GIMBALLED_COOKER_t3x1ny.jpg', alt:'GUSTO gimballed marine gas cooker'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775141/GUSTO_-_GIMBALLED_COOKER_WITH_OVEN_3_BURNERS_psutgy.jpg', alt:'GUSTO gimballed cooker with oven and three gas burners'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775138/GUSTO_-_FORNELLO_NAUTICO_eznj13.jpg', alt:'GUSTO marine gas stove for yacht galleys'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775133/GUSTO_-_CUCINA_PER_BARCHE_A_VELA_bh8pax.jpg', alt:'GUSTO gas cooker with oven for sailing boats'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775133/GUSTO_-_GIMBALED_STOVE_FOR_YACHTS_MADE_IN_ITALY_xqt0b7.jpg', alt:'GUSTO gimbaled stove for yachts, made in Italy'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775131/GUSTO_-_FORNELLO_NAUTICO_DI_LUSSO_cs1j4z.jpg', alt:'GUSTO luxury marine gas stove'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775119/GUSTO_-_CUCINA_NAUTICA_lknrkl.jpg', alt:'GUSTO marine gas cooker with oven'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775110/GUSTO_-_CUCINA_DI_LUSSO_MARINA_o9dzzw.jpg', alt:'GUSTO luxury marine cooker for high-end yachts'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775108/GUSTO_-_CUCINA_ITALIANA_LUSSO_wobinn.jpg', alt:'GUSTO luxury Italian marine gas cooker'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775107/GUSTO_-_CUCINA_A_GAS_NAUTICA_udzim7.jpg', alt:'GUSTO marine gas cooker with three burners'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775106/GUSTO_-_CUCINA_BASCULANTE_pmkd4b.jpg', alt:'GUSTO gimballed gas cooker for boats'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775106/GUSTO_-_COOKER_WITH_OVEN_d0wqpp.jpg', alt:'GUSTO marine gas cooker with oven'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775097/GUSTO_-_CUCINA_A_GAS_3_FUOCHI_CON_CARDANI_isjrpu.jpg', alt:'GUSTO three-burner gas cooker with gimbals'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775087/GUSTO_-_3_BURNERS_COOKER_WITH_OVEN_FOR_SAILING_YACHTS_v3s6cq.jpg', alt:'GUSTO three-burner cooker with oven for sailing yachts'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775087/GUSTO_-_3_GAS_RINGS_LUXURY_GIMBALED_STOVE_zhnu9b.jpg', alt:'GUSTO luxury gimbaled stove with three gas rings'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775087/GUSTO_-_COOKER_WITH_OVEN_FOR_SAILING_YACHTS_quoomb.jpg', alt:'GUSTO gas cooker with oven for sailing yachts'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775081/GUSTO_-_CUCINA_ALTA_GAMMA_ITALIANA_wnptur.jpg', alt:'GUSTO high-end Italian marine gas cooker'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775078/GUSTO_-_COOKER_WITH_OVEN_FOR_BLUEWATER_YACHTS_qyuasn.jpg', alt:'GUSTO gas cooker with oven for bluewater yachts'},
+    {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1793775077/GUSTO_-_BLUEWATER_STOVE_qrozfv.jpg', alt:'GUSTO bluewater marine gas stove'}
   ],
   'MARIS':[
     {src:'https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1789808183/MARIS_marine_gas_cooker_with_oven_su75js.jpg', alt:'MARIS marine gas cooker with oven, two burners and 30-litre static gas oven, handmade in solid stainless steel in Conegliano'},
