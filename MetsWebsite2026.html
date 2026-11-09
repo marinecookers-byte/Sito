@@ -177,6 +177,35 @@ footer nav a{text-decoration:none;border-bottom:1px solid var(--ln);color:rgba(2
 .ph-n{display:block;margin-top:12px;font-family:"Cormorant Garamond",serif;font-size:21px;line-height:1.2}
 .ph-d{display:block;margin-top:3px;font-size:12px;line-height:1.45;color:rgba(10,10,10,.6)}
 
+/* ── PANNELLO APPUNTAMENTO ──────────────────────────────────────────── */
+.bk{position:fixed;inset:0;z-index:95;background:rgba(6,6,6,.82);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px 14px}
+.bk.on{display:flex}
+.bk-p{position:relative;width:100%;max-width:560px;background:var(--wh);color:var(--bl);padding:34px 24px 30px;margin:auto 0;border-top:2px solid var(--go)}
+@media(min-width:640px){.bk-p{padding:42px 40px 36px}}
+.bk-x{position:absolute;top:12px;right:12px;background:transparent;border:1px solid rgba(150,118,63,.5);color:var(--gd);font-family:inherit;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:8px 13px;cursor:pointer}
+.bk h2{font-size:clamp(26px,5vw,34px);margin-top:6px}
+.bk .eyebrow{color:var(--gd);padding-right:84px}
+.bk em{color:var(--gd)}
+.bk-i{font-size:14px;color:rgba(10,10,10,.7);margin-top:10px}
+.fk{display:block;font-size:10px;letter-spacing:.19em;text-transform:uppercase;color:var(--gd);margin:18px 0 6px}
+.fi{width:100%;background:transparent;border:0;border-bottom:1px solid rgba(10,10,10,.24);color:var(--bl);font-family:inherit;font-size:16px;font-weight:300;padding:8px 0;border-radius:0}
+.fi:focus{outline:none;border-bottom-color:var(--gd)}
+.fi.bad{border-bottom-color:#a4442f}
+select.fi{-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,#96763f 50%),linear-gradient(135deg,#96763f 50%,transparent 50%);background-position:calc(100% - 12px) 55%,calc(100% - 7px) 55%;background-size:5px 5px;background-repeat:no-repeat}
+textarea.fi{resize:vertical;min-height:80px}
+.f2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px}
+.fhp{position:absolute;left:-9999px}
+.fgo{margin-top:26px;width:100%;background:var(--gd);border:1px solid var(--gd);color:var(--wh);font-family:inherit;font-size:11px;letter-spacing:.19em;text-transform:uppercase;padding:15px 20px;cursor:pointer}
+.fgo[disabled]{opacity:.5;cursor:default}
+.ferr{color:#a4442f;font-size:13px;margin-top:12px;display:none}
+form.err .ferr{display:block}
+.fok{display:none;font-size:15px;margin-top:22px;padding:18px 0 0;border-top:1px solid rgba(150,118,63,.35)}
+.fok b{font-family:"Cormorant Garamond",serif;font-weight:300;font-size:24px;display:block;margin-bottom:6px}
+form.sent .fbody{display:none}
+form.sent .fok{display:block}
+.fnote{font-size:12px;color:rgba(10,10,10,.55);margin-top:14px}
+.fnote a{color:var(--gd)}
+
 /* ── INGRANDIMENTO FOTO ─────────────────────────────────────────────── */
 .lb{position:fixed;inset:0;z-index:90;background:rgba(6,6,6,.96);display:none;align-items:center;justify-content:center;padding:18px}
 .lb.on{display:flex}
@@ -215,7 +244,7 @@ footer nav a{text-decoration:none;border-bottom:1px solid var(--ln);color:rgba(2
         <div><b>Stand</b><span>Hall 3 &middot; Stand 03.123</span></div>
       </div>
       <div class="cta">
-        <a class="btn btn-f" href="mailto:marinecookers@gmail.com?subject=Meeting%20at%20METSTRADE%202026%20-%20Stand%2003.123">Book a meeting</a>
+        <a class="btn btn-f js-book" href="mailto:marinecookers@gmail.com?subject=Meeting%20at%20METSTRADE%202026%20-%20Stand%2003.123">Book a meeting</a>
       </div>
     </div>
   </div>
@@ -358,7 +387,7 @@ footer nav a{text-decoration:none;border-bottom:1px solid var(--ln);color:rgba(2
     <p class="tx rv">METSTRADE is a trade show for professionals of the leisure marine industry. Write to us to book a time at the stand: we will be glad to show you the new prototypes.</p>
     <p class="map rv">Tuesday 17 and Wednesday 18 November, 10:00 &ndash; 18:00 &middot; Thursday 19 November, 10:00 &ndash; 17:00<br>RAI Amsterdam, Europaplein 24, 1078 GZ Amsterdam, The Netherlands</p>
     <div class="cta rv">
-      <a class="btn btn-f" href="mailto:marinecookers@gmail.com?subject=Meeting%20at%20METSTRADE%202026%20-%20Stand%2003.123">Book a meeting</a>
+      <a class="btn btn-f js-book" href="mailto:marinecookers@gmail.com?subject=Meeting%20at%20METSTRADE%202026%20-%20Stand%2003.123">Book a meeting</a>
       <a class="btn" href="https://www.techimpex.tv/?lang=en">Main website</a>
     </div>
   </div>
@@ -375,6 +404,58 @@ footer nav a{text-decoration:none;border-bottom:1px solid var(--ln);color:rgba(2
     </nav>
   </div>
 </footer>
+
+<!-- ══ PANNELLO "BOOK A MEETING" ════════════════════════════════════
+     Modulo Netlify "contatti" (lo stesso del sito e della landing: arriva
+     nella casella gia' sorvegliata). Campo pagina = mets-2026-meeting.
+     Giorno, ora e azienda vengono scritti dentro "messaggio", che inizia
+     sempre con «RICHIESTA APPUNTAMENTO METS 2026»: cosi' arrivano anche se
+     il modulo registrato su Netlify non ha quei campi.
+     SLOT GIA' PRESI: aggiungerli in BOOKED nello script in fondo,
+     formato '18 10:30'. Compaiono come «taken» e non si possono scegliere. -->
+<div class="bk" id="bk" role="dialog" aria-modal="true" aria-labelledby="bkT">
+  <div class="bk-p">
+    <button class="bk-x" type="button" id="bkX">Close</button>
+    <p class="eyebrow">METSTRADE 2026 &middot; Hall 3, Stand 03.123</p>
+    <h2 id="bkT">Book a <em>meeting</em></h2>
+    <form name="contatti" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate id="bkF">
+      <input type="hidden" name="form-name" value="contatti">
+      <input type="hidden" name="pagina" value="mets-2026-meeting">
+      <input type="hidden" name="richiesta" value="meeting">
+      <input type="hidden" name="origine" value="">
+      <p class="fhp"><label>Do not fill this in <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+      <div class="fbody">
+        <p class="bk-i">Choose a day and a time. We will reply by email to confirm the slot, or to propose another one.</p>
+        <div class="f2">
+          <div><label class="fk" for="bk-day">Day</label>
+            <select class="fi" id="bk-day" required>
+              <option value="">Choose</option>
+              <option value="17">Tue 17 Nov</option>
+              <option value="18">Wed 18 Nov</option>
+              <option value="19">Thu 19 Nov</option>
+            </select></div>
+          <div><label class="fk" for="bk-time">Time</label>
+            <select class="fi" id="bk-time" required disabled><option value="">Choose a day first</option></select></div>
+        </div>
+        <label class="fk" for="bk-name">Name</label>
+        <input class="fi" id="bk-name" name="nome" type="text" required autocomplete="name">
+        <label class="fk" for="bk-co">Company</label>
+        <input class="fi" id="bk-co" type="text" autocomplete="organization">
+        <label class="fk" for="bk-mail">Email</label>
+        <input class="fi" id="bk-mail" name="email" type="email" required autocomplete="email">
+        <label class="fk" for="bk-phone">Phone (optional)</label>
+        <input class="fi" id="bk-phone" type="tel" autocomplete="tel">
+        <label class="fk" for="bk-msg">Message</label>
+        <textarea class="fi" id="bk-msg" rows="3" placeholder="What would you like to talk about?"></textarea>
+        <input type="hidden" name="messaggio" value="">
+        <p class="ferr">Please choose day and time and fill in name and email.</p>
+        <button class="fgo" type="submit">Send request</button>
+        <p class="fnote">Used only to answer you &middot; <a href="https://www.techimpex.tv/privacy-policy?lang=en">Privacy Policy</a> &middot; or write to <a href="mailto:marinecookers@gmail.com">marinecookers@gmail.com</a></p>
+      </div>
+      <div class="fok"><b>Thank you</b><span id="bkOk">We have received your request and will confirm the slot by email.</span></div>
+    </form>
+  </div>
+</div>
 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo">
   <button class="x" type="button" id="lbX">Close</button>
@@ -414,6 +495,60 @@ footer nav a{text-decoration:none;border-bottom:1px solid var(--ln);color:rgba(2
     var u=(b.getAttribute('data-mets')||'').trim(); if(!u)return;
     var im=new Image(); im.alt=(b.parentNode.getAttribute('data-model')||'')+' marine cooker'; im.loading='lazy'; im.decoding='async';
     im.onload=function(){b.appendChild(im);}; im.src=u;
+  });
+})();
+/* ── BOOK A MEETING ────────────────────────────────────────────────────
+   Slot da 30 minuti negli orari di apertura della fiera.
+   BOOKED: slot gia' confermati, formato 'giorno hh:mm' (es. '18 10:30'). */
+(function(){
+  var BOOKED=[];
+  var HOURS={'17':['10:00','18:00'],'18':['10:00','18:00'],'19':['10:00','17:00']};
+  var DAYS={'17':'Tuesday 17 November 2026','18':'Wednesday 18 November 2026','19':'Thursday 19 November 2026'};
+  var bk=document.getElementById('bk'),f=document.getElementById('bkF');
+  if(!bk||!f)return;
+  var day=document.getElementById('bk-day'),tm=document.getElementById('bk-time');
+  function slots(d){var a=HOURS[d],s=a[0].split(':'),e=a[1].split(':'),m=+s[0]*60+ +s[1],end=+e[0]*60+ +e[1],o=[];
+    for(;m+30<=end;m+=30){o.push(('0'+Math.floor(m/60)).slice(-2)+':'+('0'+m%60).slice(-2));}return o;}
+  day.addEventListener('change',function(){
+    var d=day.value;tm.innerHTML='';
+    if(!d){tm.disabled=true;tm.innerHTML='<option value="">Choose a day first</option>';return;}
+    tm.disabled=false;tm.appendChild(new Option('Choose',''));
+    slots(d).forEach(function(t){var o=new Option(t+(BOOKED.indexOf(d+' '+t)>-1?'  (taken)':''),t);
+      if(BOOKED.indexOf(d+' '+t)>-1)o.disabled=true;tm.appendChild(o);});
+  });
+  function open(e){if(e)e.preventDefault();bk.classList.add('on');document.documentElement.style.overflow='hidden';setTimeout(function(){try{day.focus();}catch(x){}},50);}
+  function close(){bk.classList.remove('on');document.documentElement.style.overflow='';}
+  [].forEach.call(document.querySelectorAll('.js-book'),function(a){a.addEventListener('click',open);});
+  document.getElementById('bkX').addEventListener('click',close);
+  bk.addEventListener('click',function(e){if(e.target===bk)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&bk.classList.contains('on'))close();});
+  try{var q=new URLSearchParams(location.search),o=q.get('utm_source')||(q.get('gclid')?'Google Ads':'');
+    if(o)f.querySelector('[name="origine"]').value=o;}catch(e){}
+  f.addEventListener('input',function(e){if(e.target.classList)e.target.classList.remove('bad');});
+  f.addEventListener('change',function(e){if(e.target.classList)e.target.classList.remove('bad');});
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var bad=null,v=function(id){return (document.getElementById(id).value||'').trim();};
+    [['bk-day',0],['bk-time',0],['bk-name',0],['bk-mail',1]].forEach(function(c){
+      var el=document.getElementById(c[0]),x=(el.value||'').trim(),ko=!x;
+      if(!ko&&c[1])ko=!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x);
+      el.classList.toggle('bad',ko);if(ko&&!bad)bad=el;});
+    if(bad){f.classList.add('err');try{bad.focus();}catch(x){}return;}
+    f.classList.remove('err');
+    var txt='RICHIESTA APPUNTAMENTO METS 2026\n'+
+      'Giorno: '+DAYS[v('bk-day')]+'\nOra: '+v('bk-time')+'\n'+
+      'Nome: '+v('bk-name')+'\nAzienda: '+(v('bk-co')||'-')+'\nEmail: '+v('bk-mail')+'\nTelefono: '+(v('bk-phone')||'-')+'\n'+
+      'Messaggio: '+(v('bk-msg')||'-');
+    f.querySelector('[name="messaggio"]').value=txt;
+    var btn=f.querySelector('.fgo');btn.disabled=true;
+    var ok=document.getElementById('bkOk');
+    ok.textContent='We have received your request for '+DAYS[v('bk-day')]+' at '+v('bk-time')+'. We will confirm the slot by email to '+v('bk-mail')+'.';
+    var done=function(){f.classList.add('sent');};
+    var fail=function(){btn.disabled=false;
+      location.href='mailto:marinecookers@gmail.com?subject='+encodeURIComponent('Meeting request METSTRADE 2026')+'&body='+encodeURIComponent(txt);};
+    try{fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:new URLSearchParams(new FormData(f)).toString()}).then(function(r){r.ok?done():fail();}).catch(fail);}
+    catch(x){fail();}
   });
 })();
 /* Comparsa graduale: senza JS o con meno movimento non si nasconde nulla. */
