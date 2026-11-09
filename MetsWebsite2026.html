@@ -103,6 +103,8 @@ section{padding:72px 0}
 @media(min-width:900px){.mdl{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:56px}.mdl.rev{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}.mdl.rev .mdl-p{order:2}}
 .mdl-p{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
 .mdl-p .big{aspect-ratio:4/3;width:100%;object-fit:cover;background:#ece8df;cursor:zoom-in}
+/* Foto intera, senza taglio, nelle sue proporzioni (PRINCIPE). */
+.mdl-p .big.nat{aspect-ratio:auto;height:auto;max-height:720px;object-fit:contain;background:none}
 .mdl-p .row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .mdl-p .row img{aspect-ratio:1/1;width:100%;object-fit:cover;background:#ece8df;cursor:zoom-in}
 .mdl-k{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gd)}
@@ -272,7 +274,7 @@ footer nav a{text-decoration:none;border-bottom:1px solid var(--ln);color:rgba(2
 
     <article class="mdl rv">
       <div class="mdl-p">
-        <img class="big" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785247399/PRINCIPE30_kjdbxz.jpg" alt="Principe gas cooker with oven, Savoia white" loading="lazy" decoding="async">
+        <img class="big nat" src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1600/v1785247399/PRINCIPE30_kjdbxz.jpg" alt="Principe gas cooker with oven, Savoia white" loading="lazy" decoding="async">
       </div>
       <div>
         <p class="mdl-k">Classic cooker with oven</p>
