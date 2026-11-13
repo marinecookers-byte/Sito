@@ -175,6 +175,19 @@ footer a{color:rgba(248,246,241,.80)}
   .duo{gap:56px}
   .steam{padding:34px 32px 32px}
 }
+/* == INGRANDIMENTO FOTO (stesso sistema dei disegni della landing
+   induzione). Clic sulla foto: si apre grande; nessuno zoom ulteriore. Nessuna libreria. */
+.zm{cursor:zoom-in;position:relative}
+.zm-h{position:absolute;right:10px;bottom:10px;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#96763f;background:rgba(255,255,255,.88);padding:5px 9px;pointer-events:none;transition:opacity .3s}
+.zm:hover .zm-h{opacity:.6}
+.dwv{position:fixed;inset:0;z-index:90;background:rgba(6,6,6,.97);display:none;align-items:center;justify-content:center;padding:20px;overflow:hidden}
+.dwv.on{display:flex}
+.dwv-c{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.dwv{cursor:zoom-out}
+.dwv img{max-width:100%;max-height:100%;width:auto;height:auto;background:#f8f6f1;padding:10px}
+.dwv-x{position:absolute;top:16px;right:18px;z-index:3;background:transparent;border:1px solid rgba(184,150,90,.5);color:var(--gl);font-family:inherit;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:9px 16px;cursor:pointer}
+.dwv-x:hover{background:rgba(184,150,90,.14)}
+.dwv-h{position:absolute;bottom:16px;left:0;right:0;z-index:3;text-align:center;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:rgba(248,246,241,.42);pointer-events:none}
 </style>
 </head>
 <body>
@@ -214,9 +227,10 @@ footer a{color:rgba(248,246,241,.80)}
       <p class="hero-lead">A two or three-zone induction hob and, beneath it, an oven that does three things: microwave, grill and convection, on their own or together. Gimballed, in stainless steel, handmade in Conegliano, Italy.</p>
       <p class="hero-k"><span>2 or 3 zones</span><span>31 litres</span><span>Stainless steel</span><span>Made in Italy</span></p>
     </div>
-    <div class="hero-p">
+    <div class="hero-p zm">
       <img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1794507356/STOVE_WITH_3_INDUCTION_BURNERS_AND_31_LT_MULTIFUNCTION_MICROWAVE_OVEN_vwkxys.png"
            alt="Three-zone induction cooker with 31-litre combination microwave oven" width="1200" height="1200" fetchpriority="high" decoding="async">
+      <span class="zm-h">Tap to enlarge</span>
     </div>
   </div>
 </header>
@@ -244,8 +258,8 @@ footer a{color:rgba(248,246,241,.80)}
 
     <div class="duo">
       <article class="mdl">
-        <div class="mdl-ph"><img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1794506933/INDUCTION_STOVE_WITH_LARGE_30_LITERS_MULTIFUNCTION_MICROWAVE_OVEN_k3rjdm.png"
-             alt="Two-zone induction cooker with 31-litre combination microwave oven" width="1200" height="1200" loading="lazy" decoding="async"></div>
+        <div class="mdl-ph zm"><img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1794506933/INDUCTION_STOVE_WITH_LARGE_30_LITERS_MULTIFUNCTION_MICROWAVE_OVEN_k3rjdm.png"
+             alt="Two-zone induction cooker with 31-litre combination microwave oven" width="1200" height="1200" loading="lazy" decoding="async"><span class="zm-h">Tap to enlarge</span></div>
         <p class="mdl-cap"><b>Cooker with type 4 pan holders</b> (can be fitted with type 1 or type 4 pan holders, as preferred)</p>
         <h3 class="mdl-n">Two-zone hob</h3>
         <p class="mdl-s">For the most compact galleys</p>
@@ -260,8 +274,8 @@ footer a{color:rgba(248,246,241,.80)}
       </article>
 
       <article class="mdl">
-        <div class="mdl-ph"><img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1794507356/STOVE_WITH_3_INDUCTION_BURNERS_AND_31_LT_MULTIFUNCTION_MICROWAVE_OVEN_vwkxys.png"
-             alt="Three-zone induction cooker with 31-litre combination microwave oven" width="1200" height="1200" loading="lazy" decoding="async"></div>
+        <div class="mdl-ph zm"><img src="https://res.cloudinary.com/dseiw9ndw/image/upload/f_auto,q_auto,w_1200/v1794507356/STOVE_WITH_3_INDUCTION_BURNERS_AND_31_LT_MULTIFUNCTION_MICROWAVE_OVEN_vwkxys.png"
+             alt="Three-zone induction cooker with 31-litre combination microwave oven" width="1200" height="1200" loading="lazy" decoding="async"><span class="zm-h">Tap to enlarge</span></div>
         <p class="mdl-cap"><b>Cooker with type 1 pan holders</b> (can be fitted with type 1 or type 4 pan holders, as preferred)</p>
         <h3 class="mdl-n">Three-zone hob</h3>
         <p class="mdl-s">More power, more pans at once</p>
@@ -395,6 +409,12 @@ footer a{color:rgba(248,246,241,.80)}
   </div>
 </footer>
 
+<div class="dwv" id="dwv" role="dialog" aria-modal="true" aria-label="Photograph, enlarged">
+  <button class="dwv-x" type="button" id="dwvX">Close</button>
+  <div class="dwv-c"><img id="dwvI" alt=""></div>
+  <p class="dwv-h">Click anywhere or press Esc to close</p>
+</div>
+
 <script>
 /* ── PROVENIENZA: copiata dalla landing induzione, stessa logica ──── */
 (function(){
@@ -433,6 +453,24 @@ function lpSend(f){
   var f=document.querySelector('form[name="contatti"]'); if(!f) return;
   var clr=function(e){ if(e.target.classList) e.target.classList.remove('bad'); if(!f.querySelector('.bad')) f.classList.remove('err'); };
   f.addEventListener('input',clr,true); f.addEventListener('change',clr,true);
+})();
+
+/* ── INGRANDIMENTO FOTO: un solo livello. Clic sulla foto: si apre
+   grande. Clic ovunque, Close o Esc: si chiude. Nessuno zoom ulteriore. */
+(function(){
+  var box=document.getElementById('dwv'), im=document.getElementById('dwvI'),
+      chiudi=document.getElementById('dwvX'), foto=document.querySelectorAll('.zm img');
+  if(!box||!im||!foto.length) return;
+  var aperto=false;
+  function apri(t){
+    im.src=t.getAttribute('src').replace(/,w_\d+/,',w_2400'); im.alt=t.alt;
+    box.classList.add('on'); document.documentElement.style.overflow='hidden';
+    aperto=true; try{chiudi.focus();}catch(e){}
+  }
+  function via(){ box.classList.remove('on'); aperto=false; document.documentElement.style.overflow=''; }
+  Array.prototype.forEach.call(foto,function(t){ t.parentNode.addEventListener('click',function(){apri(t);}); });
+  box.addEventListener('click',via);
+  document.addEventListener('keydown',function(e){ if(aperto&&e.key==='Escape') via(); });
 })();
 
 /* ── COMPARSA GRADUALE (nessuna libreria; hero escluso) ──────────── */
